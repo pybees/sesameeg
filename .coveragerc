@@ -2,8 +2,8 @@
 
 [run]
 branch = True
-source = skltemplate
-include = */skltemplate/*
+source = mnetemplate
+include = */mnetemplate/*
 omit =
     */setup.py
 

@@ -2,37 +2,47 @@
 
 |Travis|_ |AppVeyor|_ |Codecov|_ |CircleCI|_ |ReadTheDocs|_
 
-.. |Travis| image:: https://travis-ci.org/scikit-learn-contrib/project-template.svg?branch=master
-.. _Travis: https://travis-ci.org/scikit-learn-contrib/project-template
+.. |Travis| image:: https://travis-ci.org/mne-tools/mne-project-template.svg?branch=master
+.. _Travis: https://travis-ci.org/mne-tools/mne-project-template
 
-.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/coy2qqaqr1rnnt5y/branch/master?svg=true
-.. _AppVeyor: https://ci.appveyor.com/project/glemaitre/project-template
+.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/4qrnsuohh5g53i5u?svg=true
+.. _AppVeyor: https://ci.appveyor.com/project/mne-tools/mne-project-template
 
-.. |Codecov| image:: https://codecov.io/gh/scikit-learn-contrib/project-template/branch/master/graph/badge.svg
-.. _Codecov: https://codecov.io/gh/scikit-learn-contrib/project-template
+.. |Codecov| image:: https://codecov.io/gh/mne-tools/mne-project-template/branch/master/graph/badge.svg
+.. _Codecov: https://codecov.io/gh/mne-tools/mne-project-template
 
-.. |CircleCI| image:: https://circleci.com/gh/scikit-learn-contrib/project-template.svg?style=shield&circle-token=:circle-token
-.. _CircleCI: https://circleci.com/gh/scikit-learn-contrib/project-template/tree/master
+.. |CircleCI| image:: https://circleci.com/gh/mne-tools/mne-project-template.svg?style=svg
+.. _CircleCI: https://circleci.com/gh/mne-tools/mne-project-template/tree/master
 
-.. |ReadTheDocs| image:: https://readthedocs.org/projects/sklearn-template/badge/?version=latest
-.. _ReadTheDocs: https://sklearn-template.readthedocs.io/en/latest/?badge=latest
+.. |ReadTheDocs| image:: https://readthedocs.org/projects/mne-project-template/badge/?version=latest
+.. _ReadTheDocs: https://mne-project-template.readthedocs.io/en/latest/?badge=latest
 
-project-template - A template for scikit-learn contributions
-============================================================
+mne-project-template - A template for mne-python compatible extensions
+======================================================================
 
-.. _scikit-learn: https://scikit-learn.org
+.. _mne-python: https://martinos.org/mne/stable/index.html
 
-**project-template** is a template project for scikit-learn_ compatible
+**mne-project-template** is a template project for mne-python_ compatible
 extensions.
 
-It aids development of estimators that can be used in scikit-learn pipelines
-and (hyper)parameter search, while facilitating testing (including some API
-compliance), documentation, open source development, packaging, and continuous
-integration.
+*Thank you for cleanly contributing to the mne-python ecosystem!*
 
-.. _documentation: https://sklearn-template.readthedocs.io/en/latest/quick_start.html
+.. _documentation: https://mne-project-template.readthedocs.io/en/latest/quick_start.html
 
-Refer to the documentation_ to modify the template for your own scikit-learn
-contribution.
+Refer to the documentation_ to modify the template for your own mne-python
+extension or follow this quick reference::
 
-*Thank you for cleanly contributing to the scikit-learn ecosystem!*
+    $ git clone https://github.com/mne-tools/mne-project-template.git mne-foo
+    $ cd mne-foo
+    $ # update mne_project_template_bootstrap.sh
+    $ bash mne_project_template_bootstrap.sh
+    $ rm mne_project_template_bootstrap.sh
+    $ rm -rf .git
+    $ git init && git add . && git commit -m 'Initial commit'
+    $ git remote add origin https://github.com/your_remote/mne-foo.git
+    $ git push origin master
+    $ # Activate all CIs
+
+Notice that appveyor badge image needs to be updated manually. Go where ``_AppVeyor:`` pints
+in the resulting `README.rst` after bootstraping and substitute `4qrnsuohh5g53i5u` with
+the relevant information from `settings` -> `badges` in appveyor's website of your project.

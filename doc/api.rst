@@ -4,31 +4,13 @@ project-template API
 
 This is an example on how to document the API of your own project.
 
-.. currentmodule:: skltemplate
+.. currentmodule:: mnetemplate
 
-Estimator
-=========
-
-.. autosummary::
-   :toctree: generated/
-   :template: class.rst
-
-   TemplateEstimator
-
-Transformer
-===========
+MNE-Template
+============
 
 .. autosummary::
    :toctree: generated/
    :template: class.rst
 
-   TemplateTransformer
-
-Predictor
-=========
-
-.. autosummary::
-   :toctree: generated/
-   :template: class.rst
-
-    TemplateClassifier
+   Some text

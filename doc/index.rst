@@ -3,11 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to sklearn-template's documentation!
-============================================
+Welcome to mne-template's documentation!
+========================================
 
 This project is a reference implementation to anyone who wishes to develop
-scikit-learn compatible classes.
+projects based from MNE.
 
 .. toctree::
    :maxdepth: 2
