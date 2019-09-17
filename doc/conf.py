@@ -75,7 +75,7 @@ plot_gallery = True
 master_doc = 'index'
 
 # General information about the project.
-project = u'mne-template'
+project = u'sesame'
 copyright = u'2016, Vighnesh Birodkar'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -83,7 +83,7 @@ copyright = u'2016, Vighnesh Birodkar'
 # built documents.
 #
 # The short X.Y version.
-from mnetemplate import __version__
+from sesame import __version__
 version = __version__
 # The full version, including alpha/beta/rc tags.
 release = __version__
@@ -318,10 +318,10 @@ except Exception:
 # sphinx-gallery configuration
 sphinx_gallery_conf = {
     'find_mayavi_figures': find_mayavi_figures,
-    'doc_module': 'mnetemplate',
+    'doc_module': 'sesame',
     'backreferences_dir': os.path.join('generated'),
-    'reference_url': {
-        'mnetemplate': None}
+    #'reference_url': {
+    #    'sesame': None}
 }
 
 def setup(app):

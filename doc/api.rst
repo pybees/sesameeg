@@ -4,13 +4,14 @@ project-template API
 
 This is an example on how to document the API of your own project.
 
-.. currentmodule:: mnetemplate
+.. currentmodule:: sesame.sasmc
 
 MNE-Template
 ============
 
 .. autosummary::
    :toctree: generated/
-   :template: class.rst
+   :template: function.rst
 
-   Some text
+
+    estimate_noise_std
