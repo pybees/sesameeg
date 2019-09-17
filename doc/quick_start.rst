@@ -37,7 +37,7 @@ information with you own. We provide you with a convenient script to speed up
 the process, but you can also do it manually.
 
 1.1.1 bootstrap your mne project using a convenience script
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Open your favorite editor and change ``PKG_NAME``, ``PYTHON_NAME``, 
 and ``GH_NAME`` in ``mne_project_template_bootstrap.sh`` with your own
 information. Then run the bootsrap script::
@@ -45,7 +45,7 @@ information. Then run the bootsrap script::
    $ bash  mne_project_template_bootstrap.sh
 
 1.1.2 Update your project manually
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Replace all occurrences of ``mnetemplate`` and ``mne-template``
 with the name of you own contribution. You can find all the occurrences using
 the following command::
@@ -149,7 +149,7 @@ Publish your package
 ====================
 
 .. _PyPi: https://packaging.python.org/tutorials/packaging-projects/
-.. _conda-foge: https://conda-forge.org/
+.. _conda-forge: https://conda-forge.org/
 
 You can make your package available through PyPi_ and conda-forge_. Refer to
 the associated documentation to be able to upload your packages such that

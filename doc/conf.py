@@ -68,9 +68,6 @@ source_suffix = '.rst'
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
 
-# Generate the plots for the gallery
-plot_gallery = True
-
 # The master toctree document.
 master_doc = 'index'
 
@@ -317,11 +314,11 @@ except Exception:
 
 # sphinx-gallery configuration
 sphinx_gallery_conf = {
-    'find_mayavi_figures': find_mayavi_figures,
+    'plot_gallery': 'True',  # Avoid annoying Unicode/bool default warning
+    'image_scrapers': ('matplotlib', 'mayavi'),
     'doc_module': 'sesame',
     'backreferences_dir': os.path.join('generated'),
-    #'reference_url': {
-    #    'sesame': None}
+    'reference_url': {'sesame': None}
 }
 
 def setup(app):

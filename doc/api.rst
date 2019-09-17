@@ -11,6 +11,12 @@ MNE-Template
 
 .. autosummary::
    :toctree: generated/
+   :template: class.rst
+
+    Sesame
+
+.. autosummary::
+   :toctree: generated/
    :template: function.rst
 
 

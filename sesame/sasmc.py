@@ -73,7 +73,7 @@ class Dipole(object):
         s = 'location : {0}'.format(self.loc)
         return '<Dipole  |  {0}>'.format(s)
 
-    # TODO: decidere se aggiungere momento di dipolo 
+    # TODO: decidere se aggiungere momento di dipolo
     # e (forse) coordinate del vertice
 
 
@@ -649,7 +649,7 @@ class EmpPdf(object):
 
 
 class Sesame(object):
-    """ Sequential Semi-Analytic Monte-Carlo Estimation (SESAME) of sources
+    """Sequential Semi-Analytic Monte-Carlo Estimation (SESAME) of sources.
 
     Parameters
     ----------
