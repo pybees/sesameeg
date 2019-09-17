@@ -47,6 +47,7 @@ numpydoc_show_class_members = False
 
 # pngmath / imgmath compatibility layer for different sphinx versions
 import sphinx
+import mne
 from distutils.version import LooseVersion
 if LooseVersion(sphinx.__version__) < LooseVersion('1.4'):
     extensions.append('sphinx.ext.pngmath')
@@ -301,11 +302,22 @@ intersphinx_mapping = {
     'numpy': ('https://docs.scipy.org/doc/numpy/', None),
     'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
     'matplotlib': ('https://matplotlib.org/', None),
+    'mayavi': ('http://docs.enthought.com/mayavi/mayavi', None),
     'sklearn': ('http://scikit-learn.org/stable', None)
 }
 
+try:
+    mlab = mne.utils._import_mlab()
+    find_mayavi_figures = True
+    # Do not pop up any mayavi windows while running the
+    # examples. These are very annoying since they steal the focus.
+    mlab.options.offscreen = True
+except Exception:
+    find_mayavi_figures = False
+
 # sphinx-gallery configuration
 sphinx_gallery_conf = {
+    'find_mayavi_figures': find_mayavi_figures,
     'doc_module': 'mnetemplate',
     'backreferences_dir': os.path.join('generated'),
     'reference_url': {
