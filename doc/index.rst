@@ -3,50 +3,36 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to sesame's documentation!
+Sesame
 ========================================
 
-This project is a reference implementation to anyone who wishes to develop
-projects based from MNE.
+This is a python implementation of the Bayesian multi-dipole modeling method and Sequential Monte Carlo algorithm described in [1]_ and currently implemented in BESA Research 7.0.
+
+The algorithm takes in input a sourcespace, a leadfield and a data time series, and outputs a posterior probability map for source locations, the estimated number of dipoles, their locations and their amplitudes.
+
+
+References
+----------
+.. [1] `S. Sommariva and A. Sorrentino, Sequential Monte Carlo samplers for semi-linear inverse problems and application to Magnetoencephalography. Inverse Problems, 30 114020 (2014).   Problems 30(11):114020 (2014) <https://doi.org/10.1088/0266-5611/30/11/114020>`_
 
 .. toctree::
    :maxdepth: 2
    :hidden:
-   :caption: Getting Started
+   
+   auto_examples/index
+   api
+   explanation_algorithm
+   
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+   :caption: Old stuff
 
    quick_start
-
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-   :caption: Documentation
-
    user_guide
-   api
 
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-   :caption: Tutorial - Examples
 
-   auto_examples/index
 
-`Getting started <quick_start.html>`_
--------------------------------------
 
-Information regarding this template and how to modify it for your own project.
 
-`User Guide <user_guide.html>`_
--------------------------------
 
-An example of narrative documentation.
-
-`API Documentation <api.html>`_
--------------------------------
-
-An example of API documentation.
-
-`Examples <auto_examples/index.html>`_
---------------------------------------
-
-A set of examples. It complements the `User Guide <user_guide.html>`_.

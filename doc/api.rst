@@ -1,19 +1,22 @@
-####################
-project-template API
-####################
+###
+API
+###
 
 This is an example on how to document the API of your own project.
 
 .. currentmodule:: sesame.sasmc
 
-MNE-Template
-============
+Classes
+=======
 
 .. autosummary::
    :toctree: generated/
    :template: class.rst
 
     Sesame
+
+Functions
+=========
 
 .. autosummary::
    :toctree: generated/
