@@ -73,9 +73,8 @@ class Dipole(object):
         s = 'location : {0}'.format(self.loc)
         return '<Dipole  |  {0}>'.format(s)
 
-    # TODO: decidere se aggiungere momento di dipolo
-    # e (forse) coordinate del vertice
-
+    # TODO: should we add dipole moment and/or
+    # vertex cartesian coordinates?
 
 class Particle(object):
     """Particle class for the semi-analytic SMC algorithm.
@@ -121,7 +120,7 @@ class Particle(object):
         return '<Particle  |  {0}>'.format(s)
 
     def add_dipole(self, n_verts, num_dip=1):
-        """ Add new dipoles to the particle.
+        """Add new dipole(s) to the particle.
 
         Parameters
         ----------
@@ -141,7 +140,7 @@ class Particle(object):
             self.n_dips += 1
 
     def remove_dipole(self, diprip):
-        """ Remove a dipole from the particle.
+        """Remove a dipole from the particle.
 
         Parameters
         ----------
@@ -156,7 +155,7 @@ class Particle(object):
             raise ValueError('No dipoles to remove.')
 
     def compute_loglikelihood_unit(self, r_data, lead_field, s_noise, s_q):
-        """ Evaluates the logarithm of the likelihood function in the present particle.
+        """Evaluates the logarithm of the marginal likelihood in the present particle.
 
         Parameters
         ----------
@@ -235,7 +234,7 @@ class Particle(object):
         lead_field : array of floats, shape (n_sens x 3*n_verts)
             The leadfield matrix.
         N_dip_max : int
-            The maximum number of dipoles allowed in the particle.
+            The maximum number of dipoles allowed in a particle.
         lklh_exp : float
             This number represents a point in the sequence of artificial
             distributions used in the SASMC samplers algorithm.
@@ -246,8 +245,11 @@ class Particle(object):
         lam : float
             Parameter of the Poisson probability distribution used for
             determining the number of dipoles in the particle.
-        q_birth : ----
-        q_death : ----
+        q_birth : float
+            Probability of proposing to add a dipole. We recommend to use
+            the default value q_birth = 1/3.
+        q_death : Probability of proposing to remove a dipole. We recommend
+            to use the default value q_death = 1/20.
 
         Return
         ------
@@ -367,8 +369,8 @@ class Particle(object):
 
 
 class EmpPdf(object):
-    """ Empirical probability density function class for the
-        semi-analytic SMC samplers algorithm.
+    """Empirical probability density function (pdf) class for the
+    semi-analytic SMC samplers algorithm.
 
     Parameters
     ----------
@@ -424,9 +426,8 @@ class EmpPdf(object):
     def sample(self, n_verts, r_data, lead_field, neigh, neigh_p,
                s_noise, sigma_q, lam, N_dip_max):
         """Perform a full evolution step of the whole empirical pdf.
-        This is done by calling the evol_n_dips method on each particle
-        forming the empirical pdf and calling the evol_loc method on
-        each dipole of each particle forming the empirical pdf.
+        For each particle the evol_n_dips method is called and then the
+        evol_loc method is applied on each of its dipoles.
 
         Parameters
         ----------
@@ -448,9 +449,7 @@ class EmpPdf(object):
         lam : float
             The parameter of the prior Poisson pdf of the number of dipoles.
         N_dip_max : int
-            The maximum number of dipoles allowed in each particle forming the
-            empirical pdf.
-
+            The maximum number of dipoles allowed in a particle.
         """
 
         for i_part, _part in enumerate(self.particles):
@@ -472,6 +471,7 @@ class EmpPdf(object):
          prevent the degeneracy of the sample (namely the circumstance in which
          all but one particle have negligible weights).
         """
+
         weights = np.exp(self.logweights)
         w_part = np.cumsum(weights)
 
@@ -506,6 +506,14 @@ class EmpPdf(object):
         ----------
         s_noise : float
             The standard deviation of the noise distribution.
+        gamma_high, gamma_low : floats
+            Upper and lower bound of the acceptable interval for the drop
+            in the Effective Sample Size. We recommend to use the default
+            values gamma_high=0.99 and gamma_low=0.9.
+        delta_min, delta_max : floats
+            The minimum and maximum allowed increment of the exponent.
+            We recommend to use the default values delta_min=1e-05 and
+            delta_max=0.1.
         """
         if self.exponents[-1] == 1:
             if self.verbose:
@@ -587,20 +595,16 @@ class EmpPdf(object):
             self.ESS = np.float32(1. / np.square(weights_aux).sum())
 
     def point_estimate(self, D, N_dip_max):
-        """Computation of a point estimate for the number of dipoles and their
-        parameters from the empirical distribution
+        """Computes a point estimate for the number of active dipoles and
+        their locations from the posterior pdf.
 
         Parameters
         ----------
-        V : float 2D array of shape n_vertices x 3
-            Source space
+        D : array of floats, shape (n_verts x n_verts)
+            The euclidean distance matrix between the points in the
+            brain discretization.
         N_dip_max : int
-            maximum allowed number of dipoles in the Particle instance
-
-        Returns
-        -------
-        self : EmpPdf istance
-            updated EmpPdf
+            The maximum number of dipoles allowed in a particle.
         """
 
         if self.verbose:
@@ -653,8 +657,8 @@ class Sesame(object):
 
     Parameters
     ----------
-    forward : dict
-        Forward operator
+    forward : instance of Forward
+        The forward solution
     evoked : instance of Evoked
         The evoked data
     s_noise : float
@@ -680,7 +684,7 @@ class Sesame(object):
     lam : float (default 0.25)
         The parameter of the prior Poisson pdf of the number of dipoles.
     N_dip_max : int (default 10)
-        The maximum number of dipoles allowed in each particle.
+        The maximum number of dipoles allowed in a particle.
 
     Attributes
     ----------
