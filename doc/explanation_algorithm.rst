@@ -2,4 +2,13 @@
 Explanation
 ############
 
-Qui metterei una descrizione semplice di cosa fa sesame.
+Spiegazione della section.
+
+Input
+-----
+
+SESAME in action
+----------------
+
+Output
+------

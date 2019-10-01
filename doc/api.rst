@@ -13,14 +13,7 @@ Classes
    :toctree: generated/
    :template: class.rst
 
+	Dipole
+	Particle
+	EmpPdf
     Sesame
-
-Functions
-=========
-
-.. autosummary::
-   :toctree: generated/
-   :template: function.rst
-
-
-    estimate_noise_std

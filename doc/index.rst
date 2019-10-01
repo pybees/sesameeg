@@ -10,6 +10,11 @@ This is a python implementation of the Bayesian multi-dipole modeling method and
 
 The algorithm takes in input a sourcespace, a leadfield and a data time series, and outputs a posterior probability map for source locations, the estimated number of dipoles, their locations and their amplitudes.
 
+Authors of the code
+-------------------
+| Gianvittorio Luria <luria@dima.unige.it>,
+| Sara Sommariva <sommariva@dima.unige.it>,
+| Alberto Sorrentino <sorrentino@dima.unige.it>.
 
 References
 ----------

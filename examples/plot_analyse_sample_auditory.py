@@ -72,7 +72,7 @@ plt.show()
 
 ###############################################################################
 # Run SESAME
-n_parts = 100
+n_parts = 10
 # If None, sigma_noise and sigma_q will be estimated by the algorithm.
 sigma_noise = None
 sigma_q = None

@@ -658,48 +658,67 @@ class Sesame(object):
     Parameters
     ----------
     forward : instance of Forward
-        The forward solution
+        The forward solution.
     evoked : instance of Evoked
-        The evoked data
+        The evoked data.
     s_noise : float
         The standard deviation of the noise distribution.
-    radius : float | None (default None)
-        The maximum distance (in cm) that is allowed between two point of
-        the source space to be considered neighbours.
-        If None it is set equal to 1 cm.
-    sigma_neigh: float | None (default None)
-        Standard deviation of the probability distribution of neighbours.
-        If None it is set equal to radius/2.
-    n_parts : int (default 100)
+    radius : float | None
+        The maximum distance in cm between two neighbouring verteces
+        of the brain discretization. If None, radius = 1cm.
+    sigma_neigh: float | None
+        The standard deviation of the probability distribution of 
+        neighbours. If None sigma_neigh = radius/2.
+    n_parts : int
         The number of particles forming the empirical pdf.
-    sample_min : float | None (default None)
+    sample_min : float | None
         First sample of the time window in which data are analyzed.
         If None, time window starts from the first sample of the data.
-    sample_max : float | None (default None)
+    sample_max : float | None
         Last sample of the time window in which dara are analyzed.
         If None, time window ends with the last sample of the data.
-    s_q : float | None (default None)
+    subsample : int | None
+        The step used to subsample the data. If None no subsampling is
+        performed.
+    s_q : float | None
         The standard deviation of the prior of the dipole moment.
-        If None its value is automatic estimated.
-    lam : float (default 0.25)
+        If None s_q is automatic estimated.
+    cov : istance of Covariance | None
+        The noise covariance matrix used to prewhiten the data. If None
+        no prewhitening is applied.
+    lam : float
         The parameter of the prior Poisson pdf of the number of dipoles.
-    N_dip_max : int (default 10)
+    N_dip_max : int
         The maximum number of dipoles allowed in a particle.
 
     Attributes
     ----------
+    n_parts : int
+        The number of particles forming the empirical pdf.
     lam : float
         The parameter of the prior Poisson pdf of the number of dipoles.
+    N_dip_max : int
+        The maximum number of dipoles allowed in a particle.
+    forward : instance of Forward
+        The forward solution.
+    source_space : array of floats, shape (n_verts, 3)
+        The coordinates of the points in the brain discretization.
+    n_verts : int
+        The number of points forming the brain discretization.
     lead_field : array of floats, shape (n_sens x 3*n_verts)
         The leadfield matrix.
-    source_space : array of floats, shape  (n_verts, 3)
-        The coordinates of the points in the brain discretization.
-    forward : dict
-        The forward structure.
-    neigh : array of ints
-        The neighbours of each point in the brain discretization.
-    neigh_p : array of floats
+    distance_matrix : array of floats, shape (n_verts x n_verts)
+        The euclidean distance matrix between the points in the
+        brain discretization.
+    neigh : array of ints, shape (n_vert, n_max_neigh)
+        The set of neighbours of each point in the brain discretization.
+        n_max_neigh is the cardinality of the biggest set.
+    radius : float
+        The radius used to compute the neigh matrix.
+    neigh_p : array of floats, shape (n_vert, n_max_neigh)
         The neighbours' probabilities.
+    sigma_neigh : float
+        The standard deviation used to compute the neigh_p matrix.
     s_min : int
         The first sample of the time window in which data are analyzed.
     s_max : int
@@ -710,30 +729,25 @@ class Sesame(object):
     i_data : array of floats, shape (n_sens, n_ist)
         The imaginary part of the data; n_sens is the number of sensors
         and n_ist is the number of time-points or of frequencies.
-    emp : instance of EmpPdf
-        The empirical pdf approximated by the particles at each iteration.
-    _resample_it : list of ints
+    s_q : float
+        The standard deviation of the prior of the dipole moment.
+    s_noise : float
+        The standard deviation of the noise distribution.
+    _resample_it : list of ints 
         The iterations during which a resampling step has been performed
-    ESS : list of floats
-        The Effective Sample Size over the iterations.
-    model_sel : list of arrays of floats
-        The model selection (i.e. the posterior distribution of the number
-        of dipoles) over the iterations.
     est_n_dips : list of ints
-        The estimated number of dipoles over the iterations.
-    blob : list of 2D arrays of floats
-        The intensity measure of the point process over the iterations.
+        The estimated number of dipoles for the first and the last iteration.
     est_locs : list of array of ints
-        The estimated source locations over the iterations.
+        The estimated source locations for the first and the last iteration.
     est_q : array of floats, shape (n_ist x (3*est_n_dips[-1]))
         The sources' moments estimated at the last iteration.
-    gof : float
-        The goodness of fit at a fixed iteration, i.e.
-                gof = 1 - ||meas_field - rec_field|| / ||meas_field||
-        where:
-        meas_field is the recorded data,
-        rec_field is the reconstructed data,
-        and || || is the Frobenius norm.
+    model_sel : list of arrays of floats
+        The model selection (i.e. the posterior distribution of the number
+        of dipoles) for the first and the last iteration.
+    blob : list of 2D arrays of floats
+        The intensity measure of the point process over the iterations.
+    emp : instance of EmpPdf
+        The empirical pdf approximated by the particles at each iteration.
     """
 
     def __init__(self, forward, evoked, s_noise, radius=None, sigma_neigh=None,
@@ -775,12 +789,10 @@ class Sesame(object):
                 self.s_min = sample_min
             else:
                 raise ValueError('sample_min index should be an integer')
-            # self.ist_in = np.argmin(np.abs(evoked.times-time_in * 0.001))
-            # TODO: pensare meglio alla definizione di distanza (istante piu' vicino? o istante prima/dopo?)
+
         if sample_max is None:
             self.s_max = evoked.data.shape[1]-1
         else:
-            # self.ist_fin = np.argmin(np.abs(evoked.times - time_fin * 0.001))
             if isinstance(sample_max, (int, np.integer)):
                 self.s_max = sample_max
             else:
@@ -841,7 +853,7 @@ class Sesame(object):
 
     def apply_sesame(self, estimate_q=True):
         """Run the SASMC sampler algorithm and performs point estimation at
-         the end of the main loop.
+        the end of the main loop.
 
         Parameters
         ----------
@@ -856,9 +868,6 @@ class Sesame(object):
         # uniform.
         nd = np.array([_part.n_dips for _part in self.emp.particles])
 
-        # Creation of distances matrix
-        # D = ssd.cdist(self.source_space, self.source_space)
-
         while not np.all(nd <= self.N_dip_max):
             nd_wrong = np.where(nd > self.N_dip_max)[0]
             self.emp.particles[nd_wrong] =\
@@ -866,7 +875,7 @@ class Sesame(object):
                          for _ in itertools.repeat(None, nd_wrong.shape[0])])
             nd = np.array([_part.n_dips for _part in self.emp.particles])
 
-        # Point estimation for the first iteraction
+        # Point estimation for the first iteration
         self.emp.point_estimate(self.distance_matrix, self.N_dip_max)
 
         self.est_n_dips.append(self.emp.est_n_dips)
@@ -897,6 +906,8 @@ class Sesame(object):
                             self.s_q, self.lam, self.N_dip_max)
 
             # STEP 3: Point Estimation
+            # For computational reasons poin estimates are only 
+            # provided at the last iteration.
             # self.emp.point_estimate(D, self.N_dip_max)
             #
             # self.est_n_dips.append(self.emp.est_n_dips)
@@ -904,7 +915,7 @@ class Sesame(object):
             # self.est_locs.append(self.emp.est_locs)
             # self.blob.append(self.emp.blob)
 
-            # STEP 4: compute new exponent e new weights
+            # STEP 4: compute new exponent and new weights
             self.emp.compute_exponent(self.s_noise)
 
             time.sleep(0.01)
@@ -913,7 +924,7 @@ class Sesame(object):
                 print('Computation time: {:.2f} seconds'.format(time_elapsed))
                 print('-------------------------------')
 
-        # Estimation
+        # Point estimation
         self.emp.point_estimate(self.distance_matrix, self.N_dip_max)
 
         self.est_n_dips.append(self.emp.est_n_dips)
@@ -928,6 +939,10 @@ class Sesame(object):
         print('[done]')
 
     def initialize_radius(self):
+        """Guess the units of the points in the brain discretization and
+        set to 1 cm the value of the radius for computing the sets of neighbours.
+        """
+
         x_length = np.amax(self.source_space[:, 0]) - np.amin(self.source_space[:, 0])
         y_length = np.amax(self.source_space[:, 1]) - np.amin(self.source_space[:, 1])
         z_length = np.amax(self.source_space[:, 2]) - np.amin(self.source_space[:, 2])
@@ -944,9 +959,11 @@ class Sesame(object):
         return radius
 
     def create_neigh(self, radius):
+        """Compute the set of neighbours for each point of the brain discretization.
+        """
+
         n_max = 100
         n_min = 3
-        # D = ssd.cdist(self.source_space, self.source_space)
         reached_points = np.array([0])
         counter = 0
         n_neigh = []
@@ -1015,7 +1032,9 @@ class Sesame(object):
             raise RuntimeError('Some problems during computation of neighbours.')
 
     def create_neigh_p(self, sigma_neigh):
-        # D = ssd.cdist(self.source_space, self.source_space)
+        """Compute neighbours' probability.
+        """
+
         neigh_p = np.zeros(self.neigh.shape, dtype=float)
         for i in range(self.source_space.shape[0]):
             n_neig = len(np.where(self.neigh[i] > -1)[0])
@@ -1025,24 +1044,28 @@ class Sesame(object):
         return neigh_p
 
     def estimate_s_q(self):
+        """Estimate the standard deviation of the prior of the dipole moment.
+        """
 
         s_q = 15 * np.max(abs(self.r_data)) / np.max(abs(self.lead_field))
 
         return s_q
 
     def estimate_s_noise(self):
+        """Estimate the standard deviation of noise distribution.
+        """
 
         s_noise = 0.2 * np.max(abs(self.r_data))
 
         return s_noise
 
     def compute_q(self, est_locs):
-        """Point-estimation of the dipole moment
+        """Compute a point estimate for the dipole moments.
 
         Parameters
         ----------
-        est_locs : int array
-            Estimated dipole location (index of the brain grid points)
+        est_locs : list of array of ints
+            The estimated source locations for the first and the last iteration.
         """
         est_num = est_locs.shape[0]
         [n_sens, n_time] = np.shape(self.r_data)
@@ -1087,23 +1110,16 @@ class Sesame(object):
 
         Parameters
         ----------
-        file_name : str
-            Path and name of the file to be saved
-        fwd : dict
-            Forward structure from which the lead-field matrix and the source
-            space were been extracted
-        it_in and it_fin : int
-            First and last iteration to be saved
-        subject : str
-            Name of the subject
+        subject : str | None
+            The subject name.
         """
+
         if 'SourceEstimate' not in dir():
             from mne import SourceEstimate
 
         if not hasattr(self, 'blob'):
             raise AttributeError('Run filter first!!')
 
-        # TODO: fwd is already saved in _sasmc
         blobs = self.blob
         fwd = self.forward
         vertno = [fwd['src'][0]['vertno'], fwd['src'][1]['vertno']]
