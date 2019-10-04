@@ -20,43 +20,6 @@ import mne
 from mayavi import mlab
 
 
-def estimate_noise_std(evoked, sample_min=None, sample_max=None, picks=None):
-    '''Estimate the standard deviation of the noise distribution from a
-    portion of the data which is assumed to be generated from noise only.
-
-    Parameters
-    ----------
-    evoked: Evoked object
-        Evoked data
-    sample_min : float | None
-        First sample of the portion of the data used.
-        If None, it will be set equal to the first sample of the data.
-    sample_max : float | None
-        Last sample of the portion of the data used.
-        If None, it will be set equal to the last sample of the data.
-    picks: array-like of int | None
-        indices of selected channels. If None, all channels are used.
-
-    Returns
-    -------
-    s_noise : float
-        Estimated noise standard deviation
-    '''
-
-    # TODO: gestire meglio i picks
-    # (consentire una scrittura tipo picks = 'grad')
-
-    _data = evoked.data
-
-    if picks is None:
-        prestimulus = _data[:, sample_min:sample_max + 1]
-    else:
-        prestimulus = _data[picks, sample_min:sample_max + 1]
-
-    s_noise = np.mean(np.std(prestimulus, axis=1))
-    return s_noise
-
-
 class Dipole(object):
     """Single current dipole class for semi-analytic SMC algorithm
 
