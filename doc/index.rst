@@ -6,7 +6,7 @@
 Sesame
 ========================================
 
-This is a python implementation of the Bayesian multi-dipole modeling method and Sequential Monte Carlo algorithm described in [1]_ and currently implemented in BESA Research 7.0.
+This is a Python3 implementation of the Bayesian multi-dipole modeling method and Sequential Monte Carlo algorithm described in [1]_ and currently implemented in BESA Research 7.0.
 
 The algorithm takes in input a sourcespace, a leadfield and a data time series, and outputs a posterior probability map for source locations, the estimated number of dipoles, their locations and their amplitudes.
 
