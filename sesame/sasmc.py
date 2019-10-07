@@ -6,9 +6,6 @@
 #
 # License: BSD (3-clause)
 
-from __future__ import division
-# TODO: check and import only if necessary
-
 import numpy as np
 import scipy.spatial.distance as ssd
 import copy
@@ -21,14 +18,13 @@ from mayavi import mlab
 
 
 class Dipole(object):
-    """Single current dipole class for semi-analytic SMC algorithm
+    """Single current dipole class for SESAME.
 
     Parameters
     ----------
     loc : int
         The dipole location (as an index of a brain grid).
     """
-
     def __init__(self, loc):
         self.loc = loc
 
@@ -36,12 +32,10 @@ class Dipole(object):
         s = 'location : {0}'.format(self.loc)
         return '<Dipole  |  {0}>'.format(s)
 
-    # TODO: should we add dipole moment and/or
-    # vertex cartesian coordinates?
 
 class Particle(object):
-    """Particle class for the semi-analytic SMC algorithm.
-    Used to store a single particle of an empirical pdf.
+    """Particle class for SESAME, used to store a single particle 
+    of an empirical pdf.
 
     Parameters
     ----------
@@ -200,7 +194,7 @@ class Particle(object):
             The maximum number of dipoles allowed in a particle.
         lklh_exp : float
             This number represents a point in the sequence of artificial
-            distributions used in the SASMC samplers algorithm.
+            distributions used in SESAME.
         s_noise : float
             The standard deviation of the noise distribution.
         s_q : float
@@ -273,7 +267,7 @@ class Particle(object):
             The leadfield matrix.
         lklh_exp : float
             This number represents a point in the sequence of artificial
-            distributions used in the SASMC samplers algorithm.
+            distributions used in SESAME.
         s_noise : float
             The standard deviation of the noise distribution.
         sigma_q : float
@@ -332,8 +326,7 @@ class Particle(object):
 
 
 class EmpPdf(object):
-    """Empirical probability density function (pdf) class for the
-    semi-analytic SMC samplers algorithm.
+    """Empirical probability density function (pdf) class for SESAME.
 
     Parameters
     ----------
@@ -356,7 +349,7 @@ class EmpPdf(object):
     exponents : array of floats
         Array whose entries represent points in the space of artificial
         distributions. It is used to keep track of the path followed
-        by the SASMC samplers algorithm.
+        by SESAME.
     model_sel : array of floats
         Marginal posterior probability of the number of sources.
     est_n_dips : float
@@ -376,7 +369,6 @@ class EmpPdf(object):
         self.blob = None
         self.est_locs = None
         self.verbose = verbose
-        # TODO: controlla di non aver fatto casino con le dichiarazioni
 
     def __repr__(self):
         s = ''
@@ -424,7 +416,6 @@ class EmpPdf(object):
                                        lead_field, self.exponents[-1], s_noise,
                                        sigma_q, lam)
             self.particles[i_part] = _part
-            # TODO: more clever way?
 
     def resample(self):
         """Performs a systematic resampling step of the whole empirical pdf
@@ -686,6 +677,8 @@ class Sesame(object):
         The first sample of the time window in which data are analyzed.
     s_max : int
         The last sample of the time window in which data are analyzed.
+    subsample : int | None
+        The step used to subsample the data.
     r_data : array of floats, shape (n_sens, n_ist)
         The real part of the data; n_sens is the number of sensors and
         n_ist is the number of time-points or of frequencies.
@@ -763,8 +756,7 @@ class Sesame(object):
         print('Analyzing data from {0} ms to {1} ms'.format(round(evoked.times[self.s_min], 4),
                                                             round(evoked.times[self.s_max], 4)))
 
-        if subsample is not None:
-            self.subsample = subsample
+        self.subsample = subsample
 
         if subsample is not None:
             print('Subsampling data with step {0}'.format(subsample))
@@ -805,7 +797,6 @@ class Sesame(object):
         self.est_q = np.array([])
         self.model_sel = list()
         self.blob = list()
-        self.SW_pv = list()
 
         self.emp = EmpPdf(self.n_parts, self.n_verts,
                           self.lam, verbose=self.verbose)
@@ -814,15 +805,17 @@ class Sesame(object):
             _part.compute_loglikelihood_unit(self.r_data, self.lead_field,
                                              self.s_noise, self.s_q)
 
-    def apply_sesame(self, estimate_q=True):
-        """Run the SASMC sampler algorithm and performs point estimation at
-        the end of the main loop.
+    def apply_sesame(self, estimate_all=False, estimate_q=True):
+        """Run SESAME and compute point estimates.
 
         Parameters
         ----------
+        estimate_all : bool
+            If True compute point-estimate at each iteration. If False compute
+            point-estimate only at the last iteration.
         estimate_q : bool
-            If true a point-estimate of the dipole moment is computed at the
-            last iteration
+            If True compute point-estimate of the dipole moment at the
+            last iteration.
         """
 
         print('Computing inverse solution. This will take a while...')
@@ -839,12 +832,13 @@ class Sesame(object):
             nd = np.array([_part.n_dips for _part in self.emp.particles])
 
         # Point estimation for the first iteration
-        self.emp.point_estimate(self.distance_matrix, self.N_dip_max)
+        if estimate_all:
+            self.emp.point_estimate(self.distance_matrix, self.N_dip_max)
 
-        self.est_n_dips.append(self.emp.est_n_dips)
-        self.model_sel.append(self.emp.model_sel)
-        self.est_locs.append(self.emp.est_locs)
-        self.blob.append(self.emp.blob)
+            self.est_n_dips.append(self.emp.est_n_dips)
+            self.model_sel.append(self.emp.model_sel)
+            self.est_locs.append(self.emp.est_locs)
+            self.blob.append(self.emp.blob)
 
         # ----------- MAIN CICLE --------------
 
@@ -869,14 +863,13 @@ class Sesame(object):
                             self.s_q, self.lam, self.N_dip_max)
 
             # STEP 3: Point Estimation
-            # For computational reasons poin estimates are only 
-            # provided at the last iteration.
-            # self.emp.point_estimate(D, self.N_dip_max)
-            #
-            # self.est_n_dips.append(self.emp.est_n_dips)
-            # self.model_sel.append(self.emp.model_sel)
-            # self.est_locs.append(self.emp.est_locs)
-            # self.blob.append(self.emp.blob)
+            if estimate_all:
+                self.emp.point_estimate(self.distance_matrix, self.N_dip_max)
+
+                self.est_n_dips.append(self.emp.est_n_dips)
+                self.model_sel.append(self.emp.model_sel)
+                self.est_locs.append(self.emp.est_locs)
+                self.blob.append(self.emp.blob)
 
             # STEP 4: compute new exponent and new weights
             self.emp.compute_exponent(self.s_noise)
@@ -1044,7 +1037,9 @@ class Sesame(object):
                               for t in range(n_time)])
 
     def goodness_of_fit(self):
-        """Evaluation of the perfomance
+        """Evalu
+
+        .. math:: \frac{2}{3}
 
         Parameters
         ----------
@@ -1088,63 +1083,11 @@ class Sesame(object):
         vertno = [fwd['src'][0]['vertno'], fwd['src'][1]['vertno']]
         nv_tot = fwd['nsource']
 
-        blob_tot = np.array([np.sum(bl, axis=0) for bl in blobs[1:]])
+        blob_tot = np.array([np.sum(bl, axis=0) for bl in [blobs[-1]]])
+	# TODO: manage the case of no-dipole estimated.
         # I don't store first iteration which is always empty
 
         tmin = 1
         stc = SourceEstimate(data=blob_tot.T, vertices=vertno, tmin=tmin,
                              tstep=1, subject=subject)
         return stc
-
-    @mlab.show
-    def plot_itensity_measure(self, subject, subjects_dir, estimated_loc=True,
-                              surface='inflated', hemi='split', views='lat',
-                              clim='auto'):
-        # TODO: Does it work also when we have multiple iterations?
-        # TODO some default value for subject/subject_dir?
-        # TODO some text in time-label?
-        # TODO: input as mne-python plot function?
-        # TODO: what happen if no dipole are estimate?
-        # TODO: --> do we really need a function?
-        # TODO: --> when hemi = 'split' problem in keeping the figure.
-
-        stc = self.to_stc(subject)
-        brain = stc.plot(subject, surface=surface, hemi=hemi,
-                         time_label=' ', subjects_dir=subjects_dir,
-                         views=views, clim=clim)
-        if estimated_loc:
-            est_locs = self.est_locs[-1]
-            nv_lh = stc.vertices[0].shape[0]
-            est_locs_lh = est_locs[np.where(est_locs < nv_lh)[0]]
-            est_locs_rh = est_locs[np.where(est_locs >= nv_lh)[0]] - nv_lh
-            if (hemi is not 'rh') and (est_locs_lh.size != 0):
-                brain.add_foci(stc.vertices[0][est_locs_lh],
-                               coords_as_verts=True, hemi='lh',
-                               color='blue', scale_factor=0.3)
-            if (hemi is not 'lh') and (est_locs_rh.size != 0):
-                brain.add_foci(stc.vertices[1][est_locs_rh],
-                               coords_as_verts=True, hemi='rh',
-                               color='blue', scale_factor=0.3)
-        return brain
-
-    def write_stc(self, file_name, fwd, tmin=1, tmax=None, subject=None):
-
-        # TODO: --> Do we really need this function?
-
-            """Export results in .stc file
-
-            Parameters
-            ----------
-            file_name : str
-                Path and name of the file to be saved
-            fwd : dict
-                Forward structure from which the lead-field
-                matrix and the source space have been extracted
-            it_in and it_fin : int
-                First and last iteration to be saved
-            subject : str
-                Name of the subject
-            """
-
-            stc = self.to_stc(fwd, tmin, tmax, subject)
-            stc.save(file_name)
