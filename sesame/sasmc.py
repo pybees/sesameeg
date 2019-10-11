@@ -1080,12 +1080,14 @@ class Sesame(object):
 
         blobs = self.blob
         fwd = self.forward
+        est_n_dips = self.est_n_dips
         vertno = [fwd['src'][0]['vertno'], fwd['src'][1]['vertno']]
         nv_tot = fwd['nsource']
 
-        blob_tot = np.array([np.sum(bl, axis=0) for bl in [blobs[-1]]])
-	# TODO: manage the case of no-dipole estimated.
-        # I don't store first iteration which is always empty
+        blob_tot = np.zeros([len(blobs), nv_tot])
+        for it, bl in enumerate(blobs):
+            if est_n_dips[it] > 0:
+                blob_tot[it] = np.sum(bl, axis=0)
 
         tmin = 1
         stc = SourceEstimate(data=blob_tot.T, vertices=vertno, tmin=tmin,
