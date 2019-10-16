@@ -69,7 +69,7 @@ through a two--step approach: first the marginal posterior :math:`p(n_D, \mathbf
 Adaptive Sequential Monte Carlo sampler for the marginal posterior :math:`p(n_D, \mathbf{r}_{1:n_D}\,|\,\mathbf{y})`.
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 | ASMC aims at approximating the target pdf :math:`p(n_D, \mathbf{r}_{1:n_D}\,|\,\mathbf{y})` using a large set of samples, also called particles; in our context each particle is a candidate solution, i.e. the number of dipoles and the dipole locations.
-| One easy way to produce such set of samples is to draw them independently from a simple pdf, and possibly weigh them to correctly approximate the target pdf (Importance Sampling, IS [3]_). An alternative approach is to start from a random candidate, perturb it randomly many times, and then approximate the target pdf with the collection of samples along the iterations (Markov Chain Monte Carlo, MCMC [4]_).
+| One easy way to produce such set of samples is to draw them independently from a simple pdf, and possibly weigh them to correctly approximate the target pdf (Importance Sampling, IS [3]_). An alternative approach is to start from a random candidate, perturb it randomly many times, and then approximate the target pdf with the collection of samples along the iterations (Markov Chain Monte Carlo, MCMC [3]_).
 | ASMC combines these two techniques:  multiple samples are independently drawn from a simple distribution, in our case the prior pdf :math:`p(n_D, \mathbf{r}_{1:n_D})`, evolve following an MCMC scheme, and their weights are updated after every MCMC step; at times, a resample move is performed, that means samples having negligible weights are replaced by samples in the higher--probability region, so as to explore better these areas. Eventually, the target distribution is approximated by the weighted sample set obtained at the last iteration.
 
 Analytic computation of :math:`p(\mathbf{q}_{1:n_D}\,|\,\mathbf{y}, n_D, \mathbf{r}_{1:n_D})`.
@@ -100,6 +100,5 @@ which represents the posterior probability of a source being located in :math:`r
 Reference
 ---------
 .. [1] `S. Sommariva and A. Sorrentino, Sequential Monte Carlo samplers for semi-linear inverse problems and application to Magnetoencephalography. Inverse Problems, 30 114020 (2014).   Problems 30(11):114020 (2014) <https://doi.org/10.1088/0266-5611/30/11/114020>`_
-.. [2]  `Sorrentino, Aramini, Luria`
-.. [3] Importance Sampling
-.. [4] MCMC
+.. [2]  `A. Sorrentino, G. Luria, and R. Aramini, Bayesian multi-dipole modeling of a single topography in MEG by adaptive Sequential Monte Carlo Samplers. Inverse Problems, 30 045010 (2014) <https://iopscience.iop.org/article/10.1088/0266-5611/30/4/045010>`_
+.. [3] `C. Robert and G. Casella, Monte Carlo Statistical Methods, 2nd Edition, Springer, 2004 <https://www.springer.com/gp/book/9780387212395>`_
