@@ -899,6 +899,11 @@ class Sesame(object):
     def initialize_radius(self):
         """Guess the units of the points in the brain discretization and
         set to 1 cm the value of the radius for computing the sets of neighbours.
+
+        Returns
+        --------
+        radius : float
+            The value of the radius.
         """
 
         x_length = np.amax(self.source_space[:, 0]) - np.amin(self.source_space[:, 0])
@@ -918,6 +923,16 @@ class Sesame(object):
 
     def create_neigh(self, radius):
         """Compute the set of neighbours for each point of the brain discretization.
+
+        Parameters
+        -----------
+        radius : float
+            The maximum distance between two neighbouring points.
+
+        Returns
+        --------
+        neigh : array of ints, shape (n_verts, n_neigh_max)
+            The sets of neighbours.
         """
 
         n_max = 100
@@ -991,6 +1006,17 @@ class Sesame(object):
 
     def create_neigh_p(self, sigma_neigh):
         """Compute neighbours' probability.
+
+        Parameters
+        -----------
+        sigma_neigh : float
+            The standard deviation of the Gaussian distribution that defines the
+            neighbours' probability.
+
+        Returns
+        --------
+        neigh_p : array of floats, shape (n_verts, n_neigh_max)
+            The neighbours' probability.
         """
 
         neigh_p = np.zeros(self.neigh.shape, dtype=float)
@@ -1003,6 +1029,11 @@ class Sesame(object):
 
     def estimate_s_q(self):
         """Estimate the standard deviation of the prior of the dipole moment.
+
+        Returns
+        --------
+        s_q : float
+            The estimated standard deviation.
         """
 
         s_q = 15 * np.max(abs(self.r_data)) / np.max(abs(self.lead_field))
@@ -1011,6 +1042,11 @@ class Sesame(object):
 
     def estimate_s_noise(self):
         """Estimate the standard deviation of noise distribution.
+
+        Returns
+        --------
+        s_noise : float
+            The estimated standard deviation.
         """
 
         s_noise = 0.2 * np.max(abs(self.r_data))
@@ -1073,12 +1109,21 @@ class Sesame(object):
         return gof
 
     def to_stc(self, subject=None):
-        """Export results in .stc file
+        """Export results in .stc file. Given the estimated number of dipoles :math:`\hat{n}_D`,
+        for each point :math:`r` of the brain discretization it computes the posterior
+	pdf :math:`p(r|\mathbf{y}, \hat{n}_D)`, i.e. the probability of a source being located
+	in :math:`r`.
 
         Parameters
         ----------
         subject : str | None
             The subject name.
+
+        Returns
+        --------
+        stc : instance of SourceEstimate.
+            The source estimate object containing the posterior map of the
+            dipoles' location.
         """
 
         if 'SourceEstimate' not in dir():
