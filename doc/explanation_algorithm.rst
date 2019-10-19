@@ -5,8 +5,6 @@ Explanation
 | Sesame (Sequential Semi-Analytic Monte-Carlo Estimation) employs a Bayesian perspective on the problem of estimating an unknown number of current dipoles from a set of spatial topographies of magnetoecenphalografic (MEG) and/or electroencephalografic (EEG) data. This section intends to outline the main idea behind the employed source model and algorithm. For a more precise description we recommend to read our publication [1]_.
 | For the sake of clarity, the description below deals with the analysis of a single MEG/EEG topography. However, as shown in [1]_ this approach easily generalizes to include multiple topographies by assuming the number and the locations of the current dipoles to be fixed over topographies, while their strengths and orientations may change.
 
-TODO: AGGIUNGERE INDICE?
-
 Multi--dipole source model.
 ---------------------------
 | We model the neural sources producing the recorded MEG/EEG data using a primary current distribution which is approximated by the superposition of an unknown number of current dipoles.
@@ -49,7 +47,7 @@ where:
 
 - :math:`p(n_D)` is the prior pdf for the number of dipole, which is defined as a Poisson distribution with mean :math:`\lambda`.
 - :math:`p(r_k|n_D, r_1, \ldots, r_{k-1})` is the prior pdf for the location of the :math:`k-` th dipole, which is defined as a uniform distribution on the given brain discretization excluding the points :math:`r_1, \ldots, r_{k-1}` already occupied by the other dipoles.
-- :math:`p(\mathbf{q}_k)` is the prior pdf for the dipole moment, which is a trivariate normal distribution with zero mean and diagonal matrix equal to :math:`\sigma_q^2 \mathbf{I}`. The variance :math:`\sigma_q^2` reflects information on the dipole strenght.
+- :math:`p(\mathbf{q}_k)` is the prior pdf for the dipole moment, which is a trivariate Gaussian distribution with zero mean and diagonal matrix equal to :math:`\sigma_q^2 \mathbf{I}`. The variance :math:`\sigma_q^2` reflects information on the dipole strenght.
 
 Likelihood function.
 """""""""""""""""""""
