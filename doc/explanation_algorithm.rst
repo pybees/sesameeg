@@ -1,3 +1,7 @@
+.. |br| raw:: html
+
+    <br>
+
 ############
 Explanation
 ############
@@ -7,13 +11,13 @@ Explanation
 
 Multi--dipole source model.
 ---------------------------
-| We model the neural sources producing the recorded MEG/EEG data using a primary current distribution which is approximated by the superposition of an unknown number of current dipoles.
-| In mathematical terms, a source configuration is assumed to belong to the variable--dimension state--space model
+We model the neural sources producing the recorded MEG/EEG data using a primary current distribution which is approximated by the superposition of an unknown number of current dipoles. |br|
+In mathematical terms, a source configuration is assumed to belong to the variable--dimension state--space model
 
 .. math:: \mathcal{J}\ :=\ \bigcup_{n_D}\ \{n_D\} \times \mathcal{D}^{n_D} ,
  
-were :math:`n_D` is the number of dipoles, :math:`\mathcal{D}` is the state space for a single--dipole configuration and :math:`\mathcal{D}^{n_D}` is the Cartesian product of :math:`n_D` copies of :math:`\mathcal{D}`.
-| A point in :math:`\mathcal{D}`, i.e. a single--dipole configuration, is a pair :math:`(r, \mathbf{q})` where :math:`r` is an integer variable representing the dipole location in a given discretizion of the cortical surface, and :math:`\mathbf{q}` is a three–dimensional vector representing the dipole moment. Any current distribution :math:`\mathbf{j}` is therefore a set of dipoles represented as 
+were :math:`n_D` is the number of dipoles, :math:`\mathcal{D}` is the state space for a single--dipole configuration and :math:`\mathcal{D}^{n_D}` is the Cartesian product of :math:`n_D` copies of :math:`\mathcal{D}`. |br|
+A point in :math:`\mathcal{D}`, i.e. a single--dipole configuration, is a pair :math:`(r, \mathbf{q})` where :math:`r` is an integer variable representing the dipole location in a given discretizion of the cortical surface, and :math:`\mathbf{q}` is a three–dimensional vector representing the dipole moment. Any current distribution :math:`\mathbf{j}` is therefore a set of dipoles represented as 
 
 .. math:: \mathbf{j} = \left(n_D, r_1, \mathbf{q}_1, \dots, r_{n_D}, \mathbf{q}_{n_D} \right) =: \left(n_D, \mathbf{r}_{1:n_D}, \dots, \mathbf{q}_{1:n_D}\right)  \in \mathcal{J}\, .
 
@@ -76,23 +80,23 @@ By exploiting the mutual independence of :math:`\mathbf{J}` and :math:`\mathbf{N
 
 Get the most out of Sesame's results.
 -------------------------------------
-| Sesame's output consists in a set of weighted particles
+Sesame's output consists in a set of weighted particles
 
 .. math::  \left\{\big(n_D^{i}, \mathbf{r}_{1:n_D^{i}}^{i}\big), w^{i} \right\}_{i=1, ..., I}
 
-which allows to approximate the full posterior distribution :math:`p(\mathbf{j}|\mathbf{y})`.
-| Roughly speaking, each of the :math:`I` particles represents a candidate source configuration, while the weight :math:`w^i` quantifies how likely it is that such configuration may have generated the recorded data.
-| Sesame also allows to compute the most probable source configuration through the following procedure.
-| First the most probable model is identified by estimating mode of the posterior pdf for the number of sources i.e. 
+which allows to approximate the full posterior distribution :math:`p(\mathbf{j}|\mathbf{y})`. |br|
+Roughly speaking, each of the :math:`I` particles represents a candidate source configuration, while the weight :math:`w^i` quantifies how likely it is that such configuration may have generated the recorded data. |br|
+Sesame also allows to compute the most probable source configuration through the following procedure. |br|
+First the most probable model is identified by estimating mode of the posterior pdf for the number of sources i.e. 
 
 .. math:: \hat{n}_D = argmax\, p \left(n_D | \mathbf{y} \right) = argmax\, \sum_{i=1}^I w^{i} \delta \left(n_D-n_D^{i} \right).
 
-| Subsequently, for each point :math:`r` of the cortical discretization, we compute
+Subsequently, for each point :math:`r` of the cortical discretization, we compute
 
 .. math:: p(r| \mathbf{y},\hat{n}_D) = \sum_{i=1}^I w^i \delta\left(\hat{n}_D,n_D^i\right) \sum_{k=1}^{n_D^{i}} \delta\left(r, r_k^{i}\right)\, ,
 
-which represents the posterior probability of a source being located in :math:`r`. This quantity can be used to produce posterior maps of activation on the cortical surface and to compute estimates of dipole locations as the local peaks of such a probability map.
-| Finally, dipole moments can be reasonably estimated as the mean of the corresponding Gaussian distribution. 
+which represents the posterior probability of a source being located in :math:`r`. This quantity can be used to produce posterior maps of activation on the cortical surface and to compute estimates of dipole locations as the local peaks of such a probability map. |br|
+Finally, dipole moments can be reasonably estimated as the mean of the corresponding Gaussian distribution.
 
 
 Reference
