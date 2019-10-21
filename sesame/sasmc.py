@@ -13,8 +13,6 @@ import time
 import itertools
 from mne.cov import compute_whitener
 from mne.forward import _select_orient_forward
-import mne
-from mayavi import mlab
 
 
 class Dipole(object):
@@ -34,7 +32,7 @@ class Dipole(object):
 
 
 class Particle(object):
-    """Particle class for SESAME, used to store a single particle 
+    """Particle class for SESAME, used to store a single particle
     of an empirical pdf.
 
     Parameters
@@ -139,7 +137,8 @@ class Particle(object):
             sigma = np.eye(n_sens)
         else:
             # 1a: compute the leadfield of the particle
-            idx = np.ravel([[3*dip.loc, 3*dip.loc+1, 3*dip.loc+2] for dip in self.dipoles])
+            idx = np.ravel([[3*dip.loc, 3*dip.loc+1, 3*dip.loc+2]
+                           for dip in self.dipoles])
             Gc = lead_field[:, idx]
             # 1b: compute the variance
             sigma = (s_q / s_noise)**2 * np.dot(Gc, np.transpose(Gc)) + \
@@ -205,7 +204,8 @@ class Particle(object):
         q_birth : float
             Probability of proposing to add a dipole. We recommend to use
             the default value q_birth = 1/3.
-        q_death : Probability of proposing to remove a dipole. We recommend
+        q_death : float
+            Probability of proposing to remove a dipole. We recommend
             to use the default value q_death = 1/20.
 
         Return
@@ -232,14 +232,19 @@ class Particle(object):
             prop_part.compute_prior(lam)
             prop_part.compute_loglikelihood_unit(r_data, lead_field,
                                                  s_noise, sigma_q)
-            log_prod_like = prop_part.loglikelihood_unit - self.loglikelihood_unit
+            log_prod_like = (prop_part.loglikelihood_unit -
+                             self.loglikelihood_unit)
 
             if prop_part.n_dips > self.n_dips:
                 alpha = np.amin([1, ((q_death * prop_part.prior) /
-                                     (q_birth * self.prior)) * np.exp((lklh_exp/(2*s_noise**2)) * log_prod_like)])
+                                     (q_birth * self.prior)) *
+                                 np.exp((lklh_exp/(2*s_noise**2)) *
+                                        log_prod_like)])
             elif prop_part.n_dips < self.n_dips:
                 alpha = np.amin([1, ((q_birth * prop_part.prior) /
-                                     (q_death * self.prior)) * np.exp((lklh_exp/(2*s_noise**2)) * log_prod_like)])
+                                     (q_death * self.prior)) *
+                                 np.exp((lklh_exp/(2*s_noise**2)) *
+                                        log_prod_like)])
 
             if np.random.rand() < alpha:
                 self = copy.deepcopy(prop_part)
@@ -283,8 +288,10 @@ class Particle(object):
         """
         # Step 1: Drawn of the new location.
         prop_part = copy.deepcopy(self)
-        p_part = np.cumsum(neigh_p[prop_part.dipoles[dip_idx].loc,
-                           np.where(neigh[prop_part.dipoles[dip_idx].loc] != -1)])
+        p_part = np.cumsum(
+                 neigh_p[prop_part.dipoles[dip_idx].loc,
+                         np.where(neigh[prop_part.dipoles[dip_idx].loc] != -1)]
+        )
         new_pos = False
 
         while new_pos is False:
@@ -299,9 +306,10 @@ class Particle(object):
 
         prob_new_move = neigh_p[prop_part.dipoles[dip_idx].loc, ind_p]
 
-        prob_opp_move = neigh_p[prop_loc,
-                                np.argwhere(neigh[prop_loc] ==
-                                            prop_part.dipoles[dip_idx].loc)[0][0]]
+        prob_opp_move = neigh_p[
+                        prop_loc,
+                        np.argwhere(neigh[prop_loc] ==
+                                    prop_part.dipoles[dip_idx].loc)[0][0]]
         prop_part.dipoles[dip_idx].loc = prop_loc
         comp_fact_delta_r = prob_opp_move / prob_new_move
 
@@ -360,8 +368,10 @@ class EmpPdf(object):
         Estimated sources locations
     """
     def __init__(self, n_parts, n_verts, lam, verbose=False):
-        self.particles = np.array([Particle(n_verts, lam) for _ in itertools.repeat(None, n_parts)])
-        self.logweights = np.array([np.log(1/n_parts) for _ in itertools.repeat(None, n_parts)])
+        self.particles = np.array([Particle(n_verts, lam) for _
+                                   in itertools.repeat(None, n_parts)])
+        self.logweights = np.array([np.log(1/n_parts) for _
+                                    in itertools.repeat(None, n_parts)])
         self.ESS = np.float32(1. / np.square(np.exp(self.logweights)).sum())
         self.exponents = np.array([0, 0])
         self.model_sel = None
@@ -373,9 +383,9 @@ class EmpPdf(object):
     def __repr__(self):
         s = ''
         for i_p, _part in enumerate(self.particles):
-            s += '---- Particle {0} (W = {1},  number of dipoles = {2}): \n {3} \n'.format(i_p+1,
-                                                                                           np.exp(self.logweights[i_p]),
-                                                                                           _part.nu, _part)
+            s += ("'---- Particle {0} (W = {1},  number of dipoles = {2}):"
+                  " \n {3} \n".
+                  format(i_p+1, np.exp(self.logweights[i_p]), _part.nu, _part))
         return s
 
     def sample(self, n_verts, r_data, lead_field, neigh, neigh_p,
@@ -485,8 +495,12 @@ class EmpPdf(object):
                     ESS_new/self.ESS < gamma_low:
 
                 # log of the unnormalized weights
-                log_weights_aux = np.array([self.logweights[i_part] + (delta/(2*s_noise**2)) *
-                                            _part.loglikelihood_unit for i_part, _part in enumerate(self.particles)])
+                log_weights_aux = np.array(
+                                  [self.logweights[i_part] +
+                                   (delta/(2*s_noise**2)) *
+                                   _part.loglikelihood_unit
+                                   for i_part, _part
+                                   in enumerate(self.particles)])
                 # normalization
                 w = log_weights_aux.max()
                 log_weights_aux = log_weights_aux - w - \
@@ -502,9 +516,12 @@ class EmpPdf(object):
                     last_op_incr = True
                     if (delta_max - delta) < delta_max/100:
                         # log of the unnormalized weights
-                        log_weights_aux = np.array([self.logweights[i_part] + (delta/(2*s_noise**2)) *
-                                                    _part.loglikelihood_unit
-                                                    for i_part, _part in enumerate(self.particles)])
+                        log_weights_aux = np.array(
+                                          [self.logweights[i_part] +
+                                           (delta/(2*s_noise**2)) *
+                                           _part.loglikelihood_unit
+                                           for i_part, _part
+                                           in enumerate(self.particles)])
                         # normalization
                         w = log_weights_aux.max()
                         log_weights_aux = log_weights_aux - w - \
@@ -518,9 +535,12 @@ class EmpPdf(object):
                     if (delta - delta_min) < delta_min/10 or \
                             (iterations > 1 and last_op_incr):
                         # log of the unnormalized weights
-                        log_weights_aux = np.array([self.logweights[i_part] + (delta/(2*s_noise**2)) *
-                                                    _part.loglikelihood_unit
-                                                    for i_part, _part in enumerate(self.particles)])
+                        log_weights_aux = np.array(
+                                          [self.logweights[i_part] +
+                                           (delta/(2*s_noise**2)) *
+                                           _part.loglikelihood_unit
+                                           for i_part, _part
+                                           in enumerate(self.particles)])
                         # normalization
                         w = log_weights_aux.max()
                         log_weights_aux = log_weights_aux - w - \
@@ -535,8 +555,12 @@ class EmpPdf(object):
             if self.exponents[-1] + delta > 1:
                 delta = 1 - self.exponents[-1]
                 # log of the unnormalized weights
-                log_weights_aux = np.array([self.logweights[i_part] + (delta/(2*s_noise**2)) *
-                                            _part.loglikelihood_unit for i_part, _part in enumerate(self.particles)])
+                log_weights_aux = np.array(
+                                  [self.logweights[i_part] +
+                                   (delta/(2*s_noise**2)) *
+                                   _part.loglikelihood_unit
+                                   for i_part, _part
+                                   in enumerate(self.particles)])
                 # normalization
                 w = log_weights_aux.max()
                 log_weights_aux = log_weights_aux - w - \
@@ -544,7 +568,8 @@ class EmpPdf(object):
                 # Actual weights:
                 weights_aux = np.exp(log_weights_aux)
 
-            self.exponents = np.append(self.exponents, self.exponents[-1] + delta)
+            self.exponents = np.append(self.exponents,
+                                       self.exponents[-1] + delta)
             self.logweights = log_weights_aux
             self.ESS = np.float32(1. / np.square(weights_aux).sum())
 
@@ -582,17 +607,23 @@ class EmpPdf(object):
             self.blob = np.array([])
         else:
             nod = np.array([_part.n_dips for _part in self.particles])
-            selected_particles = np.delete(self.particles, np.where(nod != self.est_n_dips))
-            selected_weights = np.delete(weights, np.where(nod != self.est_n_dips))
-            ind_bestpart = np.argmax(selected_weights)
-            bestpart_locs = np.array([_dip.loc for _dip in selected_particles[ind_bestpart].dipoles])
-            order_dip = np.empty([selected_particles.shape[0], self.est_n_dips], dtype='int')
+            selected_particles = np.delete(self.particles,
+                                           np.where(nod != self.est_n_dips))
+            selected_weights = np.delete(weights,
+                                         np.where(nod != self.est_n_dips))
+            ind_bestpar = np.argmax(selected_weights)
+            bestpart_locs = np.array([_dip.loc for _dip in
+                                      selected_particles[ind_bestpar].dipoles])
+            order_dip = np.empty([selected_particles.shape[0],
+                                  self.est_n_dips], dtype='int')
 
-            all_perms_index = np.asarray(list(itertools.permutations(range(self.est_n_dips))))
+            all_perms_index = np.asarray(list(itertools.permutations(
+                                              range(self.est_n_dips))))
 
             for i_p, _part in enumerate(selected_particles):
                 part_locs = np.array([_dip.loc for _dip in _part.dipoles])
-                OSPA = np.mean(D[part_locs[all_perms_index], bestpart_locs], axis=1)
+                OSPA = np.mean(D[part_locs[all_perms_index], bestpart_locs],
+                               axis=1)
                 bestperm = np.argmin(OSPA)
                 order_dip[i_p] = all_perms_index[bestperm]
 
@@ -621,7 +652,7 @@ class Sesame(object):
         The maximum distance in cm between two neighbouring verteces
         of the brain discretization. If None, radius = 1cm.
     sigma_neigh: float | None
-        The standard deviation of the probability distribution of 
+        The standard deviation of the probability distribution of
         neighbours. If None sigma_neigh = radius/2.
     n_parts : int
         The number of particles forming the empirical pdf.
@@ -689,7 +720,7 @@ class Sesame(object):
         The standard deviation of the prior of the dipole moment.
     s_noise : float
         The standard deviation of the noise distribution.
-    _resample_it : list of ints 
+    _resample_it : list of ints
         The iterations during which a resampling step has been performed
     est_n_dips : list of ints
         The estimated number of dipoles for the first and the last iteration.
@@ -716,7 +747,8 @@ class Sesame(object):
         self.lam = lam
         self.N_dip_max = N_dip_max
         self.verbose = verbose
-        self.forward, _info_picked = _select_orient_forward(forward, evoked.info, cov)
+        self.forward, _info_picked = _select_orient_forward(forward,
+                                                            evoked.info, cov)
 
         self.source_space = forward['source_rr']
         self.n_verts = self.source_space.shape[0]
@@ -754,8 +786,9 @@ class Sesame(object):
                 self.s_max = sample_max
             else:
                 raise ValueError('sample_max index should be an integer')
-        print('Analyzing data from {0} ms to {1} ms'.format(round(evoked.times[self.s_min], 4),
-                                                            round(evoked.times[self.s_max], 4)))
+        print('Analyzing data from {0} ms to {1} ms'.
+              format(round(evoked.times[self.s_min], 4),
+                     round(evoked.times[self.s_max], 4)))
 
         self.subsample = subsample
 
@@ -770,7 +803,8 @@ class Sesame(object):
             whitener, _ = compute_whitener(cov, info=_info_picked, pca=True,
                                            picks=_info_picked['ch_names'])
             data = np.sqrt(evoked.nave) * np.dot(whitener, data)
-            self.lead_field = np.sqrt(evoked.nave) * np.dot(whitener, self.lead_field)
+            self.lead_field = (np.sqrt(evoked.nave) *
+                               np.dot(whitener, self.lead_field))
 
         self.r_data = data.real
         self.i_data = data.imag
@@ -780,7 +814,8 @@ class Sesame(object):
             print('Estimating dipole strength variance...')
             self.s_q = self.estimate_s_q()
             print('[done]')
-            print(' Estimated dipole strength variance: {:.4e}'.format(self.s_q))
+            print(' Estimated dipole strength variance: {:.4e}'
+                  .format(self.s_q))
         else:
             self.s_q = s_q
 
@@ -898,7 +933,8 @@ class Sesame(object):
 
     def initialize_radius(self):
         """Guess the units of the points in the brain discretization and
-        set to 1 cm the value of the radius for computing the sets of neighbours.
+        set to 1 cm the value of the radius for computing the sets of
+        neighbours.
 
         Returns
         --------
@@ -906,9 +942,12 @@ class Sesame(object):
             The value of the radius.
         """
 
-        x_length = np.amax(self.source_space[:, 0]) - np.amin(self.source_space[:, 0])
-        y_length = np.amax(self.source_space[:, 1]) - np.amin(self.source_space[:, 1])
-        z_length = np.amax(self.source_space[:, 2]) - np.amin(self.source_space[:, 2])
+        x_length = (np.amax(self.source_space[:, 0])
+                    - np.amin(self.source_space[:, 0]))
+        y_length = (np.amax(self.source_space[:, 1])
+                    - np.amin(self.source_space[:, 1]))
+        z_length = (np.amax(self.source_space[:, 2])
+                    - np.amin(self.source_space[:, 2]))
 
         max_length = max(x_length, y_length, z_length)
 
@@ -942,10 +981,12 @@ class Sesame(object):
         n_neigh = []
         list_neigh = []
 
-        while counter < reached_points.shape[0] and self.source_space.shape[0] > reached_points.shape[0]:
+        while (counter < reached_points.shape[0]
+               and self.source_space.shape[0] > reached_points.shape[0]):
             P = reached_points[counter]
-            aux = np.array(sorted(np.where(self.distance_matrix[P] <= radius)[0],
-                                  key=lambda k: self.distance_matrix[P, k]))
+            aux = np.array(sorted(
+                           np.where(self.distance_matrix[P] <= radius)[0],
+                           key=lambda k: self.distance_matrix[P, k]))
             n_neigh.append(aux.shape[0])
 
             # Check the number of neighbours
@@ -968,8 +1009,9 @@ class Sesame(object):
         elif self.source_space.shape[0] == reached_points.shape[0]:
             while counter < self.source_space.shape[0]:
                 P = reached_points[counter]
-                aux = np.array(sorted(np.where(self.distance_matrix[P] <= radius)[0],
-                                      key=lambda k: self.distance_matrix[P, k]))
+                aux = np.array(sorted(
+                               np.where(self.distance_matrix[P] <= radius)[0],
+                               key=lambda k: self.distance_matrix[P, k]))
                 n_neigh.append(aux.shape[0])
 
                 if n_neigh[-1] < n_min:
@@ -1002,7 +1044,8 @@ class Sesame(object):
             return neigh
 
         else:
-            raise RuntimeError('Some problems during computation of neighbours.')
+            raise RuntimeError("Some problems during"
+                               "computation of neighbours.")
 
     def create_neigh_p(self, sigma_neigh):
         """Compute neighbours' probability.
@@ -1010,8 +1053,8 @@ class Sesame(object):
         Parameters
         -----------
         sigma_neigh : float
-            The standard deviation of the Gaussian distribution that defines the
-            neighbours' probability.
+            The standard deviation of the Gaussian distribution that defines
+            the neighbours' probability.
 
         Returns
         --------
@@ -1023,7 +1066,8 @@ class Sesame(object):
         for i in range(self.source_space.shape[0]):
             n_neig = len(np.where(self.neigh[i] > -1)[0])
             neigh_p[i, 0:n_neig] = \
-                np.exp(-self.distance_matrix[i, self.neigh[i, 0:n_neig]] ** 2 / (2 * sigma_neigh ** 2))
+                np.exp(-self.distance_matrix[i, self.neigh[i, 0:n_neig]] ** 2
+                       / (2 * sigma_neigh ** 2))
             neigh_p[i] = neigh_p[i] / np.sum(neigh_p[i])
         return neigh_p
 
@@ -1078,11 +1122,13 @@ class Sesame(object):
         """Evaluate the estimated configuration of dipoles. The goodness
         of fit (GOF) with the recorded data is defined as
 
-        .. math:: GOF = \\frac{\| \mathbf{y} - \hat{\mathbf{y}} \|}{ \|\mathbf{y}\|}
+        .. math:: GOF = \\frac{\\| \\mathbf{y} - \\hat{\\mathbf{y}} \\|}
+                         { \\|\\mathbf{y}\\|}
 
-        where :math:`\mathbf{y}` is the recorded data, :math:`\hat{\mathbf{y}}` is the
-        field generated by the estimated configuration of dipoles, and
-        :math:`\| \cdot \|` is the Frobenius norm.
+        where :math:`\\mathbf{y}` is the recorded data,
+        :math:`\\hat{\\mathbf{y}}` is the field generated by the
+        estimated configuration of dipoles, and :math:`\\| \\cdot \\|`
+        is the Frobenius norm.
 
         Returns
         -------
@@ -1090,10 +1136,12 @@ class Sesame(object):
             The goodness of fit with the recorded data.
         """
 
-        if len(self.est_n_dips)==0:
-            raise AttributeError('No estimation found. Run apply_sesame first.')
+        if len(self.est_n_dips) == 0:
+            raise AttributeError("No estimation found."
+                                 "Run apply_sesame first.")
         if self.est_q is None:
-            raise AttributeError('No dipoles'' moment found. Run compute_q first.')
+            raise AttributeError("No dipoles' moment found."
+                                 " Run compute_q first.")
 
         est_n_dips = self.est_n_dips[-1]
         est_locs = self.est_locs[-1]
@@ -1101,18 +1149,22 @@ class Sesame(object):
         meas_field = self.r_data
         rec_field = np.zeros(meas_field.shape)
         for i_d in range(est_n_dips):
-            rec_field += np.dot(self.lead_field[:, 3*est_locs[i_d]:3*(est_locs[i_d]+1)],
+            rec_field += np.dot(self.lead_field[:, 3*est_locs[i_d]:
+                                                3*(est_locs[i_d]+1)],
                                 est_q[:, 3*i_d:3*(i_d+1)].T)
 
-        gof = 1 - np.linalg.norm(meas_field - rec_field) / np.linalg.norm(meas_field)
+        gof = 1 - np.linalg.norm(meas_field - rec_field) \
+            / np.linalg.norm(meas_field)
 
         return gof
 
     def to_stc(self, subject=None):
-        """Export results in .stc file. Given the estimated number of dipoles :math:`\hat{n}_D`,
-        for each point :math:`r` of the brain discretization it computes the posterior
-	pdf :math:`p(r|\mathbf{y}, \hat{n}_D)`, i.e. the probability of a source being located
-	in :math:`r`.
+        """Compute and export in .stc file the posterior pdf
+        :math:`p(r|\\mathbf{y}, \\hat{n}_D)`, where :math:`\\hat{n}_D`
+        is the estimated number of sources.
+        For each point :math:`r` of the brain discretization
+        :math:`p(r|\\mathbf{y}, \\hat{n}_D)` is the probability of a
+        source being located in :math:`r`.
 
         Parameters
         ----------
