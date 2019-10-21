@@ -3,16 +3,24 @@
 
 import codecs
 import os
+import re
 
 from setuptools import find_packages, setup
 
 # get __version__ from _version.py
 ver_file = os.path.join('sesame', '_version.py')
-with open(ver_file) as f:
-    exec(f.read())
+with open(ver_file) as f_ver:
+    version_file = f_ver.read()
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
+                              version_file, re.M)
+    if version_match:
+        __version__ = version_match.group(1)
+    else:
+        raise RuntimeError("Unable to find version string.")
+
 
 DISTNAME = 'sesame'
-DESCRIPTION = 'A template for mne-python compatible packages.'
+DESCRIPTION = 'Sequential Monte Carlo algorithm for multi dipolar source modeling in MEEG.'
 with codecs.open('README.rst', encoding='utf-8-sig') as f:
     LONG_DESCRIPTION = f.read()
 MAINTAINER = 'Sara Sommariva'
