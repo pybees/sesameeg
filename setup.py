@@ -8,7 +8,7 @@ import re
 from setuptools import find_packages, setup
 
 # get __version__ from _version.py
-ver_file = os.path.join('sesame', '_version.py')
+ver_file = os.path.join('sesameeg', '_version.py')
 with open(ver_file) as f_ver:
     version_file = f_ver.read()
     version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
@@ -19,15 +19,15 @@ with open(ver_file) as f_ver:
         raise RuntimeError("Unable to find version string.")
 
 
-DISTNAME = 'sesame'
+DISTNAME = 'sesameeg'
 DESCRIPTION = 'Sequential Monte Carlo algorithm for multi dipolar source modeling in MEEG.'
 with codecs.open('README.rst', encoding='utf-8-sig') as f:
     LONG_DESCRIPTION = f.read()
 MAINTAINER = 'Sara Sommariva'
 MAINTAINER_EMAIL = 'sommariva@dima.unige.it'
-URL = 'https://github.com/mne-tools/sesame'
+URL = 'https://github.com/mne-tools/sesameeg'
 LICENSE = 'new BSD'
-DOWNLOAD_URL = 'https://github.com/mne-tools/sesame'
+DOWNLOAD_URL = 'https://github.com/mne-tools/sesameeg'
 VERSION = __version__
 INSTALL_REQUIRES = ['numpy', 'scipy', 'mne']
 CLASSIFIERS = ['Intended Audience :: Science/Research',

@@ -73,7 +73,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'sesame'
+project = u'sesameeg'
 copyright = u"2019, BEES's developer"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -81,7 +81,7 @@ copyright = u"2019, BEES's developer"
 # built documents.
 #
 # The short X.Y version.
-from sesame import __version__
+from sesameeg import __version__
 version = __version__
 # The full version, including alpha/beta/rc tags.
 release = __version__
@@ -329,9 +329,9 @@ except Exception:
 sphinx_gallery_conf = {
     'plot_gallery': 'True',  # Avoid annoying Unicode/bool default warning
     'image_scrapers': ('matplotlib', 'mayavi'),
-    'doc_module': 'sesame',
+    'doc_module': 'sesameeg',
     'backreferences_dir': os.path.join('generated'),
-    'reference_url': {'sesame': None}
+    'reference_url': {'sesameeg': None}
 }
 
 def setup(app):

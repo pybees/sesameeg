@@ -25,7 +25,7 @@ install this package, please run the following commands:
 .. code::
 
     pip install numpy scipy mne
-    pip install sesame
+    pip install sesameeg
 
 If you do not have admin privileges on the computer, use the ``--user`` flag
 with ``pip``. To upgrade, use the ``--upgrade`` flag provided by ``pip``.
@@ -34,7 +34,7 @@ To check if everything worked fine, you can run:
 
 .. code::
 
-	python -c 'import sesame'
+	python -c 'import sesameeg'
 
 and it should not give any error messages.
 
@@ -42,7 +42,7 @@ and it should not give any error messages.
 Bug reports
 ===========
 
-Use the `github issue tracker <https://github.com/sarasommariva/sesame_doc/issues>`_ to report bugs.
+Use the `github issue tracker <https://github.com/sarasommariva/sesameeg_doc/issues>`_ to report bugs.
 
 
 Authors of the code

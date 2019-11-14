@@ -841,7 +841,7 @@ class Sesame(object):
             _part.compute_loglikelihood_unit(self.r_data, self.lead_field,
                                              self.s_noise, self.s_q)
 
-    def apply_sesame(self, estimate_all=False, estimate_q=True):
+    def apply_sesameeg(self, estimate_all=False, estimate_q=True):
         """Run SESAME and compute point estimates.
 
         Parameters
@@ -1138,7 +1138,7 @@ class Sesame(object):
 
         if len(self.est_n_dips) == 0:
             raise AttributeError("No estimation found."
-                                 "Run apply_sesame first.")
+                                 "Run apply_sesameeg first.")
         if self.est_q is None:
             raise AttributeError("No dipoles' moment found."
                                  " Run compute_q first.")

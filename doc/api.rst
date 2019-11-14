@@ -2,7 +2,7 @@
 API
 ###
 
-.. currentmodule:: sesame.sasmc
+.. currentmodule:: sesameeg.sasmc
 
 Classes
 =======

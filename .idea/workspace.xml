@@ -44,7 +44,7 @@
         </entry>
       </file>
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sesame/__init__.py">
+        <entry file="file://$PROJECT_DIR$/sesameeg/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -66,7 +66,7 @@
         </entry>
       </file>
       <file leaf-file-name="sasmc.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sesame/sasmc.py">
+        <entry file="file://$PROJECT_DIR$/sesameeg/sasmc.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-2454">
               <caret line="639" column="6" lean-forward="false" selection-start-line="639" selection-start-column="6" selection-end-line="639" selection-end-column="6" />
@@ -125,7 +125,7 @@
       <list>
         <option value="$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py" />
         <option value="$PROJECT_DIR$/doc/api.rst" />
-        <option value="$PROJECT_DIR$/sesame/sasmc.py" />
+        <option value="$PROJECT_DIR$/sesameeg/sasmc.py" />
         <option value="$PROJECT_DIR$/doc/conf.py" />
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/doc/index.rst" />
@@ -165,21 +165,21 @@
         <subPane>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="sesame_doc" />
+              <option name="myItemId" value="sesameeg_doc" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="sesame_doc" />
+              <option name="myItemId" value="sesameeg_doc" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="sesame_doc" />
+              <option name="myItemId" value="sesameeg_doc" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="sesame_doc" />
+              <option name="myItemId" value="sesameeg_doc" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -216,7 +216,7 @@
           <PATH vcs="Git" revision="">$PROJECT_DIR$/doc/explanation_algorithm.rst</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/doc/index.rst</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/sesame/sasmc.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/sesameeg/sasmc.py</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Created" />
@@ -531,7 +531,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sesame/sasmc.py">
+    <entry file="file://$PROJECT_DIR$/sesameeg/sasmc.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -591,7 +591,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sesame/sasmc.py">
+    <entry file="file://$PROJECT_DIR$/sesameeg/sasmc.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -651,7 +651,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sesame/sasmc.py">
+    <entry file="file://$PROJECT_DIR$/sesameeg/sasmc.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="522">
           <caret line="40" column="0" lean-forward="true" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
@@ -728,7 +728,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sesame/__init__.py">
+    <entry file="file://$PROJECT_DIR$/sesameeg/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -738,7 +738,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sesame/sasmc.py">
+    <entry file="file://$PROJECT_DIR$/sesameeg/sasmc.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2454">
           <caret line="639" column="6" lean-forward="false" selection-start-line="639" selection-start-column="6" selection-end-line="639" selection-end-column="6" />

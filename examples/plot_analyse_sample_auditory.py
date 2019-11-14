@@ -19,7 +19,7 @@ from mne.datasets import sample
 from mne import read_forward_solution, pick_types_forward, read_evokeds
 from mne.label import _n_colors
 
-from sesame.sasmc import Sesame
+from sesameeg.sasmc import Sesame
 from mayavi import mlab
 
 data_path = sample.data_path()
@@ -75,23 +75,23 @@ cov = None
 # cov = read_cov(fname_cov)
 
 
-_sesame = Sesame(fwd, evoked, n_parts=n_parts, s_noise=sigma_noise,
+_sesameeg = Sesame(fwd, evoked, n_parts=n_parts, s_noise=sigma_noise,
                  sample_min=sample_min, sample_max=sample_max,
                  s_q=sigma_q, cov=cov, subsample=subsample, verbose=False)
-_sesame.apply_sesame()
-gof = _sesame.goodness_of_fit()
+_sesameeg.apply_sesameeg()
+gof = _sesameeg.goodness_of_fit()
 
-print('    Estimated number of sources: {0}'.format(_sesame.est_n_dips[-1]))
-print('    Estimated source locations: {0}'.format(_sesame.est_locs[-1]))
+print('    Estimated number of sources: {0}'.format(_sesameeg.est_n_dips[-1]))
+print('    Estimated source locations: {0}'.format(_sesameeg.est_locs[-1]))
 print('    Goodness of fit with the recorded data: {0}'.format(gof))
 
 ###############################################################################
 # Visualize amplitude of the estimated sources as function of time.
-est_n_dips = _sesame.est_n_dips[-1]
-est_locs = _sesame.est_locs[-1]
+est_n_dips = _sesameeg.est_n_dips[-1]
+est_locs = _sesameeg.est_locs[-1]
 
-times = evoked.times[_sesame.s_min:_sesame.s_max+1]
-amplitude = np.array([np.linalg.norm(_sesame.est_q[:, i_d:3 * (i_d + 1)],
+times = evoked.times[_sesameeg.s_min:_sesameeg.s_max+1]
+amplitude = np.array([np.linalg.norm(_sesameeg.est_q[:, i_d:3 * (i_d + 1)],
                                      axis=1) for i_d in range(est_n_dips)])
 colors = _n_colors(est_n_dips)
 plt.figure()
@@ -104,7 +104,7 @@ plt.show()
 ###############################################################################
 # Visualize the posterior map of the dipoles' location
 # :math:`p(r| \textbf{y}, 2)` and the estimated sources on the inflated brain.
-stc = _sesame.to_stc(subject)
+stc = _sesameeg.to_stc(subject)
 clim = dict(kind='value', lims=[1e-4, 1e-1, 1])
 brain = stc.plot(subject, surface='inflated', hemi='split', clim=clim,
                  time_label=' ', subjects_dir=subjects_dir, size=(1000, 600))
