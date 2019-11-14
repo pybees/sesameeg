@@ -74,7 +74,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'sesame'
-copyright = u'2016, Vighnesh Birodkar'
+copyright = u"2019, BEES's developer"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -144,8 +144,8 @@ html_theme_options = {
     'navbar_links': [
         ("Examples", "auto_examples/index"),
         ("API", "api"),
-        ("Explanation", "explanation_algorithm")
-#        ("GitHub", "https://github.com/aaltoimaginglanguage/conpy", True)
+        ("Explanation", "explanation_algorithm"),
+        ("GitHub", "https://github.com/orgs/pybees", True)
     ],
     'bootswatch_theme': "flatly"
 }
