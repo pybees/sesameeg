@@ -17,32 +17,57 @@
 .. |ReadTheDocs| image:: https://readthedocs.org/projects/mne-project-template/badge/?version=latest
 .. _ReadTheDocs: https://mne-project-template.readthedocs.io/en/latest/?badge=latest
 
-mne-project-template - A template for mne-python compatible extensions
-======================================================================
+SESAMEEG: SEquential Semi-Analytic Montecarlo Estimation for MEEG
+=================================================================
 
-.. _mne-python: https://martinos.org/mne/stable/index.html
+This is a Python3 implementation of the Bayesian multi-dipole modeling method and Sequential Monte Carlo algorithm
+SESAME described in [1]_.
+The algorithm takes in input a forward solution and a MEEG evoked data time series, and outputs a posterior
+probability map for brain activity, as well as estimates of the  number of sources, their locations and their
+amplitudes.
 
-**mne-project-template** is a template project for mne-python_ compatible
-extensions.
+Installation
+============
 
-*Thank you for cleanly contributing to the mne-python ecosystem!*
+To install this package, the easiest way is using ``pip``. It will install this
+package and its dependencies. The ``setup.py`` depends on ``numpy``, ``scipy``  and ``mne``
+for the installation so it is advised to install them beforehand. To
+install this package, please run the following commands:
 
-.. _documentation: https://mne-project-template.readthedocs.io/en/latest/quick_start.html
+(Latest stable version)
 
-Refer to the documentation_ to modify the template for your own mne-python
-extension or follow this quick reference::
+.. code::
 
-    $ git clone https://github.com/mne-tools/mne-project-template.git mne-foo
-    $ cd mne-foo
-    $ # update mne_project_template_bootstrap.sh
-    $ bash mne_project_template_bootstrap.sh
-    $ rm mne_project_template_bootstrap.sh
-    $ rm -rf .git
-    $ git init && git add . && git commit -m 'Initial commit'
-    $ git remote add origin https://github.com/your_remote/mne-foo.git
-    $ git push origin master
-    $ # Activate all CIs
+    pip install numpy scipy mne
+    pip install sesameeg
 
-Notice that appveyor badge image needs to be updated manually. Go where ``_AppVeyor:`` pints
-in the resulting `README.rst` after bootstraping and substitute `4qrnsuohh5g53i5u` with
-the relevant information from `settings` -> `badges` in appveyor's website of your project.
+If you do not have admin privileges on the computer, use the ``--user`` flag
+with ``pip``. To upgrade, use the ``--upgrade`` flag provided by ``pip``.
+
+To check if everything worked fine, you can run:
+
+.. code::
+
+	python -c 'import sesameeg'
+
+and it should not give any error messages.
+
+
+Bug reports
+===========
+
+Use the `github issue tracker <https://github.com/sarasommariva/sesameeg_doc/issues>`_ to report bugs.
+
+
+Authors of the code
+-------------------
+| Gianvittorio Luria <luria@dima.unige.it>,
+| Sara Sommariva <sommariva@dima.unige.it>,
+| Alberto Sorrentino <sorrentino@dima.unige.it>.
+
+Cite our work
+=============
+
+If you use this code in your project, please consider citing our work:
+
+.. [1] S. Sommariva and A. Sorrentino, `Sequential Monte Carlo samplers for semi-linear inverse problems and application to Magnetoencephalography <https://doi.org/10.1088/0266-5611/30/11/114020>`_. Inverse Problems, 30 114020 (2014).
