@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-SESAME: SEquential Semi-Analytic Montecarlo Estimation
-======================================================
+SESAMEEG: SEquential Semi-Analytic Montecarlo Estimation for MEEG
+=================================================================
 
 This is a Python3 implementation of the Bayesian multi-dipole modeling method and Sequential Monte Carlo algorithm
 SESAME described in [1]_.

@@ -19,8 +19,7 @@ from mne.datasets import sample
 from mne import read_forward_solution, pick_types_forward, read_evokeds
 from mne.label import _n_colors
 
-#from sesame.sasmc import Sesame
-from sesame import  Sesame
+from sesameeg import Sesame
 from mayavi import mlab
 
 data_path = sample.data_path()
