@@ -159,7 +159,7 @@ def estimate_s_q(r_data, lf):
         The estimated standard deviation.
     """
 
-    s_q = 15 * np.max(abs(r_data)) / np.max(abs(lf))
+    s_q = 1.5 * np.max(abs(r_data)) / np.max(abs(lf))
     return s_q
 
 

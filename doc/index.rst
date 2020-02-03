@@ -3,14 +3,15 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-SESAMEEG: SEquential Semi-Analytic Montecarlo Estimation for MEEG
-=================================================================
+SESAMEEG
+========
 
-This is a Python3 implementation of the Bayesian multi-dipole modeling method and Sequential Monte Carlo algorithm
-SESAME described in [1]_.
-The algorithm takes in input a forward solution and a MEEG evoked data time series, and outputs a posterior
-probability map for brain activity, as well as estimates of the  number of sources, their locations and their
-amplitudes.
+SESAMEEG is a Python3 library providing the Bayesian multi-dipole localization method
+SESAME [1]_ (SEquential Semi-Analytic Montecarlo Estimation) for the automatic estimation of
+brain source currents from MEEG data.
+
+A mathematical descriptions of the algorithm is available in the documentation.
+
 
 Installation
 ============
@@ -42,7 +43,7 @@ and it should not give any error messages.
 Bug reports
 ===========
 
-Use the `github issue tracker <https://github.com/sarasommariva/sesameeg_doc/issues>`_ to report bugs.
+Use the `github issue tracker <https://github.com/pybees/sesameeg/issues>`_ to report bugs.
 
 
 Authors of the code

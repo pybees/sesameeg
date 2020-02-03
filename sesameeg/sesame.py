@@ -34,6 +34,9 @@ def write_sesame_h5(fpath, sesame, tmin=None, tmax=None, subsample=None,
     _est_cs = f.create_group('est_locs')
     for i, _e in enumerate(sesame.est_locs):
         _est_cs.create_dataset(str(i), data=_e)
+    _est_q = f.create_group('est_q')
+    for i, _e in enumerate(sesame.est_q):
+        _est_q.create_dataset(str(i), data=_e)
     _est_ndips = f.create_dataset('est_n_dips',
                                   data=np.asarray(sesame.est_n_dips))
     _model_sel = f.create_group('model_sel')
@@ -52,6 +55,7 @@ def write_sesame_h5(fpath, sesame, tmin=None, tmax=None, subsample=None,
     _sn = f.create_dataset('sigma_noise', data=sesame.s_noise)
     _sq = f.create_dataset('sigma_q', data=sesame.s_q)
     if sesame.hyper_q:
+        _fin_sq = f.create_dataset('final_s_q', data=sesame.final_s_q)
         _est_s_q = f.create_group('est_s_q')
         for i, _sq in enumerate(sesame.est_s_q):
             _est_s_q.create_dataset(str(i), data=_sq)
@@ -113,13 +117,23 @@ def read_sesame_h5(fpath):
         else:
             res[_k] = 'Not available.'
 
-    for _k in ['lambda', 'sigma_noise', 'sigma_q', 'n_max_dip',
+    for _k in ['lambda', 'sigma_noise', 'sigma_q', 'n_max_dip', 'final_s_q',
                'tmin', 'tmax', 'subsample', 'subject', 'subject_viz',
                'data_path', 'fwd_path', 'src_path', 'lf_path']:
         if _k in f.keys():
             res[_k] = f[_k][()]
         else:
             res[_k] = 'Not available.'
+
+    if 'est_q' in f.keys():
+        est_q_temp = np.asarray(list(f['est_q'][_key][:] for _key in sorted(f['est_q'].keys(),
+                                                                            key=lambda x: int(x))))
+        est_q_aux = np.zeros((res['est_locs'][-1].shape[0], est_q_temp.shape[0], 3))
+        for i in range(est_q_temp.shape[0]):
+            _temp = est_q_temp[i, :].reshape(-1, 3)
+            for j in range(res['est_locs'][-1].shape[0]):
+                est_q_aux[j, i, :] += _temp[j]
+        res['est_q'] = est_q_aux
 
     f.close()
     return res
@@ -344,6 +358,7 @@ class Sesame(object):
         self.est_locs = list()
         self.est_q = None
         self.est_s_q = None
+        self.final_s_q = None
         self.model_sel = list()
         self.blob = list()
 
@@ -482,12 +497,22 @@ class Sesame(object):
         est_num = est_locs.shape[0]
         [n_sens, n_time] = np.shape(self.r_data)
 
+        if self.hyper_q:
+            weights = np.exp(self.emp.logweights)
+            assert np.abs(np.sum(weights) - 1) < 1e-15
+            est_sq = np.asarray([self.est_s_q[p][-1] for p in range(self.n_parts)])
+            _s_q = np.dot(weights, est_sq)
+            self.final_s_q = _s_q
+            print('Estimated dipole strength variance: {}'.format(_s_q))
+        else:
+            _s_q = self.s_q
+
         ind = np.ravel([[3*est_locs[idip], 3*est_locs[idip]+1,
                        3*est_locs[idip]+2] for idip in range(est_num)])
         Gc = self.lead_field[:, ind]
-        sigma = (self.s_q / self.s_noise)**2 * np.dot(Gc, np.transpose(Gc)) +\
+        sigma = (_s_q / self.s_noise)**2 * np.dot(Gc, np.transpose(Gc)) +\
             np.eye(n_sens)
-        kal_mat = (self.s_q / self.s_noise)**2 * np.dot(np.transpose(Gc),
+        kal_mat = (_s_q / self.s_noise)**2 * np.dot(np.transpose(Gc),
                                                         np.linalg.inv(sigma))
         self.est_q = np.array([np.dot(kal_mat, self.r_data[:, t])
                               for t in range(n_time)])

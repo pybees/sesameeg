@@ -19,7 +19,7 @@ from mne.datasets import sample
 from mne import read_forward_solution, pick_types_forward, read_evokeds
 from mne.label import _n_colors
 
-from sesameeg import Sesame
+from sesameeg import Sesame, write_sesame_h5
 from mayavi import mlab
 
 data_path = sample.data_path()
@@ -62,7 +62,7 @@ plt.show()
 
 ###############################################################################
 # Run SESAME.
-n_parts = 10
+n_parts = 100
 # If None, sigma_noise and sigma_q will be estimated by SESAME.
 sigma_noise = None
 sigma_q = None
@@ -117,5 +117,12 @@ for idx, loc in enumerate(est_locs):
     else:
         brain.add_foci(stc.vertices[1][loc-nv_lh], coords_as_verts=True,
                        hemi='rh', color=colors[idx], scale_factor=0.3)
+
+###############################################################################
+# Save results to an .h5 file
+
+write_sesame_h5('/home/gv/Codici/Python Scripts/DESIRE/prova_h.h5', _sesame,
+                tmin=time_in, tmax=time_fin, subsample=subsample, sbj=subject,
+                data_path=fname_evoked, fwd_path=fname_fwd)
 
 mlab.show()
