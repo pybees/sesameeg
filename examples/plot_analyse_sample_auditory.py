@@ -19,7 +19,7 @@ from mne.datasets import sample
 from mne import read_forward_solution, pick_types_forward, read_evokeds
 from mne.label import _n_colors
 
-from sesameeg import Sesame, write_sesame_h5
+from sesameeg import Sesame
 from mayavi import mlab
 
 data_path = sample.data_path()
@@ -68,7 +68,7 @@ sigma_noise = None
 sigma_q = None
 
 cov = None
-# If a noise covariance is provided, SESAME will be pre-whiten the data
+# If a noise covariance is provided, SESAME will pre-whiten the data
 # from mne import read_cov
 # fname_cov = op.join(sample.data_path(), 'MEG', subject,
 #                    'sample_audvis-cov.fif')
@@ -80,11 +80,17 @@ _sesame = Sesame(fwd, evoked, n_parts=n_parts, s_noise=sigma_noise,
                  s_q=sigma_q, cov=cov, subsample=subsample,
                  hyper_q=True, verbose=False)
 _sesame.apply_sesame()
-gof = _sesame.goodness_of_fit()
 
 print('    Estimated number of sources: {0}'.format(_sesame.est_n_dips[-1]))
 print('    Estimated source locations: {0}'.format(_sesame.est_locs[-1]))
-print('    Goodness of fit with the recorded data: {0}'.format(gof))
+
+# Compute goodness of fit
+gof = _sesame.goodness_of_fit()
+print('    Goodness of fit with the recorded data: {0}%'.format(round(gof, 4) * 100))
+
+# Compute source dispersion
+sd = _sesame.source_dispersion()
+print('    Source Dispersion: {0} mm'.format(round(sd, 2)))
 
 ###############################################################################
 # Visualize amplitude of the estimated sources as function of time.
@@ -105,7 +111,7 @@ plt.show()
 ###############################################################################
 # Visualize the posterior map of the dipoles' location
 # :math:`p(r| \textbf{y}, 2)` and the estimated sources on the inflated brain.
-stc = _sesame.to_stc(subject)
+stc = _sesame.compute_stc(subject)
 clim = dict(kind='value', lims=[1e-4, 1e-1, 1])
 brain = stc.plot(subject, surface='inflated', hemi='split', clim=clim,
                  time_label=' ', subjects_dir=subjects_dir, size=(1000, 600))
@@ -120,9 +126,13 @@ for idx, loc in enumerate(est_locs):
 
 ###############################################################################
 # Save results to an .h5 file
-
-write_sesame_h5('/home/gv/Codici/Python Scripts/DESIRE/prova_h.h5', _sesame,
+_sesame.save_h5('/home/gv/Codici/Python_Scripts/DESIRE/prova_h.h5',
                 tmin=time_in, tmax=time_fin, subsample=subsample, sbj=subject,
                 data_path=fname_evoked, fwd_path=fname_fwd)
+
+# Save results to an .pkl file
+_sesame.save_pkl('/home/gv/Codici/Python_Scripts/DESIRE/prova_h.pkl',
+                 tmin=time_in, tmax=time_fin, subsample=subsample, sbj=subject,
+                 data_path=fname_evoked, fwd_path=fname_fwd)
 
 mlab.show()

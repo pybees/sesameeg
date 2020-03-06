@@ -12,131 +12,13 @@ import numpy as np
 import scipy.spatial.distance as ssd
 from mne.cov import compute_whitener
 from mne.forward import _select_orient_forward
-
 from .emp_pdf import EmpPdf
 from .particles import Particle
 from .utils import compute_neighbours_matrix, initialize_radius, \
     compute_neighbours_probability_matrix, estimate_s_noise, estimate_s_q
-from .utils import _check_h5_installed, is_evoked, is_forward
-
-
-def write_sesame_h5(fpath, sesame, tmin=None, tmax=None, subsample=None,
-                    sbj=None, sbj_viz=None, data_path=None, fwd_path=None,
-                    src_path=None, lf_path=None):
-    _check_h5_installed()
-    import h5py as h5
-
-    f = h5.File(fpath, 'w')
-
-    _blob = f.create_group('prob_map')
-    for i, _b in enumerate(sesame.blob):
-        _blob.create_dataset(str(i), data=_b)
-    _est_cs = f.create_group('est_locs')
-    for i, _e in enumerate(sesame.est_locs):
-        _est_cs.create_dataset(str(i), data=_e)
-    _est_q = f.create_group('est_q')
-    for i, _e in enumerate(sesame.est_q):
-        _est_q.create_dataset(str(i), data=_e)
-    _est_ndips = f.create_dataset('est_n_dips',
-                                  data=np.asarray(sesame.est_n_dips))
-    _model_sel = f.create_group('model_sel')
-    for i, _m in enumerate(sesame.model_sel):
-        _model_sel.create_dataset(str(i), data=_m)
-    _exponents = f.create_dataset('exponents',
-                                  data=sesame.emp.exponents)
-    if hasattr(sesame, 'forward'):
-        _ch_n = sesame.forward['info']['ch_names']
-        _ch_names = f.create_dataset('ch_names',
-                                     shape=(len(_ch_n), 1),
-                                     dtype='S10',
-                                     data=list(ch.encode('ascii', 'ignore')
-                                               for ch in _ch_n))
-    _lam = f.create_dataset('lambda', data=sesame.lam)
-    _sn = f.create_dataset('sigma_noise', data=sesame.s_noise)
-    _sq = f.create_dataset('sigma_q', data=sesame.s_q)
-    if sesame.hyper_q:
-        _fin_sq = f.create_dataset('final_s_q', data=sesame.final_s_q)
-        _est_s_q = f.create_group('est_s_q')
-        for i, _sq in enumerate(sesame.est_s_q):
-            _est_s_q.create_dataset(str(i), data=_sq)
-    _np = f.create_dataset('n_parts', data=sesame.n_parts)
-    _ndm = f.create_dataset('n_max_dip', data=sesame.N_dip_max)
-    if tmin is not None:
-        _tmin = f.create_dataset('tmin', data=tmin)
-    if tmax is not None:
-        _tmax = f.create_dataset('tmax', data=tmax)
-    if subsample is not None:
-        _subsample = f.create_dataset('subsample', data=subsample)
-    if sbj is not None:
-        _sbj = f.create_dataset('subject', data=sbj)
-    if sbj_viz is not None:
-        _sbj_viz = f.create_dataset('subject_viz', data=sbj_viz)
-    if data_path is not None:
-        _dpath = f.create_dataset('data_path', data=data_path)
-    if fwd_path is not None:
-        _fwdpath = f.create_dataset('fwd_path', data=fwd_path)
-    if src_path is not None:
-        _srcpath = f.create_dataset('src_path', data=src_path)
-    if lf_path is not None:
-        _lfpath = f.create_dataset('lf_path', data=lf_path)
-
-    f.close()
-    print('SESAME solution written in {}'.format(fpath))
-    return
-
-
-def read_sesame_h5(fpath):
-    _check_h5_installed()
-    import h5py as h5
-
-    f = h5.File(fpath, 'r')
-    res = dict()
-
-    if 'est_n_dips' in f.keys():
-        res['est_n_dips'] = list(f['est_n_dips'][:])
-    else:
-        res['est_n_dips'] = 'Not available.'
-
-    if 'exponents' in f.keys():
-        res['exponents'] = f['exponents'][:]
-    else:
-        res['exponents'] = 'Not available.'
-
-    if 'ch_names' in f.keys():
-        _temp = list(f['ch_names'][:].flatten())
-        res['ch_names'] = list(x.decode('utf-8', 'ignore') for x in _temp)
-        del _temp
-    else:
-        res['ch_names'] = 'Not available.'
-
-    for _k in ['prob_map', 'est_locs', 'model_sel', 'est_s_q']:
-        if _k in f.keys():
-            res[_k] = list(f[_k][_key][:]
-                           for _key in sorted(f[_k].keys(),
-                                              key=lambda x: int(x)))
-        else:
-            res[_k] = 'Not available.'
-
-    for _k in ['lambda', 'sigma_noise', 'sigma_q', 'n_max_dip', 'final_s_q',
-               'tmin', 'tmax', 'subsample', 'subject', 'subject_viz',
-               'data_path', 'fwd_path', 'src_path', 'lf_path']:
-        if _k in f.keys():
-            res[_k] = f[_k][()]
-        else:
-            res[_k] = 'Not available.'
-
-    if 'est_q' in f.keys():
-        est_q_temp = np.asarray(list(f['est_q'][_key][:] for _key in sorted(f['est_q'].keys(),
-                                                                            key=lambda x: int(x))))
-        est_q_aux = np.zeros((res['est_locs'][-1].shape[0], est_q_temp.shape[0], 3))
-        for i in range(est_q_temp.shape[0]):
-            _temp = est_q_temp[i, :].reshape(-1, 3)
-            for j in range(res['est_locs'][-1].shape[0]):
-                est_q_aux[j, i, :] += _temp[j]
-        res['est_q'] = est_q_aux
-
-    f.close()
-    return res
+from .utils import is_evoked, is_forward
+from .io import write_h5, write_pkl
+from .metrics import compute_goodness_of_fit, compute_sd
 
 
 class Sesame(object):
@@ -542,23 +424,48 @@ class Sesame(object):
             raise AttributeError("No dipoles' moment found."
                                  " Run compute_q first.")
 
-        est_n_dips = self.est_n_dips[-1]
-        est_locs = self.est_locs[-1]
-        est_q = self.est_q
-        meas_field = self.r_data
-        rec_field = np.zeros(meas_field.shape)
-        for i_d in range(est_n_dips):
-            rec_field += np.dot(self.lead_field[:, 3*est_locs[i_d]:
-                                                3*(est_locs[i_d]+1)],
-                                est_q[:, 3*i_d:3*(i_d+1)].T)
-
-        gof = 1 - np.linalg.norm(meas_field - rec_field) \
-            / np.linalg.norm(meas_field)
-
+        gof = compute_goodness_of_fit(self.r_data, self.est_n_dips[-1],
+                                      self.est_locs[-1], self.est_q,
+                                      self.lead_field)
         return gof
 
+    def source_dispersion(self):
+        blob_tot = np.sum(self.blob[-1], axis=0)
+        est_pos = self.source_space[self.est_locs[-1]]
+        sd = compute_sd(self.source_space, blob_tot, est_pos)
+        return sd
+
+    def compute_stc(self, subject=None):
+        """Compute a SourceEstimate object from the posterior pdf
+        :math:`p(r|\\mathbf{y}, \\hat{n}_D)`, where :math:`\\hat{n}_D`
+        is the estimated number of sources.
+        For each point :math:`r` of the brain discretization
+        :math:`p(r|\\mathbf{y}, \\hat{n}_D)` is the probability of a
+        source being located in :math:`r`.
+
+        Parameters
+        ----------
+        subject : str | None
+            The subject name.
+
+        Returns
+        --------
+        stc : instance of SourceEstimate.
+            The source estimate object containing the posterior map of the
+            dipoles' location.
+        """
+        if self.forward['src'].kind == 'surface':
+            print('Surface stc computed.')
+            return self.to_stc(subject=subject)
+        elif self.forward['src'].kind == 'volume':
+            raise NotImplementedError
+            # print('Volume stc computed  ')
+            # return self.to_vol_stc(subject=subject)
+        else:
+            raise ValueError('src can be either surface or volume')
+
     def to_stc(self, subject=None):
-        """Compute and export in .stc file the posterior pdf
+        """Compute a SourceEstimate object from the posterior pdf
         :math:`p(r|\\mathbf{y}, \\hat{n}_D)`, where :math:`\\hat{n}_D`
         is the estimated number of sources.
         For each point :math:`r` of the brain discretization
@@ -598,3 +505,67 @@ class Sesame(object):
         stc = SourceEstimate(data=blob_tot.T, vertices=vertno, tmin=tmin,
                              tstep=1, subject=subject)
         return stc
+
+    def save_h5(self, fpath, tmin=None, tmax=None, subsample=None,
+                sbj=None, sbj_viz=None, data_path=None, fwd_path=None,
+                src_path=None, lf_path=None):
+        """Save SESAME result to an HDF5 file.
+
+        Parameters
+        ----------
+        fpath: str
+            The path to the save file
+        tmin: float | None
+            The first instant (in seconds) of the time window in which data have been analyzed.
+        tmax: float | None
+            The last instant (in seconds) of the time window in which data have been analyzed.
+        subsample : int | None
+            The step used to subsample the data.
+        sbj : str | None
+            The subject name.
+        sbj_viz: str | None
+            The name of the subject's FreeSurfer folder.
+        data_path: str | None
+            The path to the data file
+        fwd_path: str | None
+            The path to the forward solution file
+        src_path: str | None
+            The path to the source space file
+        lf_path: str | None
+            The path to the leadfield matrix file
+        """
+        write_h5(fpath, self, tmin=tmin, tmax=tmax, subsample=subsample,
+                 sbj=sbj, sbj_viz=sbj_viz, data_path=data_path,
+                 fwd_path=fwd_path, src_path=src_path, lf_path=lf_path)
+
+    def save_pkl(self, fpath, tmin=None, tmax=None, subsample=None,
+                sbj=None, sbj_viz=None, data_path=None, fwd_path=None,
+                src_path=None, lf_path=None):
+        """Save SESAME result to an Python pickle file.
+
+        Parameters
+        ----------
+        fpath: str
+            The path to the save file
+        tmin: float | None
+            The first instant (in seconds) of the time window in which data have been analyzed.
+        tmax: float | None
+            The last instant (in seconds) of the time window in which data have been analyzed.
+        subsample : int | None
+            The step used to subsample the data.
+        sbj : str | None
+            The subject name.
+        sbj_viz: str | None
+            The name of the subject's FreeSurfer folder.
+        data_path: str | None
+            The path to the data file
+        fwd_path: str | None
+            The path to the forward solution file
+        src_path: str | None
+            The path to the source space file
+        lf_path: str | None
+            The path to the leadfield matrix file
+        """
+        write_pkl(fpath, self, tmin=tmin, tmax=tmax, subsample=subsample,
+                  sbj=sbj, sbj_viz=sbj_viz, data_path=data_path,
+                  fwd_path=fwd_path, src_path=src_path, lf_path=lf_path)

@@ -16,3 +16,16 @@ def _check_h5_installed(strict=True):
                                'library is required.')
         else:
             return False
+
+
+def _check_pickle_installed(strict=True):
+    """Aux function."""
+    try:
+        import pickle
+        return pickle
+    except ImportError:
+        if strict is True:
+            raise RuntimeError('For this functionality to work, the pickle '
+                               'library is required.')
+        else:
+            return False

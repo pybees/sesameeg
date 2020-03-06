@@ -6,4 +6,4 @@ from .smc_utils import (compute_neighbours_matrix, compute_neighbours_probabilit
                         initialize_radius, estimate_q_in, estimate_s_noise, estimate_s_q,
                         is_evoked, is_forward, sample_from_sphere, woodbury)
 
-from .check import _check_h5_installed
+from .check import _check_h5_installed, _check_pickle_installed
