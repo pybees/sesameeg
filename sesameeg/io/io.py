@@ -1,5 +1,52 @@
 import numpy as np
+from mne import SourceEstimate, VolSourceEstimate
 from ..utils import _check_h5_installed, _check_pickle_installed
+
+
+def _export_to_stc(inv_op, subject=None):
+    if not hasattr(inv_op, 'blob'):
+        raise AttributeError('Run the inversion algorithm first!!')
+
+    blobs = inv_op.blob
+    fwd = inv_op.forward
+    est_n_dips = inv_op.est_n_dips
+    vertno = [fwd['src'][0]['vertno'], fwd['src'][1]['vertno']]
+    nv_tot = fwd['nsource']
+
+    blob_tot = np.zeros([len(blobs), nv_tot])
+    for it, bl in enumerate(blobs):
+        if est_n_dips[it] > 0:
+            blob_tot[it] = np.sum(bl, axis=0)
+
+    tmin = 1
+    stc = SourceEstimate(data=blob_tot.T, vertices=vertno, tmin=tmin,
+                         tstep=1, subject=subject)
+    return stc
+
+
+def _export_to_vol_stc(inv_op, subject=None):
+    if not hasattr(inv_op, 'blob'):
+        raise AttributeError('Run the inversion algorithm first!!')
+
+    blobs = inv_op.blob
+    est_n_dips = inv_op.est_n_dips
+    if len(inv_op.forward['src']) == 2:
+        vertno = [inv_op.forward['src'][0]['vertno'],
+                  inv_op.forward['src'][1]['vertno']]
+    elif len(inv_op.forward['src']) == 1:
+        vertno = inv_op.forward['src'][0]['vertno']
+    else:
+        raise ValueError
+    nv_tot = inv_op.forward['nsource']
+    blob_tot = np.zeros([len(blobs), nv_tot])
+
+    for it, bl in enumerate(blobs):
+        if est_n_dips[it] > 0:
+            blob_tot[it] = np.sum(bl, axis=0)
+
+    vol_stc = VolSourceEstimate(data=blob_tot.T, vertices=vertno, tmin=1,
+                                tstep=1, subject=subject)
+    return vol_stc
 
 
 def write_h5(fpath, inv_op, tmin=None, tmax=None, subsample=None,

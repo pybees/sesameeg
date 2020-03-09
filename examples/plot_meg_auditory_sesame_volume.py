@@ -1,9 +1,10 @@
 """
-=============================
-Compute SESAME on evoked data
-=============================
+=======================================================
+Compute SESAME inverse solution in volume source space
+=======================================================
 
-Compute and visualize SESAME solution on the auditory sample dataset.
+Compute and visualize SESAME solution on the auditory sample dataset
+in a volume source space.
 """
 # Authors: Gianvittorio Luria <luria@dima.unige.it>
 #          Sara Sommariva <sommariva@dima.unige.it>
@@ -12,27 +13,37 @@ Compute and visualize SESAME solution on the auditory sample dataset.
 # License: BSD (3-clause)
 
 from os import path as op
-import numpy as np
 import matplotlib.pyplot as plt
-
+import numpy as np
+from nilearn.plotting import plot_stat_map
+from nilearn.image import index_img
+from mne import read_forward_solution, pick_types_forward, read_evokeds, \
+    read_trans, head_to_mri
 from mne.datasets import sample
-from mne import read_forward_solution, pick_types_forward, read_evokeds
 from mne.label import _n_colors
-
 from sesameeg import Sesame
-from mayavi import mlab
+import time
+
 
 data_path = sample.data_path()
 subject = 'sample'
 subjects_dir = op.join(data_path, 'subjects')
 fname_fwd = op.join(data_path, 'MEG', subject,
-                    'sample_audvis-meg-eeg-oct-6-fwd.fif')
+                    'sample_audvis-meg-vol-7-fwd.fif')
+fname_trans = op.join(data_path, 'MEG', subject,
+                      'sample_audvis_raw-trans.fif')
+fname_t1 = op.join(data_path , 'subjects', subject, 'mri', 'T1.mgz')
 fname_evoked = op.join(data_path, 'MEG', subject, 'sample_audvis-ave.fif')
 
 ###############################################################################
-# Load the forward solution :math:`\textbf{G}` and the evoked data
+# Load the transformation matrix, the forward solution :math:`\textbf{G}` and the evoked data
 # :math:`\textbf{y}`.
 # The forward solution also defines the employed brain discretization.
+
+# Transformation matrix
+trans = read_trans(fname_trans)
+
+# Choose sensor type
 meg_sensor_type = True  # All meg sensors will be included
 eeg_sensor_type = False
 
@@ -77,20 +88,18 @@ cov = None
 
 _sesame = Sesame(fwd, evoked, n_parts=n_parts, s_noise=sigma_noise,
                  sample_min=sample_min, sample_max=sample_max,
-                 s_q=sigma_q, cov=cov, subsample=subsample,
-                 hyper_q=True, verbose=False)
+                 s_q=sigma_q, hyper_q=True, cov=cov, subsample=subsample,
+                 verbose=True)
+time_start = time.time()
 _sesame.apply_sesame()
-
+time_elapsed = (time.time() - time_start)
 print('    Estimated number of sources: {0}'.format(_sesame.est_n_dips[-1]))
 print('    Estimated source locations: {0}'.format(_sesame.est_locs[-1]))
+print('    Total computation time: {0}'.format(time_elapsed))
 
 # Compute goodness of fit
 gof = _sesame.goodness_of_fit()
 print('    Goodness of fit with the recorded data: {0}%'.format(round(gof, 4) * 100))
-
-# Compute source dispersion
-sd = _sesame.source_dispersion()
-print('    Source Dispersion: {0} mm'.format(round(sd, 2)))
 
 ###############################################################################
 # Visualize amplitude of the estimated sources as function of time.
@@ -112,21 +121,21 @@ plt.show()
 # Visualize the posterior map of the dipoles' location
 # :math:`p(r| \textbf{y}, 2)` and the estimated sources on the inflated brain.
 stc = _sesame.compute_stc(subject)
-clim = dict(kind='value', lims=[1e-4, 1e-1, 1])
-brain = stc.plot(subject, surface='inflated', hemi='split', clim=clim,
-                 time_label=' ', subjects_dir=subjects_dir, size=(1000, 600))
-nv_lh = stc.vertices[0].shape[0]
-for idx, loc in enumerate(est_locs):
-    if loc < nv_lh:
-        brain.add_foci(stc.vertices[0][loc], coords_as_verts=True,
-                       hemi='lh', color=colors[idx], scale_factor=0.3)
-    else:
-        brain.add_foci(stc.vertices[1][loc-nv_lh], coords_as_verts=True,
-                       hemi='rh', color=colors[idx], scale_factor=0.3)
 
-mlab.show()
+peak_vertex, peak_time = stc.get_peak(vert_as_index=True,
+                                      time_as_index=True)
+peak_pos = fwd['source_rr'][peak_vertex]
+peak_mri_pos = head_to_mri(peak_pos, mri_head_t=trans,
+                           subject=subject, subjects_dir=subjects_dir)
 
-###############################################################################
+_time = stc.times[-1]
+stc.crop(_time-1, _time)
+
+img = stc.as_volume(fwd['src'], mri_resolution=True)
+plot_stat_map(index_img(img, -1), fname_t1, threshold=0.001, cut_coords=peak_mri_pos)
+plt.show()
+
+########################################################################################
 # You can save result in HDF5 files with:
 # _sesame.save_h5(save_fname, tmin=time_in, tmax=time_fin, subsample=subsample,
 #                 sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)
@@ -134,5 +143,4 @@ mlab.show()
 # You can save result in Pickle files with:
 # _sesame.save_pkl(save_fname, tmin=time_in, tmax=time_fin, subsample=subsample,
 #                  sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)
-
 

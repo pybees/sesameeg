@@ -17,7 +17,7 @@ from .particles import Particle
 from .utils import compute_neighbours_matrix, initialize_radius, \
     compute_neighbours_probability_matrix, estimate_s_noise, estimate_s_q
 from .utils import is_evoked, is_forward
-from .io import write_h5, write_pkl
+from .io import _export_to_stc, _export_to_vol_stc, write_h5, write_pkl
 from .metrics import compute_goodness_of_fit, compute_sd
 
 
@@ -436,75 +436,32 @@ class Sesame(object):
         return sd
 
     def compute_stc(self, subject=None):
-        """Compute a SourceEstimate object from the posterior pdf
-        :math:`p(r|\\mathbf{y}, \\hat{n}_D)`, where :math:`\\hat{n}_D`
-        is the estimated number of sources.
-        For each point :math:`r` of the brain discretization
-        :math:`p(r|\\mathbf{y}, \\hat{n}_D)` is the probability of a
-        source being located in :math:`r`.
+        """Compute and export in .stc file the posterior pdf
+            :math:`p(r|\\mathbf{y}, \\hat{n}_D)`, where :math:`\\hat{n}_D`
+            is the estimated number of sources.
+            For each point :math:`r` of the brain discretization
+            :math:`p(r|\\mathbf{y}, \\hat{n}_D)` is the probability of a
+            source being located in :math:`r`.
 
-        Parameters
-        ----------
-        subject : str | None
-            The subject name.
+            Parameters
+            ----------
+            subject : str | None
+                The subject name.
 
-        Returns
-        --------
-        stc : instance of SourceEstimate.
-            The source estimate object containing the posterior map of the
-            dipoles' location.
-        """
+            Returns
+            --------
+            stc : SourceEstimate | VolSourceEstimate
+                The source estimate object containing the posterior map of the
+                dipoles' location.
+            """
         if self.forward['src'].kind == 'surface':
             print('Surface stc computed.')
-            return self.to_stc(subject=subject)
+            return _export_to_stc(self, subject=subject)
         elif self.forward['src'].kind == 'volume':
-            raise NotImplementedError
-            # print('Volume stc computed  ')
-            # return self.to_vol_stc(subject=subject)
+            print('Volume stc computed  ')
+            return _export_to_vol_stc(self, subject=subject)
         else:
             raise ValueError('src can be either surface or volume')
-
-    def to_stc(self, subject=None):
-        """Compute a SourceEstimate object from the posterior pdf
-        :math:`p(r|\\mathbf{y}, \\hat{n}_D)`, where :math:`\\hat{n}_D`
-        is the estimated number of sources.
-        For each point :math:`r` of the brain discretization
-        :math:`p(r|\\mathbf{y}, \\hat{n}_D)` is the probability of a
-        source being located in :math:`r`.
-
-        Parameters
-        ----------
-        subject : str | None
-            The subject name.
-
-        Returns
-        --------
-        stc : instance of SourceEstimate.
-            The source estimate object containing the posterior map of the
-            dipoles' location.
-        """
-
-        if 'SourceEstimate' not in dir():
-            from mne import SourceEstimate
-
-        if not hasattr(self, 'blob'):
-            raise AttributeError('Run SESAME first!!')
-
-        blobs = self.blob
-        fwd = self.forward
-        est_n_dips = self.est_n_dips
-        vertno = [fwd['src'][0]['vertno'], fwd['src'][1]['vertno']]
-        nv_tot = fwd['nsource']
-
-        blob_tot = np.zeros([len(blobs), nv_tot])
-        for it, bl in enumerate(blobs):
-            if est_n_dips[it] > 0:
-                blob_tot[it] = np.sum(bl, axis=0)
-
-        tmin = 1
-        stc = SourceEstimate(data=blob_tot.T, vertices=vertno, tmin=tmin,
-                             tstep=1, subject=subject)
-        return stc
 
     def save_h5(self, fpath, tmin=None, tmax=None, subsample=None,
                 sbj=None, sbj_viz=None, data_path=None, fwd_path=None,
