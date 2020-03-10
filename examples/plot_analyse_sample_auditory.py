@@ -30,7 +30,7 @@ fname_fwd = op.join(data_path, 'MEG', subject,
 fname_evoked = op.join(data_path, 'MEG', subject, 'sample_audvis-ave.fif')
 
 ###############################################################################
-# Load the forward solution :math:`\textbf{G}` and the evoked data
+# Load the forward solution  :math:`\textbf{G}`  and the evoked data
 # :math:`\textbf{y}`.
 # The forward solution also defines the employed brain discretization.
 meg_sensor_type = True  # All meg sensors will be included
@@ -61,7 +61,7 @@ for ax in fig.get_axes():
 plt.show()
 
 ###############################################################################
-# Run SESAME.
+# Apply SESAME.
 n_parts = 100
 # If None, sigma_noise and sigma_q will be estimated by SESAME.
 sigma_noise = None
@@ -93,7 +93,7 @@ sd = _sesame.source_dispersion()
 print('    Source Dispersion: {0} mm'.format(round(sd, 2)))
 
 ###############################################################################
-# Visualize amplitude of the estimated sources as function of time.
+# Visualize the amplitude of the estimated sources as function of time.
 est_n_dips = _sesame.est_n_dips[-1]
 est_locs = _sesame.est_locs[-1]
 
@@ -127,11 +127,13 @@ for idx, loc in enumerate(est_locs):
 mlab.show()
 
 ###############################################################################
-# You can save result in HDF5 files with:
+# Save results
+
+# You can save SESAME result in an HDF5 file with:
 # _sesame.save_h5(save_fname, tmin=time_in, tmax=time_fin, subsample=subsample,
 #                 sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)
 
-# You can save result in Pickle files with:
+# You can save SESAME result in a Pickle file with:
 # _sesame.save_pkl(save_fname, tmin=time_in, tmax=time_fin, subsample=subsample,
 #                  sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)
 

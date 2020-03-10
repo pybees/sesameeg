@@ -7,6 +7,7 @@
 # License: BSD (3-clause)
 
 import numpy as np
+import scipy.special as sps
 from mne.evoked import Evoked, EvokedArray
 from mne.forward import Forward
 
@@ -180,6 +181,27 @@ def estimate_s_noise(r_data):
 
     s_noise = 0.2 * np.max(abs(r_data))
     return s_noise
+
+
+def gamma_pdf(x, shape, scale):
+    """Evaluates the Gamma pdf on a single point.
+
+    Parameters
+    ----------
+    x : :py:class:`~float`
+        The point where to evaluate the Gamma pdf
+    shape : :py:class:`~int`
+        The Gamma pdf shape parameter :math:`k`
+    scale : :py:class:`~float`
+        The Gamma pdf scale parameter :math:`\\theta`
+
+    Returns
+    -------
+    gamma_x : :py:class:`~float`
+        The Gamma pdf evaluated on x
+    """
+    gamma_x = x**(shape-1)*(np.exp(-x/scale) / (sps.gamma(shape)*scale**shape))
+    return gamma_x
 
 
 def initialize_radius(src):

@@ -313,7 +313,8 @@ intersphinx_mapping = {
     'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
     'matplotlib': ('https://matplotlib.org/', None),
     'mayavi': ('http://docs.enthought.com/mayavi/mayavi', None),
-    'sklearn': ('http://scikit-learn.org/stable', None)
+    'sklearn': ('http://scikit-learn.org/stable', None),
+    'mne': ('https://mne.tools/stable/', None)
 }
 
 try:

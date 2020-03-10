@@ -7,26 +7,9 @@
 # License: BSD (3-clause)
 
 import copy
-import itertools
 import numpy as np
-import scipy.special as sps
 from .dipoles import Dipole
-from .utils import woodbury
-
-
-def gamma_pdf(x, shape, scale):
-    """
-    Evaluates the Gamma pdf on a single point.
-    :param x: float
-        The point where to evaluate the Gamma pdf
-    :param shape: int
-        The Gamma pdf shape parameter :math:`k`
-    :param scale: float
-        The Gamma pdf scale parameter :math:`\\theta`
-    :return:
-        The Gamma pdf evaluated on x
-    """
-    return x**(shape-1)*(np.exp(-x/scale) / (sps.gamma(shape)*scale**shape))
+from .utils import gamma_pdf, woodbury
 
 
 class Particle(object):
@@ -35,24 +18,24 @@ class Particle(object):
 
     Parameters
     ----------
-    n_verts : int
+    n_verts : :py:class:`~int`
         The number of the points in the given brain discretization.
-    lam : float
+    lam : :py:class:`~float`
         The parameter of the prior Poisson pdf of the number of dipoles.
-    s_q : float
+    s_q : :py:class:`~float`
         The standard deviation of the prior of the dipole moment.
-    hyper_q : bool
+    hyper_q : :py:class:`~bool`
         If True use hyperprior in dipole strength
 
     Attributes
     ----------
-    n_dips : int
+    n_dips : :py:class:`~int`
         The number of dipoles in the particle.
-    dipoles : array of instances of Dipole, shape(n_dips,)
+    dipoles : :py:class:`~numpy.ndarray` of instances of :py:class:`~dipole.Dipole`, shape(n_dips,)
         The particle's dipoles.
-    loglikelihood_unit : float
+    loglikelihood_unit : :py:class:`~float`
         The logarithm of the marginal likelihood, evaluated in the particle.
-    prior : float
+    prior : :py:class:`~float`
         The prior pdf, evaluated in the particle.
     """
 
@@ -91,9 +74,9 @@ class Particle(object):
 
         Parameters
         ----------
-        n_verts : int
+        n_verts : :py:class:`~int`
             The number of the points in the given brain discretization.
-        num_dip : int
+        num_dip : :py:class:`~int`
             The number of dipoles to add.
         """
 
@@ -111,7 +94,7 @@ class Particle(object):
 
         Parameters
         ----------
-        diprip : int
+        diprip : :py:class:`~int`
             The index representing the dipoles array entry to be removed.
         """
 
@@ -146,17 +129,17 @@ class Particle(object):
 
         Parameters
         ----------
-        r_data : array of floats, shape (n_sens, n_ist)
+        r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
             The real part of the data; n_sens is the number of sensors and
             n_ist is the number of time-points or of frequencies.
-        lead_field : array of floats, shape (n_sens x 3*n_verts)
+        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
             The leadfield matrix.
-        s_noise : float
+        s_noise : :py:class:`~float`
             The standard deviation of the noise distribution.
 
         Returns
         -------
-        loglikelihood_unit : float
+        loglikelihood_unit : :py:class:`~float`
             The logarithm of the likelihood function in the present particle.
         """
 
@@ -191,13 +174,13 @@ class Particle(object):
 
         Parameters
         ----------
-        lam : float
+        lam : :py:class:`~float`
             Parameter of the Poisson probability distribution used for
             determining the number of dipoles in the particle.
 
         Returns
         -------
-        prior : float
+        prior : :py:class:`~float`
             The prior pdf evaluated in the present particle.
         """
 
@@ -220,33 +203,33 @@ class Particle(object):
 
         Parameters
         ----------
-        n_verts : int
+        n_verts : :py:class:`~int`
             The number of the points in the given brain discretization.
-        r_data : array of floats, shape (n_sens, n_ist)
+        r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
             The real part of the data; n_sens is the number of sensors and
             n_ist is the number of time-points or of frequencies.
-        lead_field : array of floats, shape (n_sens x 3*n_verts)
+        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
             The leadfield matrix.
-        N_dip_max : int
+        N_dip_max : :py:class:`~int`
             The maximum number of dipoles allowed in a particle.
-        lklh_exp : float
+        lklh_exp : :py:class:`~float`
             This number represents a point in the sequence of artificial
             distributions used in SESAME.
-        s_noise : float
+        s_noise : :py:class:`~float`
             The standard deviation of the noise distribution.
-        lam : float
+        lam : :py:class:`~float`
             Parameter of the Poisson probability distribution used for
             determining the number of dipoles in the particle.
-        q_birth : float
+        q_birth : :py:class:`~float`
             Probability of proposing to add a dipole. We recommend to use
             the default value q_birth = 1/3.
-        q_death : float
+        q_death : :py:class:`~float`
             Probability of proposing to remove a dipole. We recommend
             to use the default value q_death = 1/20.
 
         Return
         ------
-        self : instance of Particle
+        self : instance of :py:class:`~Particle`
             The possibly modified particle instance.
         """
 
@@ -303,29 +286,29 @@ class Particle(object):
 
         Parameters
         ----------
-        dip_idx : int
+        dip_idx : :py:class:`~int`
             index of the Particle.dipoles array.
-        neigh : array of ints
+        neigh : :py:class:`~numpy.ndarray` of :py:class:`~int`
             The neighbours of each point in the brain discretization.
-        neigh_p : array of floats
+        neigh_p : :py:class:`~numpy.ndarray` of :py:class:`~float`
             The neighbours' probabilities.
-        r_data : array of floats, shape (n_sens, n_ist)
+        r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
             The real part of the data; n_sens is the number of sensors and
             n_ist is the number of time-points or of frequencies.
-        lead_field : array of floats, shape (n_sens x 3*n_verts)
+        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
             The leadfield matrix.
-        lklh_exp : float
+        lklh_exp : :py:class:`~float`
             This number represents a point in the sequence of artificial
             distributions used in SESAME.
-        s_noise : float
+        s_noise : :py:class:`~float`
             The standard deviation of the noise distribution.
-        lam : float
+        lam : :py:class:`~float`
             Parameter of the Poisson probability distribution used for
             determining the number of dipoles in the particle.
 
         Return
         ------
-        self : instance of Particle
+        self : instance of :py:class:`~Particle`
             The possibly modified particle instance.
         """
         # Step 1: Drawn of the new location.

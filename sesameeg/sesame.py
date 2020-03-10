@@ -26,101 +26,103 @@ class Sesame(object):
 
     Parameters
     ----------
-    forward : instance of Forward
+    forward : :py:class:`~mne.Forward` object
         The forward solution.
-    evoked : instance of mne.evoked.Evoked, EvokedArray
-        The  data.
-    s_noise : float
+    evoked : instance of :py:class:`~mne.Evoked` | :py:class:`~mne.EvokedArray`
+        The evoked data.
+    s_noise : :py:class:`~float`
         The standard deviation of the noise distribution.
-    radius : float | None
-        The maximum distance in cm between two neighbouring verteces
-        of the brain discretization. If None, radius = 1cm.
-    sigma_neigh: float | None
+    radius : :py:class:`~float` | None
+        The maximum distance in cm between two neighbouring vertices
+        of the brain discretization. If None, radius is set to 1 cm.
+    sigma_neigh : :py:class:`~float` | None
         The standard deviation of the probability distribution of
-        neighbours. If None sigma_neigh = radius/2.
-    n_parts : int
+        neighbours. If None, sigma_neigh is set to radius/2.
+    n_parts : :py:class:`~int`
         The number of particles forming the empirical pdf.
-    sample_min : float | None
-        First sample of the time window in which data are analyzed.
-        If None, time window starts from the first sample of the data.
-    sample_max : float | None
-        Last sample of the time window in which dara are analyzed.
-        If None, time window ends with the last sample of the data.
-    subsample : int | None
+    sample_min : :py:class:`~float` | None
+        First sample of the segment of data to be analyzed.
+        If None, it is set to the first sample of the input data.
+    sample_max : :py:class:`~float` | None
+        Last sample of the segment of data to be analyzed.
+        If None, it is set to the last sample of the input data.
+    subsample : :py:class:`~int` | None
         The step used to subsample the data. If None no subsampling is
-        performed.
-    s_q : float | None
-        The standard deviation of the prior of the dipole moment.
-        If None s_q is automatic estimated.
-    cov : istance of Covariance | None
-        The noise covariance matrix used to prewhiten the data. If None
+        applied.
+    s_q : :py:class:`~float` | None
+        The standard deviation of the prior pdf on the dipole moment.
+        If None, s_q is estimated from the forward model and the data.
+    hyper_q : :py:class:`~bool`
+        If True an hyperprior pdf on the dipole moment will be used.
+        Default is False.
+    cov : instance of :py:class:`~mne.Covariance` | None
+        The noise covariance matrix used to prewhiten the data. If None,
         no prewhitening is applied.
-    lam : float
-        The parameter of the prior Poisson pdf of the number of dipoles.
-    N_dip_max : int
+    lam : :py:class:`~float`
+        The parameter of the Poisson prior pdf on the number of dipoles.
+    N_dip_max : :py:class:`~int`
         The maximum number of dipoles allowed in a particle.
+    verbose : :py:class:`~bool`
+        If True, increase verbose level.
 
     Attributes
     ----------
-    n_parts : int
+    n_parts : :py:class:`~int`
         The number of particles forming the empirical pdf.
-    lam : float
-        The parameter of the prior Poisson pdf of the number of dipoles.
-    N_dip_max : int
+    lam : :py:class:`~float`
+        The parameter of the Poisson prior pdf on the number of dipoles.
+    N_dip_max : :py:class:`~int`
         The maximum number of dipoles allowed in a particle.
-    forward : instance of Forward
+    forward : instance of :py:class:`~mne.Forward`
         The forward solution.
-    source_space : array of floats, shape (n_verts, 3)
+    source_space : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)
         The coordinates of the points in the brain discretization.
-    n_verts : int
+    n_verts : :py:class:`~int`
         The number of points forming the brain discretization.
-    lead_field : array of floats, shape (n_sens x 3*n_verts)
+    lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
         The leadfield matrix.
-    distance_matrix : array of floats, shape (n_verts x n_verts)
-        The euclidean distance matrix between the points in the
+    distance_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)
+        The Euclidean distance between the points in the
         brain discretization.
-    neigh : array of ints, shape (n_vert, n_max_neigh)
+    neigh : :py:class:`~numpy.ndarray` of :py:class:`~int`, shape (n_vert, n_max_neigh)
         The set of neighbours of each point in the brain discretization.
         n_max_neigh is the cardinality of the biggest set.
-    radius : float
-        The radius used to compute the neigh matrix.
-    neigh_p : array of floats, shape (n_vert, n_max_neigh)
+    radius : :py:class:`~float`
+        The radius used to compute the neighbours.
+    neigh_p : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_vert, n_max_neigh)
         The neighbours' probabilities.
-    sigma_neigh : float
+    sigma_neigh : :py:class:`~float`
         The standard deviation used to compute the neigh_p matrix.
-    s_min : int
-        The first sample of the time window in which data are analyzed.
-    s_max : int
-        The last sample of the time window in which data are analyzed.
-    subsample : int | None
+    s_min : :py:class:`~int`
+        The first sample of the segment of data that are analyzed.
+    s_max : :py:class:`~int`
+        The last sample of the segment of data that are analyzed.
+    subsample : :py:class:`~int` | None
         The step used to subsample the data.
-    r_data : array of floats, shape (n_sens, n_ist)
+    r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
         The real part of the data; n_sens is the number of sensors and
         n_ist is the number of time-points or of frequencies.
-    i_data : array of floats, shape (n_sens, n_ist)
-        The imaginary part of the data; n_sens is the number of sensors
-        and n_ist is the number of time-points or of frequencies.
-    s_q : float
-        The standard deviation of the prior of the dipole moment.
-    hyper_q : bool
+    s_q : :py:class:`~float`
+        The standard deviation of the prior on the dipole moment.
+    hyper_q : :py:class:`~bool`
         If True use hyperprior in dipole strength
-    s_noise : float
+    s_noise : :py:class:`~float`
         The standard deviation of the noise distribution.
-    _resample_it : list of ints
+    _resample_it : :py:class:`~list` of :py:class:`~int`
         The iterations during which a resampling step has been performed
-    est_n_dips : list of ints
-        The estimated number of dipoles for the first and the last iteration.
-    est_locs : list of array of ints
-        The estimated source locations for the first and the last iteration.
-    est_q : None | array of floats, shape (n_ist x (3*est_n_dips[-1]))
+    est_n_dips : :py:class:`~list` of :py:class:`~int`
+        The estimated number of dipoles.
+    est_locs : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~int`
+        The source space grid points indices in which a source is estimated.
+    est_q : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_ist x (3*est_n_dips[-1])) | None
         The sources' moments estimated at the last iteration.
-        If None Sesame did not estimate the sources' moments yet.
-    model_sel : list of arrays of floats
-        The model selection (i.e. the posterior distribution of the number
-        of dipoles) for the first and the last iteration.
-    blob : list of 2D arrays of floats
-        The intensity measure of the point process over the iterations.
-    emp : instance of EmpPdf
+        If None, moments can be estimated by calling :py:meth:`~Sesame.compute_q`
+    model_sel : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`
+        The model selection, i.e. the posterior distribution on the number
+        of dipoles.
+    blob : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (est_n_dips, n_verts)
+        Posterior probability map.
+    emp : instance of :class:`~sesameeg.emppdf.EmpPdf`
         The empirical pdf approximated by the particles at each iteration.
     """
 
@@ -208,7 +210,7 @@ class Sesame(object):
                                np.dot(whitener, self.lead_field))
 
         self.r_data = _data.real
-        self.i_data = _data.imag
+        # self.i_data = _data.imag
         del _data
 
         if s_q is None:
@@ -267,16 +269,17 @@ class Sesame(object):
                                              s_noise=self.s_noise)
 
     def apply_sesame(self, estimate_all=False, estimate_q=True):
-        """Run SESAME and compute point estimates.
+        """Apply SESAME on evoked data and compute point estimates.
 
         Parameters
         ----------
-        estimate_all : bool
-            If True estimate the number of dipoles and their locations at
-            each iteration. If False compute point-estimate only at the last
+        estimate_all : :py:class:`~bool`
+            If True compute the posterior probability map and estimate the
+            number of dipoles and their locations at each iteration.
+            If False compute the above quantities only at the last
             iteration.
-        estimate_q : bool
-            If True compute point-estimate of the dipole moment at the
+        estimate_q : :py:class:`~bool`
+            If True compute a point-estimate of the dipole moment at the
             last iteration.
         """
 
@@ -373,7 +376,7 @@ class Sesame(object):
 
         Parameters
         ----------
-        est_locs : list of array of ints
+        est_locs : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~int`
             The estimated source locations.
         """
         est_num = est_locs.shape[0]
@@ -413,7 +416,7 @@ class Sesame(object):
 
         Returns
         -------
-        gof : float
+        gof : :py:class:`~float`
             The goodness of fit with the recorded data.
         """
 
@@ -430,27 +433,41 @@ class Sesame(object):
         return gof
 
     def source_dispersion(self):
+        """Compute the Source Dispersion measure to quantify the spatial dispersion
+        of the posterior probability map. It is defined as
+
+         .. math:: SD = \\sqrt{\\frac{\\sum_{j=1}^{N_v} \\big(d_j |S_j|\\big)^2}{\\sum_{j=1}^{N_v}|S_j|^2}}
+
+        where :math:`N_v` is the number of voxels, :math:`d_j` is the distance between the :math:`j`-th voxel
+        and the nearest estimated dipole location and :math:`S_j` is the value of the cortical map at
+        the :math:`j`-th voxel.
+
+        Returns
+        -------
+        sd : :py:class:`~float`
+            The Source Dispersion of SESAME result
+        """
         blob_tot = np.sum(self.blob[-1], axis=0)
         est_pos = self.source_space[self.est_locs[-1]]
         sd = compute_sd(self.source_space, blob_tot, est_pos)
         return sd
 
     def compute_stc(self, subject=None):
-        """Compute and export in .stc file the posterior pdf
-            :math:`p(r|\\mathbf{y}, \\hat{n}_D)`, where :math:`\\hat{n}_D`
-            is the estimated number of sources.
-            For each point :math:`r` of the brain discretization
+        """Compute and export in an .stc file the posterior pdf
+            :math:`p(r|\\mathbf{y}, \\hat{n}_D)`, being :math:`\\hat{n}_D`
+            the estimated number of sources.
+            For each point :math:`r` in the brain discretization,
             :math:`p(r|\\mathbf{y}, \\hat{n}_D)` is the probability of a
             source being located in :math:`r`.
 
             Parameters
             ----------
-            subject : str | None
+            subject : :py:class:`~str` | None
                 The subject name.
 
             Returns
             --------
-            stc : SourceEstimate | VolSourceEstimate
+            stc : :py:class:`~mne.SourceEstimate` | :py:class:`~mne.VolSourceEstimate`
                 The source estimate object containing the posterior map of the
                 dipoles' location.
             """
@@ -470,26 +487,26 @@ class Sesame(object):
 
         Parameters
         ----------
-        fpath: str
-            The path to the save file
-        tmin: float | None
+        fpath : :py:class:`~str`
+            The path to the save file.
+        tmin : :py:class:`~float` | None
             The first instant (in seconds) of the time window in which data have been analyzed.
-        tmax: float | None
+        tmax : :py:class:`~float` | None
             The last instant (in seconds) of the time window in which data have been analyzed.
-        subsample : int | None
+        subsample : :py:class:`~int` | None
             The step used to subsample the data.
-        sbj : str | None
+        sbj : :py:class:`~str` | None
             The subject name.
-        sbj_viz: str | None
+        sbj_viz : :py:class:`~str` | None
             The name of the subject's FreeSurfer folder.
-        data_path: str | None
-            The path to the data file
-        fwd_path: str | None
-            The path to the forward solution file
-        src_path: str | None
-            The path to the source space file
-        lf_path: str | None
-            The path to the leadfield matrix file
+        data_path : :py:class:`~str` | None
+            The path to the data file.
+        fwd_path : :py:class:`~str` | None
+            The path to the forward solution file.
+        src_path : :py:class:`~str` | None
+            The path to the source space file.
+        lf_path : :py:class:`~str` | None
+            The path to the leadfield matrix file.
         """
         write_h5(fpath, self, tmin=tmin, tmax=tmax, subsample=subsample,
                  sbj=sbj, sbj_viz=sbj_viz, data_path=data_path,
@@ -502,26 +519,26 @@ class Sesame(object):
 
         Parameters
         ----------
-        fpath: str
-            The path to the save file
-        tmin: float | None
+        fpath : :py:class:`~str`
+            The path to the save file.
+        tmin : :py:class:`~float` | None
             The first instant (in seconds) of the time window in which data have been analyzed.
-        tmax: float | None
+        tmax : :py:class:`~float` | None
             The last instant (in seconds) of the time window in which data have been analyzed.
-        subsample : int | None
+        subsample : :py:class:`~int` | None
             The step used to subsample the data.
-        sbj : str | None
+        sbj : :py:class:`~str` | None
             The subject name.
-        sbj_viz: str | None
+        sbj_viz : :py:class:`~str` | None
             The name of the subject's FreeSurfer folder.
-        data_path: str | None
-            The path to the data file
-        fwd_path: str | None
-            The path to the forward solution file
-        src_path: str | None
-            The path to the source space file
-        lf_path: str | None
-            The path to the leadfield matrix file
+        data_path : :py:class:`~str` | None
+            The path to the data file.
+        fwd_path : :py:class:`~str` | None
+            The path to the forward solution file.
+        src_path : :py:class:`~str` | None
+            The path to the source space file.
+        lf_path : :py:class:`~str` | None
+            The path to the leadfield matrix file.
         """
         write_pkl(fpath, self, tmin=tmin, tmax=tmax, subsample=subsample,
                   sbj=sbj, sbj_viz=sbj_viz, data_path=data_path,

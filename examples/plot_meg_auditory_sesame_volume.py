@@ -65,14 +65,15 @@ time_fin = 0.135
 subsample = None
 sample_min, sample_max = evoked.time_as_index([time_in, time_fin],
                                               use_rounding=True)
-fig = evoked.plot(show=False)
-for ax in fig.get_axes():
-    ax.axvline(time_in, color='r', linewidth=2.0)
-    ax.axvline(time_fin, color='r', linewidth=2.0)
+lst = evoked.plot_joint(show=False)
+for fig in lst:
+    ax = fig.get_axes()
+    ax[0].axvline(time_in, color='r', linewidth=2.0)
+    ax[0].axvline(time_fin, color='r', linewidth=2.0)
 plt.show()
 
 ###############################################################################
-# Run SESAME.
+# Apply SESAME.
 n_parts = 100
 # If None, sigma_noise and sigma_q will be estimated by SESAME.
 sigma_noise = None
@@ -135,12 +136,14 @@ img = stc.as_volume(fwd['src'], mri_resolution=True)
 plot_stat_map(index_img(img, -1), fname_t1, threshold=0.001, cut_coords=peak_mri_pos)
 plt.show()
 
-########################################################################################
-# You can save result in HDF5 files with:
+###############################################################################
+# Save results
+
+# You can save SESAME result in an HDF5 file with:
 # _sesame.save_h5(save_fname, tmin=time_in, tmax=time_fin, subsample=subsample,
 #                 sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)
 
-# You can save result in Pickle files with:
+# You can save SESAME result in a Pickle file with:
 # _sesame.save_pkl(save_fname, tmin=time_in, tmax=time_fin, subsample=subsample,
 #                  sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)
 
