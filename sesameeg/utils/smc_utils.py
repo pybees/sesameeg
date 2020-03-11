@@ -13,21 +13,21 @@ from mne.forward import Forward
 
 
 def compute_neighbours_matrix(src, d_matrix, radius):
-    """Compute the set of neighbours for each point of the brain discretization.
+    """Compute the set of neighbours of each point in the brain discretization.
 
     Parameters
     -----------
-    src :  array of floats, shape (n_verts, 3)
+    src :  :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)
         The coordinates of the points in the brain discretization.
-    d_matrix : array of floats, shape (n_verts x n_verts)
-        The euclidean distance matrix between the points in the
+    d_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)
+        The Euclidean distance between the points in the
         brain discretization.
-    radius : float
+    radius : :py:class:`~float`
         The maximum distance between two neighbouring points.
 
     Returns
     --------
-    n_matrix : array of ints, shape (n_verts, n_neigh_max)
+    n_matrix : :py:class:`~numpy.ndarray` of :py:class:`~int`, shape (n_verts, n_neigh_max)
         The sets of neighbours.
     """
 
@@ -102,20 +102,20 @@ def compute_neighbours_probability_matrix(n_matrix, src, d_matrix, sigma_neigh):
 
     Parameters
     -----------
-    n_matrix : array of ints, shape (n_verts, n_neigh_max)
+    n_matrix : :py:class:`~numpy.ndarray` of :py:class:`~int`, shape (n_verts, n_neigh_max)
         The sets of neighbours.
-    src :  array of floats, shape (n_verts, 3)
+    src :  :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)
         The coordinates of the points in the brain discretization.
-    d_matrix : array of floats, shape (n_verts x n_verts)
-        The euclidean distance matrix between the points in the
+    d_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)
+        The Euclidean distance between the points in the
         brain discretization.
-    sigma_neigh : float
+    sigma_neigh : :py:class:`~float`
         The standard deviation of the Gaussian distribution that defines
         the neighbours' probability.
 
     Returns
     --------
-    np_matrix : array of floats, shape (n_verts, n_neigh_max)
+    np_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, n_neigh_max)
         The neighbours' probability.
     """
 
@@ -129,34 +129,20 @@ def compute_neighbours_probability_matrix(n_matrix, src, d_matrix, sigma_neigh):
     return np_matrix
 
 
-def estimate_q_in(r_data, lf, i_data=None):
-    """
-    Estimate Qin
-    """
-    dipoles_single_max = np.array([np.max(np.absolute(lf[:, 3*c:3*c+3]))
-                                   for c in range(int(lf.shape[1]/3))])
-    r_data_max = np.amax(np.absolute(r_data))
-    i_data_max = np.amax(np.absolute(i_data))
-    data_max = max(r_data_max, i_data_max)
-    q_in = data_max / np.mean(dipoles_single_max)
-    del dipoles_single_max
-    return q_in
-
-
 def estimate_s_q(r_data, lf):
     """Estimate the standard deviation of the prior of the dipole moment.
 
     Parameters
     ----------
-    r_data : array of floats, shape (n_sens, n_ist)
+    r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
         The real part of the data; n_sens is the number of sensors and
         n_ist is the number of time-points or of frequencies.
-    lf : array of floats, shape (n_sens x 3*n_verts)
+    lf : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
         The leadfield matrix.
 
     Returns
     --------
-    s_q : float
+    s_q : :py:class:`~float`
         The estimated standard deviation.
     """
 
@@ -169,13 +155,13 @@ def estimate_s_noise(r_data):
 
     Parameters
     ----------
-    r_data : array of floats, shape (n_sens, n_ist)
+    r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
         The real part of the data; n_sens is the number of sensors and
         n_ist is the number of time-points or of frequencies.
 
     Returns
     --------
-    s_noise : float
+    s_noise : :py:class:`~float`
         The estimated standard deviation.
     """
 
@@ -211,12 +197,12 @@ def initialize_radius(src):
 
     Parameters
     -----------
-    src :  array of floats, shape (n_verts, 3)
+    src :  :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)
         The coordinates of the points in the brain discretization.
 
     Returns
     --------
-    radius : float
+    radius : :py:class:`~float`
         The value of the radius.
     """
 

@@ -16,10 +16,10 @@ A mathematical descriptions of the algorithm is available in the documentation.
 Installation
 ============
 
-To install this package, the easiest way is using ``pip``. It will install this
-package and its dependencies. The ``setup.py`` depends on ``numpy``, ``scipy``  and ``mne``
-for the installation so it is advised to install them beforehand. To
-install this package, please run the following commands:
+To install this package, the easiest way is using ``pip``. It will install both
+``sesameeg`` and its dependencies. The ``setup.py`` depends on ``numpy``, ``scipy``  and ``mne``
+for the installation so it is advised to install them beforehand.
+To install this package, please run the following commands:
 
 (Latest stable version)
 
@@ -35,7 +35,7 @@ To check if everything worked fine, you can run:
 
 .. code::
 
-	python -c 'import sesameeg'
+    python -c 'import sesameeg'
 
 and it should not give any error messages.
 

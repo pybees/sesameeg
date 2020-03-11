@@ -227,8 +227,8 @@ class Particle(object):
             Probability of proposing to remove a dipole. We recommend
             to use the default value q_death = 1/20.
 
-        Return
-        ------
+        Returns
+        -------
         self : instance of :py:class:`~Particle`
             The possibly modified particle instance.
         """
@@ -306,8 +306,8 @@ class Particle(object):
             Parameter of the Poisson probability distribution used for
             determining the number of dipoles in the particle.
 
-        Return
-        ------
+        Returns
+        -------
         self : instance of :py:class:`~Particle`
             The possibly modified particle instance.
         """
