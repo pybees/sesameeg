@@ -8,38 +8,78 @@ Mathematical model
 
 SESAME (Sequential Semi-Analytic Montecarlo Estimation) employs a Bayesian perspective on the problem of
 estimating an unknown number of current dipoles from a set of spatial topographies of
-magnetoencephalografic (MEG) and/or electroencephalografic (EEG) data.
-This section intends to outline the main ideas behind the employed source model and algorithm.
-For a more precise description we recommend to read our publication [1]_.
-| For the sake of clarity, the description below deals with the analysis of a single MEG/EEG topography. However, as shown in [1]_ this approach easily generalizes to include multiple topographies by assuming the number and the locations of the current dipoles to be fixed over topographies, while their strengths and orientations may change.
+MagnetoEncephaloGrafic (MEG) and/or ElectroEncephaloGrafic (EEG) data.
+This section intends to outline the main ideas behind it.
+For a thorough description of the subject, the reader is referred to [1]_, [2]_.
+
+
+For the sake of clarity, the description below deals with the analysis of a single MEG/EEG topography.
+However, as shown in [1]_, this approach easily generalizes to include multiple topographies
+under the hypothesis that both the number of sources and their locations do not change.
 
 Multi--dipole source model.
 ---------------------------
-We model the neural sources producing the recorded MEG/EEG data using a primary current distribution which is approximated by the superposition of an unknown number of current dipoles. |br|
-In mathematical terms, a source configuration is assumed to belong to the variable--dimension state--space model
+SESAME makes use of the equivalent current dipole model for the neuronal currents.
+In this framework, the brain volume is discretized into small domains and the activity of the neuronal population
+inside any of these domains is represented by a point source, which can be thought of as the concentration of
+the current to a given reference point of the domain.
 
-.. math:: \mathcal{J}\ :=\ \bigcup_{n_D}\ \{n_D\} \times \mathcal{D}^{n_D} ,
- 
-were :math:`n_D` is the number of dipoles, :math:`\mathcal{D}` is the state space for a single--dipole configuration and :math:`\mathcal{D}^{n_D}` is the Cartesian product of :math:`n_D` copies of :math:`\mathcal{D}`. |br|
-A point in :math:`\mathcal{D}`, i.e. a single--dipole configuration, is a pair :math:`(r, \mathbf{q})` where :math:`r` is an integer variable representing the dipole location in a given discretizion of the cortical surface, and :math:`\mathbf{q}` is a three–dimensional vector representing the dipole moment. Any current distribution :math:`\mathbf{j}` is therefore a set of dipoles represented as 
+In mathematical terms, each of these point sources, termed *current dipoles*, is an applied vector, whose
+moment :math:`\mathbf{q}` expresses the strength and the orientation of the current.
+The neuronal primary current distribution :math:`\mathbf{j}` is then assumed to be  closely approximated by
+the superposition of a small --- but unknown --- number :math:`n_D`
+of current dipoles, and can therefore be seen in abstract terms as a point in the disjoint union of
+spaces
 
-.. math:: \mathbf{j} = \left(n_D, r_1, \mathbf{q}_1, \dots, r_{n_D}, \mathbf{q}_{n_D} \right) =: \left(n_D, \mathbf{r}_{1:n_D}, \dots, \mathbf{q}_{1:n_D}\right)  \in \mathcal{J}\, .
+.. math:: \mathcal{J}\ :=\ \bigcup_{n_D}\ \{n_D\} \times \mathcal{D}^{n_D}
+
+in which :math:`\mathcal{D}^{n_D}` is the state space of the  :math:`n_D`--tuple of current dipoles
+approximating :math:`\mathbf{j}`, and where the number :math:`n_D` of dipoles is explicitly included
+among the unkowns. The space :math:`\mathcal{D}^{n_D}` is defined as the Cartesian product of
+:math:`n_D` copies of the single dipole space :math:`\mathcal{D}` whose points
+are given by the pairs  :math:`(r, \mathbf{q})`, in which :math:`r` is an integer variable
+representing the dipole location and :math:`\mathbf{q}` is a three--dimensional vector representing
+the dipole moment.
+Any current distribution :math:`\mathbf{j}` is therefore represented as
+
+.. math:: \mathbf{j} = \left(n_D, r_1, \mathbf{q}_1, \dots, r_{n_D}, \mathbf{q}_{n_D} \right) \in \mathcal{J}\, .
+
+or also equivalently as
+
+.. math:: \mathbf{j} = \left(\/n_D, \mathbf{r}_{1:n_D}, \mathbf{q}_{1:n_D}\/\right)\ ,
+
+which directly follows from the previous equation by reordering the axes and by introducing the shorthand notations
+
+.. math:: \mathbf{r}_{1:n_D}\, :=\, \left(r_1, \ldots, r_{n_D}\right),
+.. math:: \mathbf{q}_{1:n_D}\, :=\, \left(\mathbf{q}_{\/1}, \ldots, \mathbf{q}_{\/{n_D}}\right).
+
+Measurement model
+-----------------
+Let :math:`\mathbf{y}_t = (\/{y_t}^{\!1}, \ldots, {y_t}^{\!n_s}\/)` denote the data recorded by
+the :math:`n_S` MEG/EEG sensors at time :math:`\ t\ `.
+Assuming data to be affected by zero--mean Gaussian additive noise, at each sampled time :math:`\ t\ `
+the following functional relation holds
+
+.. math:: \mathbf{y}_t = \mathbf{e}_t + \mathbf{n}_t,
+  :label: fwd
+
+being :math:`\mathbf{e}_t` the exact field produced by the neural current distribution
+:math:`\mathbf{j}_t` and :math:`\mathbf{n}_t` the noise term.
+The explicit model for :math:`\mathbf{e}_t` is given by
+
+.. math:: \mathbf{e}_t = \sum_{k=1}^{n_D} G(r_k) \cdot \mathbf{q}_{k,t} =:  G\!\left(\mathbf{r}\/\right) \cdot \mathbf{q}_{t},
+
+where, at time :math:`t\/`,  :math:`G(r_k)` is the lead field matrix computed at the location :math:`r_k` of the
+:math:`k`--th dipole on the discretized cortex, :math:`\mathbf{q}_{\/k,t}` is the corresponding dipole moment, and
 
 
-The functional relation between the current distribution :math:`\mathbf{j}` and the data :math:`\mathbf{y}` recorded by the :math:`n_S` MEG/EEG sensors is given by
+.. math:: \mathbf{q}_{t}\,  :=\, \left(\mathbf{q}_{\/1,t}, \ldots, \mathbf{q}_{\/{n_D}, t}\right) ,
+.. math:: G\!\left(\/\mathbf{r}\/\right)\, :=\, \left[G(r_1)\lvert\,\cdots\lvert G(r_{n_D})\right].
 
-.. math:: \mathbf{y} = \mathbf{G} \left( \mathbf{r}_{1:n_D} \right) \cdot \mathbf{q}_{1:n_D} + \mathbf{e},
-   :label: fwd
-
-where :math:`\mathbf{e}` is measurement noise, and 
-
-.. math:: \mathbf{G}\left(\mathbf{r}_{1:n_D}\right)\, :=\, \big[\mathbf{G}(r_1)\, \cdots \, \mathbf{G}(r_{n_D})\big]
-
-is a matrix of size :math:`n_S \, \times \, 3N_D` that provides the forward solution associated to the set of dipole locations :math:`r_{1}, \dots, r_{n_D}`. 
 
 Statistical model.
--------------------
-| In a Bayesian approach to the dipole estimation problem, the MEG/EEG data :math:`\mathbf{y}`, the unknown :math:`\mathbf{j}` and the noise :math:`\mathbf{e}` are considered as the realizations of corresponding random variables :math:`\mathbf{Y}`, :math:`\mathbf{J}` and :math:`\mathbf{E}`. In this framework, the solution is the posterior probability density function (pdf) of :math:`\mathbf{J}` conditioned on the data, which, in the light of Bayes' theorem, can be written as
+------------------
+In a Bayesian approach to the dipole estimation problem, the MEG/EEG data :math:`\mathbf{y}`, the unknown :math:`\mathbf{j}` and the noise :math:`\mathbf{e}` are considered as the realizations of corresponding random variables :math:`\mathbf{Y}`, :math:`\mathbf{J}` and :math:`\mathbf{E}`. In this framework, the solution is the posterior probability density function (pdf) of :math:`\mathbf{J}` conditioned on the data, which, in the light of Bayes' theorem, can be written as
 
 .. math:: p(\mathbf{j}|\mathbf{y}) \propto p(\mathbf{y}|\mathbf{j})\, p(\mathbf{j})\ ,
 
