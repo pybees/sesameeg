@@ -156,7 +156,7 @@ class EmpPdf(object):
         """
 
         gamma_high = 0.99
-        gamma_low = 0.9,
+        gamma_low = 0.9
         delta_min = 1e-05
         delta_max = 0.1
 

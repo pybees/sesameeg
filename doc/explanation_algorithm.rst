@@ -2,11 +2,15 @@
 
     <br>
 
-############
-Explanation
-############
+##################
+Mathematical model
+##################
 
-| Sesame (Sequential Semi-Analytic Monte-Carlo Estimation) employs a Bayesian perspective on the problem of estimating an unknown number of current dipoles from a set of spatial topographies of magnetoecenphalografic (MEG) and/or electroencephalografic (EEG) data. This section intends to outline the main idea behind the employed source model and algorithm. For a more precise description we recommend to read our publication [1]_.
+SESAME (Sequential Semi-Analytic Montecarlo Estimation) employs a Bayesian perspective on the problem of
+estimating an unknown number of current dipoles from a set of spatial topographies of
+magnetoencephalografic (MEG) and/or electroencephalografic (EEG) data.
+This section intends to outline the main ideas behind the employed source model and algorithm.
+For a more precise description we recommend to read our publication [1]_.
 | For the sake of clarity, the description below deals with the analysis of a single MEG/EEG topography. However, as shown in [1]_ this approach easily generalizes to include multiple topographies by assuming the number and the locations of the current dipoles to be fixed over topographies, while their strengths and orientations may change.
 
 Multi--dipole source model.
@@ -101,6 +105,6 @@ Finally, dipole moments can be reasonably estimated as the mean of the correspon
 
 Reference
 ---------
-.. [1] `S. Sommariva and A. Sorrentino, Sequential Monte Carlo samplers for semi-linear inverse problems and application to Magnetoencephalography. Inverse Problems, 30 114020 (2014).   Problems 30(11):114020 (2014) <https://doi.org/10.1088/0266-5611/30/11/114020>`_
-.. [2]  `A. Sorrentino, G. Luria, and R. Aramini, Bayesian multi-dipole modeling of a single topography in MEG by adaptive Sequential Monte Carlo Samplers. Inverse Problems, 30 045010 (2014) <https://iopscience.iop.org/article/10.1088/0266-5611/30/4/045010>`_
-.. [3] `C. Robert and G. Casella, Monte Carlo Statistical Methods, 2nd Edition, Springer, 2004 <https://www.springer.com/gp/book/9780387212395>`_
+.. [1] S. Sommariva and A. Sorrentino, `Sequential Monte Carlo samplers for semi-linear inverse problems and application to Magnetoencephalography <https://doi.org/10.1088/0266-5611/30/11/114020>`_. Inverse Problems, 30 114020 (2014).
+.. [2] A. Sorrentino, G. Luria, and R. Aramini, `Bayesian multi-dipole modeling of a single topography in MEG by adaptive Sequential Monte Carlo Samplers <https://iopscience.iop.org/article/10.1088/0266-5611/30/4/045010>`_. Inverse Problems, 30 045010 (2014).
+.. [3] C. Robert and G. Casella, `Monte Carlo Statistical Methods <https://www.springer.com/gp/book/9780387212395>`_, 2nd Edition.  Springer (2004).
