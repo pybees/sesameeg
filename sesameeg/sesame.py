@@ -514,7 +514,7 @@ class Sesame(object):
 
     def save_pkl(self, fpath, tmin=None, tmax=None, subsample=None,
                 sbj=None, sbj_viz=None, data_path=None, fwd_path=None,
-                src_path=None, lf_path=None):
+                src_path=None, lf_path=None, save_all=False):
         """Save SESAME result to an Python pickle file.
 
         Parameters
@@ -539,7 +539,10 @@ class Sesame(object):
             The path to the source space file.
         lf_path : :py:class:`~str` | None
             The path to the leadfield matrix file.
+        save_all : :py:class:`~bool`
+            If True, save the data and the forward model. Default to False.
         """
         write_pkl(fpath, self, tmin=tmin, tmax=tmax, subsample=subsample,
                   sbj=sbj, sbj_viz=sbj_viz, data_path=data_path,
-                  fwd_path=fwd_path, src_path=src_path, lf_path=lf_path)
+                  fwd_path=fwd_path, src_path=src_path, lf_path=lf_path,
+                  save_all=save_all)

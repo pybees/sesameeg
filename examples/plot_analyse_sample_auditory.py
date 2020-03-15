@@ -146,5 +146,3 @@ mlab.show()
 # You can save SESAME result in a Pickle file with:
 # _sesame.save_pkl(save_fname, tmin=time_in, tmax=time_fin, subsample=subsample,
 #                  sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)
-
-

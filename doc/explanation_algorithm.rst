@@ -89,7 +89,8 @@ related by
 
 
 
-In this framework, the solution is the posterior probability density function (pdf) of :math:`\mathbf{J}` conditioned on the data, which, in the light of Bayes' theorem, can be written as
+In this framework, the solution is the posterior probability density function (pdf) of :math:`\mathbf{J}` conditioned
+on the data, which, in the light of Bayes' theorem, can be written as
 
 .. math:: p(\mathbf{j}|\mathbf{y}) \propto p(\mathbf{y}|\mathbf{j})\, p(\mathbf{j})\ ,
 
@@ -116,7 +117,9 @@ where:
 
 Likelihood function.
 """"""""""""""""""""
-The likelihood function, :math:`p(\mathbf{y}|\mathbf{j})`, contains information on the forward model :eq:`fwd` and the statistical properties of the noise. Here we assume the noise to be Gaussian with zero mean and diagonal covariance matrix :math:`\sigma_e^2 \mathbf{I}`, thus
+The likelihood function, :math:`p(\mathbf{y}|\mathbf{j})`, contains information on the forward model :eq:`fwd` and the
+statistical properties of the noise. Here we assume the noise to be Gaussian with zero mean and diagonal covariance
+matrix :math:`\sigma_e^2 \mathbf{I}`, thus
 
 .. math:: p(\mathbf{y}|\mathbf{j}) = \mathcal{N}(\mathbf{y}; \mathbf{G} \left( \mathbf{r}_{1:n_D} \right) \cdot \mathbf{q}_{1:n_D}, \sigma_{e}^2 \mathbf{I}).
 
@@ -126,7 +129,8 @@ The likelihood function, :math:`p(\mathbf{y}|\mathbf{j})`, contains information 
 SESAME in action.
 -----------------
 In order to compute estimates of the unknown neural currents from the posterior distribution, a numerical approximation
-of the latter is needed. By exploiting the semi--linear structure of the MEG/EEG forward model SESAME approximates the posterior pdf
+of the latter is needed. By exploiting the semi--linear structure of the MEG/EEG forward model SESAME approximates
+the posterior pdf
 
 .. math:: p(\mathbf{j}|\mathbf{y})\, =\,  p(\mathbf{q}_{1:n_D}\,|\,\mathbf{y}, n_D, \mathbf{r}_{1:n_D})\ p(n_D, \mathbf{r}_{1:n_D}\,|\,\mathbf{y})
 
@@ -150,38 +154,56 @@ them to correctly approximate the target pdf (Importance Sampling, IS [3]_).
 An alternative approach is to start from a random candidate, perturb it randomly many times, and then approximate
 the target pdf with the collection of samples along the iterations (Markov Chain Monte Carlo, MCMC [3]_).
 
-The ASMC sampler combines these two techniques:  multiple samples are independently drawn from a simple
-distribution, which in our case is the prior pdf :math:`p(n_D, \mathbf{r}_{1:n_D})`, evolve following an MCMC
-scheme, and their weights are updated after every MCMC step; at times, a resample move is performed,
-that means samples having negligible weights are replaced by samples in the higher--probability region,
-so as to explore better these areas.
+The ASMC sampler combines these two techniques: a sequence of artificial distributions is defined that smoothly
+moves from a tractable prior pdf :math:`p(n_D, \mathbf{r}_{1:n_D})` to the posterior pdf
+:math:`p(n_D, \mathbf{r}_{1:n_D}\,|\,\mathbf{y})`, multiple samples are independently drawn from the prior pdf,
+evolve following an MCMC scheme, and their weights are updated after every MCMC step;
+at times, a resample move is performed, that means samples having negligible weights are replaced by samples in
+the higher--probability region, so as to explore better these areas.
 Eventually, the target distribution is approximated by the weighted sample set obtained at the last iteration.
+
+The step with which the path from the prior to the posterior pdf is covered is not established a priori,
+but adaptively determined at run-time. This means that the actual number of iterations is also determined
+online, even if it is always kept within given lower and upper bounds.
 
 
 Analytic computation of :math:`p(\mathbf{q}_{1:n_D}\,|\,\mathbf{y}, n_D, \mathbf{r}_{1:n_D})`.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-By exploiting the mutual independence of :math:`\mathbf{J}` and :math:`\mathbf{N}` and the Gaussian assumptions made about the prior pdf of the dipole moments and the noise model, SESAME analytically compute the posterior pdf :math:`p(\mathbf{q}_{1:n_D}\,|\,\mathbf{y}, n_D, \mathbf{r}_{1:n_D})`. Indeed, it is a Gaussian density whose mean and variance depend only on the data, the forward solution :math:`\mathbf{G}\left(\mathbf{r}_{1:n_D}\right)`, and the standard deviations :math:`\sigma_q` and :math:`\sigma_e`.
+By exploiting the mutual independence of :math:`\mathbf{J}` and :math:`\mathbf{N}` and the Gaussian assumptions made
+about the prior pdf of the dipole moments and the noise model, SESAME analytically compute the posterior
+pdf :math:`p(\mathbf{q}_{1:n_D}\,|\,\mathbf{y}, n_D, \mathbf{r}_{1:n_D})`.
+Indeed, it is a Gaussian density whose mean and variance depend only on the data, the forward
+solution :math:`\mathbf{G}\left(\mathbf{r}_{1:n_D}\right)`, and the standard
+deviations :math:`\sigma_q` and :math:`\sigma_e`.
 
-Get the most out of Sesame's results.
+Get the most out of SESAME's results.
 -------------------------------------
-Sesame's output consists in a set of weighted particles
+As descibed above, SESAME approximates the full posterior distribution :math:`p(\mathbf{j}|\mathbf{y})`
+as the set of weighted particles
 
-.. math::  \left\{\big(n_D^{i}, \mathbf{r}_{1:n_D^{i}}^{i}\big), w^{i} \right\}_{i=1, ..., I}
+.. math::  \left\{\big(n_D^{i}, \mathbf{r}_{1:n_D^{i}}^{i}\big), w^{i} \right\}_{i=1, ..., I}.
 
-which allows to approximate the full posterior distribution :math:`p(\mathbf{j}|\mathbf{y})`. |br|
-Roughly speaking, each of the :math:`I` particles represents a candidate source configuration, while the weight :math:`w^i` quantifies how likely it is that such configuration may have generated the recorded data. |br|
-Sesame also allows to compute the most probable source configuration through the following procedure. |br|
-First the most probable model is identified by estimating mode of the posterior pdf for the number of sources i.e. 
 
-.. math:: \hat{n}_D = argmax\, p \left(n_D | \mathbf{y} \right) = argmax\, \sum_{i=1}^I w^{i} \delta \left(n_D-n_D^{i} \right).
+Roughly speaking, each of the :math:`I` particles represents a candidate source configuration,
+while the corresponding weight :math:`w^i` quantifies its probability.
 
-Subsequently, for each point :math:`r` of the cortical discretization, we compute
+SESAME also provides an estimate of the unknown neuronal primary current distribution :math:`\mathbf{j}`,
+through the following procedure:
 
-.. math:: p(r| \mathbf{y},\hat{n}_D) = \sum_{i=1}^I w^i \delta\left(\hat{n}_D,n_D^i\right) \sum_{k=1}^{n_D^{i}} \delta\left(r, r_k^{i}\right)\, ,
+* first the most probable model is identified by estimating mode of the posterior pdf for the number of sources i.e.
 
-which represents the posterior probability of a source being located in :math:`r`. This quantity can be used to produce posterior maps of activation on the cortical surface and to compute estimates of dipole locations as the local peaks of such a probability map. |br|
-Finally, dipole moments can be reasonably estimated as the mean of the corresponding Gaussian distribution.
+  .. math:: \hat{n}_D = argmax\, p \left(n_D | \mathbf{y} \right) = argmax\, \sum_{i=1}^I w^{i} \delta \left(n_D-n_D^{i} \right);
+
+* subsequently, for each point :math:`r` in the cortical discretization, the posterior probability of a source
+  being located in :math:`r` is computed as:
+
+  .. math:: p(r| \mathbf{y},\hat{n}_D) = \sum_{i=1}^I w^i \delta\left(\hat{n}_D,n_D^i\right) \sum_{k=1}^{n_D^{i}} \delta\left(r, r_k^{i}\right)\, ;
+
+* the above quantity is then used to produce posterior maps of activation on the cortical surface and to compute
+  estimates of dipole locations as the local peaks of such a probability map;
+
+* finally, dipole moments can be reasonably estimated as the mean of the corresponding Gaussian distribution.
 
 
 Reference

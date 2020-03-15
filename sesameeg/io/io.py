@@ -115,7 +115,7 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, subsample=None,
 
 def write_pkl(fpath, inv_op, tmin=None, tmax=None, subsample=None,
               sbj=None, sbj_viz=None, data_path=None, fwd_path=None,
-              src_path=None, lf_path=None):
+              src_path=None, lf_path=None, save_all=False):
     _check_pickle_installed()
     import pickle as pkl
 
@@ -133,16 +133,20 @@ def write_pkl(fpath, inv_op, tmin=None, tmax=None, subsample=None,
         inv_op.sbj_viz = sbj_viz
     if data_path is not None:
         inv_op.d_path = data_path
-        del inv_op.i_data, inv_op.r_data
+        if not save_all:
+            del inv_op.i_data, inv_op.r_data
     if fwd_path is not None:
         inv_op.fwd_path = fwd_path
-        del inv_op.forward, inv_op.source_space, inv_op.lead_field
+        if not save_all:
+            del inv_op.forward, inv_op.source_space, inv_op.lead_field
     if src_path is not None:
         inv_op.src_path = src_path
-        del inv_op.source_space
+        if not save_all:
+            del inv_op.source_space
     if lf_path is not None:
         inv_op.lf_path =lf_path
-        del inv_op.lead_field
+        if not save_all:
+            del inv_op.lead_field
     pkl.dump(inv_op, open(fpath, 'wb'))
     print('SESAME solution written in {}'.format(fpath))
     return
