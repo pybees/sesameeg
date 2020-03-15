@@ -14,13 +14,14 @@ Compute and visualize SESAME solution on the auditory sample dataset.
 from os import path as op
 import numpy as np
 import matplotlib.pyplot as plt
+from mayavi import mlab
 
 from mne.datasets import sample
 from mne import read_forward_solution, pick_types_forward, read_evokeds
 from mne.label import _n_colors
 
 from sesameeg import Sesame
-from mayavi import mlab
+
 
 data_path = sample.data_path()
 subject = 'sample'
@@ -33,7 +34,7 @@ fname_evoked = op.join(data_path, 'MEG', subject, 'sample_audvis-ave.fif')
 # Load the forward solution  :math:`\textbf{G}`  and the evoked data
 # :math:`\textbf{y}`.
 # The forward solution also defines the employed brain discretization.
-meg_sensor_type = True  # All meg sensors will be included
+meg_sensor_type = True  # All MEG sensors will be included
 eeg_sensor_type = False
 
 # Forward solution
@@ -48,12 +49,35 @@ evoked = evoked.pick_types(meg=meg_sensor_type,
                            eeg=eeg_sensor_type, exclude='bads')
 
 ###############################################################################
-# Select and visualize the data topographies.
+# Define the parameters.
 time_in = 0.055
 time_fin = 0.135
 subsample = None
 sample_min, sample_max = evoked.time_as_index([time_in, time_fin],
                                               use_rounding=True)
+
+# To accelerate the run time of this example, we use a small number of
+# particles. We recall that the parameter ``n_parts`` represents, roughly speaking,
+# the number of candidate solutions that are tested in the Monte Carlo procedure;
+# larger values yield in principle more accurate reconstructions but also entail a
+# higher computational cost. Setting the value to about a hundred seems to represent
+# a good trade–off.
+n_parts = 10
+# If None, sigma_noise and sigma_q will be estimated by SESAME.
+sigma_noise = None
+sigma_q = None
+
+
+cov = None
+# You can make SESAME pre-whiten the data by providing a noise covariance
+# from mne import read_cov
+# fname_cov = op.join(sample.data_path(), 'MEG', subject,
+#                    'sample_audvis-cov.fif')
+# cov = read_cov(fname_cov)
+
+###############################################################################
+# Visualize the selected data.
+
 fig = evoked.plot(show=False)
 for ax in fig.get_axes():
     ax.axvline(time_in, color='r', linewidth=2.0)
@@ -62,23 +86,9 @@ plt.show()
 
 ###############################################################################
 # Apply SESAME.
-n_parts = 100
-# If None, sigma_noise and sigma_q will be estimated by SESAME.
-sigma_noise = None
-sigma_q = None
-
-cov = None
-# If a noise covariance is provided, SESAME will pre-whiten the data
-# from mne import read_cov
-# fname_cov = op.join(sample.data_path(), 'MEG', subject,
-#                    'sample_audvis-cov.fif')
-# cov = read_cov(fname_cov)
-
-
 _sesame = Sesame(fwd, evoked, n_parts=n_parts, s_noise=sigma_noise,
                  sample_min=sample_min, sample_max=sample_max,
-                 s_q=sigma_q, cov=cov, subsample=subsample,
-                 hyper_q=True, verbose=False)
+                 s_q=sigma_q, hyper_q=True, cov=cov, subsample=subsample)
 _sesame.apply_sesame()
 
 print('    Estimated number of sources: {0}'.format(_sesame.est_n_dips[-1]))
@@ -127,7 +137,7 @@ for idx, loc in enumerate(est_locs):
 mlab.show()
 
 ###############################################################################
-# Save results
+# Save results.
 
 # You can save SESAME result in an HDF5 file with:
 # _sesame.save_h5(save_fname, tmin=time_in, tmax=time_fin, subsample=subsample,

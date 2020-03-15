@@ -42,3 +42,14 @@ Utility functions
    estimate_s_noise
    initialize_radius
 
+Reading SESAME result
+=====================
+
+.. currentmodule:: sesameeg.io
+
+.. autosummary::
+   :toctree: generated/
+   :template: function.rst
+
+   read_h5
+

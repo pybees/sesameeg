@@ -8,7 +8,7 @@ Mathematical model
 
 SESAME (Sequential Semi-Analytic Montecarlo Estimation) employs a Bayesian perspective on the problem of
 estimating an unknown number of current dipoles from a set of spatial topographies of
-MagnetoEncephaloGrafic (MEG) and/or ElectroEncephaloGrafic (EEG) data.
+MagnetoEncephaloGraphic (MEG) and/or ElectroEncephaloGraphic (EEG) data.
 This section intends to outline the main ideas behind it.
 For a thorough description of the subject, the reader is referred to [1]_, [2]_.
 
@@ -79,47 +79,88 @@ where, at time :math:`t\/`,  :math:`G(r_k)` is the lead field matrix computed at
 
 Statistical model.
 ------------------
-In a Bayesian approach to the dipole estimation problem, the MEG/EEG data :math:`\mathbf{y}`, the unknown :math:`\mathbf{j}` and the noise :math:`\mathbf{e}` are considered as the realizations of corresponding random variables :math:`\mathbf{Y}`, :math:`\mathbf{J}` and :math:`\mathbf{E}`. In this framework, the solution is the posterior probability density function (pdf) of :math:`\mathbf{J}` conditioned on the data, which, in the light of Bayes' theorem, can be written as
+In a Bayesian approach to the neuromagnetic inverse problem, the MEG/EEG data :math:`\mathbf{y}`,
+the unknown :math:`\mathbf{j}` and the noise :math:`\mathbf{e}` are considered as the realizations of
+corresponding random variables :math:`\mathbf{Y}`,
+:math:`\mathbf{J} = \left(N_D,\, \mathbf{R}_{1:n_D},\, \mathbf{Q}  \,\right)` and :math:`\mathbf{E}`,
+related by
+
+.. math:: \mathbf{Y} =  G\!\left(\mathbf{R}\right) \cdot \mathbf{Q} + \mathbf{N} .
+
+
+
+In this framework, the solution is the posterior probability density function (pdf) of :math:`\mathbf{J}` conditioned on the data, which, in the light of Bayes' theorem, can be written as
 
 .. math:: p(\mathbf{j}|\mathbf{y}) \propto p(\mathbf{y}|\mathbf{j})\, p(\mathbf{j})\ ,
 
 being :math:`p(\mathbf{j})` the prior pdf, and :math:`p(\mathbf{y}|\mathbf{j})` the likelihood function.
+From :math:`p(\mathbf{j}|\mathbf{y})` sensible estimates of :math:`\mathbf{j}` can then be computed.
 
 Prior distribution.
 """""""""""""""""""
-The prior pdf :math:`p(\mathbf{j})` encodes all the information on the unknown source configuration which is available before the measurement is made. Here we set:
+The prior pdf :math:`p(\mathbf{j})` encodes all the information on the unknown which is available before the
+measurement is made. Here we set:
 
 .. math:: p(\mathbf{j}) = p(n_D, \mathbf{r}_{1:n_D}, \mathbf{q}_{1:n_D}) = p(n_D) \prod_{k=1}^{n_D}\, p(r_k|n_D, r_1, \ldots, r_{k-1})\, p(\mathbf{q}_{k}),
 
 where:
 
-- :math:`p(n_D)` is the prior pdf for the number of dipole, which is defined as a Poisson distribution with mean :math:`\lambda`.
-- :math:`p(r_k|n_D, r_1, \ldots, r_{k-1})` is the prior pdf for the location of the :math:`k-` th dipole, which is defined as a uniform distribution on the given brain discretization excluding the points :math:`r_1, \ldots, r_{k-1}` already occupied by the other dipoles.
-- :math:`p(\mathbf{q}_k)` is the prior pdf for the dipole moment, which is a trivariate Gaussian distribution with zero mean and diagonal matrix equal to :math:`\sigma_q^2 \mathbf{I}`. The variance :math:`\sigma_q^2` reflects information on the dipole strenght.
+- :math:`p(n_D)` is the prior pdf for the number of dipole, which is defined as a Poisson distribution with
+  mean :math:`\lambda`.
+- :math:`p(r_k|n_D, r_1, \ldots, r_{k-1})` is the prior pdf for the location of the :math:`k--` th dipole,
+  which is defined as a uniform distribution on the given brain discretization, under the constraint
+  that at each grid point can be located at most one dipole.
+- :math:`p(\mathbf{q}_k)` is the prior pdf for the dipole moment, which is a trivariate Gaussian
+  distribution with zero mean and diagonal matrix equal to :math:`\sigma_q^2 \mathbf{I}`.
+  The variance :math:`\sigma_q^2` reflects information on the dipole strenght.
 
 Likelihood function.
-"""""""""""""""""""""
+""""""""""""""""""""
 The likelihood function, :math:`p(\mathbf{y}|\mathbf{j})`, contains information on the forward model :eq:`fwd` and the statistical properties of the noise. Here we assume the noise to be Gaussian with zero mean and diagonal covariance matrix :math:`\sigma_e^2 \mathbf{I}`, thus
 
 .. math:: p(\mathbf{y}|\mathbf{j}) = \mathcal{N}(\mathbf{y}; \mathbf{G} \left( \mathbf{r}_{1:n_D} \right) \cdot \mathbf{q}_{1:n_D}, \sigma_{e}^2 \mathbf{I}).
 
 
-Sesame in action.
+|
+
+SESAME in action.
 -----------------
-By exploiting the semi--linear structure of the MEG/EEG forward model SESAME approximates the posterior pdf
+In order to compute estimates of the unknown neural currents from the posterior distribution, a numerical approximation
+of the latter is needed. By exploiting the semi--linear structure of the MEG/EEG forward model SESAME approximates the posterior pdf
 
 .. math:: p(\mathbf{j}|\mathbf{y})\, =\,  p(\mathbf{q}_{1:n_D}\,|\,\mathbf{y}, n_D, \mathbf{r}_{1:n_D})\ p(n_D, \mathbf{r}_{1:n_D}\,|\,\mathbf{y})
 
-through a two--step approach: first the marginal posterior :math:`p(n_D, \mathbf{r}_{1:n_D}\,|\,\mathbf{y})` is approximated via an Adaptive Sequential Monte Carlo sampler (ASMC, [2]_); then  :math:`p(\mathbf{q}_{1:n_D}\,|\,\mathbf{y}, n_D, \mathbf{r}_{1:n_D})` is analytically computed.
+through a two--step approach:
 
-Adaptive Sequential Monte Carlo sampler for the marginal posterior :math:`p(n_D, \mathbf{r}_{1:n_D}\,|\,\mathbf{y})`.
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| ASMC aims at approximating the target pdf :math:`p(n_D, \mathbf{r}_{1:n_D}\,|\,\mathbf{y})` using a large set of samples, also called particles; in our context each particle is a candidate solution, i.e. the number of dipoles and the dipole locations.
-| One easy way to produce such set of samples is to draw them independently from a simple pdf, and possibly weigh them to correctly approximate the target pdf (Importance Sampling, IS [3]_). An alternative approach is to start from a random candidate, perturb it randomly many times, and then approximate the target pdf with the collection of samples along the iterations (Markov Chain Monte Carlo, MCMC [3]_).
-| ASMC combines these two techniques:  multiple samples are independently drawn from a simple distribution, in our case the prior pdf :math:`p(n_D, \mathbf{r}_{1:n_D})`, evolve following an MCMC scheme, and their weights are updated after every MCMC step; at times, a resample move is performed, that means samples having negligible weights are replaced by samples in the higher--probability region, so as to explore better these areas. Eventually, the target distribution is approximated by the weighted sample set obtained at the last iteration.
+#. first the marginal posterior :math:`p(n_D, \mathbf{r}_{1:n_D}\,|\,\mathbf{y})` is approximated via an
+   Adaptive Sequential Monte Carlo (ASMC)  sampler [2]_ ;
+#. then  :math:`p(\mathbf{q}_{1:n_D}\,|\,\mathbf{y}, n_D, \mathbf{r}_{1:n_D})` is analytically computed.
+
+
+ASMC sampler.
+"""""""""""""
+The ASMC sampler aims at approximating the target pdf :math:`p(n_D, \mathbf{r}_{1:n_D}\,|\,\mathbf{y})` using a large
+set of samples, termed `particles`; in our context each particle is a candidate solution and contains all the
+parameters that are estimated through the Monte Carlo procedure, namely the number of active sources and their
+location.
+
+One easy way to produce such set of samples is to draw them independently from a simple pdf, and possibly weight
+them to correctly approximate the target pdf (Importance Sampling, IS [3]_).
+
+An alternative approach is to start from a random candidate, perturb it randomly many times, and then approximate
+the target pdf with the collection of samples along the iterations (Markov Chain Monte Carlo, MCMC [3]_).
+
+The ASMC sampler combines these two techniques:  multiple samples are independently drawn from a simple
+distribution, which in our case is the prior pdf :math:`p(n_D, \mathbf{r}_{1:n_D})`, evolve following an MCMC
+scheme, and their weights are updated after every MCMC step; at times, a resample move is performed,
+that means samples having negligible weights are replaced by samples in the higher--probability region,
+so as to explore better these areas.
+Eventually, the target distribution is approximated by the weighted sample set obtained at the last iteration.
+
 
 Analytic computation of :math:`p(\mathbf{q}_{1:n_D}\,|\,\mathbf{y}, n_D, \mathbf{r}_{1:n_D})`.
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 By exploiting the mutual independence of :math:`\mathbf{J}` and :math:`\mathbf{N}` and the Gaussian assumptions made about the prior pdf of the dipole moments and the noise model, SESAME analytically compute the posterior pdf :math:`p(\mathbf{q}_{1:n_D}\,|\,\mathbf{y}, n_D, \mathbf{r}_{1:n_D})`. Indeed, it is a Gaussian density whose mean and variance depend only on the data, the forward solution :math:`\mathbf{G}\left(\mathbf{r}_{1:n_D}\right)`, and the standard deviations :math:`\sigma_q` and :math:`\sigma_e`.
 
 Get the most out of Sesame's results.

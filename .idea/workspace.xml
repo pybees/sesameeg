@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="*** Rimosso gamma hig,low e delta min. max dai parametri in EmpPdf.compute_exponent&#10;sistemato il doc">
+    <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="iniziato a sistemare mathematical model">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/api.rst" afterPath="$PROJECT_DIR$/doc/api.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/conf.py" afterPath="$PROJECT_DIR$/doc/conf.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/explanation_algorithm.rst" afterPath="$PROJECT_DIR$/doc/explanation_algorithm.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/index.rst" afterPath="$PROJECT_DIR$/doc/index.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py" afterPath="$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py" afterPath="$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sesameeg/io/io.py" afterPath="$PROJECT_DIR$/sesameeg/io/io.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,8 +27,8 @@
       <file leaf-file-name="plot_analyse_sample_auditory.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="433">
-              <caret line="128" column="0" lean-forward="false" selection-start-line="128" selection-start-column="0" selection-end-line="137" selection-end-column="75" />
+            <state relative-caret-position="270">
+              <caret line="90" column="72" lean-forward="false" selection-start-line="90" selection-start-column="72" selection-end-line="90" selection-end-column="72" />
               <folding>
                 <element signature="e#358#383#0" expanded="true" />
               </folding>
@@ -30,14 +36,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="particles.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sesameeg/particles.py">
+      <file leaf-file-name="plot_meg_auditory_sesame_volume.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="20" column="14" lean-forward="false" selection-start-line="20" selection-start-column="14" selection-end-line="20" selection-end-column="26" />
-              <folding>
-                <element signature="e#215#226#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="289">
+              <caret line="100" column="72" lean-forward="false" selection-start-line="100" selection-start-column="72" selection-end-line="100" selection-end-column="72" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -45,30 +49,28 @@
       <file leaf-file-name="explanation_algorithm.rst" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/doc/explanation_algorithm.rst">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1458">
-              <caret line="81" column="0" lean-forward="false" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+            <state relative-caret-position="325">
+              <caret line="157" column="95" lean-forward="false" selection-start-line="157" selection-start-column="95" selection-end-line="157" selection-end-column="95" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="emp_pdf.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sesameeg/emp_pdf.py">
+      <file leaf-file-name="io.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sesameeg/io/io.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="158" column="23" lean-forward="false" selection-start-line="158" selection-start-column="23" selection-end-line="158" selection-end-column="23" />
-              <folding>
-                <element signature="e#215#231#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="128">
+              <caret line="218" column="9" lean-forward="false" selection-start-line="218" selection-start-column="7" selection-end-line="218" selection-end-column="9" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.rst" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/doc/index.rst">
+      <file leaf-file-name="sesame.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sesameeg/sesame.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1062">
-              <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="234" />
+            <state relative-caret-position="106">
+              <caret line="123" column="33" lean-forward="false" selection-start-line="122" selection-start-column="11" selection-end-line="123" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -114,19 +116,19 @@
         <option value="$PROJECT_DIR$/sesameeg/__init__.py" />
         <option value="$PROJECT_DIR$/sesameeg/metrics/__init__.py" />
         <option value="$PROJECT_DIR$/sesameeg/metrics/metrics.py" />
-        <option value="$PROJECT_DIR$/sesameeg/io/io.py" />
         <option value="$PROJECT_DIR$/sesameeg/io/__init__.py" />
-        <option value="$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py" />
-        <option value="$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py" />
         <option value="$PROJECT_DIR$/sesameeg/sesame.py" />
         <option value="$PROJECT_DIR$/sesameeg/dipoles.py" />
-        <option value="$PROJECT_DIR$/doc/index.rst" />
         <option value="$PROJECT_DIR$/sesameeg/particles.py" />
         <option value="$PROJECT_DIR$/sesameeg/utils/smc_utils.py" />
         <option value="$PROJECT_DIR$/sesameeg/utils/__init__.py" />
-        <option value="$PROJECT_DIR$/doc/conf.py" />
-        <option value="$PROJECT_DIR$/doc/api.rst" />
         <option value="$PROJECT_DIR$/sesameeg/emp_pdf.py" />
+        <option value="$PROJECT_DIR$/doc/api.rst" />
+        <option value="$PROJECT_DIR$/sesameeg/io/io.py" />
+        <option value="$PROJECT_DIR$/doc/conf.py" />
+        <option value="$PROJECT_DIR$/doc/index.rst" />
+        <option value="$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py" />
+        <option value="$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py" />
         <option value="$PROJECT_DIR$/doc/explanation_algorithm.rst" />
       </list>
     </option>
@@ -160,7 +162,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -253,7 +255,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -273,7 +275,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.plot_analyse_sample_auditory">
+  <component name="RunManager" selected="Python.plot_meg_auditory_sesame_volume">
     <configuration default="false" name="plot_analyse_sample_auditory" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -448,8 +450,8 @@
     </list>
     <recent_temporary>
       <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Python.plot_analyse_sample_auditory" />
-        <item index="1" class="java.lang.String" itemvalue="Python.plot_meg_auditory_sesame_volume" />
+        <item index="0" class="java.lang.String" itemvalue="Python.plot_meg_auditory_sesame_volume" />
+        <item index="1" class="java.lang.String" itemvalue="Python.plot_analyse_sample_auditory" />
       </list>
     </recent_temporary>
   </component>
@@ -537,17 +539,24 @@
       <option name="project" value="LOCAL" />
       <updated>1583942266883</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="iniziato a sistemare mathematical model">
+      <created>1583954205745</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1583954205745</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="730" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24944155" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17656766" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17656766" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32784185" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27227724" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24944155" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -575,7 +584,8 @@
     <MESSAGE value="Volume source space (solo 1 o 2) con esempio left auditory" />
     <MESSAGE value="Sistemato il doc, spostata la funzione compjute gamma" />
     <MESSAGE value="*** Rimosso gamma hig,low e delta min. max dai parametri in EmpPdf.compute_exponent&#10;sistemato il doc" />
-    <option name="LAST_COMMIT_MESSAGE" value="*** Rimosso gamma hig,low e delta min. max dai parametri in EmpPdf.compute_exponent&#10;sistemato il doc" />
+    <MESSAGE value="iniziato a sistemare mathematical model" />
+    <option name="LAST_COMMIT_MESSAGE" value="iniziato a sistemare mathematical model" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -758,13 +768,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sesameeg/io/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sesameeg/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="18">
@@ -772,31 +775,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2466">
-          <caret line="147" column="75" lean-forward="false" selection-start-line="147" selection-start-column="75" selection-end-line="147" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sesameeg/io/io.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sesameeg/dipoles.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
           <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sesameeg/sesame.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="28" column="14" lean-forward="false" selection-start-line="28" selection-start-column="14" selection-end-line="28" selection-end-column="26" />
         </state>
       </provider>
     </entry>
@@ -814,52 +796,87 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/doc/conf.py">
+    <entry file="file://$PROJECT_DIR$/sesameeg/io/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="311" column="33" lean-forward="false" selection-start-line="311" selection-start-column="33" selection-end-line="311" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/doc/api.rst">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="379">
-          <caret line="44" column="0" lean-forward="false" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+        <state relative-caret-position="18">
+          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sesameeg/particles.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="20" column="14" lean-forward="false" selection-start-line="20" selection-start-column="14" selection-end-line="20" selection-end-column="26" />
+        <state relative-caret-position="342">
+          <caret line="22" column="4" lean-forward="false" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="4" />
           <folding>
-            <element signature="e#215#226#0" expanded="true" />
+            <element signature="e#215#226#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/doc/index.rst">
+    <entry file="file://$PROJECT_DIR$/doc/api.rst">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1062">
-          <caret line="59" column="0" lean-forward="false" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="234" />
+        <state relative-caret-position="810">
+          <caret line="45" column="21" lean-forward="false" selection-start-line="45" selection-start-column="21" selection-end-line="45" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sesameeg/emp_pdf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="158" column="23" lean-forward="false" selection-start-line="158" selection-start-column="23" selection-end-line="158" selection-end-column="23" />
+        <state relative-caret-position="702">
+          <caret line="41" column="18" lean-forward="false" selection-start-line="39" selection-start-column="8" selection-end-line="41" selection-end-column="18" />
           <folding>
-            <element signature="e#215#231#0" expanded="true" />
+            <element signature="e#215#231#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/conf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2466">
+          <caret line="143" column="4" lean-forward="false" selection-start-line="143" selection-start-column="4" selection-end-line="143" selection-end-column="4" />
+          <folding>
+            <element signature="e#429#439#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/doc/index.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1098">
+          <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sesameeg/io/io.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="218" column="9" lean-forward="false" selection-start-line="218" selection-start-column="7" selection-end-line="218" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sesameeg/sesame.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="106">
+          <caret line="123" column="33" lean-forward="false" selection-start-line="122" selection-start-column="11" selection-end-line="123" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="100" column="72" lean-forward="false" selection-start-line="100" selection-start-column="72" selection-end-line="100" selection-end-column="72" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="433">
-          <caret line="128" column="0" lean-forward="false" selection-start-line="128" selection-start-column="0" selection-end-line="137" selection-end-column="75" />
+        <state relative-caret-position="270">
+          <caret line="90" column="72" lean-forward="false" selection-start-line="90" selection-start-column="72" selection-end-line="90" selection-end-column="72" />
           <folding>
             <element signature="e#358#383#0" expanded="true" />
           </folding>
@@ -868,8 +885,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/doc/explanation_algorithm.rst">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1458">
-          <caret line="81" column="0" lean-forward="false" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+        <state relative-caret-position="325">
+          <caret line="157" column="95" lean-forward="false" selection-start-line="157" selection-start-column="95" selection-end-line="157" selection-end-column="95" />
           <folding />
         </state>
       </provider>

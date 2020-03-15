@@ -14,6 +14,7 @@
 
 import sys
 import os
+import warnings
 
 import sphinx_gallery
 # import sphinx_rtd_theme
@@ -140,6 +141,7 @@ html_theme = 'bootstrap'
 # documentation.
 html_theme_options = {
     'navbar_sidebarrel': False,
+    'navbar_pagenav': False,
     'globaltoc_includehidden': False,
     'navbar_links': [
         ("Examples", "auto_examples/index"),
@@ -205,7 +207,7 @@ html_static_path = ['_static']
 #html_split_index = False
 
 # If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
+html_show_sourcelink = False
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 #html_show_sphinx = True
@@ -334,6 +336,12 @@ sphinx_gallery_conf = {
     'backreferences_dir': os.path.join('generated'),
     'reference_url': {'sesameeg': None}
 }
+
+# Remove matplotlib agg warnings from generated doc when using plt.show
+warnings.filterwarnings("ignore", category=UserWarning,
+                        message='Matplotlib is currently using agg, which is a'
+                                ' non-GUI backend, so cannot show the figure.')
+
 
 def setup(app):
     # a copy button to copy snippet of code from the documentation

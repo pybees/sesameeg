@@ -63,17 +63,9 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, subsample=None,
     _est_cs = f.create_group('est_locs')
     for i, _e in enumerate(inv_op.est_locs):
         _est_cs.create_dataset(str(i), data=_e)
-    if hasattr(inv_op, 's_q'):
-        _est_q = f.create_group('est_q')
-        for i, _e in enumerate(inv_op.est_q):
-            _est_q.create_dataset(str(i), data=_e)
-    elif hasattr(inv_op, 'q_in'):
-        _est_im_q = f.create_group('est_im_q')
-        for i, _e in enumerate(inv_op.est_im_q):
-            _est_im_q.create_dataset(str(i), data=_e)
-        _est_re_q = f.create_group('est_re_q')
-        for i, _e in enumerate(inv_op.est_re_q):
-            _est_re_q.create_dataset(str(i), data=_e)
+    _est_q = f.create_group('est_q')
+    for i, _e in enumerate(inv_op.est_q):
+        _est_q.create_dataset(str(i), data=_e)
 
     _est_ndips = f.create_dataset('est_n_dips',
                                   data=np.asarray(inv_op.est_n_dips))
@@ -157,6 +149,77 @@ def write_pkl(fpath, inv_op, tmin=None, tmax=None, subsample=None,
 
 
 def read_h5(fpath):
+    """Load SESAME result from an HDF5 file.
+
+    Parameters
+    ----------
+    fpath : :py:class:`~str`
+        Path and filename of the .h5 file containing the result.
+
+    Returns
+    -------
+    res : :py:class:`~dict`
+        A Python dictionary containing the result
+
+    Notes
+    -----
+    The keys of the returned dictionary are the following:
+
+    * ch_names : :py:class:`~list` | 'Not available.'
+        The channel names
+    * data_path : :py:class:`~str` | 'Not available.'
+        Path and filename of the file containing the data.
+    * est_locs : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~int` | 'Not available.'
+        The source space grid points indices in which a source is estimated.
+    * est_n_dips : :py:class:`~list` of :py:class:`~int` | 'Not available.'
+        The estimated number of dipoles.
+    * est_q : :py:class:`~numpy.ndarray` , shape (est_n_dips[-1], n_ist, 3) | 'Not available.'
+        The moment time courses of the dipoles estimated in the last iteration of SESAME.
+    * est_s_q : :py:class:`~list` of :py:class:`~numpy.ndarray`, shape (n_iterations, ) | 'Not available.'
+        Estimated values of the parameter ``s_q``. Each array in the list corresponds to a single particle.
+        This only applies if ``hyper_q=True`` has been selected when instantiating :py:class:`~sesameeg.Sesame`.
+    * exponents : :py:class:`~numpy.ndarray` | 'Not available.'
+        Array whose entries represent points in the space of artificial
+        distributions. It is used to keep track of the path followed
+        by SESAME.
+    * final_s_q : :py:class:`~float` | 'Not available.'
+        The weighted average of the last estimated value of ``s_q`` in each particle.
+        This only applies if ``hyper_q=True`` has been selected when instantiating :py:class:`~sesameeg.Sesame`.
+    * fwd_path : :py:class:`~str` | 'Not available.'
+        Path and filename of the file containing the forward model.
+    * lambda : :py:class:`~float`
+        The parameter of the Poisson prior pdf on the number of dipoles.
+    * lf_path : :py:class:`~str` | 'Not available.'
+        Path and filename of the file containing the lead field.
+    * model_sel : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`
+        The model selection, i.e. the posterior distribution on the number
+        of dipoles.
+    * n_max_dip : :py:class:`~int`
+        The maximum number of dipoles allowed in each particle.
+    * prob_map : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (est_n_dips, n_verts)
+        Posterior probability map
+    * sigma_noise : :py:class:`~float`
+        The standard deviation of the noise distribution.
+    * sigma_q : :py:class:`~float` | None
+        The standard deviation of the prior pdf on the dipole moment.
+    * src_path : :py:class:`~str` | 'Not available.'
+        Path and filename of the file containing the source space grid.
+    * subject : :py:class:`~str` | None
+        The subject name.
+    * subject_viz : :py:class:`~str` | None
+        The name of the subject's FreeSurfer folder.
+    * tmax : :py:class:`~float` | None
+        The last instant (in seconds) of the time window in which data have been analyzed.
+    * tmin : :py:class:`~float` | None
+        The first instant (in seconds) of the time window in which data have been analyzed.
+
+    .. note::
+       Depending on the value of the ``estimate_all`` parameter used in the call of the
+       :py:meth:`~sesameeg.Sesame.apply_sesame` method, the list returned in the fields
+       ``est_locs``, ``est_n_dips`` and ``prob_map`` may contain either
+       the corresponding quantity estimated at each iteration or only those estimated at the last iteration.
+
+    """
     _check_h5_installed()
     import h5py as h5
 

@@ -36,8 +36,8 @@ fname_t1 = op.join(data_path , 'subjects', subject, 'mri', 'T1.mgz')
 fname_evoked = op.join(data_path, 'MEG', subject, 'sample_audvis-ave.fif')
 
 ###############################################################################
-# Load the transformation matrix, the forward solution :math:`\textbf{G}` and the evoked data
-# :math:`\textbf{y}`.
+# Load the  mri to head coordinates transformation matrix, the forward solution
+# :math:`\textbf{G}` and the evoked data :math:`\textbf{y}`.
 # The forward solution also defines the employed brain discretization.
 
 # Transformation matrix
@@ -59,12 +59,34 @@ evoked = evoked.pick_types(meg=meg_sensor_type,
                            eeg=eeg_sensor_type, exclude='bads')
 
 ###############################################################################
-# Select and visualize the data topographies.
+# Define the parameters.
 time_in = 0.055
 time_fin = 0.135
 subsample = None
 sample_min, sample_max = evoked.time_as_index([time_in, time_fin],
                                               use_rounding=True)
+# To accelerate the run time of this example, we use a small number of
+# particles. We recall that the parameter ``n_parts`` represents, roughly speaking,
+# the number of candidate solutions that are tested in the Monte Carlo procedure;
+# larger values yield in principle more accurate reconstructions but also entail a
+# higher computational cost. Setting the value to about a hundred seems to represent
+# a good trade–off.
+n_parts = 10
+# If None, sigma_noise and sigma_q will be estimated by SESAME.
+sigma_noise = None
+sigma_q = None
+
+
+cov = None
+# You can make SESAME pre-whiten the data by providing a noise covariance
+# from mne import read_cov
+# fname_cov = op.join(sample.data_path(), 'MEG', subject,
+#                    'sample_audvis-cov.fif')
+# cov = read_cov(fname_cov)
+
+###############################################################################
+# Visualize the selected data.
+
 lst = evoked.plot_joint(show=False)
 for fig in lst:
     ax = fig.get_axes()
@@ -74,23 +96,9 @@ plt.show()
 
 ###############################################################################
 # Apply SESAME.
-n_parts = 100
-# If None, sigma_noise and sigma_q will be estimated by SESAME.
-sigma_noise = None
-sigma_q = None
-
-cov = None
-# If a noise covariance is provided, SESAME will pre-whiten the data
-# from mne import read_cov
-# fname_cov = op.join(sample.data_path(), 'MEG', subject,
-#                    'sample_audvis-cov.fif')
-# cov = read_cov(fname_cov)
-
-
 _sesame = Sesame(fwd, evoked, n_parts=n_parts, s_noise=sigma_noise,
                  sample_min=sample_min, sample_max=sample_max,
-                 s_q=sigma_q, hyper_q=True, cov=cov, subsample=subsample,
-                 verbose=True)
+                 s_q=sigma_q, hyper_q=True, cov=cov, subsample=subsample)
 time_start = time.time()
 _sesame.apply_sesame()
 time_elapsed = (time.time() - time_start)
@@ -137,7 +145,7 @@ plot_stat_map(index_img(img, -1), fname_t1, threshold=0.001, cut_coords=peak_mri
 plt.show()
 
 ###############################################################################
-# Save results
+# Save results.
 
 # You can save SESAME result in an HDF5 file with:
 # _sesame.save_h5(save_fname, tmin=time_in, tmax=time_fin, subsample=subsample,

@@ -10,7 +10,7 @@ SESAMEEG is a Python3 library providing the Bayesian multi-dipole localization m
 SESAME [1]_ (SEquential Semi-Analytic Montecarlo Estimation) for the automatic estimation of
 brain source currents from MEEG data.
 
-A mathematical descriptions of the algorithm is available in the documentation.
+A mathematical description of the algorithm is available in the documentation.
 
 
 Installation
@@ -58,6 +58,7 @@ Cite our work
 If you use this code in your project, please consider citing our work:
 
 .. [1] S. Sommariva and A. Sorrentino, `Sequential Monte Carlo samplers for semi-linear inverse problems and application to Magnetoencephalography <https://doi.org/10.1088/0266-5611/30/11/114020>`_. Inverse Problems, 30 114020 (2014).
+.. [2] A. Sorrentino, G. Luria, and R. Aramini, `Bayesian multi-dipole modeling of a single topography in MEG by adaptive Sequential Monte Carlo Samplers <https://iopscience.iop.org/article/10.1088/0266-5611/30/4/045010>`_. Inverse Problems, 30 045010 (2014).
 
 .. toctree::
    :maxdepth: 2
