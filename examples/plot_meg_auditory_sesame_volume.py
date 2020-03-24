@@ -60,10 +60,10 @@ evoked = evoked.pick_types(meg=meg_sensor_type,
 
 ###############################################################################
 # Define the parameters.
-time_in = 0.055
-time_fin = 0.135
+time_min = 0.055
+time_max = 0.135
 subsample = None
-sample_min, sample_max = evoked.time_as_index([time_in, time_fin],
+sample_min, sample_max = evoked.time_as_index([time_min, time_max],
                                               use_rounding=True)
 # To accelerate the run time of this example, we use a small number of
 # particles. We recall that the parameter ``n_parts`` represents, roughly speaking,
@@ -90,15 +90,15 @@ cov = None
 lst = evoked.plot_joint(show=False)
 for fig in lst:
     ax = fig.get_axes()
-    ax[0].axvline(time_in, color='r', linewidth=2.0)
-    ax[0].axvline(time_fin, color='r', linewidth=2.0)
+    ax[0].axvline(time_min, color='r', linewidth=2.0)
+    ax[0].axvline(time_max, color='r', linewidth=2.0)
 plt.show()
 
 ###############################################################################
 # Apply SESAME.
 _sesame = Sesame(fwd, evoked, n_parts=n_parts, s_noise=sigma_noise,
-                 sample_min=sample_min, sample_max=sample_max,
-                 s_q=sigma_q, hyper_q=True, cov=cov, subsample=subsample)
+                 top_min=time_min, top_max=time_max, s_q=sigma_q,
+                 hyper_q=True, cov=cov, subsample=subsample)
 time_start = time.time()
 _sesame.apply_sesame()
 time_elapsed = (time.time() - time_start)
@@ -144,13 +144,11 @@ img = stc.as_volume(fwd['src'], mri_resolution=True)
 plot_stat_map(index_img(img, -1), fname_t1, threshold=0.001, cut_coords=peak_mri_pos)
 plt.show()
 
-###############################################################################
+#######################################################################################
 # Save results.
 
 # You can save SESAME result in an HDF5 file with:
-# _sesame.save_h5(save_fname, tmin=time_in, tmax=time_fin, subsample=subsample,
-#                 sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)
+# _sesame.save_h5(save_fname, sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)
 
 # You can save SESAME result in a Pickle file with:
-# _sesame.save_pkl(save_fname, tmin=time_in, tmax=time_fin, subsample=subsample,
-#                  sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)
+# _sesame.save_pkl(save_fname, sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)

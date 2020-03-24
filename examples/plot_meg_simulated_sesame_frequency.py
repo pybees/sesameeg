@@ -172,47 +172,26 @@ stc_signal = mne.SourceEstimate(q, vertices, tmin=0, tstep=1. / sfreq, subject='
 # Now we run the signal through the forward model to obtain simulated sensor
 # data. We then corrupt the resulting simulated gradiometer recordings
 # by empty room noise.
-evoked_t = mne.apply_forward(fwd, stc_signal, info)
-mne.simulation.add_noise(evoked_t, cov, random_state=rand)
+evoked = mne.apply_forward(fwd, stc_signal, info)
+mne.simulation.add_noise(evoked, cov, random_state=rand)
 
 ###############################################################################
 # Visualize the data
-evoked_t.plot()
+evoked.plot()
 
 ###############################################################################
-# We now Fourier transform the data, select a frequency band and extract the
-# corresponding topographies from the data
-
-tstep = 1 / evoked_t.info['sfreq']
-
-evoked_f = evoked_t.copy()
-evoked_f.data *= np.hamming(evoked_f.data.shape[1])
-evoked_f.data = (np.fft.rfft(evoked_f.data))
-freqs = np.fft.rfftfreq(evoked_t.data.shape[1], tstep)
-
-_freq_min = 9.5
-_freq_max = 10.5
-
-top_f_list = np.where((freqs >= _freq_min) & (freqs <= _freq_max))[0]
-top_f_min = top_f_list[0]
-top_f_max = top_f_list[-1]
-evoked_f_temp = evoked_f.data[:, top_f_min:top_f_max + 1]
-temp_list = list()
-for l in evoked_f_temp.T:
-    temp_list.append(np.vstack([np.real(l),np.imag(l)]).T)
-_real_imag = np.hstack(temp_list)
-topographies = mne.EvokedArray(_real_imag, evoked_f.info)
-
-
-###############################################################################
-# Define the parameters and apply SESAME
+# Define the parameters and apply SESAME. We convert the data to the frequency
+# domain by setting ``Fourier_transf=True``.
 
 n_parts = 100
 sigma_noise = None
 sigma_q = None
+freq_min = 9.5
+freq_max = 10.5
 
-_sesame = Sesame(fwd, topographies, n_parts=n_parts, s_noise=sigma_noise,
-                 s_q=sigma_q, hyper_q=True)
+_sesame = Sesame(fwd, evoked, n_parts=n_parts, s_noise=sigma_noise,
+                 top_min=freq_min, top_max=freq_max,  s_q=sigma_q,
+                 hyper_q=True, Fourier_transf=True)
 
 _sesame.apply_sesame()
 print('    Estimated number of sources: {0}'.format(_sesame.est_n_dips[-1]))

@@ -49,9 +49,10 @@ def _export_to_vol_stc(inv_op, subject=None):
     return vol_stc
 
 
-def write_h5(fpath, inv_op, tmin=None, tmax=None, subsample=None,
-             sbj=None, sbj_viz=None, data_path=None, fwd_path=None,
-             src_path=None, lf_path=None):
+def write_h5(fpath, inv_op, tmin=None, tmax=None, fmin=None,
+             fmax=None, subsample=None, sbj=None, sbj_viz=None,
+             data_path=None, fwd_path=None, src_path=None,
+             lf_path=None):
     _check_h5_installed()
     import h5py as h5
 
@@ -94,6 +95,10 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, subsample=None,
         _tmin = f.create_dataset('tmin', data=tmin)
     if tmax is not None:
         _tmax = f.create_dataset('tmax', data=tmax)
+    if fmin is not None:
+        _fmin = f.create_dataset('fmin', data=fmin)
+    if fmax is not None:
+        _fmax = f.create_dataset('fmax', data=fmax)
     if subsample is not None:
         _subsample = f.create_dataset('subsample', data=subsample)
     if sbj is not None:
@@ -113,20 +118,13 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, subsample=None,
     return
 
 
-def write_pkl(fpath, inv_op, tmin=None, tmax=None, subsample=None,
-              sbj=None, sbj_viz=None, data_path=None, fwd_path=None,
-              src_path=None, lf_path=None, save_all=False):
+def write_pkl(fpath, inv_op, sbj=None, sbj_viz=None, data_path=None,
+              fwd_path=None, src_path=None, lf_path=None, save_all=False):
     _check_pickle_installed()
     import pickle as pkl
 
     if hasattr(inv_op, 'forward'):
         inv_op.ch_names = inv_op.forward['info']['ch_names']
-    if tmin is not None:
-        inv_op.t_min = tmin
-    if tmax is not None:
-        inv_op.t_max = tmax
-    if subsample is not None:
-        inv_op.subsample = subsample
     if sbj is not None:
         inv_op.sbj = sbj
     if sbj_viz is not None:
@@ -134,7 +132,7 @@ def write_pkl(fpath, inv_op, tmin=None, tmax=None, subsample=None,
     if data_path is not None:
         inv_op.d_path = data_path
         if not save_all:
-            del inv_op.i_data, inv_op.r_data
+            del inv_op.r_data
     if fwd_path is not None:
         inv_op.fwd_path = fwd_path
         if not save_all:
@@ -189,6 +187,10 @@ def read_h5(fpath):
     * final_s_q : :py:class:`~float` | 'Not available.'
         The weighted average of the last estimated value of ``s_q`` in each particle.
         This only applies if ``hyper_q=True`` has been selected when instantiating :py:class:`~sesameeg.Sesame`.
+    * fmax : :py:class:`~float` | None
+        The last frequency (in Hertz) of the frequency band in which data have been analyzed.
+    * fmin : :py:class:`~float` | None
+        The first frequency (in Hertz) of the frequency band in which data have been analyzed.
     * fwd_path : :py:class:`~str` | 'Not available.'
         Path and filename of the file containing the forward model.
     * lambda : :py:class:`~float`
@@ -204,13 +206,13 @@ def read_h5(fpath):
         Posterior probability map
     * sigma_noise : :py:class:`~float`
         The standard deviation of the noise distribution.
-    * sigma_q : :py:class:`~float` | None
+    * sigma_q : :py:class:`~float`
         The standard deviation of the prior pdf on the dipole moment.
     * src_path : :py:class:`~str` | 'Not available.'
         Path and filename of the file containing the source space grid.
-    * subject : :py:class:`~str` | None
+    * subject : :py:class:`~str` | 'Not available.'
         The subject name.
-    * subject_viz : :py:class:`~str` | None
+    * subject_viz : :py:class:`~str` | 'Not available.'
         The name of the subject's FreeSurfer folder.
     * tmax : :py:class:`~float` | None
         The last instant (in seconds) of the time window in which data have been analyzed.
@@ -254,11 +256,13 @@ def read_h5(fpath):
         else:
             res[_k] = 'Not available.'
 
-    for _k in ['sigma_q', 'final_s_q', 'tmin', 'tmax', 'subsample']:
+    for _k in ['final_s_q', 'tmin', 'tmax', 'fmin', 'fmax', 'subsample']:
         if _k in f.keys():
             res[_k] = f[_k][()]
+        else:
+            res[_k] = None
 
-    for _k in ['lambda', 'sigma_noise', 'n_max_dip',
+    for _k in ['lambda', 'sigma_noise', 'sigma_q', 'n_max_dip',
                'subject', 'subject_viz', 'data_path', 'fwd_path',
                'src_path', 'lf_path']:
         if _k in f.keys():

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="sistemato  mathematical model (manca la parte su hyperprior)&#10;aggiunto save_all in save_pkl&#10;">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/examples/plot_meg_simulated_sesame_frequency.py" />
+    <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="aggiunto esempio in frequenza">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py" afterPath="$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py" afterPath="$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/plot_meg_simulated_sesame_frequency.py" afterPath="$PROJECT_DIR$/examples/plot_meg_simulated_sesame_frequency.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sesameeg/io/io.py" afterPath="$PROJECT_DIR$/sesameeg/io/io.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sesameeg/sesame.py" afterPath="$PROJECT_DIR$/sesameeg/sesame.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,9 +25,11 @@
       <file leaf-file-name="plot_analyse_sample_auditory.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="31" />
-              <folding />
+            <state relative-caret-position="308">
+              <caret line="146" column="0" lean-forward="false" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
+              <folding>
+                <element signature="e#358#383#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -31,8 +37,8 @@
       <file leaf-file-name="plot_meg_auditory_sesame_volume.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1638">
-              <caret line="101" column="0" lean-forward="false" selection-start-line="101" selection-start-column="0" selection-end-line="106" selection-end-column="61" />
+            <state relative-caret-position="164">
+              <caret line="146" column="52" lean-forward="false" selection-start-line="146" selection-start-column="52" selection-end-line="146" selection-end-column="52" />
               <folding />
             </state>
           </provider>
@@ -41,18 +47,20 @@
       <file leaf-file-name="plot_meg_simulated_sesame_frequency.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/examples/plot_meg_simulated_sesame_frequency.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3561">
-              <caret line="25" column="31" lean-forward="false" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
-              <folding />
+            <state relative-caret-position="3294">
+              <caret line="183" column="44" lean-forward="false" selection-start-line="183" selection-start-column="44" selection-end-line="183" selection-end-column="44" />
+              <folding>
+                <element signature="e#607#627#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="explanation_algorithm.rst" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/doc/explanation_algorithm.rst">
+      <file leaf-file-name="sesame.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sesameeg/sesame.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="541">
-              <caret line="200" column="147" lean-forward="false" selection-start-line="200" selection-start-column="147" selection-end-line="200" selection-end-column="147" />
+            <state relative-caret-position="-240">
+              <caret line="547" column="8" lean-forward="false" selection-start-line="547" selection-start-column="8" selection-end-line="547" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -61,18 +69,8 @@
       <file leaf-file-name="io.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sesameeg/io/io.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2628">
-              <caret line="148" column="12" lean-forward="false" selection-start-line="148" selection-start-column="12" selection-end-line="148" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sesame.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sesameeg/sesame.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="115" column="44" lean-forward="false" selection-start-line="115" selection-start-column="12" selection-end-line="115" selection-end-column="44" />
+            <state relative-caret-position="114">
+              <caret line="222" column="53" lean-forward="false" selection-start-line="222" selection-start-column="37" selection-end-line="222" selection-end-column="53" />
               <folding />
             </state>
           </provider>
@@ -128,8 +126,8 @@
         <option value="$PROJECT_DIR$/doc/conf.py" />
         <option value="$PROJECT_DIR$/doc/index.rst" />
         <option value="$PROJECT_DIR$/doc/explanation_algorithm.rst" />
-        <option value="$PROJECT_DIR$/sesameeg/io/io.py" />
         <option value="$PROJECT_DIR$/sesameeg/sesame.py" />
+        <option value="$PROJECT_DIR$/sesameeg/io/io.py" />
         <option value="$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py" />
         <option value="$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py" />
         <option value="$PROJECT_DIR$/examples/plot_meg_simulated_sesame_frequency.py" />
@@ -176,6 +174,38 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="sesameeg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sesameeg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sesameeg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sesameeg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sesameeg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sesameeg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sesameeg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="io" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -408,8 +438,8 @@
     <recent_temporary>
       <list size="3">
         <item index="0" class="java.lang.String" itemvalue="Python.plot_meg_simulated_sesame_frequency" />
-        <item index="1" class="java.lang.String" itemvalue="Python.plot_analyse_sample_auditory" />
-        <item index="2" class="java.lang.String" itemvalue="Python.plot_meg_auditory_sesame_volume" />
+        <item index="1" class="java.lang.String" itemvalue="Python.plot_meg_auditory_sesame_volume" />
+        <item index="2" class="java.lang.String" itemvalue="Python.plot_analyse_sample_auditory" />
       </list>
     </recent_temporary>
   </component>
@@ -518,20 +548,27 @@
       <option name="project" value="LOCAL" />
       <updated>1584294345724</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="aggiunto esempio in frequenza">
+      <created>1584986216441</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1584986216441</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="730" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24944155" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24944155" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17656766" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32784185" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17491749" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24944155" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26567656" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24944155" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -559,7 +596,8 @@
     <MESSAGE value="iniziato a sistemare mathematical model" />
     <MESSAGE value="continuato a sistemare mathematical model&#10;cambiati leggermente gli esempi" />
     <MESSAGE value="sistemato  mathematical model (manca la parte su hyperprior)&#10;aggiunto save_all in save_pkl&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="sistemato  mathematical model (manca la parte su hyperprior)&#10;aggiunto save_all in save_pkl&#10;" />
+    <MESSAGE value="aggiunto esempio in frequenza" />
+    <option name="LAST_COMMIT_MESSAGE" value="aggiunto esempio in frequenza" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -807,17 +845,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sesameeg/io/io.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2628">
-          <caret line="148" column="12" lean-forward="false" selection-start-line="148" selection-start-column="12" selection-end-line="148" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/doc/explanation_algorithm.rst">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="541">
+        <state relative-caret-position="434">
           <caret line="200" column="147" lean-forward="false" selection-start-line="200" selection-start-column="147" selection-end-line="200" selection-end-column="147" />
           <folding />
         </state>
@@ -825,33 +855,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sesameeg/sesame.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="115" column="44" lean-forward="false" selection-start-line="115" selection-start-column="12" selection-end-line="115" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1638">
-          <caret line="101" column="0" lean-forward="false" selection-start-line="101" selection-start-column="0" selection-end-line="106" selection-end-column="61" />
+        <state relative-caret-position="-240">
+          <caret line="547" column="8" lean-forward="false" selection-start-line="547" selection-start-column="8" selection-end-line="547" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="31" />
+        <state relative-caret-position="308">
+          <caret line="146" column="0" lean-forward="false" selection-start-line="146" selection-start-column="0" selection-end-line="146" selection-end-column="0" />
+          <folding>
+            <element signature="e#358#383#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="164">
+          <caret line="146" column="52" lean-forward="false" selection-start-line="146" selection-start-column="52" selection-end-line="146" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sesameeg/io/io.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="222" column="53" lean-forward="false" selection-start-line="222" selection-start-column="37" selection-end-line="222" selection-end-column="53" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/examples/plot_meg_simulated_sesame_frequency.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3561">
-          <caret line="25" column="31" lean-forward="false" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
-          <folding />
+        <state relative-caret-position="3294">
+          <caret line="183" column="44" lean-forward="false" selection-start-line="183" selection-start-column="44" selection-end-line="183" selection-end-column="44" />
+          <folding>
+            <element signature="e#607#627#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

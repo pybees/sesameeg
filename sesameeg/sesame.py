@@ -30,8 +30,9 @@ class Sesame(object):
         The forward solution.
     evoked : instance of :py:class:`~mne.Evoked` | :py:class:`~mne.EvokedArray`
         The evoked data.
-    s_noise : :py:class:`~float`
+    s_noise : :py:class:`~float` | None
         The standard deviation of the noise distribution.
+        If None, it is estimated from the data
     radius : :py:class:`~float` | None
         The maximum distance in cm between two neighbouring vertices
         of the brain discretization. If None, radius is set to 1 cm.
@@ -40,18 +41,22 @@ class Sesame(object):
         neighbours. If None, sigma_neigh is set to radius/2.
     n_parts : :py:class:`~int`
         The number of particles forming the empirical pdf.
-    sample_min : :py:class:`~float` | None
-        First sample of the segment of data to be analyzed.
-        If None, it is set to the first sample of the input data.
-    sample_max : :py:class:`~float` | None
-        Last sample of the segment of data to be analyzed.
-        If None, it is set to the last sample of the input data.
+    top_min : :py:class:`~float` | None
+        First topography to be included in the segment of data to be analyzed.
+        It is meant to be expressed either in seconds in the time domain or
+        in Hertz in the frequency domain.
+        If None, it is set to the first topography of the input data.
+    top_max : :py:class:`~float` | None
+        Last topography to be included in the segment of data to be analyzed.
+        It is meant to be expressed either in seconds in the time domain or
+        in Hertz in the frequency domain.
+        If None, it is set to the last topography of the input data.
     subsample : :py:class:`~int` | None
         The step used to subsample the data. If None no subsampling is
         applied.
     s_q : :py:class:`~float` | None
         The standard deviation of the prior pdf on the dipole moment.
-        If None, s_q is estimated from the forward model and the data.
+        If None, it is estimated from the forward model and the data.
     hyper_q : :py:class:`~bool`
         If True an hyperprior pdf on the dipole moment will be used.
         Default is False.
@@ -62,6 +67,8 @@ class Sesame(object):
         The parameter of the Poisson prior pdf on the number of dipoles.
     N_dip_max : :py:class:`~int`
         The maximum number of dipoles allowed in a particle.
+    Fourier_transf : :py:class:`~bool`
+        If True data are converted to the frequency domain.
     verbose : :py:class:`~bool`
         If True, increase verbose level.
 
@@ -127,9 +134,10 @@ class Sesame(object):
     """
 
     def __init__(self, forward, evoked, s_noise=None, radius=None,
-                 sigma_neigh=None, n_parts=100, sample_min=None,
-                 sample_max=None, subsample=None, s_q=None, hyper_q=False,
-                 cov=None, lam=0.25, N_dip_max=10, verbose=False):
+                 sigma_neigh=None, n_parts=100, top_min=None,
+                 top_max=None, subsample=None, s_q=None, hyper_q=False,
+                 cov=None, lam=0.25, N_dip_max=10, Fourier_transf=False,
+                 verbose=False):
 
         if not is_forward(forward):
             raise ValueError('Forward must be an instance of MNE'
@@ -139,10 +147,13 @@ class Sesame(object):
             raise ValueError('Data must be an instance of MNE class '
                              'Evoked or EvokedArray.')
 
+
         # 1) Choosen by the user
+        self.fourier = Fourier_transf
         self.n_parts = n_parts
         self.lam = lam
         self.N_dip_max = N_dip_max
+        self.subsample = subsample
         self.verbose = verbose
         self.hyper_q = hyper_q
         self.forward, _info_picked = _select_orient_forward(forward,
@@ -174,43 +185,21 @@ class Sesame(object):
                                                              self.sigma_neigh)
         print('[done]')
 
-        if sample_min is None:
-            self.s_min = 0
-        else:
-            if isinstance(sample_min, (int, np.integer)):
-                self.s_min = sample_min
-            else:
-                raise ValueError('sample_min index should be an integer')
-
-        if sample_max is None:
-            self.s_max = evoked.data.shape[1]-1
-        else:
-            if isinstance(sample_max, (int, np.integer)):
-                self.s_max = sample_max
-            else:
-                raise ValueError('sample_max index should be an integer')
-        print('Analyzing data from {0} s to {1} s'.
-              format(round(evoked.times[self.s_min], 4),
-                     round(evoked.times[self.s_max], 4)))
-
-        self.subsample = subsample
-
-        if subsample is not None:
-            print('Subsampling data with step {0}'.format(subsample))
-            _data = evoked.data[:, self.s_min:self.s_max + 1:subsample]
-        else:
-            _data = evoked.data[:, self.s_min:self.s_max+1]
+        # Prepare data
+        _data = self._prepare_data(evoked, top_min, top_max)
 
         # Perform whitening if a noise covariance is provided
         if cov is not None:
-            whitener, _ = compute_whitener(cov, info=_info_picked, pca=True,
-                                           picks=_info_picked['ch_names'])
-            _data = np.sqrt(evoked.nave) * np.dot(whitener, _data)
-            self.lead_field = (np.sqrt(evoked.nave) *
-                               np.dot(whitener, self.lead_field))
+            if self.fourier is False:
+                whitener, _ = compute_whitener(cov, info=_info_picked, pca=True,
+                                               picks=_info_picked['ch_names'])
+                _data = np.sqrt(evoked.nave) * np.dot(whitener, _data)
+                self.lead_field = (np.sqrt(evoked.nave) *
+                                   np.dot(whitener, self.lead_field))
+            else:
+                raise NotImplementedError('Still to implement whitening in the frequency domain')
 
         self.r_data = _data.real
-        # self.i_data = _data.imag
         del _data
 
         if s_q is None:
@@ -267,6 +256,82 @@ class Sesame(object):
 
             _part.compute_loglikelihood_unit(self.r_data, self.lead_field,
                                              s_noise=self.s_noise)
+
+    def _prepare_data(self, evoked, top_min, top_max):
+        if self.fourier is False:
+            if top_min is None:
+                self.s_min = 0
+                self.top_min = evoked.times[0]
+            else:
+                if isinstance(top_min, (float, np.float)):
+                    self.s_min = evoked.time_as_index(top_min, use_rounding=True)[0]
+                    self.top_min = evoked.times[self.s_min]
+                else:
+                    raise ValueError('top_min value should be a float')
+
+            if top_max is None:
+                self.s_max = evoked.data.shape[1] - 1
+                self.top_max = evoked.times[-1]
+            else:
+                if isinstance(top_max, (float, np.float)):
+                    self.s_max = evoked.time_as_index(top_max, use_rounding=True)[0]
+                    self.top_max = evoked.times[self.s_max]
+                else:
+                    raise ValueError('top_max value should be a float')
+
+            print('Analyzing data from {0} s to {1} s'.format(round(self.top_min, 4), round(self.top_max, 4)))
+
+            if self.subsample is not None:
+                print('Subsampling data with step {0}'.format(self.subsample))
+                _data = evoked.data[:, self.s_min:self.s_max + 1:self.subsample]
+            else:
+                _data = evoked.data[:, self.s_min:self.s_max + 1]
+
+            return _data
+        elif self.fourier is True:
+            tstep = 1 / evoked.info['sfreq']
+            evoked_f = evoked.copy()
+            evoked_f.data *= np.hamming(evoked.data.shape[1])
+            evoked_f.data = (np.fft.rfft(evoked_f.data))
+            freqs = np.fft.rfftfreq(evoked.data.shape[1], tstep)
+            print('Data have been converted to the frequency domain.')
+
+            if top_min is None:
+                self.s_min = 0
+                self.top_min = freqs[0]
+            else:
+                if isinstance(top_min, (float, np.float)):
+                    self.s_min = np.where((freqs >= top_min))[0][0]
+                    self.top_min = freqs[self.s_min]
+                else:
+                    raise ValueError('top_min value should be a float')
+
+            if top_max is None:
+                self.s_max = evoked_f.data.shape[1] - 1
+                self.top_max = freqs[-1]
+            else:
+                if isinstance(top_max, (float, np.float)):
+                    self.s_max = np.where((freqs <= top_max))[0][-1]
+                    self.top_max = freqs[self.s_max]
+                else:
+                    raise ValueError('top_max value should be a float')
+
+            print('Analyzing data from {0} Hz to {1} Hz'.format(round(self.top_min, 4), round(self.top_max, 4)))
+
+            if self.subsample is not None:
+                print('Subsampling data with step {0}'.format(self.subsample))
+                _data_temp = evoked_f.data[:, self.s_min:self.s_max + 1:self.subsample]
+            else:
+                _data_temp = evoked_f.data[:, self.s_min:self.s_max + 1]
+
+            temp_list = list()
+            for l in _data_temp.T:
+                temp_list.append(np.vstack([np.real(l), np.imag(l)]).T)
+            _data = np.hstack(temp_list)
+
+            return _data
+        else:
+            raise ValueError
 
     def apply_sesame(self, estimate_all=False, estimate_q=True):
         """Apply SESAME on evoked data and compute point estimates.
@@ -480,21 +545,14 @@ class Sesame(object):
         else:
             raise ValueError('src can be either surface or volume')
 
-    def save_h5(self, fpath, tmin=None, tmax=None, subsample=None,
-                sbj=None, sbj_viz=None, data_path=None, fwd_path=None,
-                src_path=None, lf_path=None):
+    def save_h5(self, fpath, sbj=None, sbj_viz=None, data_path=None,
+                fwd_path=None, src_path=None, lf_path=None):
         """Save SESAME result to an HDF5 file.
 
         Parameters
         ----------
         fpath : :py:class:`~str`
             The path to the save file.
-        tmin : :py:class:`~float` | None
-            The first instant (in seconds) of the time window in which data have been analyzed.
-        tmax : :py:class:`~float` | None
-            The last instant (in seconds) of the time window in which data have been analyzed.
-        subsample : :py:class:`~int` | None
-            The step used to subsample the data.
         sbj : :py:class:`~str` | None
             The subject name.
         sbj_viz : :py:class:`~str` | None
@@ -508,25 +566,25 @@ class Sesame(object):
         lf_path : :py:class:`~str` | None
             The path to the leadfield matrix file.
         """
-        write_h5(fpath, self, tmin=tmin, tmax=tmax, subsample=subsample,
-                 sbj=sbj, sbj_viz=sbj_viz, data_path=data_path,
-                 fwd_path=fwd_path, src_path=src_path, lf_path=lf_path)
+        if self.fourier is False:
+            write_h5(fpath, self, tmin=self.top_min, tmax=self.top_max,
+                     subsample=self.subsample, sbj=sbj, sbj_viz=sbj_viz,
+                     data_path=data_path, fwd_path=fwd_path, src_path=src_path,
+                     lf_path=lf_path)
+        else:
+            write_h5(fpath, self, fmin=self.top_min, fmax=self.top_max,
+                     subsample=self.subsample, sbj=sbj, sbj_viz=sbj_viz,
+                     data_path=data_path, fwd_path=fwd_path, src_path=src_path,
+                     lf_path=lf_path)
 
-    def save_pkl(self, fpath, tmin=None, tmax=None, subsample=None,
-                sbj=None, sbj_viz=None, data_path=None, fwd_path=None,
-                src_path=None, lf_path=None, save_all=False):
+    def save_pkl(self, fpath, sbj=None, sbj_viz=None, data_path=None,
+                 fwd_path=None, src_path=None, lf_path=None, save_all=False):
         """Save SESAME result to an Python pickle file.
 
         Parameters
         ----------
         fpath : :py:class:`~str`
             The path to the save file.
-        tmin : :py:class:`~float` | None
-            The first instant (in seconds) of the time window in which data have been analyzed.
-        tmax : :py:class:`~float` | None
-            The last instant (in seconds) of the time window in which data have been analyzed.
-        subsample : :py:class:`~int` | None
-            The step used to subsample the data.
         sbj : :py:class:`~str` | None
             The subject name.
         sbj_viz : :py:class:`~str` | None
@@ -542,7 +600,6 @@ class Sesame(object):
         save_all : :py:class:`~bool`
             If True, save the data and the forward model. Default to False.
         """
-        write_pkl(fpath, self, tmin=tmin, tmax=tmax, subsample=subsample,
-                  sbj=sbj, sbj_viz=sbj_viz, data_path=data_path,
+        write_pkl(fpath, self, sbj=sbj, sbj_viz=sbj_viz, data_path=data_path,
                   fwd_path=fwd_path, src_path=src_path, lf_path=lf_path,
                   save_all=save_all)
