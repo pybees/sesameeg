@@ -8,8 +8,14 @@ two dipolar sources are active in the cortex. The source time courses
 are 10 Hz sinusoids, each modulated by a Gaussian. Simulated MEG recordings
 are then corrupted by empty room noise.
 
-We shall use SESAME in the frequency domain and see if we can find our two
+We shall use SESAME in the frequency domain [1]_ and see if we can find our two
 simulated sources.
+
+References
+----------
+.. [1] Luria et al.,  `Bayesian multi-dipole modelling in the frequency
+   domain <https://doi.org/10.1016/j.jneumeth.2018.11.007>`_. J. Neurosci.
+   Meth., 312 (2019) 27–36
 """
 # Author: Gianvittorio Luria <luria@dima.unige.it>
 #
@@ -17,7 +23,7 @@ simulated sources.
 
 import os.path as op
 import numpy as np
-from scipy.signal import welch, coherence, unit_impulse
+from scipy.signal import welch, coherence
 from matplotlib import pyplot as plt
 from mayavi import mlab
 
