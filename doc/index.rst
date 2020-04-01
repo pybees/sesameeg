@@ -58,7 +58,7 @@ Cite our work
 If you use this code in your project, please consider citing our work:
 
 .. [1] S. Sommariva and A. Sorrentino, `Sequential Monte Carlo samplers for semi-linear inverse problems and application to Magnetoencephalography <https://doi.org/10.1088/0266-5611/30/11/114020>`_. Inverse Problems, 30 114020 (2014).
-.. [2] Luria et al.,  `Bayesian multi-dipole modelling in the frequency domain <https://doi.org/10.1016/j.jneumeth.2018.11.007>`_. J. Neurosci. Meth., 312 (2019) 27–36.
+.. [2] G. Luria et al., `Bayesian multi-dipole modelling in the frequency domain <https://doi.org/10.1016/j.jneumeth.2018.11.007>`_. J. Neurosci. Meth., 312 (2019) 27–36.
 
 .. toctree::
    :maxdepth: 2

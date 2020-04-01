@@ -8,6 +8,7 @@
 
 import numpy as np
 import scipy.special as sps
+from mne.epochs import Epochs, EpochsArray
 from mne.evoked import Evoked, EvokedArray
 from mne.forward import Forward
 
@@ -220,6 +221,13 @@ def initialize_radius(src):
         radius = 0.01
 
     return radius
+
+
+def is_epochs(epch):
+    if isinstance(epch, (Epochs, EpochsArray)):
+        return True
+    else:
+        return False
 
 
 def is_evoked(evk):

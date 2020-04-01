@@ -1,4 +1,8 @@
 from .sesame import Sesame
+from .dipoles import Dipole
+from .emp_pdf import EmpPdf
+from .particles import Particle
+
 
 __all__ = ['Sesame']
 

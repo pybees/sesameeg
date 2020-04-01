@@ -24,9 +24,9 @@ Other classes
    :toctree: generated/
    :template: class.rst
 
-   dipoles.Dipole
-   particles.Particle
-   emp_pdf.EmpPdf
+   Dipole
+   Particle
+   EmpPdf
 
 Utility functions
 =================

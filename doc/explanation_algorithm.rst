@@ -108,7 +108,7 @@ where:
 
 - :math:`p(n_D)` is the prior pdf for the number of dipole, which is defined as a Poisson distribution with
   mean :math:`\lambda`.
-- :math:`p(r_k|n_D, r_1, \ldots, r_{k-1})` is the prior pdf for the location of the :math:`k--` th dipole,
+- :math:`p(r_k|n_D, r_1, \ldots, r_{k-1})` is the prior pdf for the location of the :math:`k-` th dipole,
   which is defined as a uniform distribution on the given brain discretization, under the constraint
   that at each grid point can be located at most one dipole.
 - :math:`p(\mathbf{q}_k)` is the prior pdf for the dipole moment, which is a trivariate Gaussian

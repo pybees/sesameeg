@@ -11,12 +11,13 @@ import time
 import numpy as np
 import scipy.spatial.distance as ssd
 from mne.cov import compute_whitener
+from mne.evoked import EvokedArray
 from mne.forward import _select_orient_forward
 from .emp_pdf import EmpPdf
 from .particles import Particle
 from .utils import compute_neighbours_matrix, initialize_radius, \
     compute_neighbours_probability_matrix, estimate_s_noise, estimate_s_q
-from .utils import is_evoked, is_forward
+from .utils import is_epochs, is_evoked, is_forward
 from .io import _export_to_stc, _export_to_vol_stc, write_h5, write_pkl
 from .metrics import compute_goodness_of_fit, compute_sd
 
@@ -28,8 +29,8 @@ class Sesame(object):
     ----------
     forward : :py:class:`~mne.Forward` object
         The forward solution.
-    evoked : instance of :py:class:`~mne.Evoked` | :py:class:`~mne.EvokedArray`
-        The evoked data.
+    data : instance of :py:class:`~mne.Evoked` | :py:class:`~mne.Epochs`
+        The MEEG data.
     s_noise : :py:class:`~float` | None
         The standard deviation of the noise distribution.
         If None, it is estimated from the data
@@ -133,7 +134,7 @@ class Sesame(object):
         The empirical pdf approximated by the particles at each iteration.
     """
 
-    def __init__(self, forward, evoked, s_noise=None, radius=None,
+    def __init__(self, forward, data, s_noise=None, radius=None,
                  sigma_neigh=None, n_parts=100, top_min=None,
                  top_max=None, subsample=None, s_q=None, hyper_q=False,
                  cov=None, lam=0.25, N_dip_max=10, Fourier_transf=False,
@@ -143,10 +144,9 @@ class Sesame(object):
             raise ValueError('Forward must be an instance of MNE'
                              ' class Forward.')
 
-        if not is_evoked(evoked):
+        if not is_evoked(data) and not is_epochs(data):
             raise ValueError('Data must be an instance of MNE class '
-                             'Evoked or EvokedArray.')
-
+                             'Evoked, EvokedArray, Epochs or EpochsArray.')
 
         # 1) Choosen by the user
         self.fourier = Fourier_transf
@@ -157,7 +157,7 @@ class Sesame(object):
         self.verbose = verbose
         self.hyper_q = hyper_q
         self.forward, _info_picked = _select_orient_forward(forward,
-                                                            evoked.info, cov)
+                                                            data.info, cov)
 
         self.source_space = forward['source_rr']
         self.n_verts = self.source_space.shape[0]
@@ -186,15 +186,18 @@ class Sesame(object):
         print('[done]')
 
         # Prepare data
-        _data = self._prepare_data(evoked, top_min, top_max)
+        if is_evoked(data):
+            _data = self._prepare_evoked_data(data, top_min, top_max)
+        elif is_epochs(data):
+            _data = self._prepare_epochs_data(data, top_min, top_max)
 
         # Perform whitening if a noise covariance is provided
         if cov is not None:
-            if self.fourier is False:
+            if self.fourier is False and is_evoked(data):
                 whitener, _ = compute_whitener(cov, info=_info_picked, pca=True,
                                                picks=_info_picked['ch_names'])
-                _data = np.sqrt(evoked.nave) * np.dot(whitener, _data)
-                self.lead_field = (np.sqrt(evoked.nave) *
+                _data = np.sqrt(data.nave) * np.dot(whitener, _data)
+                self.lead_field = (np.sqrt(data.nave) *
                                    np.dot(whitener, self.lead_field))
             else:
                 raise NotImplementedError('Still to implement whitening in the frequency domain')
@@ -257,7 +260,7 @@ class Sesame(object):
             _part.compute_loglikelihood_unit(self.r_data, self.lead_field,
                                              s_noise=self.s_noise)
 
-    def _prepare_data(self, evoked, top_min, top_max):
+    def _get_topographies(self, evoked, top_min, top_max, freqs=None):
         if self.fourier is False:
             if top_min is None:
                 self.s_min = 0
@@ -278,24 +281,8 @@ class Sesame(object):
                     self.top_max = evoked.times[self.s_max]
                 else:
                     raise ValueError('top_max value should be a float')
-
             print('Analyzing data from {0} s to {1} s'.format(round(self.top_min, 4), round(self.top_max, 4)))
-
-            if self.subsample is not None:
-                print('Subsampling data with step {0}'.format(self.subsample))
-                _data = evoked.data[:, self.s_min:self.s_max + 1:self.subsample]
-            else:
-                _data = evoked.data[:, self.s_min:self.s_max + 1]
-
-            return _data
         elif self.fourier is True:
-            tstep = 1 / evoked.info['sfreq']
-            evoked_f = evoked.copy()
-            evoked_f.data *= np.hamming(evoked.data.shape[1])
-            evoked_f.data = (np.fft.rfft(evoked_f.data))
-            freqs = np.fft.rfftfreq(evoked.data.shape[1], tstep)
-            print('Data have been converted to the frequency domain.')
-
             if top_min is None:
                 self.s_min = 0
                 self.top_min = freqs[0]
@@ -307,7 +294,7 @@ class Sesame(object):
                     raise ValueError('top_min value should be a float')
 
             if top_max is None:
-                self.s_max = evoked_f.data.shape[1] - 1
+                self.s_max = evoked.data.shape[1] - 1
                 self.top_max = freqs[-1]
             else:
                 if isinstance(top_max, (float, np.float)):
@@ -315,21 +302,80 @@ class Sesame(object):
                     self.top_max = freqs[self.s_max]
                 else:
                     raise ValueError('top_max value should be a float')
-
             print('Analyzing data from {0} Hz to {1} Hz'.format(round(self.top_min, 4), round(self.top_max, 4)))
+
+    def _prepare_epochs_data(self, epochs, top_min, top_max):
+        ep_data = epochs.get_data()
+        evoked = EvokedArray(ep_data[0], epochs.info)
+        if self.fourier is False:
+            self._get_topographies(evoked, top_min, top_max)
+            temp_list = list()
+            for ie, _e in enumerate(ep_data):
+                if self.subsample is not None:
+                    if ie == 0:
+                        print('Subsampling data with step {0}'.format(self.subsample))
+                    temp_list.append(_e[:, self.s_min:self.s_max + 1:self.subsample])
+                else:
+                    temp_list.append(_e[:, self.s_min:self.s_max + 1])
+            return np.hstack(temp_list)
+        elif self.fourier is True:
+            tstep = 1 / evoked.info['sfreq']
+            evoked_f = evoked.copy()
+            evoked_f.data *= np.hamming(evoked.data.shape[1])
+            evoked_f.data = (np.fft.rfft(evoked_f.data))
+            freqs = np.fft.rfftfreq(evoked.data.shape[1], tstep)
+            print('Data have been converted to the frequency domain.')
+
+            self._get_topographies(evoked_f, top_min, top_max, freqs=freqs)
+
+            temp_list = list()
+            temp_list2 = list()
+            for ie, _e in enumerate(ep_data):
+                _e *= np.hamming(_e.shape[1])
+                _e_f = np.fft.rfft(_e)
+                if self.subsample is not None:
+                    if ie == 0:
+                        print('Subsampling data with step {0}'.format(self.subsample))
+                    temp_list.append(_e_f[:, self.s_min:self.s_max + 1:self.subsample])
+                else:
+                    temp_list.append(_e_f[:, self.s_min:self.s_max + 1])
+
+                for _data_temp in temp_list:
+                    for l in _data_temp.T:
+                        temp_list2.append(np.vstack([np.real(l), np.imag(l)]).T)
+                return np.hstack(temp_list2)
+        else:
+            raise ValueError
+
+    def _prepare_evoked_data(self, evoked, top_min, top_max):
+        if self.fourier is False:
+            self._get_topographies(evoked, top_min, top_max)
+
+            if self.subsample is not None:
+                print('Subsampling data with step {0}'.format(self.subsample))
+                _data = evoked.data[:, self.s_min:self.s_max + 1:self.subsample]
+            else:
+                _data = evoked.data[:, self.s_min:self.s_max + 1]
+            return _data
+        elif self.fourier is True:
+            tstep = 1 / evoked.info['sfreq']
+            evoked_f = evoked.copy()
+            evoked_f.data *= np.hamming(evoked.data.shape[1])
+            evoked_f.data = (np.fft.rfft(evoked_f.data))
+            freqs = np.fft.rfftfreq(evoked.data.shape[1], tstep)
+            print('Data have been converted to the frequency domain.')
+
+            self._get_topographies(evoked_f, top_min, top_max, freqs=freqs)
 
             if self.subsample is not None:
                 print('Subsampling data with step {0}'.format(self.subsample))
                 _data_temp = evoked_f.data[:, self.s_min:self.s_max + 1:self.subsample]
             else:
                 _data_temp = evoked_f.data[:, self.s_min:self.s_max + 1]
-
             temp_list = list()
             for l in _data_temp.T:
                 temp_list.append(np.vstack([np.real(l), np.imag(l)]).T)
-            _data = np.hstack(temp_list)
-
-            return _data
+            return np.hstack(temp_list)
         else:
             raise ValueError
 
@@ -432,6 +478,12 @@ class Sesame(object):
         if estimate_q:
             if self.est_n_dips[-1] == 0:
                 self.est_q = np.array([])
+                if self.hyper_q:
+                    weights = np.exp(self.emp.logweights)
+                    assert np.abs(np.sum(weights) - 1) < 1e-15
+                    est_sq = np.asarray([self.est_s_q[p][-1] for p in range(self.n_parts)])
+                    self.final_s_q = np.dot(weights, est_sq)
+                    print('Estimated dipole strength variance: {}'.format(self.final_s_q))
             else:
                 self.compute_q(self.est_locs[-1])
         print('[done]')
@@ -485,9 +537,9 @@ class Sesame(object):
             The goodness of fit with the recorded data.
         """
 
-        if len(self.est_n_dips) == 0:
-            raise AttributeError("No estimation found."
-                                 "Run apply_sesame first.")
+        if self.est_n_dips[-1] == 0:
+            raise AttributeError("No dipole has been estimated."
+                                 "Run apply_sesame first and set sigma_noise properly.")
         if self.est_q is None:
             raise AttributeError("No dipoles' moment found."
                                  " Run compute_q first.")
@@ -512,6 +564,10 @@ class Sesame(object):
         sd : :py:class:`~float`
             The Source Dispersion of SESAME result
         """
+        if self.est_n_dips[-1] == 0:
+            raise AttributeError("No dipole has been estimated."
+                                 "Run apply_sesame first and set sigma_noise properly.")
+
         blob_tot = np.sum(self.blob[-1], axis=0)
         est_pos = self.source_space[self.est_locs[-1]]
         sd = compute_sd(self.source_space, blob_tot, est_pos)

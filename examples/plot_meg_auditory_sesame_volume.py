@@ -1,16 +1,20 @@
 """
-=======================================================
-Compute SESAME inverse solution in volume source space
-=======================================================
+=====================================================================
+Compute SESAME inverse solution on evoked data in volume source space
+=====================================================================
 
-Compute and visualize SESAME solution on the auditory sample dataset
-in a volume source space.
+In this example we shall compute SESAME inverse solution on evoked data in
+a volume source space. Data are taken from the MNE-Python
+`sample <https://mne.tools/stable/generated/mne.datasets.sample.data_path.html#mne.datasets.sample.data_path>`_
+dataset and correspond to the response to an auditory stimulus.
 """
 # Authors: Gianvittorio Luria <luria@dima.unige.it>
 #          Sara Sommariva <sommariva@dima.unige.it>
-#          Albero Sorrentino <sorrentino@dima.unige.it>
+#          Alberto Sorrentino <sorrentino@dima.unige.it>
 #
 # License: BSD (3-clause)
+
+# sphinx_gallery_thumbnail_number = 4
 
 from os import path as op
 import matplotlib.pyplot as plt
@@ -36,9 +40,10 @@ fname_t1 = op.join(data_path , 'subjects', subject, 'mri', 'T1.mgz')
 fname_evoked = op.join(data_path, 'MEG', subject, 'sample_audvis-ave.fif')
 
 ###############################################################################
-# Load the  mri to head coordinates transformation matrix, the forward solution
+# Load the  mri-to-head coordinates transformation matrix, the forward solution
 # :math:`\textbf{G}` and the evoked data :math:`\textbf{y}`.
-# The forward solution also defines the employed brain discretization.
+# The forward solution also defines the employed brain discretization which, in this example,
+# comprises the whole brain volume.
 
 # Transformation matrix
 trans = read_trans(fname_trans)

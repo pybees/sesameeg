@@ -1,7 +1,7 @@
 """
-=======================================================
-Compute SESAME inverse solution in the frequency domain
-=======================================================
+=========================================================================
+Compute SESAME inverse solution on simulated data in the frequency domain
+=========================================================================
 
 In the present example we shall devise a synthetic scenario in which
 two dipolar sources are active in the cortex. The source time courses
@@ -13,7 +13,7 @@ simulated sources.
 
 References
 ----------
-.. [1] Luria et al.,  `Bayesian multi-dipole modelling in the frequency
+.. [1] G. Luria et al.,  `Bayesian multi-dipole modelling in the frequency
    domain <https://doi.org/10.1016/j.jneumeth.2018.11.007>`_. J. Neurosci.
    Meth., 312 (2019) 27–36
 """
@@ -34,7 +34,8 @@ from mne.label import _n_colors
 from sesameeg import Sesame
 
 
-# We use the MEG and MRI setup from the MNE-sample dataset
+# We use the MEG and MRI setup from the MNE-Python
+# sample dataset
 data_path = sample.data_path(download=False)
 subjects_dir = op.join(data_path, 'subjects')
 subject = 'sample'

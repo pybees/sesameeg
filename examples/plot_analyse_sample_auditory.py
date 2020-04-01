@@ -1,15 +1,20 @@
 """
-=============================
-Compute SESAME on evoked data
-=============================
+==============================================
+Compute SESAME inverse solution on evoked data
+==============================================
 
-Compute and visualize SESAME solution on the auditory sample dataset.
+In this example we shall apply SESAME on an evoked dataset,
+corresponding to the response to an auditory stimulus. Data are taken from the MNE-Python
+`sample <https://mne.tools/stable/generated/mne.datasets.sample.data_path.html#mne.datasets.sample.data_path>`_
+dataset.
 """
 # Authors: Gianvittorio Luria <luria@dima.unige.it>
 #          Sara Sommariva <sommariva@dima.unige.it>
-#          Albero Sorrentino <sorrentino@dima.unige.it>
+#          Alberto Sorrentino <sorrentino@dima.unige.it>
 #
 # License: BSD (3-clause)
+
+# sphinx_gallery_thumbnail_number = 3
 
 from os import path as op
 import numpy as np
