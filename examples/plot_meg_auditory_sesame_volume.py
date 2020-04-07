@@ -133,7 +133,7 @@ plt.show()
 
 ###############################################################################
 # Visualize the posterior map of the dipoles' location
-# :math:`p(r| \textbf{y}, 2)` and the estimated sources on the inflated brain.
+# :math:`p(r| \textbf{y}, 2)` as an overlay onto the MRI.
 stc = _sesame.compute_stc(subject)
 
 peak_vertex, peak_time = stc.get_peak(vert_as_index=True,

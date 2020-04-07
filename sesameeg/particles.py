@@ -242,7 +242,7 @@ class Particle(object):
         if birth_death < q_birth and prop_part.n_dips < N_dip_max:
             prop_part.add_dipole(n_verts)
         elif prop_part.n_dips > 0 and birth_death > 1-q_death:
-            sent_to_death = np.random.random_integers(0, self.n_dips-1)
+            sent_to_death = np.random.randint(0, self.n_dips)
             prop_part.remove_dipole(sent_to_death)
 
         # Compute alpha rjmcmc
