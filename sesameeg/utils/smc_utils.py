@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""The Sequential Monte Carlo algorithms utility functions."""
+""" Utility functions for the Sequential Monte Carlo algorithms."""
 # Authors: Gianvittorio Luria <luria@dima.unige.it>
 #          Sara Sommariva <sommariva@dima.unige.it>
 #          Alberto Sorrentino <sorrentino@dima.unige.it>
@@ -130,7 +130,7 @@ def compute_neighbours_probability_matrix(n_matrix, src, d_matrix, sigma_neigh):
     return np_matrix
 
 
-def estimate_s_q(r_data, lf):
+def estimate_dip_mom_std(r_data, lf):
     """Estimate the standard deviation of the prior of the dipole moment.
 
     Parameters
@@ -151,7 +151,7 @@ def estimate_s_q(r_data, lf):
     return s_q
 
 
-def estimate_s_noise(r_data):
+def estimate_noise_std(r_data):
     """Estimate the standard deviation of noise distribution.
 
     Parameters

@@ -54,7 +54,7 @@ rand = np.random.RandomState(42)
 # The forward solution also defines the employed brain discretization.
 info = mne.io.read_info(raw_fname)
 fwd = mne.read_forward_solution(fwd_fname)
-cov = mne.read_cov(erm_cov_fname)
+noise_cov = mne.read_cov(erm_cov_fname)
 
 ###############################################################################
 # In this example, to save computation time, we shall only simulate gradiometer
@@ -62,7 +62,7 @@ cov = mne.read_cov(erm_cov_fname)
 picks = mne.pick_types(info, meg='grad', stim=True, exclude='bads')
 mne.pick_info(info, picks, copy=False)
 fwd = mne.pick_channels_forward(fwd, include=info['ch_names'])
-cov = mne.pick_channels_cov(cov, include=info['ch_names'])
+noise_cov = mne.pick_channels_cov(noise_cov, include=info['ch_names'])
 
 ###############################################################################
 # Data simulation
@@ -180,7 +180,7 @@ stc_signal = mne.SourceEstimate(q, vertices, tmin=0, tstep=1. / sfreq, subject='
 # data. We then corrupt the resulting simulated gradiometer recordings
 # by empty room noise.
 evoked = mne.apply_forward(fwd, stc_signal, info)
-mne.simulation.add_noise(evoked, cov, random_state=rand)
+mne.simulation.add_noise(evoked, noise_cov, random_state=rand)
 
 ###############################################################################
 # Visualize the data
@@ -191,13 +191,13 @@ evoked.plot()
 # domain by setting ``Fourier_transf=True``.
 
 n_parts = 100
-sigma_noise = None
-sigma_q = None
+noise_std = None
+dip_mom_std = None
 freq_min = 9.5
 freq_max = 10.5
 
-_sesame = Sesame(fwd, evoked, n_parts=n_parts, s_noise=sigma_noise,
-                 top_min=freq_min, top_max=freq_max,  s_q=sigma_q,
+_sesame = Sesame(fwd, evoked, n_parts=n_parts, noise_std=noise_std,
+                 top_min=freq_min, top_max=freq_max,  dip_mom_std=dip_mom_std,
                  hyper_q=True, Fourier_transf=True)
 
 _sesame.apply_sesame()

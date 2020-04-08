@@ -68,17 +68,17 @@ sample_min, sample_max = evoked.time_as_index([time_min, time_max],
 # higher computational cost. Setting the value to about a hundred seems to represent
 # a good trade–off.
 n_parts = 10
-# If None, sigma_noise and sigma_q will be estimated by SESAME.
-sigma_noise = None
-sigma_q = None
+# If None, noise_std and dip_mom_std will be estimated by SESAME.
+noise_std = None
+dip_mom_std = None
 
 
-cov = None
+noise_cov = None
 # You can make SESAME pre-whiten the data by providing a noise covariance
 # from mne import read_cov
 # fname_cov = op.join(sample.data_path(), 'MEG', subject,
 #                    'sample_audvis-cov.fif')
-# cov = read_cov(fname_cov)
+# noise_cov = read_cov(fname_cov)
 
 ###############################################################################
 # Visualize the selected data.
@@ -91,9 +91,9 @@ plt.show()
 
 ###############################################################################
 # Apply SESAME.
-_sesame = Sesame(fwd, evoked, n_parts=n_parts, s_noise=sigma_noise,
-                 top_min=time_min, top_max=time_max, s_q=sigma_q,
-                 hyper_q=True, cov=cov, subsample=subsample)
+_sesame = Sesame(fwd, evoked, n_parts=n_parts, noise_std=noise_std,
+                 top_min=time_min, top_max=time_max, dip_mom_std=dip_mom_std,
+                 hyper_q=True, noise_cov=noise_cov, subsample=subsample)
 _sesame.apply_sesame()
 
 print('    Estimated number of sources: {0}'.format(_sesame.est_n_dips[-1]))
@@ -113,7 +113,7 @@ est_n_dips = _sesame.est_n_dips[-1]
 est_locs = _sesame.est_locs[-1]
 
 times = evoked.times[_sesame.s_min:_sesame.s_max+1]
-amplitude = np.array([np.linalg.norm(_sesame.est_q[:, i_d:3 * (i_d + 1)],
+amplitude = np.array([np.linalg.norm(_sesame.est_dip_moms[:, i_d:3 * (i_d + 1)],
                                      axis=1) for i_d in range(est_n_dips)])
 colors = _n_colors(est_n_dips)
 plt.figure()

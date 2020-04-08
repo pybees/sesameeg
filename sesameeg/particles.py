@@ -22,7 +22,7 @@ class Particle(object):
         The number of the points in the given brain discretization.
     lam : :py:class:`~float`
         The parameter of the prior Poisson pdf of the number of dipoles.
-    s_q : :py:class:`~float`
+    dip_mom_std : :py:class:`~float`
         The standard deviation of the prior of the dipole moment.
     hyper_q : :py:class:`~bool`
         If True use hyperprior in dipole strength
@@ -39,7 +39,7 @@ class Particle(object):
         The prior pdf, evaluated in the particle.
     """
 
-    def __init__(self, n_verts, lam, s_q=None, hyper_q=False, q_in=None):
+    def __init__(self, n_verts, lam, dip_mom_std=None, hyper_q=False, q_in=None):
         """Initialization: the initial number of dipoles is Poisson
            distribuited; the initial locations are uniformly distribuited
            within the brain grid points, with no dipoles in the same position.
@@ -50,11 +50,11 @@ class Particle(object):
         self.prior = None
         self.loglikelihood_unit = None
 
-        if isinstance(s_q, float):
+        if isinstance(dip_mom_std, float):
             if self.hyper_q:
-                self.s_q = 10 ** (3 * np.random.rand()) * (s_q / 35)
+                self.dip_mom_std = 10 ** (3 * np.random.rand()) * (dip_mom_std / 35)
             else:
-                self.s_q = s_q
+                self.dip_mom_std = dip_mom_std
 
         if isinstance(q_in, float):
             self.q_in = q_in
@@ -104,7 +104,7 @@ class Particle(object):
         else:
             raise ValueError('No dipoles to remove.')
 
-    def _check_sigma(self, r_data, lead_field, s_noise):
+    def _check_sigma(self, r_data, lead_field, noise_std):
         [n_sens, n_ist] = r_data.shape
 
         # Step 1: compute variance of the likelihood.
@@ -116,7 +116,7 @@ class Particle(object):
                             for dip in self.dipoles])
             Gc = lead_field[:, idx]
             # 1b: compute the variance
-            sigma = (self.s_q / s_noise) ** 2 * np.dot(Gc, np.transpose(Gc)) + \
+            sigma = (self.dip_mom_std / noise_std) ** 2 * np.dot(Gc, np.transpose(Gc)) + \
                     np.eye(n_sens)
 
         if np.all(np.linalg.eigvals(sigma) > 0):
@@ -124,7 +124,7 @@ class Particle(object):
         else:
             return False
 
-    def compute_loglikelihood_unit(self, r_data, lead_field, s_noise=None):
+    def compute_loglikelihood_unit(self, r_data, lead_field, noise_std=None):
         """Evaluates the logarithm of the marginal likelihood in the present particle.
 
         Parameters
@@ -134,7 +134,7 @@ class Particle(object):
             n_ist is the number of time-points or of frequencies.
         lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
             The leadfield matrix.
-        s_noise : :py:class:`~float`
+        noise_std : :py:class:`~float`
             The standard deviation of the noise distribution.
 
         Returns
@@ -156,14 +156,14 @@ class Particle(object):
                            for dip in self.dipoles])
             Gc = lead_field[:, idx]
             # 1b: compute the covariance
-            sigma = (self.s_q / s_noise)**2 * np.dot(Gc, np.transpose(Gc)) + \
+            sigma = (self.dip_mom_std / noise_std)**2 * np.dot(Gc, np.transpose(Gc)) + \
                 np.eye(n_sens)
             det_sigma = np.linalg.det(sigma)
-            inv_sigma = woodbury(np.eye(n_sens), (self.s_q / s_noise)**2 * Gc,
+            inv_sigma = woodbury(np.eye(n_sens), (self.dip_mom_std / noise_std)**2 * Gc,
                                  Gc.T, Gc.shape[1])
 
         # Step 2: compute the log_likelihood
-        self.loglikelihood_unit = - (n_ist * s_noise**2) * np.log(det_sigma)
+        self.loglikelihood_unit = - (n_ist * noise_std**2) * np.log(det_sigma)
         for ist in range(n_ist):
             self.loglikelihood_unit -= \
                 np.transpose(r_data[:, ist]).dot(inv_sigma).dot(r_data[:, ist])
@@ -191,12 +191,12 @@ class Particle(object):
                                             for dip in self.dipoles])) * \
                           np.prod(np.array([1 / np.fabs(dip.im_q)
                                             for dip in self.dipoles]))
-        elif hasattr(self, 's_q') and self.hyper_q is True:
-            self.prior /= self.s_q
+        elif hasattr(self, 'dip_mom_std') and self.hyper_q is True:
+            self.prior /= self.dip_mom_std
         return self.prior
 
-    def evol_n_dips(self, n_verts, r_data, lead_field, N_dip_max,
-                    lklh_exp, s_noise, lam, q_birth=1/3, q_death=1/20):
+    def evol_n_dips(self, n_verts, r_data, lead_field, max_n_dips,
+                    lklh_exp, noise_std, lam, q_birth=1/3, q_death=1/20):
         """Perform a Reversible Jump Markov Chain Monte Carlo step in order
            to explore the "number of sources" component of the state space.
            Recall that we are working in a variable dimension model.
@@ -210,12 +210,12 @@ class Particle(object):
             n_ist is the number of time-points or of frequencies.
         lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
             The leadfield matrix.
-        N_dip_max : :py:class:`~int`
+        max_n_dips : :py:class:`~int`
             The maximum number of dipoles allowed in a particle.
         lklh_exp : :py:class:`~float`
             This number represents a point in the sequence of artificial
             distributions used in SESAME.
-        s_noise : :py:class:`~float`
+        noise_std : :py:class:`~float`
             The standard deviation of the noise distribution.
         lam : :py:class:`~float`
             Parameter of the Poisson probability distribution used for
@@ -237,9 +237,9 @@ class Particle(object):
         birth_death = np.random.uniform(1e-16, 1)
 
         if self.loglikelihood_unit is None:
-            self.compute_loglikelihood_unit(r_data, lead_field, s_noise=s_noise)
+            self.compute_loglikelihood_unit(r_data, lead_field, noise_std=noise_std)
 
-        if birth_death < q_birth and prop_part.n_dips < N_dip_max:
+        if birth_death < q_birth and prop_part.n_dips < max_n_dips:
             prop_part.add_dipole(n_verts)
         elif prop_part.n_dips > 0 and birth_death > 1-q_death:
             sent_to_death = np.random.randint(0, self.n_dips)
@@ -249,13 +249,13 @@ class Particle(object):
         if prop_part.n_dips != self.n_dips:
             prop_part.compute_prior(lam)
             prop_part.compute_loglikelihood_unit(r_data, lead_field,
-                                                 s_noise=s_noise)
+                                                 noise_std=noise_std)
             log_prod_like = (prop_part.loglikelihood_unit -
                              self.loglikelihood_unit)
 
             if prop_part.n_dips > self.n_dips:
                 alpha_aux = (q_death * prop_part.prior) / (q_birth * self.prior) * \
-                             np.exp((lklh_exp/(2*s_noise**2)) * log_prod_like)
+                             np.exp((lklh_exp/(2*noise_std**2)) * log_prod_like)
 
                 if hasattr(self, 'q_in'):
                     alpha_aux *= np.fabs(prop_part.dipoles[prop_part.n_dips-1].re_q) * \
@@ -265,7 +265,7 @@ class Particle(object):
 
             elif prop_part.n_dips < self.n_dips:
                 alpha_aux = (q_birth * prop_part.prior) / (q_death * self.prior) * \
-                            np.exp((lklh_exp/(2*s_noise**2)) * log_prod_like)
+                            np.exp((lklh_exp/(2*noise_std**2)) * log_prod_like)
 
                 if hasattr(self, 'q_in'):
                     alpha_aux *= np.fabs(self.dipoles[sent_to_death].re_q) * \
@@ -278,7 +278,7 @@ class Particle(object):
         return self
 
     def evol_loc(self, dip_idx, neigh, neigh_p, r_data, lead_field,
-                 lklh_exp, s_noise, lam):
+                 lklh_exp, noise_std, lam):
         """Perform a Markov Chain Monte Carlo step in order to explore the
            dipole location component of the state space. The dipole is
            allowed to move only to a restricted set of brain points,
@@ -300,7 +300,7 @@ class Particle(object):
         lklh_exp : :py:class:`~float`
             This number represents a point in the sequence of artificial
             distributions used in SESAME.
-        s_noise : :py:class:`~float`
+        noise_std : :py:class:`~float`
             The standard deviation of the noise distribution.
         lam : :py:class:`~float`
             Parameter of the Poisson probability distribution used for
@@ -341,46 +341,46 @@ class Particle(object):
         # Compute alpha mcmc
         prop_part.compute_prior(lam)
         prop_part.compute_loglikelihood_unit(r_data, lead_field,
-                                             s_noise=s_noise)
+                                             noise_std=noise_std)
 
         if self.loglikelihood_unit is None:
             self.compute_loglikelihood_unit(r_data, lead_field,
-                                            s_noise=s_noise)
+                                            noise_std=noise_std)
 
         log_prod_like = prop_part.loglikelihood_unit - self.loglikelihood_unit
         alpha = np.amin([1, (comp_fact_delta_r *
                          (prop_part.prior/self.prior) *
-                         np.exp((lklh_exp/(2*s_noise**2)) * log_prod_like))])
+                         np.exp((lklh_exp/(2*noise_std**2)) * log_prod_like))])
 
         if np.random.rand() < alpha:
             self = copy.deepcopy(prop_part)
 
         return self
 
-    def evol_s_q(self, r_data, lead_field, lklh_exp, s_noise, lam):
+    def evol_dip_mom_std(self, r_data, lead_field, lklh_exp, noise_std, lam):
 
-        if not hasattr(self, 's_q'):
+        if not hasattr(self, 'dip_mom_std'):
             raise ValueError
 
         prop_part = copy.deepcopy(self)
 
         if self.loglikelihood_unit is None:
-            self.compute_loglikelihood_unit(r_data, lead_field, s_noise=s_noise)
-        prop_part.s_q = np.random.gamma(3, self.s_q/3)
+            self.compute_loglikelihood_unit(r_data, lead_field, noise_std=noise_std)
+        prop_part.dip_mom_std = np.random.gamma(3, self.dip_mom_std/3)
 
         # Compute alpha mcmc
-        prob_new_move = gamma_pdf(prop_part.s_q, 3, self.s_q/3)
-        prob_opp_move = gamma_pdf(self.s_q, 3, prop_part.s_q/3)
+        prob_new_move = gamma_pdf(prop_part.dip_mom_std, 3, self.dip_mom_std/3)
+        prob_opp_move = gamma_pdf(self.dip_mom_std, 3, prop_part.dip_mom_std/3)
 
         proposal_ratio = prob_opp_move / prob_new_move
 
         prop_part.compute_prior(lam)
-        prop_part.compute_loglikelihood_unit(r_data, lead_field, s_noise=s_noise)
+        prop_part.compute_loglikelihood_unit(r_data, lead_field, noise_std=noise_std)
 
         log_prod_like = prop_part.loglikelihood_unit - self.loglikelihood_unit
         alpha = np.amin([1, (proposal_ratio *
                              (prop_part.prior / self.prior) *
-                             np.exp((lklh_exp / (2 * s_noise ** 2)) * log_prod_like))])
+                             np.exp((lklh_exp / (2 * noise_std ** 2)) * log_prod_like))])
 
         if np.random.rand() < alpha:
             self = copy.deepcopy(prop_part)

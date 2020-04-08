@@ -22,7 +22,7 @@ class EmpPdf(object):
         The number of the points in the given brain discretization.
     lam : :py:class:`~float`
         The parameter of the prior Poisson pdf of the number of dipoles.
-    s_q : :py:class:`~float`
+    dip_mom_std : :py:class:`~float`
         The standard deviation of the prior of the dipole moment.
     hyper_q : :py:class:`~bool`
         If True, use hyperprior in dipole strength
@@ -44,16 +44,16 @@ class EmpPdf(object):
         Marginal posterior probability of the number of sources.
     est_n_dips : :py:class:`~float`
         Estimated number of sources.
-    blob : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape(est_n_dips x n_verts)
+    pmap : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape(est_n_dips x n_verts)
         Intensity measure of the point process.
     est_locs : :py:class:`~numpy.ndarray` of :py:class:`~int`
         Estimated sources locations
     """
-    def __init__(self, n_parts, n_verts, lam, s_q=None, hyper_q=False,
+    def __init__(self, n_parts, n_verts, lam, dip_mom_std=None, hyper_q=False,
                  q_in=None, verbose=False):
 
         self.hyper_q = hyper_q
-        self.particles = np.array([Particle(n_verts, lam, s_q=s_q, hyper_q=self.hyper_q,
+        self.particles = np.array([Particle(n_verts, lam, dip_mom_std=dip_mom_std, hyper_q=self.hyper_q,
                                             q_in=q_in) for _ in itertools.repeat(None, n_parts)])
         self.logweights = np.array([np.log(1/n_parts) for _
                                     in itertools.repeat(None, n_parts)])
@@ -61,7 +61,7 @@ class EmpPdf(object):
         self.exponents = np.array([0, 0])
         self.model_sel = None
         self.est_n_dips = None
-        self.blob = None
+        self.pmap = None
         self.est_locs = None
         self.verbose = verbose
 
@@ -74,7 +74,7 @@ class EmpPdf(object):
         return s
 
     def sample(self, n_verts, r_data, lead_field, neigh, neigh_p,
-               s_noise, lam, N_dip_max):
+               noise_std, lam, max_n_dips):
         """Perform a full evolution step of the whole empirical pdf.
 
         Parameters
@@ -90,25 +90,25 @@ class EmpPdf(object):
             The neighbours of each point in the brain discretization.
         neigh_p : :py:class:`~numpy.ndarray` of :py:class:`~float`
             The neighbours' probabilities.
-        s_noise : :py:class:`~float`
+        noise_std : :py:class:`~float`
             The standard deviation of the noise distribution.
         sigma_q : :py:class:`~float`
             The standard deviation of the prior of the dipole moment
         lam : :py:class:`~float`
             The parameter of the prior Poisson pdf of the number of dipoles.
-        N_dip_max : :py:class:`~int`
+        max_n_dips : :py:class:`~int`
             The maximum number of dipoles allowed in a particle.
         """
 
         for i_part, _part in enumerate(self.particles):
             if self.hyper_q:
-                _part = _part.evol_s_q(r_data, lead_field, self.exponents[-1], s_noise, lam)
+                _part = _part.evol_dip_mom_std(r_data, lead_field, self.exponents[-1], noise_std, lam)
 
-            _part = _part.evol_n_dips(n_verts, r_data, lead_field, N_dip_max,
-                                      self.exponents[-1], s_noise, lam)
+            _part = _part.evol_n_dips(n_verts, r_data, lead_field, max_n_dips,
+                                      self.exponents[-1], noise_std, lam)
             for dip_idx in reversed(range(_part.n_dips)):
                 _part = _part.evol_loc(dip_idx, neigh, neigh_p, r_data, lead_field,
-                                       self.exponents[-1], s_noise, lam)
+                                       self.exponents[-1], noise_std, lam)
             self.particles[i_part] = _part
 
     def resample(self):
@@ -138,7 +138,7 @@ class EmpPdf(object):
         self.logweights[:] = np.log(1. / self.logweights.shape[0])
         self.ESS = self.logweights.shape[0]
 
-    def compute_exponent(self, s_noise):
+    def compute_exponent(self, noise_std):
         """The choice for the sequence of artificial distributions  consists
         in starting from the prior distribution and moving towards the
         posterior by increasing the exponent of the likelihood function with
@@ -151,7 +151,7 @@ class EmpPdf(object):
 
         Parameters
         ----------
-        s_noise : :py:class:`~float`
+        noise_std : :py:class:`~float`
             The standard deviation of the noise distribution.
         """
 
@@ -178,7 +178,7 @@ class EmpPdf(object):
                 # log of the unnormalized weights
                 log_weights_aux = np.array(
                                   [self.logweights[i_part] +
-                                   (delta/(2*s_noise**2)) *
+                                   (delta/(2*noise_std**2)) *
                                    _part.loglikelihood_unit
                                    for i_part, _part
                                    in enumerate(self.particles)])
@@ -199,7 +199,7 @@ class EmpPdf(object):
                         # log of the unnormalized weights
                         log_weights_aux = np.array(
                                           [self.logweights[i_part] +
-                                           (delta/(2*s_noise**2)) *
+                                           (delta/(2*noise_std**2)) *
                                            _part.loglikelihood_unit
                                            for i_part, _part
                                            in enumerate(self.particles)])
@@ -218,7 +218,7 @@ class EmpPdf(object):
                         # log of the unnormalized weights
                         log_weights_aux = np.array(
                                           [self.logweights[i_part] +
-                                           (delta/(2*s_noise**2)) *
+                                           (delta/(2*noise_std**2)) *
                                            _part.loglikelihood_unit
                                            for i_part, _part
                                            in enumerate(self.particles)])
@@ -238,7 +238,7 @@ class EmpPdf(object):
                 # log of the unnormalized weights
                 log_weights_aux = np.array(
                                   [self.logweights[i_part] +
-                                   (delta/(2*s_noise**2)) *
+                                   (delta/(2*noise_std**2)) *
                                    _part.loglikelihood_unit
                                    for i_part, _part
                                    in enumerate(self.particles)])
@@ -254,7 +254,7 @@ class EmpPdf(object):
             self.logweights = log_weights_aux
             self.ESS = np.float32(1. / np.square(weights_aux).sum())
 
-    def point_estimate(self, D, N_dip_max):
+    def point_estimate(self, D, max_n_dips):
         """Computes a point estimate for the number of active dipoles and
         their locations from the posterior pdf.
 
@@ -263,7 +263,7 @@ class EmpPdf(object):
         D : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)
             The Euclidean distance between the points in the
             brain discretization.
-        N_dip_max : :py:class:`~int`
+        max_n_dips : :py:class:`~int`
             The maximum number of dipoles allowed in a particle.
         """
 
@@ -273,10 +273,10 @@ class EmpPdf(object):
 
         # Step1: Number of Dipoles
         #    1a) Compute model_selection
-        self.model_sel = np.zeros(N_dip_max+1)
+        self.model_sel = np.zeros(max_n_dips+1)
 
         for i_p, _part in enumerate(self.particles):
-            if _part.n_dips <= N_dip_max:
+            if _part.n_dips <= max_n_dips:
                 self.model_sel[_part.n_dips] += weights[i_p]
             else:
                 raise ValueError('Particle {} has too many dipoles!'.format(i_p))
@@ -287,7 +287,7 @@ class EmpPdf(object):
         # Step2: Positions of the dipoles
         if self.est_n_dips == 0:
             self.est_locs = np.array([])
-            self.blob = np.array([])
+            self.pmap = np.array([])
         else:
             nod = np.array([_part.n_dips for _part in self.particles])
             selected_particles = np.delete(self.particles,
@@ -310,11 +310,11 @@ class EmpPdf(object):
                 bestperm = np.argmin(OSPA)
                 order_dip[i_p] = all_perms_index[bestperm]
 
-            self.blob = np.zeros([self.est_n_dips, D.shape[0]])
+            self.pmap = np.zeros([self.est_n_dips, D.shape[0]])
 
             for dip_idx in range(self.est_n_dips):
                 for i_p, _part in enumerate(selected_particles):
                     loc = _part.dipoles[order_dip[i_p, dip_idx]].loc
-                    self.blob[dip_idx, loc] += selected_weights[i_p]
+                    self.pmap[dip_idx, loc] += selected_weights[i_p]
 
-            self.est_locs = np.argmax(self.blob, axis=1)
+            self.est_locs = np.argmax(self.pmap, axis=1)

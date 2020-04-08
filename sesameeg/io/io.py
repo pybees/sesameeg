@@ -4,31 +4,31 @@ from ..utils import _check_h5_installed, _check_pickle_installed
 
 
 def _export_to_stc(inv_op, subject=None):
-    if not hasattr(inv_op, 'blob'):
+    if not hasattr(inv_op, 'pmap'):
         raise AttributeError('Run the inversion algorithm first!!')
 
-    blobs = inv_op.blob
+    pmaps = inv_op.pmap
     fwd = inv_op.forward
     est_n_dips = inv_op.est_n_dips
     vertno = [fwd['src'][0]['vertno'], fwd['src'][1]['vertno']]
     nv_tot = fwd['nsource']
 
-    blob_tot = np.zeros([len(blobs), nv_tot])
-    for it, bl in enumerate(blobs):
+    pmap_tot = np.zeros([len(pmaps), nv_tot])
+    for it, bl in enumerate(pmaps):
         if est_n_dips[it] > 0:
-            blob_tot[it] = np.sum(bl, axis=0)
+            pmap_tot[it] = np.sum(bl, axis=0)
 
     tmin = 1
-    stc = SourceEstimate(data=blob_tot.T, vertices=vertno, tmin=tmin,
+    stc = SourceEstimate(data=pmap_tot.T, vertices=vertno, tmin=tmin,
                          tstep=1, subject=subject)
     return stc
 
 
 def _export_to_vol_stc(inv_op, subject=None):
-    if not hasattr(inv_op, 'blob'):
+    if not hasattr(inv_op, 'pmap'):
         raise AttributeError('Run the inversion algorithm first!!')
 
-    blobs = inv_op.blob
+    pmaps = inv_op.pmap
     est_n_dips = inv_op.est_n_dips
     if len(inv_op.forward['src']) == 2:
         vertno = [inv_op.forward['src'][0]['vertno'],
@@ -38,35 +38,35 @@ def _export_to_vol_stc(inv_op, subject=None):
     else:
         raise ValueError
     nv_tot = inv_op.forward['nsource']
-    blob_tot = np.zeros([len(blobs), nv_tot])
+    pmap_tot = np.zeros([len(pmaps), nv_tot])
 
-    for it, bl in enumerate(blobs):
+    for it, bl in enumerate(pmaps):
         if est_n_dips[it] > 0:
-            blob_tot[it] = np.sum(bl, axis=0)
+            pmap_tot[it] = np.sum(bl, axis=0)
 
-    vol_stc = VolSourceEstimate(data=blob_tot.T, vertices=vertno, tmin=1,
+    vol_stc = VolSourceEstimate(data=pmap_tot.T, vertices=vertno, tmin=1,
                                 tstep=1, subject=subject)
     return vol_stc
 
 
 def write_h5(fpath, inv_op, tmin=None, tmax=None, fmin=None,
              fmax=None, subsample=None, sbj=None, sbj_viz=None,
-             data_path=None, fwd_path=None, src_path=None,
-             lf_path=None):
+             data_path=None, fwd_path=None, cov_path=None,
+             src_path=None, lf_path=None):
     _check_h5_installed()
     import h5py as h5
 
     f = h5.File(fpath, 'w')
 
-    _blob = f.create_group('prob_map')
-    for i, _b in enumerate(inv_op.blob):
-        _blob.create_dataset(str(i), data=_b)
+    _pmap = f.create_group('prob_map')
+    for i, _b in enumerate(inv_op.pmap):
+        _pmap.create_dataset(str(i), data=_b)
     _est_cs = f.create_group('est_locs')
     for i, _e in enumerate(inv_op.est_locs):
         _est_cs.create_dataset(str(i), data=_e)
-    _est_q = f.create_group('est_q')
-    for i, _e in enumerate(inv_op.est_q):
-        _est_q.create_dataset(str(i), data=_e)
+    _est_dip_moms = f.create_group('est_dip_moms')
+    for i, _e in enumerate(inv_op.est_dip_moms):
+        _est_dip_moms.create_dataset(str(i), data=_e)
 
     _est_ndips = f.create_dataset('est_n_dips',
                                   data=np.asarray(inv_op.est_n_dips))
@@ -74,7 +74,7 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, fmin=None,
     for i, _m in enumerate(inv_op.model_sel):
         _model_sel.create_dataset(str(i), data=_m)
     _exponents = f.create_dataset('exponents',
-                                  data=inv_op.emp.exponents)
+                                  data=inv_op.e_pdf.exponents)
     if hasattr(inv_op, 'forward'):
         _ch_names = f.create_dataset('ch_names',
                                      shape=(len(inv_op.forward['info']['ch_names']),1),
@@ -82,15 +82,15 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, fmin=None,
                                      data=list(ch.encode('ascii', 'ignore')
                                                for ch in inv_op.forward['info']['ch_names']))
     _lam = f.create_dataset('lambda', data=inv_op.lam)
-    _sn = f.create_dataset('sigma_noise', data=inv_op.s_noise)
-    _sq = f.create_dataset('sigma_q', data=inv_op.s_q)
+    _sn = f.create_dataset('noise_std', data=inv_op.noise_std)
+    _sq = f.create_dataset('dip_mom_std', data=inv_op.dip_mom_std)
     if inv_op.hyper_q:
-        _fin_sq = f.create_dataset('final_s_q', data=inv_op.final_s_q)
-        _est_s_q = f.create_group('est_s_q')
-        for i, _sq in enumerate(inv_op.est_s_q):
-            _est_s_q.create_dataset(str(i), data=_sq)
+        _fin_sq = f.create_dataset('final_dip_mom_std', data=inv_op.final_dip_mom_std)
+        _est_dip_mom_std = f.create_group('est_dip_mom_std')
+        for i, _sq in enumerate(inv_op.est_dip_mom_std):
+            _est_dip_mom_std.create_dataset(str(i), data=_sq)
     _np = f.create_dataset('n_parts', data=inv_op.n_parts)
-    _ndm = f.create_dataset('n_max_dip', data=inv_op.N_dip_max)
+    _ndm = f.create_dataset('max_n_dips', data=inv_op.max_n_dips)
     if tmin is not None:
         _tmin = f.create_dataset('tmin', data=tmin)
     if tmax is not None:
@@ -109,6 +109,8 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, fmin=None,
         _dpath = f.create_dataset('data_path', data=data_path)
     if fwd_path is not None:
         _fwdpath = f.create_dataset('fwd_path', data=fwd_path)
+    if cov_path is not None:
+        _covpath = f.create_dataset('cov_path', data=fwd_path)
     if src_path is not None:
         _srcpath = f.create_dataset('src_path', data=src_path)
     if lf_path is not None:
@@ -119,7 +121,8 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, fmin=None,
 
 
 def write_pkl(fpath, inv_op, sbj=None, sbj_viz=None, data_path=None,
-              fwd_path=None, src_path=None, lf_path=None, save_all=False):
+              fwd_path=None, cov_path=None, src_path=None, lf_path=None,
+              save_all=False):
     _check_pickle_installed()
     import pickle as pkl
 
@@ -137,6 +140,8 @@ def write_pkl(fpath, inv_op, sbj=None, sbj_viz=None, data_path=None,
         inv_op.fwd_path = fwd_path
         if not save_all:
             del inv_op.forward, inv_op.source_space, inv_op.lead_field
+    if cov_path is not None:
+        inv_op.cov_path = cov_path
     if src_path is not None:
         inv_op.src_path = src_path
         if not save_all:
@@ -169,23 +174,25 @@ def read_h5(fpath):
 
     * ch_names : :py:class:`~list` | 'Not available.'
         The channel names
+    * cov_path : :py:class:`~str` | 'Not available.'
+        Path and filename of the file containing the noise covariance.
     * data_path : :py:class:`~str` | 'Not available.'
         Path and filename of the file containing the data.
     * est_locs : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~int` | 'Not available.'
         The source space grid points indices in which a source is estimated.
     * est_n_dips : :py:class:`~list` of :py:class:`~int` | 'Not available.'
         The estimated number of dipoles.
-    * est_q : :py:class:`~numpy.ndarray` , shape (est_n_dips[-1], n_ist, 3) | 'Not available.'
+    * est_dip_moms : :py:class:`~numpy.ndarray` , shape (est_n_dips[-1], n_ist, 3) | 'Not available.'
         The moment time courses of the dipoles estimated in the last iteration of SESAME.
-    * est_s_q : :py:class:`~list` of :py:class:`~numpy.ndarray`, shape (n_iterations, ) | 'Not available.'
-        Estimated values of the parameter ``s_q``. Each array in the list corresponds to a single particle.
+    * est_dip_mom_std : :py:class:`~list` of :py:class:`~numpy.ndarray`, shape (n_iterations, ) | 'Not available.'
+        Estimated values of the parameter ``dip_mom_std``. Each array in the list corresponds to a single particle.
         This only applies if ``hyper_q=True`` has been selected when instantiating :py:class:`~sesameeg.Sesame`.
     * exponents : :py:class:`~numpy.ndarray` | 'Not available.'
         Array whose entries represent points in the space of artificial
         distributions. It is used to keep track of the path followed
         by SESAME.
-    * final_s_q : :py:class:`~float` | 'Not available.'
-        The weighted average of the last estimated value of ``s_q`` in each particle.
+    * final_dip_mom_std : :py:class:`~float` | 'Not available.'
+        The weighted average of the last estimated value of ``dip_mom_std`` in each particle.
         This only applies if ``hyper_q=True`` has been selected when instantiating :py:class:`~sesameeg.Sesame`.
     * fmax : :py:class:`~float` | None
         The last frequency (in Hertz) of the frequency band in which data have been analyzed.
@@ -197,16 +204,16 @@ def read_h5(fpath):
         The parameter of the Poisson prior pdf on the number of dipoles.
     * lf_path : :py:class:`~str` | 'Not available.'
         Path and filename of the file containing the lead field.
+    * max_n_dips : :py:class:`~int`
+        The maximum number of dipoles allowed in each particle.
     * model_sel : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`
         The model selection, i.e. the posterior distribution on the number
         of dipoles.
-    * n_max_dip : :py:class:`~int`
-        The maximum number of dipoles allowed in each particle.
     * prob_map : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (est_n_dips, n_verts)
         Posterior probability map
-    * sigma_noise : :py:class:`~float`
+    * noise_std : :py:class:`~float`
         The standard deviation of the noise distribution.
-    * sigma_q : :py:class:`~float`
+    * dip_mom_std : :py:class:`~float`
         The standard deviation of the prior pdf on the dipole moment.
     * src_path : :py:class:`~str` | 'Not available.'
         Path and filename of the file containing the source space grid.
@@ -249,35 +256,35 @@ def read_h5(fpath):
     else:
         res['ch_names'] = 'Not available.'
 
-    for _k in ['prob_map', 'est_locs', 'model_sel', 'est_s_q']:
+    for _k in ['prob_map', 'est_locs', 'model_sel', 'est_dip_mom_std']:
         if _k in f.keys():
             res[_k] = list(f[_k][_key][:] for _key in sorted(f[_k].keys(),
                                                              key=lambda x: int(x)))
         else:
             res[_k] = 'Not available.'
 
-    for _k in ['final_s_q', 'tmin', 'tmax', 'fmin', 'fmax', 'subsample']:
+    for _k in ['final_dip_mom_std', 'tmin', 'tmax', 'fmin', 'fmax', 'subsample']:
         if _k in f.keys():
             res[_k] = f[_k][()]
         else:
             res[_k] = None
 
-    for _k in ['lambda', 'sigma_noise', 'sigma_q', 'n_max_dip',
+    for _k in ['lambda', 'noise_std', 'dip_mom_std', 'max_n_dips',
                'subject', 'subject_viz', 'data_path', 'fwd_path',
-               'src_path', 'lf_path']:
+               'cov_path', 'src_path', 'lf_path']:
         if _k in f.keys():
             res[_k] = f[_k][()]
         else:
             res[_k] = 'Not available.'
 
-    if 'est_q' in f.keys():
-        est_q_temp = np.asarray(list(f['est_q'][_key][:] for _key in sorted(f['est_q'].keys(),
+    if 'est_dip_moms' in f.keys():
+        est_dip_moms_temp = np.asarray(list(f['est_dip_moms'][_key][:] for _key in sorted(f['est_dip_moms'].keys(),
                                                                             key=lambda x: int(x))))
-        est_q_aux = np.zeros((res['est_locs'][-1].shape[0], est_q_temp.shape[0], 3))
-        for i in range(est_q_temp.shape[0]):
-            _temp = est_q_temp[i, :].reshape(-1, 3)
+        est_dip_moms_aux = np.zeros((res['est_locs'][-1].shape[0], est_dip_moms_temp.shape[0], 3))
+        for i in range(est_dip_moms_temp.shape[0]):
+            _temp = est_dip_moms_temp[i, :].reshape(-1, 3)
             for j in range(res['est_locs'][-1].shape[0]):
-                est_q_aux[j, i, :] += _temp[j]
-        res['est_q'] = est_q_aux
+                est_dip_moms_aux[j, i, :] += _temp[j]
+        res['est_dip_moms'] = est_dip_moms_aux
     f.close()
     return res

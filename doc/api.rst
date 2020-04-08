@@ -38,8 +38,8 @@ Utility functions
 
    compute_neighbours_matrix
    compute_neighbours_probability_matrix
-   estimate_s_q
-   estimate_s_noise
+   estimate_dip_mom_std
+   estimate_noise_std
    initialize_radius
 
 Reading SESAME result

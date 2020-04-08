@@ -10,14 +10,14 @@ import scipy.spatial.distance as ssd
 from ..utils import initialize_radius
 
 
-def compute_mld(src, blob_tot, true_pos):
+def compute_mld(src, pmap_tot, true_pos):
     """Compute the Map Localization Discrepancy
 
     Parameters
     ----------
     src :  array of floats, shape (n_verts, 3)
         The coordinates of the points in the brain discretization.
-    blob_tot : array of floats, shape (n_verts)
+    pmap_tot : array of floats, shape (n_verts)
         The intensity measure of the point process.
     true_pos: array of floats, shape (n_true_sources, 3)
         The coordinates of the sourcespace grid points in which the sources are located.
@@ -39,8 +39,8 @@ def compute_mld(src, blob_tot, true_pos):
     for t in true_pos:
         all_dist.append(list(map(lambda x: _scale * ssd.euclidean(x, t), src)))
     _dist = np.amin(np.asarray(all_dist), axis=0).flatten()
-    _num = np.sum(list(map(lambda x,y : (x*np.abs(y))**2, _dist, blob_tot.flatten())))
-    _denum = np.sum(np.abs(blob_tot)**2)
+    _num = np.sum(list(map(lambda x,y : (x*np.abs(y))**2, _dist, pmap_tot.flatten())))
+    _denum = np.sum(np.abs(pmap_tot)**2)
     return np.sqrt(_num / _denum)
 
 
@@ -77,7 +77,7 @@ def compute_ospa(src, true_locs, est_locs, true_src=None):
     return ospa
 
 
-def compute_goodness_of_fit(meas_field, est_n_dips, est_locs, est_q, lead_field):
+def compute_goodness_of_fit(meas_field, est_n_dips, est_locs, est_dip_moms, lead_field):
     """Evaluate the estimated configuration of dipoles. The goodness
     of fit (GOF) with the recorded data is defined as
 
@@ -97,7 +97,7 @@ def compute_goodness_of_fit(meas_field, est_n_dips, est_locs, est_q, lead_field)
 
     if est_n_dips == 0:
         raise ValueError("No dipole has been estimated!")
-    if est_q is None:
+    if est_dip_moms is None:
         raise AttributeError("No dipoles' moment found."
                              " Run compute_q first.")
 
@@ -105,7 +105,7 @@ def compute_goodness_of_fit(meas_field, est_n_dips, est_locs, est_q, lead_field)
     for i_d in range(est_n_dips):
         rec_field += np.dot(lead_field[:, 3*est_locs[i_d]:
                                             3*(est_locs[i_d]+1)],
-                            est_q[:, 3*i_d:3*(i_d+1)].T)
+                            est_dip_moms[:, 3*i_d:3*(i_d+1)].T)
 
     gof = 1 - np.linalg.norm(meas_field - rec_field) \
         / np.linalg.norm(meas_field)
@@ -113,14 +113,14 @@ def compute_goodness_of_fit(meas_field, est_n_dips, est_locs, est_q, lead_field)
     return gof
 
 
-def compute_sd(src, blob_tot, est_pos):
+def compute_sd(src, pmap_tot, est_pos):
     """Compute the Source Dispersion
 
     Parameters
     ----------
     src :  array of floats, shape (n_verts, 3)
         The coordinates of the points in the brain discretization.
-    blob_tot : array of floats, shape (n_verts)
+    pmap_tot : array of floats, shape (n_verts)
         The intensity measure of the point process.
     est_pos: array of floats, shape (n_true_sources, 3)
         The coordinates of the sourcespace grid points in which the sources have been estimated.
@@ -142,6 +142,6 @@ def compute_sd(src, blob_tot, est_pos):
     for t in est_pos:
         all_dist.append(list(map(lambda x: _scale * ssd.euclidean(x, t), src)))
     _dist = np.amin(np.asarray(all_dist), axis=0).flatten()
-    _num = np.sum(list(map(lambda x,y : (x*np.abs(y))**2, _dist, blob_tot.flatten())))
-    _denum = np.sum(np.abs(blob_tot)**2)
+    _num = np.sum(list(map(lambda x,y : (x*np.abs(y))**2, _dist, pmap_tot.flatten())))
+    _denum = np.sum(np.abs(pmap_tot)**2)
     return np.sqrt(_num / _denum)
