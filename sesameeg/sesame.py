@@ -113,7 +113,7 @@ class Sesame(object):
     dip_mom_std : :py:class:`~float`
         The standard deviation of the prior on the dipole moment.
     hyper_q : :py:class:`~bool`
-        If True use hyperprior in dipole strength
+        If True use hyperprior on dipole moment std.
     noise_std : :py:class:`~float`
         The standard deviation of the noise distribution.
     _resample_it : :py:class:`~list` of :py:class:`~int`
@@ -130,7 +130,7 @@ class Sesame(object):
         of dipoles.
     pmap : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (est_n_dips, n_verts)
         Posterior probability map.
-    e_pdf : instance of :class:`~sesameeg.emppdf.EmpPdf`
+    posterior : instance of :class:`~sesameeg.emppdf.EmpPdf`
         The empirical pdf approximated by the particles at each iteration.
     """
 
@@ -190,17 +190,26 @@ class Sesame(object):
             _data = self._prepare_evoked_data(data, top_min, top_max)
         elif is_epochs(data):
             _data = self._prepare_epochs_data(data, top_min, top_max)
+        else:
+            raise ValueError
 
         # Perform whitening if a noise covariance is provided
         if noise_cov is not None:
-            if self.fourier is False and is_evoked(data):
+            if self.fourier:
+                raise NotImplementedError('Still to implement whitening in the frequency domain')
+            else:
+                if is_evoked(data):
+                    _sf = np.sqrt(data.nave)
+                elif is_epochs(data):
+                    _sf = 1.0
+                else:
+                    raise ValueError
+
                 whitener, _ = compute_whitener(noise_cov, info=_info_picked, pca=True,
                                                picks=_info_picked['ch_names'])
-                _data = np.sqrt(data.nave) * np.dot(whitener, _data)
-                self.lead_field = (np.sqrt(data.nave) *
-                                   np.dot(whitener, self.lead_field))
-            else:
-                raise NotImplementedError('Still to implement whitening in the frequency domain')
+                _data = _sf * np.dot(whitener, _data)
+                self.lead_field = (_sf * np.dot(whitener, self.lead_field))
+                print('Data and leadfield have been prewhitened.')
 
         self.r_data = _data.real
         del _data
@@ -228,6 +237,8 @@ class Sesame(object):
             print(' Estimated noise std: {:.4e}'.format(self.noise_std))
         else:
             self.noise_std = noise_std
+            print('User defined noise std: {:.4e}'
+                  .format(self.noise_std))
 
         self._resample_it = list()
         self.est_n_dips = list()
@@ -241,10 +252,10 @@ class Sesame(object):
         if self.hyper_q:
             self.est_dip_mom_std = list(np.array([]) for _ in range(self.n_parts))
 
-        self.e_pdf = EmpPdf(self.n_parts, self.n_verts, self.lam, dip_mom_std=self.dip_mom_std,
-                          hyper_q=self.hyper_q, verbose=self.verbose)
+        self.posterior = EmpPdf(self.n_parts, self.n_verts, self.lam, dip_mom_std=self.dip_mom_std,
+                                hyper_q=self.hyper_q, verbose=self.verbose)
 
-        for _part in self.e_pdf.particles:
+        for _part in self.posterior.particles:
             if self.hyper_q:
                 _aux = 0
                 _pos_def = _part._check_sigma(self.r_data, self.lead_field,
@@ -398,65 +409,65 @@ class Sesame(object):
         # --------- INIZIALIZATION ------------
         # Samples are drawn from the prior distribution and weigths are set as
         # uniform.
-        nd = np.array([_part.n_dips for _part in self.e_pdf.particles])
+        nd = np.array([_part.n_dips for _part in self.posterior.particles])
 
         while not np.all(nd <= self.max_n_dips):
             nd_wrong = np.where(nd > self.max_n_dips)[0]
-            self.e_pdf.particles[nd_wrong] =\
+            self.posterior.particles[nd_wrong] =\
                 np.array([Particle(self.n_verts, self.lam, dip_mom_std=self.dip_mom_std)
                          for _ in itertools.repeat(None, nd_wrong.shape[0])])
-            nd = np.array([_part.n_dips for _part in self.e_pdf.particles])
+            nd = np.array([_part.n_dips for _part in self.posterior.particles])
 
         # Point estimation for the first iteration
         if self.hyper_q:
-            for i_p, _part in enumerate(self.e_pdf.particles):
+            for i_p, _part in enumerate(self.posterior.particles):
                 self.est_dip_mom_std[i_p] = np.append(self.est_dip_mom_std[i_p],
                                               _part.dip_mom_std)
         if estimate_all:
-            self.e_pdf.point_estimate(self.distance_matrix, self.max_n_dips)
+            self.posterior.point_estimate(self.distance_matrix, self.max_n_dips)
 
-            self.est_n_dips.append(self.e_pdf.est_n_dips)
-            self.model_sel.append(self.e_pdf.model_sel)
-            self.est_locs.append(self.e_pdf.est_locs)
-            self.pmap.append(self.e_pdf.pmap)
+            self.est_n_dips.append(self.posterior.est_n_dips)
+            self.model_sel.append(self.posterior.model_sel)
+            self.est_locs.append(self.posterior.est_locs)
+            self.pmap.append(self.posterior.pmap)
 
         # ----------- MAIN CICLE --------------
 
-        while np.all(self.e_pdf.exponents <= 1):
+        while np.all(self.posterior.exponents <= 1):
             time_start = time.time()
             if self.verbose:
-                print('iteration = {0}'.format(self.e_pdf.exponents.shape[0]))
-                print('exponent = {0}'.format(self.e_pdf.exponents[-1]))
-                print('ESS = {:.2%}'.format(self.e_pdf.ESS/self.n_parts))
+                print('iteration = {0}'.format(self.posterior.exponents.shape[0]))
+                print('exponent = {0}'.format(self.posterior.exponents[-1]))
+                print('ESS = {:.2%}'.format(self.posterior.ESS/self.n_parts))
 
             # STEP 1: (possible) resampling
-            if self.e_pdf.ESS < self.n_parts/2:
-                self._resample_it.append(int(self.e_pdf.exponents.shape[0]))
-                self.e_pdf.resample()
+            if self.posterior.ESS < self.n_parts/2:
+                self._resample_it.append(int(self.posterior.exponents.shape[0]))
+                self.posterior.resample()
                 if self.verbose:
                     print('----- RESAMPLING -----')
-                    print('ESS = {:.2%}'.format(self.e_pdf.ESS/self.n_parts))
+                    print('ESS = {:.2%}'.format(self.posterior.ESS/self.n_parts))
 
             # STEP 2: Sampling.
-            self.e_pdf.sample(self.n_verts, self.r_data, self.lead_field,
+            self.posterior.sample(self.n_verts, self.r_data, self.lead_field,
                             self.neigh, self.neigh_p, self.noise_std,
                             self.lam, self.max_n_dips)
 
             # STEP 3: Point Estimation
             if self.hyper_q:
-                for i_p, _part in enumerate(self.e_pdf.particles):
+                for i_p, _part in enumerate(self.posterior.particles):
                     self.est_dip_mom_std[i_p] = np.append(self.est_dip_mom_std[i_p],
                                                   _part.dip_mom_std)
             if estimate_all:
-                self.e_pdf.point_estimate(self.distance_matrix, self.max_n_dips)
+                self.posterior.point_estimate(self.distance_matrix, self.max_n_dips)
 
-                self.est_n_dips.append(self.e_pdf.est_n_dips)
-                self.model_sel.append(self.e_pdf.model_sel)
-                self.est_locs.append(self.e_pdf.est_locs)
-                self.pmap.append(self.e_pdf.pmap)
+                self.est_n_dips.append(self.posterior.est_n_dips)
+                self.model_sel.append(self.posterior.model_sel)
+                self.est_locs.append(self.posterior.est_locs)
+                self.pmap.append(self.posterior.pmap)
 
             # STEP 4: compute new exponent and new weights
-            self.e_pdf.compute_exponent(self.noise_std)
+            self.posterior.compute_exponent(self.noise_std)
 
             time.sleep(0.01)
             time_elapsed = (time.time() - time_start)
@@ -466,20 +477,20 @@ class Sesame(object):
 
         # Point estimation
         if self.hyper_q:
-            for i_p, _part in enumerate(self.e_pdf.particles):
+            for i_p, _part in enumerate(self.posterior.particles):
                 self.est_dip_mom_std[i_p] = np.append(self.est_dip_mom_std[i_p],
                                               _part.dip_mom_std)
-        self.e_pdf.point_estimate(self.distance_matrix, self.max_n_dips)
+        self.posterior.point_estimate(self.distance_matrix, self.max_n_dips)
 
-        self.est_n_dips.append(self.e_pdf.est_n_dips)
-        self.model_sel.append(self.e_pdf.model_sel)
-        self.est_locs.append(self.e_pdf.est_locs)
-        self.pmap.append(self.e_pdf.pmap)
+        self.est_n_dips.append(self.posterior.est_n_dips)
+        self.model_sel.append(self.posterior.model_sel)
+        self.est_locs.append(self.posterior.est_locs)
+        self.pmap.append(self.posterior.pmap)
         if estimate_dip_mom:
             if self.est_n_dips[-1] == 0:
                 self.est_dip_moms = np.array([])
                 if self.hyper_q:
-                    weights = np.exp(self.e_pdf.logweights)
+                    weights = np.exp(self.posterior.logweights)
                     assert np.abs(np.sum(weights) - 1) < 1e-15
                     est_sq = np.asarray([self.est_dip_mom_std[p][-1] for p in range(self.n_parts)])
                     self.final_dip_mom_std = np.dot(weights, est_sq)
@@ -500,7 +511,7 @@ class Sesame(object):
         [n_sens, n_time] = np.shape(self.r_data)
 
         if self.hyper_q:
-            weights = np.exp(self.e_pdf.logweights)
+            weights = np.exp(self.posterior.logweights)
             assert np.abs(np.sum(weights) - 1) < 1e-15
             est_sq = np.asarray([self.est_dip_mom_std[p][-1] for p in range(self.n_parts)])
             _dip_mom_std = np.dot(weights, est_sq)
