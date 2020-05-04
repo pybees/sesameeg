@@ -39,7 +39,7 @@ class Particle(object):
         The prior pdf, evaluated in the particle.
     """
 
-    def __init__(self, n_verts, lam, dip_mom_std=None, hyper_q=False, q_in=None):
+    def __init__(self, n_verts, lam, dip_mom_std=None, hyper_q=False):
         """Initialization: the initial number of dipoles is Poisson
            distribuited; the initial locations are uniformly distribuited
            within the brain grid points, with no dipoles in the same position.
@@ -55,9 +55,6 @@ class Particle(object):
                 self.dip_mom_std = 10 ** (3 * np.random.rand()) * (dip_mom_std / 35)
             else:
                 self.dip_mom_std = dip_mom_std
-
-        if isinstance(q_in, float):
-            self.q_in = q_in
 
         self.add_dipole(n_verts, np.random.poisson(lam))
         self.compute_prior(lam)
@@ -186,13 +183,10 @@ class Particle(object):
 
         self.prior = 1/np.math.factorial(self.n_dips) * np.exp(-lam) *\
             (lam**self.n_dips)
-        if hasattr(self, 'q_in'):
-            self.prior *= np.prod(np.array([1 / np.fabs(dip.re_q)
-                                            for dip in self.dipoles])) * \
-                          np.prod(np.array([1 / np.fabs(dip.im_q)
-                                            for dip in self.dipoles]))
-        elif hasattr(self, 'dip_mom_std') and self.hyper_q is True:
+
+        if hasattr(self, 'dip_mom_std') and self.hyper_q is True:
             self.prior /= self.dip_mom_std
+
         return self.prior
 
     def evol_n_dips(self, n_verts, r_data, lead_field, max_n_dips,
@@ -257,19 +251,11 @@ class Particle(object):
                 alpha_aux = (q_death * prop_part.prior) / (q_birth * self.prior) * \
                              np.exp((lklh_exp/(2*noise_std**2)) * log_prod_like)
 
-                if hasattr(self, 'q_in'):
-                    alpha_aux *= np.fabs(prop_part.dipoles[prop_part.n_dips-1].re_q) * \
-                                 np.fabs(prop_part.dipoles[prop_part.n_dips-1].im_q)
-
                 alpha = np.amin([1, alpha_aux])
 
             elif prop_part.n_dips < self.n_dips:
                 alpha_aux = (q_birth * prop_part.prior) / (q_death * self.prior) * \
                             np.exp((lklh_exp/(2*noise_std**2)) * log_prod_like)
-
-                if hasattr(self, 'q_in'):
-                    alpha_aux *= np.fabs(self.dipoles[sent_to_death].re_q) * \
-                                 np.fabs(self.dipoles[sent_to_death].im_q)
 
                 alpha = np.amin([1, alpha_aux])
 

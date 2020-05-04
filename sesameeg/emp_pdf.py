@@ -49,12 +49,11 @@ class EmpPdf(object):
     est_locs : :py:class:`~numpy.ndarray` of :py:class:`~int`
         Estimated sources locations
     """
-    def __init__(self, n_parts, n_verts, lam, dip_mom_std=None, hyper_q=False,
-                 q_in=None, verbose=False):
+    def __init__(self, n_parts, n_verts, lam, dip_mom_std=None, hyper_q=False, verbose=False):
 
         self.hyper_q = hyper_q
-        self.particles = np.array([Particle(n_verts, lam, dip_mom_std=dip_mom_std, hyper_q=self.hyper_q,
-                                            q_in=q_in) for _ in itertools.repeat(None, n_parts)])
+        self.particles = np.array([Particle(n_verts, lam, dip_mom_std=dip_mom_std,
+                                            hyper_q=self.hyper_q) for _ in itertools.repeat(None, n_parts)])
         self.logweights = np.array([np.log(1/n_parts) for _
                                     in itertools.repeat(None, n_parts)])
         self.ESS = np.float32(1. / np.square(np.exp(self.logweights)).sum())

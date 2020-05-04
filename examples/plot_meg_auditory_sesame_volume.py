@@ -65,8 +65,7 @@ evoked = evoked.pick_types(meg=meg_sensor_type,
 
 ###############################################################################
 # Define the parameters.
-time_min = 0.055
-time_max = 0.135
+time_min, time_max = 0.05, 0.15  # Select N100m
 subsample = None
 sample_min, sample_max = evoked.time_as_index([time_min, time_max],
                                               use_rounding=True)

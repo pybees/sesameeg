@@ -55,8 +55,7 @@ evoked = evoked.pick_types(meg=meg_sensor_type,
 
 ###############################################################################
 # Define the parameters.
-time_min = 0.055
-time_max = 0.135
+time_min, time_max = 0.05, 0.15  # Select N100m
 subsample = None
 sample_min, sample_max = evoked.time_as_index([time_min, time_max],
                                               use_rounding=True)
@@ -118,8 +117,8 @@ amplitude = np.array([np.linalg.norm(_sesame.est_dip_moms[:, i_d:3 * (i_d + 1)],
 colors = _n_colors(est_n_dips)
 plt.figure()
 for idx, amp in enumerate(amplitude):
-    plt.plot(times, 1e9*amp, color=colors[idx], linewidth=2)
-plt.xlabel('Time (s)')
+    plt.plot(1e3*times, 1e9*amp, color=colors[idx], linewidth=2)
+plt.xlabel('Time (ms)')
 plt.ylabel('Source amplitude (nAm)')
 plt.show()
 

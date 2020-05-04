@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="* cambio nomi variabili e metodi &#10;* aggiunto cov_path in I/O">
+    <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="whitening su epoche (NON FUNZIONA!)&#10;cambiato nome attributo e_pdf -&gt;posterior">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sesameeg/sesame.py" afterPath="$PROJECT_DIR$/sesameeg/sesame.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py" afterPath="$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py" afterPath="$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sesameeg/emp_pdf.py" afterPath="$PROJECT_DIR$/sesameeg/emp_pdf.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sesameeg/particles.py" afterPath="$PROJECT_DIR$/sesameeg/particles.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,11 +21,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="sesame.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="sesame.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sesameeg/sesame.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="255" column="32" lean-forward="false" selection-start-line="255" selection-start-column="32" selection-end-line="255" selection-end-column="32" />
+            <state relative-caret-position="-431">
+              <caret line="501" column="8" lean-forward="false" selection-start-line="501" selection-start-column="8" selection-end-line="501" selection-end-column="8" />
               <folding>
                 <element signature="e#215#231#0" expanded="true" />
               </folding>
@@ -30,11 +33,51 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plot_analyse_sample_auditory.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="emp_pdf.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sesameeg/emp_pdf.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-4283">
+              <caret line="55" column="44" lean-forward="false" selection-start-line="55" selection-start-column="44" selection-end-line="55" selection-end-column="44" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dipoles.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sesameeg/dipoles.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="particles.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sesameeg/particles.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-593">
+              <caret line="315" column="30" lean-forward="false" selection-start-line="315" selection-start-column="30" selection-end-line="315" selection-end-column="30" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="plot_analyse_sample_auditory.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1080">
-              <caret line="69" column="12" lean-forward="false" selection-start-line="69" selection-start-column="12" selection-end-line="69" selection-end-column="12" />
+            <state relative-caret-position="1062">
+              <caret line="68" column="11" lean-forward="false" selection-start-line="68" selection-start-column="11" selection-end-line="68" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="plot_meg_auditory_sesame_volume.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="257">
+              <caret line="77" column="11" lean-forward="false" selection-start-line="77" selection-start-column="11" selection-end-line="77" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -119,14 +162,14 @@
         <option value="$PROJECT_DIR$/sesameeg/utils/smc_utils.py" />
         <option value="$PROJECT_DIR$/sesameeg/utils/__init__.py" />
         <option value="$PROJECT_DIR$/doc/api.rst" />
-        <option value="$PROJECT_DIR$/sesameeg/particles.py" />
-        <option value="$PROJECT_DIR$/sesameeg/emp_pdf.py" />
         <option value="$PROJECT_DIR$/sesameeg/metrics/metrics.py" />
         <option value="$PROJECT_DIR$/sesameeg/io/io.py" />
-        <option value="$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py" />
         <option value="$PROJECT_DIR$/examples/plot_meg_simulated_sesame_frequency.py" />
-        <option value="$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py" />
         <option value="$PROJECT_DIR$/sesameeg/sesame.py" />
+        <option value="$PROJECT_DIR$/sesameeg/particles.py" />
+        <option value="$PROJECT_DIR$/sesameeg/emp_pdf.py" />
+        <option value="$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py" />
+        <option value="$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py" />
       </list>
     </option>
   </component>
@@ -159,6 +202,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -199,25 +244,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="metrics" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sesameeg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sesameeg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="sesameeg" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="io" />
+              <option name="myItemId" value="utils" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -237,8 +264,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -604,7 +629,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586368482551</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="whitening su epoche (NON FUNZIONA!)&#10;cambiato nome attributo e_pdf -&gt;posterior">
+      <created>1587475223190</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1587475223190</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -614,20 +646,20 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18466121" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.169967" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.59240925" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32784185" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40924093" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24944155" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40924093" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18976897" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -669,7 +701,8 @@
     <MESSAGE value="* Sesame ora legge dati epocati&#10;* BUG: sistemato calcolo di final_s_q  (i.e. media pesata della stima di s_q)  in caso di hyperprior quando non vengono stimati dipoli&#10;* Sistemate questioni 3,6,8,9,10 sollevate da Sara nel google doc" />
     <MESSAGE value="* DEPRECATION: sostituito np.random.random_integers(0, self.n_dips-1)  con np.random.randint(0, self.n_dips)  in particles.py:245&#10;&#10;* corretto commento errato su ultima figura in esempio volume" />
     <MESSAGE value="* cambio nomi variabili e metodi &#10;* aggiunto cov_path in I/O" />
-    <option name="LAST_COMMIT_MESSAGE" value="* cambio nomi variabili e metodi &#10;* aggiunto cov_path in I/O" />
+    <MESSAGE value="whitening su epoche (NON FUNZIONA!)&#10;cambiato nome attributo e_pdf -&gt;posterior" />
+    <option name="LAST_COMMIT_MESSAGE" value="whitening su epoche (NON FUNZIONA!)&#10;cambiato nome attributo e_pdf -&gt;posterior" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -831,13 +864,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sesameeg/dipoles.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sesameeg/io/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="18">
@@ -880,13 +906,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sesameeg/utils/smc_utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="96" column="38" lean-forward="false" selection-start-line="96" selection-start-column="38" selection-end-line="96" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/doc/_templates/class.rst">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
@@ -901,32 +920,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sesameeg/emp_pdf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="319" column="47" lean-forward="false" selection-start-line="319" selection-start-column="43" selection-end-line="319" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sesameeg/metrics/metrics.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="134">
           <caret line="65" column="17" lean-forward="false" selection-start-line="65" selection-start-column="14" selection-end-line="65" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="159" column="0" lean-forward="false" selection-start-line="159" selection-start-column="0" selection-end-line="159" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sesameeg/particles.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-897">
-          <caret line="311" column="23" lean-forward="false" selection-start-line="311" selection-start-column="23" selection-end-line="311" selection-end-column="23" />
         </state>
       </provider>
     </entry>
@@ -944,21 +941,61 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py">
+    <entry file="file://$PROJECT_DIR$/sesameeg/utils/smc_utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1080">
-          <caret line="69" column="12" lean-forward="false" selection-start-line="69" selection-start-column="12" selection-end-line="69" selection-end-column="12" />
+        <state relative-caret-position="30">
+          <caret line="132" column="4" lean-forward="false" selection-start-line="132" selection-start-column="4" selection-end-line="132" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sesameeg/particles.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-593">
+          <caret line="315" column="30" lean-forward="false" selection-start-line="315" selection-start-column="30" selection-end-line="315" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sesameeg/emp_pdf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4283">
+          <caret line="55" column="44" lean-forward="false" selection-start-line="55" selection-start-column="44" selection-end-line="55" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sesameeg/dipoles.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sesameeg/sesame.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="255" column="32" lean-forward="false" selection-start-line="255" selection-start-column="32" selection-end-line="255" selection-end-column="32" />
+        <state relative-caret-position="-431">
+          <caret line="501" column="8" lean-forward="false" selection-start-line="501" selection-start-column="8" selection-end-line="501" selection-end-column="8" />
           <folding>
             <element signature="e#215#231#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="77" column="11" lean-forward="false" selection-start-line="77" selection-start-column="11" selection-end-line="77" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1062">
+          <caret line="68" column="11" lean-forward="false" selection-start-line="68" selection-start-column="11" selection-end-line="68" selection-end-column="11" />
+          <folding />
         </state>
       </provider>
     </entry>
