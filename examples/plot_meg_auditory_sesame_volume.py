@@ -65,7 +65,7 @@ evoked = evoked.pick_types(meg=meg_sensor_type,
 
 ###############################################################################
 # Define the parameters.
-time_min, time_max = 0.05, 0.15  # Select N100m
+time_min, time_max = 0.045, 0.135  # Select N100m
 subsample = None
 sample_min, sample_max = evoked.time_as_index([time_min, time_max],
                                               use_rounding=True)
@@ -120,7 +120,7 @@ est_n_dips = _sesame.est_n_dips[-1]
 est_locs = _sesame.est_locs[-1]
 
 times = evoked.times[_sesame.s_min:_sesame.s_max+1]
-amplitude = np.array([np.linalg.norm(_sesame.est_dip_moms[:, i_d:3 * (i_d + 1)],
+amplitude = np.array([np.linalg.norm(_sesame.est_dip_moms[:, 3*i_d:3 * (i_d + 1)],
                                      axis=1) for i_d in range(est_n_dips)])
 colors = _n_colors(est_n_dips)
 plt.figure()
