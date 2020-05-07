@@ -390,8 +390,40 @@ class Sesame(object):
         else:
             raise ValueError
 
+    def _reset_attributes(self):
+        self._resample_it = list()
+        self.est_n_dips = list()
+        self.est_locs = list()
+        self.est_dip_moms = None
+        self.est_dip_mom_std = None
+        self.final_dip_mom_std = None
+        self.model_sel = list()
+        self.pmap = list()
+
+        if self.hyper_q:
+            self.est_dip_mom_std = list(np.array([]) for _ in range(self.n_parts))
+
+        self.posterior = EmpPdf(self.n_parts, self.n_verts, self.lam, dip_mom_std=self.dip_mom_std,
+                                hyper_q=self.hyper_q, verbose=self.verbose)
+
+        for _part in self.posterior.particles:
+            if self.hyper_q:
+                _aux = 0
+                _pos_def = _part._check_sigma(self.r_data, self.lead_field,
+                                              self.noise_std)
+                while _pos_def is False:
+                    _part.dip_mom_std = 10 ** (3 * np.random.rand()) * (self.dip_mom_std / 35)
+                    _pos_def = _part._check_sigma(self.r_data, self.lead_field,
+                                                  self.noise_std)
+                    _aux += 1
+                    if _aux == 100:
+                        raise ValueError
+
+            _part.compute_loglikelihood_unit(self.r_data, self.lead_field,
+                                             noise_std=self.noise_std)
+
     def apply_sesame(self, estimate_all=False, estimate_dip_mom=True):
-        """Apply SESAME on evoked data and compute point estimates.
+        """Apply SESAME on MEEG data and compute point estimates.
 
         Parameters
         ----------
@@ -404,6 +436,11 @@ class Sesame(object):
             If True compute a point-estimate of the dipole moment at the
             last iteration.
         """
+
+        if self.posterior.exponents[-1] >0:
+            print('Resetting SESAME...', end='')
+            self._reset_attributes()
+            print('[done]')
 
         print('Computing inverse solution. This will take a while...')
         # --------- INIZIALIZATION ------------
