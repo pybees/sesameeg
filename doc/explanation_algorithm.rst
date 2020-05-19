@@ -111,9 +111,16 @@ where:
 - :math:`p(r_k|n_D, r_1, \ldots, r_{k-1})` is the prior pdf for the location of the :math:`k-` th dipole,
   which is defined as a uniform distribution on the given brain discretization, under the constraint
   that at each grid point can be located at most one dipole.
-- :math:`p(\mathbf{q}_k)` is the prior pdf for the dipole moment, which is a trivariate Gaussian
-  distribution with zero mean and diagonal matrix equal to :math:`\sigma_q^2 \mathbf{I}`.
-  The variance :math:`\sigma_q^2` reflects information on the dipole strenght.
+- :math:`p(\mathbf{q}_k)` is the prior pdf for the dipole moment. Its definition depends on the value given to the boolean
+  parameter ``hyper_q`` when instantiating the class :py:class:`~sesameeg.Sesame`.
+  In particular:
+
+  * if  ``hyper_q = True``, it is given by a hierarchical model :math:`p(\mathbf{q}_k) = \int p(\mathbf{q}_k|\sigma_q) p(\sigma_q) d\sigma_q`,
+    where the conditional distribution :math:`p(\mathbf{q}_k|\sigma_q)` is a trivariate Gaussian distribution with zero
+    mean and diagonal matrix equal to :math:`\sigma_q^2 \mathbf{I}` and the prior distribution of the standard deviation
+    :math:`\sigma_q` is log-uniform;
+  * if  ``hyper_q = False``, it is a trivariate Gaussian distribution with zero mean and diagonal matrix equal
+    to :math:`\sigma_q^2 \mathbf{I}`. The variance :math:`\sigma_q^2` reflects information on the dipole strenght.
 
 Likelihood function.
 """"""""""""""""""""

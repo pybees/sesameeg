@@ -29,7 +29,7 @@ class Sesame(object):
     ----------
     forward : :py:class:`~mne.Forward` object
         The forward solution.
-    data : instance of :py:class:`~mne.Evoked` | :py:class:`~mne.Epochs`
+    data : instance of :py:class:`~mne.Evoked` | :py:class:`~mne.EvokedArray`
         The MEEG data.
     noise_std : :py:class:`~float` | None
         The standard deviation of the noise distribution.
@@ -60,7 +60,7 @@ class Sesame(object):
         If None, it is estimated from the forward model and the data.
     hyper_q : :py:class:`~bool`
         If True an hyperprior pdf on the dipole moment std will be used.
-        Default is False.
+        Default is True.
     noise_cov : instance of :py:class:`~mne.Covariance` | None
         The noise covariance matrix used to prewhiten the data. If None,
         no prewhitening is applied.
@@ -136,7 +136,7 @@ class Sesame(object):
 
     def __init__(self, forward, data, noise_std=None, radius=None,
                  neigh_std=None, n_parts=100, top_min=None,
-                 top_max=None, subsample=None, dip_mom_std=None, hyper_q=False,
+                 top_max=None, subsample=None, dip_mom_std=None, hyper_q=True,
                  noise_cov=None, lam=0.25, max_n_dips=10, Fourier_transf=False,
                  verbose=False):
 
@@ -144,9 +144,9 @@ class Sesame(object):
             raise ValueError('Forward must be an instance of MNE'
                              ' class Forward.')
 
-        if not is_evoked(data) and not is_epochs(data):
+        if not is_evoked(data):
             raise ValueError('Data must be an instance of MNE class '
-                             'Evoked, EvokedArray, Epochs or EpochsArray.')
+                             'Evoked or EvokedArray.')
 
         # 1) Choosen by the user
         self.fourier = Fourier_transf
@@ -188,8 +188,6 @@ class Sesame(object):
         # Prepare data
         if is_evoked(data):
             _data = self._prepare_evoked_data(data, top_min, top_max)
-        elif is_epochs(data):
-            _data = self._prepare_epochs_data(data, top_min, top_max)
         else:
             raise ValueError
 
