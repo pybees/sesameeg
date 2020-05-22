@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>sesameeg.Particle &#8212; sesameeg 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sesameeg.EmpPdf" href="sesameeg.EmpPdf.html" />
+    <link rel="prev" title="sesameeg.Dipole" href="sesameeg.Dipole.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          sesameeg</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../auto_examples/index.html">Examples</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../explanation_algorithm.html">Model</a></li>
+                <li><a href="https://github.com/pybees/sesameeg">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="sesameeg-particle">
+<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">sesameeg</span></code>.Particle<a class="headerlink" href="#sesameeg-particle" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="sesameeg.Particle">
+<em class="property">class </em><code class="sig-prename descclassname">sesameeg.</code><code class="sig-name descname">Particle</code><span class="sig-paren">(</span><em class="sig-param">n_verts</em>, <em class="sig-param">lam</em>, <em class="sig-param">dip_mom_std=None</em>, <em class="sig-param">hyper_q=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/particles.html#Particle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sesameeg.Particle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Particle class for SESAME, used to store a single particle
+of an empirical pdf.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>n_verts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of the points in the given brain discretization.</p>
+</dd>
+<dt><strong>lam</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The parameter of the prior Poisson pdf of the number of dipoles.</p>
+</dd>
+<dt><strong>dip_mom_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the prior of the dipole moment.</p>
+</dd>
+<dt><strong>hyper_q</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True use hyperprior in dipole strength</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes</dt>
+<dd class="field-even"><dl>
+<dt><strong>n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of dipoles in the particle.</p>
+</dd>
+<dt><strong>dipoles</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">Dipole</span></code>, shape(n_dips,)</span></dt><dd><p>The particle’s dipoles.</p>
+</dd>
+<dt><strong>loglikelihood_unit</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The logarithm of the marginal likelihood, evaluated in the particle.</p>
+</dd>
+<dt><strong>prior</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The prior pdf, evaluated in the particle.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="sesameeg.Particle.add_dipole">
+<code class="sig-name descname">add_dipole</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">n_verts</em>, <em class="sig-param">num_dip=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/particles.html#Particle.add_dipole"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sesameeg.Particle.add_dipole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add new dipole(s) to the particle.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>n_verts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of the points in the given brain discretization.</p>
+</dd>
+<dt><strong>num_dip</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of dipoles to add.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sesameeg.Particle.compute_loglikelihood_unit">
+<code class="sig-name descname">compute_loglikelihood_unit</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">r_data</em>, <em class="sig-param">lead_field</em>, <em class="sig-param">noise_std=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/particles.html#Particle.compute_loglikelihood_unit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sesameeg.Particle.compute_loglikelihood_unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates the logarithm of the marginal likelihood in the present particle.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>r_data</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_sens, n_ist)</span></dt><dd><p>The real part of the data; n_sens is the number of sensors and
+n_ist is the number of time-points or of frequencies.</p>
+</dd>
+<dt><strong>lead_field</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_sens x 3*n_verts)</span></dt><dd><p>The leadfield matrix.</p>
+</dd>
+<dt><strong>noise_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the noise distribution.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>loglikelihood_unit</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The logarithm of the likelihood function in the present particle.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sesameeg.Particle.compute_prior">
+<code class="sig-name descname">compute_prior</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">lam</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/particles.html#Particle.compute_prior"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sesameeg.Particle.compute_prior" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the prior pdf in the present particle.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>lam</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Parameter of the Poisson probability distribution used for
+determining the number of dipoles in the particle.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>prior</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The prior pdf evaluated in the present particle.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sesameeg.Particle.evol_loc">
+<code class="sig-name descname">evol_loc</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">dip_idx</em>, <em class="sig-param">neigh</em>, <em class="sig-param">neigh_p</em>, <em class="sig-param">r_data</em>, <em class="sig-param">lead_field</em>, <em class="sig-param">lklh_exp</em>, <em class="sig-param">noise_std</em>, <em class="sig-param">lam</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/particles.html#Particle.evol_loc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sesameeg.Particle.evol_loc" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Perform a Markov Chain Monte Carlo step in order to explore the</dt><dd><p>dipole location component of the state space. The dipole is
+allowed to move only to a restricted set of brain points,
+called “neighbours”, with a probability that depends on the point.</p>
+</dd>
+</dl>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>dip_idx</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>index of the Particle.dipoles array.</p>
+</dd>
+<dt><strong>neigh</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The neighbours of each point in the brain discretization.</p>
+</dd>
+<dt><strong>neigh_p</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The neighbours’ probabilities.</p>
+</dd>
+<dt><strong>r_data</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_sens, n_ist)</span></dt><dd><p>The real part of the data; n_sens is the number of sensors and
+n_ist is the number of time-points or of frequencies.</p>
+</dd>
+<dt><strong>lead_field</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_sens x 3*n_verts)</span></dt><dd><p>The leadfield matrix.</p>
+</dd>
+<dt><strong>lklh_exp</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>This number represents a point in the sequence of artificial
+distributions used in SESAME.</p>
+</dd>
+<dt><strong>noise_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the noise distribution.</p>
+</dd>
+<dt><strong>lam</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Parameter of the Poisson probability distribution used for
+determining the number of dipoles in the particle.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>self</strong><span class="classifier">instance of <a class="reference internal" href="#sesameeg.Particle" title="sesameeg.Particle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Particle</span></code></a></span></dt><dd><p>The possibly modified particle instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sesameeg.Particle.evol_n_dips">
+<code class="sig-name descname">evol_n_dips</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">n_verts</em>, <em class="sig-param">r_data</em>, <em class="sig-param">lead_field</em>, <em class="sig-param">max_n_dips</em>, <em class="sig-param">lklh_exp</em>, <em class="sig-param">noise_std</em>, <em class="sig-param">lam</em>, <em class="sig-param">q_birth=0.3333333333333333</em>, <em class="sig-param">q_death=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/particles.html#Particle.evol_n_dips"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sesameeg.Particle.evol_n_dips" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Perform a Reversible Jump Markov Chain Monte Carlo step in order</dt><dd><p>to explore the “number of sources” component of the state space.
+Recall that we are working in a variable dimension model.</p>
+</dd>
+</dl>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>n_verts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of the points in the given brain discretization.</p>
+</dd>
+<dt><strong>r_data</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_sens, n_ist)</span></dt><dd><p>The real part of the data; n_sens is the number of sensors and
+n_ist is the number of time-points or of frequencies.</p>
+</dd>
+<dt><strong>lead_field</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_sens x 3*n_verts)</span></dt><dd><p>The leadfield matrix.</p>
+</dd>
+<dt><strong>max_n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The maximum number of dipoles allowed in a particle.</p>
+</dd>
+<dt><strong>lklh_exp</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>This number represents a point in the sequence of artificial
+distributions used in SESAME.</p>
+</dd>
+<dt><strong>noise_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the noise distribution.</p>
+</dd>
+<dt><strong>lam</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Parameter of the Poisson probability distribution used for
+determining the number of dipoles in the particle.</p>
+</dd>
+<dt><strong>q_birth</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Probability of proposing to add a dipole. We recommend to use
+the default value q_birth = 1/3.</p>
+</dd>
+<dt><strong>q_death</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Probability of proposing to remove a dipole. We recommend
+to use the default value q_death = 1/20.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>self</strong><span class="classifier">instance of <a class="reference internal" href="#sesameeg.Particle" title="sesameeg.Particle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Particle</span></code></a></span></dt><dd><p>The possibly modified particle instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sesameeg.Particle.remove_dipole">
+<code class="sig-name descname">remove_dipole</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">diprip</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/particles.html#Particle.remove_dipole"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sesameeg.Particle.remove_dipole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a dipole from the particle.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>diprip</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The index representing the dipoles array entry to be removed.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div style='clear:both'></div></div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, SESAMEEG developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

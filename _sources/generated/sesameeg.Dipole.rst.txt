@@ -1,0 +1,13 @@
+:mod:`sesameeg`.Dipole
+=============================
+
+.. currentmodule:: sesameeg
+
+.. autoclass:: Dipole
+   :members:
+
+.. include:: sesameeg.Dipole.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

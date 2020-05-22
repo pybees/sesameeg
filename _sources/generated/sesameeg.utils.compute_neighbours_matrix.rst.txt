@@ -1,0 +1,12 @@
+:mod:`sesameeg.utils`.compute_neighbours_matrix
+============================================================
+
+.. currentmodule:: sesameeg.utils
+
+.. autofunction:: compute_neighbours_matrix
+
+.. include:: sesameeg.utils.compute_neighbours_matrix.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

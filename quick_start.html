@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Quick Start with the mne-project-template &#8212; sesameeg 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="User guide: create your own mne project" href="user_guide.html" />
+    <link rel="prev" title="Mathematical model" href="explanation_algorithm.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">
+          sesameeg</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="auto_examples/index.html">Examples</a></li>
+                <li><a href="api.html">API</a></li>
+                <li><a href="explanation_algorithm.html">Model</a></li>
+                <li><a href="https://github.com/pybees/sesameeg">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="quick-start-with-the-mne-project-template">
+<h1>Quick Start with the mne-project-template<a class="headerlink" href="#quick-start-with-the-mne-project-template" title="Permalink to this headline">¶</a></h1>
+<p>This package serves as a skeleton package aiding at MNE
+compatible packages.</p>
+<div class="section" id="creating-your-own-mne-contribution-package">
+<h2>Creating your own mne contribution package<a class="headerlink" href="#creating-your-own-mne-contribution-package" title="Permalink to this headline">¶</a></h2>
+<p>For illustration purposes we want to create a <code class="docutils literal notranslate"><span class="pre">mne-foo</span></code> project
+named <code class="docutils literal notranslate"><span class="pre">mnefoo</span></code>. Here is a table of the naming of this project and
+the project you will create:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 36%" />
+<col style="width: 39%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td></td>
+<td><p>tis project</p></td>
+<td><p>your resulting project</p></td>
+</tr>
+<tr class="row-even"><td><p>repo name</p></td>
+<td><p>mne-project-template</p></td>
+<td><p>mne-foo</p></td>
+</tr>
+<tr class="row-odd"><td><p>package name</p></td>
+<td><p>mnetemplate</p></td>
+<td><p>mnefoo</p></td>
+</tr>
+<tr class="row-even"><td><p>import example</p></td>
+<td><p>import mnetemplate</p></td>
+<td><p>import mnefoo</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="download-and-setup-your-repository">
+<h3>1. Download and setup your repository<a class="headerlink" href="#download-and-setup-your-repository" title="Permalink to this headline">¶</a></h3>
+<p>To create your package, you need to clone the <code class="docutils literal notranslate"><span class="pre">mne-project-template</span></code> repository
+and rename it to your convenience (i.e:<code class="docutils literal notranslate"><span class="pre">mne-foo</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/mne-tools/mne-project-template.git mne-foo
+$ cd mne-foo
+</pre></div>
+</div>
+<p>Before to reinitialize your git repository, you need to replace the template
+information with you own. We provide you with a convenient script to speed up
+the process, but you can also do it manually.</p>
+<div class="section" id="bootstrap-your-mne-project-using-a-convenience-script">
+<h4>1.1.1 bootstrap your mne project using a convenience script<a class="headerlink" href="#bootstrap-your-mne-project-using-a-convenience-script" title="Permalink to this headline">¶</a></h4>
+<p>Open your favorite editor and change <code class="docutils literal notranslate"><span class="pre">PKG_NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">PYTHON_NAME</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">GH_NAME</span></code> in <code class="docutils literal notranslate"><span class="pre">mne_project_template_bootstrap.sh</span></code> with your own
+information. Then run the bootsrap script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ bash  mne_project_template_bootstrap.sh
+</pre></div>
+</div>
+</div>
+<div class="section" id="update-your-project-manually">
+<h4>1.1.2 Update your project manually<a class="headerlink" href="#update-your-project-manually" title="Permalink to this headline">¶</a></h4>
+<p>Replace all occurrences of <code class="docutils literal notranslate"><span class="pre">mnetemplate</span></code> and <code class="docutils literal notranslate"><span class="pre">mne-template</span></code>
+with the name of you own contribution. You can find all the occurrences using
+the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git grep mnetemplate
+$ git grep mne-template
+</pre></div>
+</div>
+<p>You can do this with your favorite editor or use the <code class="docutils literal notranslate"><span class="pre">sed</span></code> tool.
+In linux machine:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git grep -l &#39;mnetemplate&#39; | xargs sed -i &#39;s/mnetemplate/mnefoo/g&#39;
+$ git grep -l &#39;mne-template&#39; | xargs sed -i &#39;s/mne-template/mne-foo/g&#39;
+</pre></div>
+</div>
+<p>this is how to do it in Macosx machine:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git grep -l &#39;mnetemplate&#39; | xargs sed -i &#39;&#39; -e &#39;s/mnetemplate/mnefoo/g&#39;
+$ git grep -l &#39;mne-template&#39; | xargs sed -i &#39;&#39; -e &#39;s/mne-template/mne-foo/g&#39;
+</pre></div>
+</div>
+<p>Update the module directory name:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mv mnetemplate mnefoo
+</pre></div>
+</div>
+</div>
+<div class="section" id="remove-history-and-convert-it-into-a-new-project">
+<h4>1.3 Remove history and convert it into a new project<a class="headerlink" href="#remove-history-and-convert-it-into-a-new-project" title="Permalink to this headline">¶</a></h4>
+<p>To remove the history of the template package, you need to remove the <cite>.git</cite>
+directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rm -rf .git
+</pre></div>
+</div>
+<p>Then, you need to initialize your new git repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git init
+$ git add .
+$ git commit -m &#39;Initial commit&#39;
+</pre></div>
+</div>
+<p>Finally, you create an online repository on GitHub and push your code online:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git remote add origin https://github.com/your_remote/mne-foo.git
+$ git push origin master
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="edit-the-documentation">
+<h3>2. Edit the documentation<a class="headerlink" href="#edit-the-documentation" title="Permalink to this headline">¶</a></h3>
+<p>The documentation is created using <a class="reference external" href="http://www.sphinx-doc.org/en/stable/">Sphinx</a>. In addition, the examples are
+created using <code class="docutils literal notranslate"><span class="pre">sphinx-gallery</span></code>. Therefore, to generate locally the
+documentation, you are required to install the following packages:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install sphinx sphinx-gallery sphinx_rtd_theme matplotlib numpydoc pillow
+</pre></div>
+</div>
+<p>The documentation is made of:</p>
+<ul class="simple">
+<li><p>a home page, <code class="docutils literal notranslate"><span class="pre">doc/index.rst</span></code>;</p></li>
+<li><p>an API documentation, <code class="docutils literal notranslate"><span class="pre">doc/api.rst</span></code> in which you should add all public
+objects for which the docstring should be exposed publicly.</p></li>
+<li><p>a User Guide documentation, <code class="docutils literal notranslate"><span class="pre">doc/user_guide.rst</span></code>, containing the narrative
+documentation of your package, to give as much intuition as possible to your
+users.</p></li>
+<li><p>examples which are created in the <cite>examples/</cite> folder. Each example
+illustrates some usage of the package. the example file name should start by
+<cite>plot_*.py</cite>.</p></li>
+</ul>
+<p>The documentation is built with the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd doc
+$ make html
+</pre></div>
+</div>
+</div>
+<div class="section" id="setup-the-continuous-integration">
+<h3>3. Setup the continuous integration<a class="headerlink" href="#setup-the-continuous-integration" title="Permalink to this headline">¶</a></h3>
+<p>The project template already contains configuration files of the continuous
+integration system. Basically, the following systems are set:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://travis-ci.com/getting_started">Travis</a> CI is used to test the package in Linux. We provide you with an
+initial <code class="docutils literal notranslate"><span class="pre">.travis.yml</span></code> configuration file. So you only need to create
+a Travis account, activate own repository and trigger a build.</p></li>
+<li><p>AppVeyor is used to test the package in Windows. You need to activate
+AppVeyor for your own repository. Refer to the AppVeyor documentation.</p></li>
+<li><p>Circle CI is used to check if the documentation is generated properly. You
+need to activate Circle CI for your own repository. Refer to the Circle CI
+documentation.</p></li>
+<li><p>ReadTheDocs is used to build and host the documentation. You need to activate
+ReadTheDocs for your own repository. Refer to the ReadTheDocs documentation.</p></li>
+<li><p>CodeCov for tracking the code coverage of the package. You need to activate
+CodeCov for you own repository.</p></li>
+<li><p>PEP8Speaks for automatically checking the PEP8 compliance of your project for
+each Pull Request.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="publish-your-package">
+<h2>Publish your package<a class="headerlink" href="#publish-your-package" title="Permalink to this headline">¶</a></h2>
+<p>You can make your package available through <a class="reference external" href="https://packaging.python.org/tutorials/packaging-projects/">PyPi</a> and <a class="reference external" href="https://conda-forge.org/">conda-forge</a>. Refer to
+the associated documentation to be able to upload your packages such that
+it will be installable with <code class="docutils literal notranslate"><span class="pre">pip</span></code> and <code class="docutils literal notranslate"><span class="pre">conda</span></code>. Once published, it will
+be possible to install your package with the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install mne-foo
+$ conda install -c conda-forge mne-foo
+</pre></div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, SESAMEEG developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

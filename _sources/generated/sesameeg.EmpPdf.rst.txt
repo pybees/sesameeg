@@ -1,0 +1,13 @@
+:mod:`sesameeg`.EmpPdf
+=============================
+
+.. currentmodule:: sesameeg
+
+.. autoclass:: EmpPdf
+   :members:
+
+.. include:: sesameeg.EmpPdf.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

@@ -1,0 +1,13 @@
+:mod:`sesameeg`.Particle
+===============================
+
+.. currentmodule:: sesameeg
+
+.. autoclass:: Particle
+   :members:
+
+.. include:: sesameeg.Particle.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

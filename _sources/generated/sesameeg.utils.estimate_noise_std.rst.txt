@@ -1,0 +1,12 @@
+:mod:`sesameeg.utils`.estimate_noise_std
+=====================================================
+
+.. currentmodule:: sesameeg.utils
+
+.. autofunction:: estimate_noise_std
+
+.. include:: sesameeg.utils.estimate_noise_std.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

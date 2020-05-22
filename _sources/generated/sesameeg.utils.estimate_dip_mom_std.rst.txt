@@ -1,0 +1,12 @@
+:mod:`sesameeg.utils`.estimate_dip_mom_std
+=======================================================
+
+.. currentmodule:: sesameeg.utils
+
+.. autofunction:: estimate_dip_mom_std
+
+.. include:: sesameeg.utils.estimate_dip_mom_std.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

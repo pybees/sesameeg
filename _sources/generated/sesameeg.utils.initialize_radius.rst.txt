@@ -1,0 +1,12 @@
+:mod:`sesameeg.utils`.initialize_radius
+====================================================
+
+.. currentmodule:: sesameeg.utils
+
+.. autofunction:: initialize_radius
+
+.. include:: sesameeg.utils.initialize_radius.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

@@ -1,0 +1,13 @@
+:mod:`sesameeg`.Sesame
+=============================
+
+.. currentmodule:: sesameeg
+
+.. autoclass:: Sesame
+   :members:
+
+.. include:: sesameeg.Sesame.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

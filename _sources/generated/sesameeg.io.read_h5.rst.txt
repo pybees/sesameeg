@@ -1,0 +1,12 @@
+:mod:`sesameeg.io`.read_h5
+=======================================
+
+.. currentmodule:: sesameeg.io
+
+.. autofunction:: read_h5
+
+.. include:: sesameeg.io.read_h5.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

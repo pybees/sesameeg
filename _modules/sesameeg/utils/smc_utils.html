@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>sesameeg.utils.smc_utils &#8212; sesameeg 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          sesameeg</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../auto_examples/index.html">Examples</a></li>
+                <li><a href="../../../api.html">API</a></li>
+                <li><a href="../../../explanation_algorithm.html">Model</a></li>
+                <li><a href="https://github.com/pybees/sesameeg">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for sesameeg.utils.smc_utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot; Utility functions for the Sequential Monte Carlo algorithms.&quot;&quot;&quot;</span>
+<span class="c1"># Authors: Gianvittorio Luria &lt;luria@dima.unige.it&gt;</span>
+<span class="c1">#          Sara Sommariva &lt;sommariva@dima.unige.it&gt;</span>
+<span class="c1">#          Alberto Sorrentino &lt;sorrentino@dima.unige.it&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: BSD (3-clause)</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.special</span> <span class="k">as</span> <span class="nn">sps</span>
+<span class="kn">from</span> <span class="nn">mne.epochs</span> <span class="kn">import</span> <span class="n">Epochs</span><span class="p">,</span> <span class="n">EpochsArray</span>
+<span class="kn">from</span> <span class="nn">mne.evoked</span> <span class="kn">import</span> <span class="n">Evoked</span><span class="p">,</span> <span class="n">EvokedArray</span>
+<span class="kn">from</span> <span class="nn">mne.forward</span> <span class="kn">import</span> <span class="n">Forward</span>
+
+
+<div class="viewcode-block" id="compute_neighbours_matrix"><a class="viewcode-back" href="../../../generated/sesameeg.utils.compute_neighbours_matrix.html#sesameeg.utils.compute_neighbours_matrix">[docs]</a><span class="k">def</span> <span class="nf">compute_neighbours_matrix</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the set of neighbours of each point in the brain discretization.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    src :  :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)</span>
+<span class="sd">        The coordinates of the points in the brain discretization.</span>
+<span class="sd">    d_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)</span>
+<span class="sd">        The Euclidean distance between the points in the</span>
+<span class="sd">        brain discretization.</span>
+<span class="sd">    radius : :py:class:`~float`</span>
+<span class="sd">        The maximum distance between two neighbouring points.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    n_matrix : :py:class:`~numpy.ndarray` of :py:class:`~int`, shape (n_verts, n_neigh_max)</span>
+<span class="sd">        The sets of neighbours.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">n_max</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">n_min</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">reached_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">n_neigh</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">list_neigh</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">counter</span> <span class="o">&lt;</span> <span class="n">reached_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+           <span class="ow">and</span> <span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">reached_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">reached_points</span><span class="p">[</span><span class="n">counter</span><span class="p">]</span>
+        <span class="n">aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">d_matrix</span><span class="p">[</span><span class="n">P</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">radius</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">d_matrix</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">k</span><span class="p">]))</span>
+        <span class="n">n_neigh</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aux</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># Check the number of neighbours</span>
+        <span class="k">if</span> <span class="n">n_neigh</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">n_min</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Computation of neighbours aborted since &#39;</span>
+                             <span class="s1">&#39;their minimum number is too small.</span><span class="se">\n</span><span class="s1">&#39;</span>
+                             <span class="s1">&#39;Please choose a higher radius.&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">n_neigh</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">n_max</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Computation of neighbours aborted since&#39;</span>
+                             <span class="s1">&#39;their maximum number is too big.</span><span class="se">\n</span><span class="s1">&#39;</span>
+                             <span class="s1">&#39;Please choose a lower radius.&#39;</span><span class="p">)</span>
+        <span class="n">list_neigh</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aux</span><span class="p">)</span>
+        <span class="n">reached_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reached_points</span><span class="p">,</span>
+                                   <span class="n">aux</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">aux</span><span class="p">,</span> <span class="n">reached_points</span><span class="p">)])</span>
+        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">counter</span> <span class="o">&gt;=</span> <span class="n">reached_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Too small value of the radius:&#39;</span>
+                         <span class="s1">&#39;the neighbour-matrix is not connected&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">reached_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">while</span> <span class="n">counter</span> <span class="o">&lt;</span> <span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="n">reached_points</span><span class="p">[</span><span class="n">counter</span><span class="p">]</span>
+            <span class="n">aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">d_matrix</span><span class="p">[</span><span class="n">P</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">radius</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">d_matrix</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">k</span><span class="p">]))</span>
+            <span class="n">n_neigh</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aux</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">n_neigh</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">n_min</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Computation of neighbours aborted since &#39;</span>
+                                 <span class="s1">&#39;their minimum number is too small.</span><span class="se">\n</span><span class="s1">&#39;</span>
+                                 <span class="s1">&#39;Please choose a higher radius.&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">n_neigh</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">n_max</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Computation of neighbours aborted since&#39;</span>
+                                 <span class="s1">&#39;their maximum number is too big.</span><span class="se">\n</span><span class="s1">&#39;</span>
+                                 <span class="s1">&#39;Please choose a lower radius.&#39;</span><span class="p">)</span>
+
+            <span class="n">list_neigh</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aux</span><span class="p">)</span>
+            <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">n_neigh_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">n_neigh</span><span class="p">)</span>
+        <span class="n">n_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                          <span class="n">n_neigh_max</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">n_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">list_neigh</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">list_neigh</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">index_ord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">n_matrix</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">n_matrix</span> <span class="o">=</span> <span class="n">n_matrix</span><span class="p">[</span><span class="n">index_ord</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">n_matrix</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Some problems during&quot;</span>
+                           <span class="s2">&quot;computation of neighbours.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="compute_neighbours_probability_matrix"><a class="viewcode-back" href="../../../generated/sesameeg.utils.compute_neighbours_probability_matrix.html#sesameeg.utils.compute_neighbours_probability_matrix">[docs]</a><span class="k">def</span> <span class="nf">compute_neighbours_probability_matrix</span><span class="p">(</span><span class="n">n_matrix</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">sigma_neigh</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute neighbours&#39; probability matrix.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    n_matrix : :py:class:`~numpy.ndarray` of :py:class:`~int`, shape (n_verts, n_neigh_max)</span>
+<span class="sd">        The sets of neighbours.</span>
+<span class="sd">    src :  :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)</span>
+<span class="sd">        The coordinates of the points in the brain discretization.</span>
+<span class="sd">    d_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)</span>
+<span class="sd">        The Euclidean distance between the points in the</span>
+<span class="sd">        brain discretization.</span>
+<span class="sd">    sigma_neigh : :py:class:`~float`</span>
+<span class="sd">        The standard deviation of the Gaussian distribution that defines</span>
+<span class="sd">        the neighbours&#39; probability.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    np_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, n_neigh_max)</span>
+<span class="sd">        The neighbours&#39; probability.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">np_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">n_neig</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">n_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">np_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">n_neig</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">d_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">n_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">n_neig</span><span class="p">]]</span> <span class="o">**</span> <span class="mi">2</span>
+                   <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma_neigh</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">np_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np_matrix</span></div>
+
+
+<div class="viewcode-block" id="estimate_dip_mom_std"><a class="viewcode-back" href="../../../generated/sesameeg.utils.estimate_dip_mom_std.html#sesameeg.utils.estimate_dip_mom_std">[docs]</a><span class="k">def</span> <span class="nf">estimate_dip_mom_std</span><span class="p">(</span><span class="n">r_data</span><span class="p">,</span> <span class="n">lf</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Estimate the standard deviation of the prior of the dipole moment.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)</span>
+<span class="sd">        The real part of the data; n_sens is the number of sensors and</span>
+<span class="sd">        n_ist is the number of time-points or of frequencies.</span>
+<span class="sd">    lf : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)</span>
+<span class="sd">        The leadfield matrix.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    s_q : :py:class:`~float`</span>
+<span class="sd">        The estimated standard deviation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">s_q</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">r_data</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lf</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">s_q</span></div>
+
+
+<div class="viewcode-block" id="estimate_noise_std"><a class="viewcode-back" href="../../../generated/sesameeg.utils.estimate_noise_std.html#sesameeg.utils.estimate_noise_std">[docs]</a><span class="k">def</span> <span class="nf">estimate_noise_std</span><span class="p">(</span><span class="n">r_data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Estimate the standard deviation of noise distribution.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)</span>
+<span class="sd">        The real part of the data; n_sens is the number of sensors and</span>
+<span class="sd">        n_ist is the number of time-points or of frequencies.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    s_noise : :py:class:`~float`</span>
+<span class="sd">        The estimated standard deviation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">s_noise</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">r_data</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">s_noise</span></div>
+
+
+<span class="k">def</span> <span class="nf">gamma_pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Evaluates the Gamma pdf on a single point.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : :py:class:`~float`</span>
+<span class="sd">        The point where to evaluate the Gamma pdf</span>
+<span class="sd">    shape : :py:class:`~int`</span>
+<span class="sd">        The Gamma pdf shape parameter :math:`k`</span>
+<span class="sd">    scale : :py:class:`~float`</span>
+<span class="sd">        The Gamma pdf scale parameter :math:`\\theta`</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gamma_x : :py:class:`~float`</span>
+<span class="sd">        The Gamma pdf evaluated on x</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gamma_x</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="p">(</span><span class="n">shape</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="n">scale</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">sps</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span><span class="o">*</span><span class="n">scale</span><span class="o">**</span><span class="n">shape</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">gamma_x</span>
+
+
+<div class="viewcode-block" id="initialize_radius"><a class="viewcode-back" href="../../../generated/sesameeg.utils.initialize_radius.html#sesameeg.utils.initialize_radius">[docs]</a><span class="k">def</span> <span class="nf">initialize_radius</span><span class="p">(</span><span class="n">src</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Guess the units of the points in the brain discretization and</span>
+<span class="sd">    set to 1 cm the value of the radius for computing the sets of</span>
+<span class="sd">    neighbours.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    src :  :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)</span>
+<span class="sd">        The coordinates of the points in the brain discretization.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    radius : :py:class:`~float`</span>
+<span class="sd">        The value of the radius.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">x_length</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">src</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">src</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span>
+    <span class="n">y_length</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">src</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">src</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]))</span>
+    <span class="n">z_length</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">src</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">src</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]))</span>
+
+    <span class="n">max_length</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x_length</span><span class="p">,</span> <span class="n">y_length</span><span class="p">,</span> <span class="n">z_length</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">max_length</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">:</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="k">elif</span> <span class="n">max_length</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+    <span class="k">return</span> <span class="n">radius</span></div>
+
+
+<span class="k">def</span> <span class="nf">is_epochs</span><span class="p">(</span><span class="n">epch</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">epch</span><span class="p">,</span> <span class="p">(</span><span class="n">Epochs</span><span class="p">,</span> <span class="n">EpochsArray</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span> <span class="nf">is_evoked</span><span class="p">(</span><span class="n">evk</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">evk</span><span class="p">,</span> <span class="p">(</span><span class="n">Evoked</span><span class="p">,</span> <span class="n">EvokedArray</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span> <span class="nf">is_forward</span><span class="p">(</span><span class="n">fwd</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fwd</span><span class="p">,</span> <span class="n">Forward</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span> <span class="nf">sample_from_sphere</span><span class="p">():</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">z</span><span class="p">))</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+    <span class="n">out</span> <span class="o">*=</span> <span class="n">v</span>
+    <span class="n">out</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="k">def</span> <span class="nf">woodbury</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+    <span class="n">A_inv_diag</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">B_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">V</span> <span class="o">*</span> <span class="n">A_inv_diag</span><span class="p">)</span> <span class="o">@</span> <span class="n">U</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">A_inv_diag</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">A_inv_diag</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">U</span> <span class="o">@</span> <span class="n">B_inv</span> <span class="o">@</span> <span class="n">V</span> <span class="o">*</span> <span class="n">A_inv_diag</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, SESAMEEG developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

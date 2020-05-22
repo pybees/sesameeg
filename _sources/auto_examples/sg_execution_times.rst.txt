@@ -1,0 +1,16 @@
+
+:orphan:
+
+.. _sphx_glr_auto_examples_sg_execution_times:
+
+Computation times
+=================
+**09:24.368** total execution time for **auto_examples** files:
+
++-------------------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_auto_examples_plot_meg_simulated_sesame_frequency.py` (``plot_meg_simulated_sesame_frequency.py``) | 05:57.392 | 0.0 MB |
++-------------------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_auto_examples_plot_meg_auditory_sesame_volume.py` (``plot_meg_auditory_sesame_volume.py``)         | 02:16.031 | 0.0 MB |
++-------------------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_auto_examples_plot_analyse_sample_auditory.py` (``plot_analyse_sample_auditory.py``)               | 01:10.946 | 0.0 MB |
++-------------------------------------------------------------------------------------------------------------------+-----------+--------+

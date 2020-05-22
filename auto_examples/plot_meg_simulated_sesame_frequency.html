@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Compute SESAME inverse solution on simulated data in the frequency domain &#8212; sesameeg 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Python API Reference" href="../api.html" />
+    <link rel="prev" title="Compute SESAME inverse solution on evoked data in volume source space" href="plot_meg_auditory_sesame_volume.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          sesameeg</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="index.html">Examples</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../explanation_algorithm.html">Model</a></li>
+                <li><a href="https://github.com/pybees/sesameeg">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-meg-simulated-sesame-frequency-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="compute-sesame-inverse-solution-on-simulated-data-in-the-frequency-domain">
+<span id="sphx-glr-auto-examples-plot-meg-simulated-sesame-frequency-py"></span><h1>Compute SESAME inverse solution on simulated data in the frequency domain<a class="headerlink" href="#compute-sesame-inverse-solution-on-simulated-data-in-the-frequency-domain" title="Permalink to this headline">¶</a></h1>
+<p>In the present example we shall devise a synthetic scenario in which
+two dipolar sources are active in the cortex. The source time courses
+are 10 Hz sinusoids, each modulated by a Gaussian. Simulated MEG recordings
+are then corrupted by empty room noise.</p>
+<p>We shall use SESAME in the frequency domain <a class="footnote-reference brackets" href="#id2" id="id1">1</a> and see if we can find our two
+simulated sources.</p>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<dl class="footnote brackets">
+<dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>G. Luria et al.,  <a class="reference external" href="https://doi.org/10.1016/j.jneumeth.2018.11.007">Bayesian multi-dipole modelling in the frequency
+domain</a>. J. Neurosci.
+Meth., 312 (2019) 27–36</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Author: Gianvittorio Luria &lt;luria@dima.unige.it&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: BSD (3-clause)</span>
+
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">op</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">welch</span><span class="p">,</span> <span class="n">coherence</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">mayavi</span> <span class="kn">import</span> <span class="n">mlab</span>
+
+<span class="kn">import</span> <span class="nn">mne</span>
+<span class="kn">from</span> <span class="nn">mne.datasets</span> <span class="kn">import</span> <span class="n">sample</span>
+<span class="kn">from</span> <span class="nn">mne.label</span> <span class="kn">import</span> <span class="n">_n_colors</span>
+
+<span class="kn">from</span> <span class="nn">sesameeg</span> <span class="kn">import</span> <a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="View documentation for sesameeg.Sesame"><span class="n">Sesame</span></a>
+
+
+<span class="c1"># We use the MEG and MRI setup from the MNE-Python</span>
+<span class="c1"># sample dataset</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">data_path</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.datasets.sample.data_path.html#mne.datasets.sample.data_path" title="View documentation for mne.datasets.sample.data_path"><span class="n">sample</span><span class="o">.</span><span class="n">data_path</span></a><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">subjects_dir</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="View documentation for os.path.join"><span class="n">op</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">data_path</span></a><span class="p">,</span> <span class="s1">&#39;subjects&#39;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">subject</span></a> <span class="o">=</span> <span class="s1">&#39;sample&#39;</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">meg_path</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="View documentation for os.path.join"><span class="n">op</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">data_path</span></a><span class="p">,</span> <span class="s1">&#39;MEG&#39;</span><span class="p">,</span> <span class="s1">&#39;sample&#39;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">raw_fname</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="View documentation for os.path.join"><span class="n">op</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">meg_path</span></a><span class="p">,</span> <span class="s1">&#39;sample_audvis_raw.fif&#39;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">fwd_fname</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="View documentation for os.path.join"><span class="n">op</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">meg_path</span></a><span class="p">,</span> <span class="s1">&#39;sample_audvis-meg-eeg-oct-6-fwd.fif&#39;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">erm_fname</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="View documentation for os.path.join"><span class="n">op</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">meg_path</span></a><span class="p">,</span> <span class="s1">&#39;ernoise_raw.fif&#39;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">erm_cov_fname</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="View documentation for os.path.join"><span class="n">op</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">meg_path</span></a><span class="p">,</span> <span class="s1">&#39;ernoise-cov.fif&#39;</span><span class="p">)</span>
+
+<span class="c1"># Seed for the random number generator</span>
+<span class="n">rand</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Load the info, the forward solution and the noise covariance
+The forward solution also defines the employed brain discretization.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="View documentation for mne.Info"><span class="n">info</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.io.read_info.html#mne.io.read_info" title="View documentation for mne.io.read_info"><span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_info</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">raw_fname</span></a><span class="p">)</span>
+<a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="View documentation for mne.Forward"><span class="n">fwd</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.read_forward_solution.html#mne.read_forward_solution" title="View documentation for mne.read_forward_solution"><span class="n">mne</span><span class="o">.</span><span class="n">read_forward_solution</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">fwd_fname</span></a><span class="p">)</span>
+<a href="https://mne.tools/stable/generated/mne.Covariance.html#mne.Covariance" title="View documentation for mne.Covariance"><span class="n">noise_cov</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.read_cov.html#mne.read_cov" title="View documentation for mne.read_cov"><span class="n">mne</span><span class="o">.</span><span class="n">read_cov</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">erm_cov_fname</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>    Read a total of 3 projection items:
+        PCA-v1 (1 x 102)  idle
+        PCA-v2 (1 x 102)  idle
+        PCA-v3 (1 x 102)  idle
+Reading forward solution from /home/sara/mne_data/MNE-sample-data/MEG/sample/sample_audvis-meg-eeg-oct-6-fwd.fif...
+    Reading a source space...
+    Computing patch statistics...
+    Patch information added...
+    Distance information added...
+    [done]
+    Reading a source space...
+    Computing patch statistics...
+    Patch information added...
+    Distance information added...
+    [done]
+    2 source spaces read
+    Desired named matrix (kind = 3523) not available
+    Read MEG forward solution (7498 sources, 306 channels, free orientations)
+    Desired named matrix (kind = 3523) not available
+    Read EEG forward solution (7498 sources, 60 channels, free orientations)
+    MEG and EEG forward solutions combined
+    Source spaces transformed to the forward solution coordinate frame
+    306 x 306 full covariance (kind = 1) found.
+    Read a total of 3 projection items:
+        PCA-v1 (1 x 102) active
+        PCA-v2 (1 x 102) active
+        PCA-v3 (1 x 102) active
+</pre></div>
+</div>
+<p>In this example, to save computation time, we shall only simulate gradiometer
+data. You can try simulating other types of sensors as well.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">picks</span> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.pick_types.html#mne.pick_types" title="View documentation for mne.pick_types"><span class="n">mne</span><span class="o">.</span><span class="n">pick_types</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="View documentation for mne.Info"><span class="n">info</span></a><span class="p">,</span> <span class="n">meg</span><span class="o">=</span><span class="s1">&#39;grad&#39;</span><span class="p">,</span> <span class="n">stim</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="s1">&#39;bads&#39;</span><span class="p">)</span>
+<a href="https://mne.tools/stable/generated/mne.pick_info.html#mne.pick_info" title="View documentation for mne.pick_info"><span class="n">mne</span><span class="o">.</span><span class="n">pick_info</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="View documentation for mne.Info"><span class="n">info</span></a><span class="p">,</span> <span class="n">picks</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="View documentation for mne.Forward"><span class="n">fwd</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.pick_channels_forward.html#mne.pick_channels_forward" title="View documentation for mne.pick_channels_forward"><span class="n">mne</span><span class="o">.</span><span class="n">pick_channels_forward</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="View documentation for mne.Forward"><span class="n">fwd</span></a><span class="p">,</span> <span class="n">include</span><span class="o">=</span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="View documentation for mne.Info"><span class="n">info</span></a><span class="p">[</span><span class="s1">&#39;ch_names&#39;</span><span class="p">])</span>
+<a href="https://mne.tools/stable/generated/mne.Covariance.html#mne.Covariance" title="View documentation for mne.Covariance"><span class="n">noise_cov</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.pick_channels_cov.html#mne.pick_channels_cov" title="View documentation for mne.pick_channels_cov"><span class="n">mne</span><span class="o">.</span><span class="n">pick_channels_cov</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Covariance.html#mne.Covariance" title="View documentation for mne.Covariance"><span class="n">noise_cov</span></a><span class="p">,</span> <span class="n">include</span><span class="o">=</span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="View documentation for mne.Info"><span class="n">info</span></a><span class="p">[</span><span class="s1">&#39;ch_names&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>203 out of 366 channels remain after picking
+</pre></div>
+</div>
+</div>
+<div class="section" id="data-simulation">
+<h2>Data simulation<a class="headerlink" href="#data-simulation" title="Permalink to this headline">¶</a></h2>
+<p>The following function generates a timeseries that contains an oscillator,
+modulated by a Gaussian. The frequency of the oscillator fluctuates a little
+over time, but stays close to 10 Hz.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gen_signal</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">base_freq</span><span class="p">,</span> <span class="n">rand</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_rand</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">std_rand</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">g_sigma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">g_mu_shift</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate an oscillating signal with a Gaussian envelope.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    times : array</span>
+<span class="sd">        Times</span>
+<span class="sd">    base_freq : float</span>
+<span class="sd">        Base frequency of the oscillators in Hertz</span>
+<span class="sd">    t_rand : float</span>
+<span class="sd">        Variation in the instantaneous frequency of the signal</span>
+<span class="sd">    std_rand : float</span>
+<span class="sd">        Std-dev of the random fluctuations added to the signal</span>
+<span class="sd">    g_sigma : float</span>
+<span class="sd">        Standard deviation of the enveloping Gaussian</span>
+<span class="sd">    g_mu_shift: float</span>
+<span class="sd">        Shift (in seconds) of the mean of the enveloping Gaussian with respect to the</span>
+<span class="sd">        middle of the time window</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    signal : ndarray</span>
+<span class="sd">        The generated signal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">n_times</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+
+    <span class="n">mu_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">times</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">mu_shift</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">g_mu_shift</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#float" title="View documentation for builtins.float"><span class="n">sfreq</span></a><span class="p">)</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">mu_0</span> <span class="o">+</span> <span class="n">mu_shift</span><span class="p">)</span> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="View documentation for builtins.float"><span class="n">sfreq</span></a>
+    <span class="n">gauss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">times</span> <span class="o">-</span> <span class="n">mu</span><span class="p">,</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">g_sigma</span><span class="p">,</span> <span class="mf">2.</span><span class="p">)))</span>
+
+    <span class="k">if</span> <span class="n">rand</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Generate an oscillator with varying frequency and phase lag.</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">base_freq</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_times</span><span class="p">)</span> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="View documentation for builtins.float"><span class="n">sfreq</span></a> <span class="o">+</span>
+                                       <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">t_rand</span> <span class="o">*</span> <span class="n">rand</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_times</span><span class="p">))))</span>
+
+        <span class="c1"># Add some random fluctuations to the signal.</span>
+        <span class="n">signal</span> <span class="o">+=</span> <span class="n">std_rand</span> <span class="o">*</span> <span class="n">rand</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_times</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">base_freq</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_times</span><span class="p">)</span> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="View documentation for builtins.float"><span class="n">sfreq</span></a> <span class="o">+</span>
+                                       <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">t_rand</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_times</span><span class="p">))))</span>
+        <span class="n">signal</span> <span class="o">+=</span> <span class="n">std_rand</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_times</span><span class="p">)</span>
+
+    <span class="c1"># Scale the signal to be in the right order of magnitude (~100 nAm)</span>
+    <span class="c1"># for MEG data.</span>
+    <span class="n">signal</span> <span class="o">*=</span> <span class="mf">100e-9</span> <span class="o">*</span> <span class="n">gauss</span>
+
+    <span class="k">return</span> <span class="n">signal</span>
+</pre></div>
+</div>
+<p>We now simulate two timeseries and plot some basic information about them.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="View documentation for builtins.float"><span class="n">sfreq</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="View documentation for mne.Info"><span class="n">info</span></a><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="View documentation for builtins.int"><span class="n">n_sample</span></a> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="mf">5.</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#float" title="View documentation for builtins.float"><span class="n">sfreq</span></a><span class="p">))</span>
+<span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="View documentation for builtins.int"><span class="n">n_sample</span></a><span class="p">)</span> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="View documentation for builtins.float"><span class="n">sfreq</span></a>
+<span class="n">signal1</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#object" title="View documentation for builtins.object"><span class="n">gen_signal</span></a><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="n">g_sigma</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">g_mu_shift</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">signal2</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#object" title="View documentation for builtins.object"><span class="n">gen_signal</span></a><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="n">g_sigma</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">g_mu_shift</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">signal1</span><span class="p">,</span> <span class="n">signal2</span><span class="p">))</span>
+
+<a href="https://matplotlib.org/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="View documentation for matplotlib.figure.Figure"><span class="n">fig</span></a><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="View documentation for matplotlib.pyplot.subplots"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="c1"># Plot the timeseries</span>
+<a href="https://matplotlib.org/api/_as_gen/matplotlib.axes.SubplotBase.html#matplotlib.axes.SubplotBase" title="View documentation for matplotlib.axes.SubplotBase"><span class="n">ax</span></a> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<a href="https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.plot.html#matplotlib.axes.Axes.plot" title="View documentation for matplotlib.axes.Axes.plot"><span class="n">ax</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="mf">1e9</span> <span class="o">*</span> <span class="n">signal1</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<a href="https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.set.html#matplotlib.axes.Axes.set" title="View documentation for matplotlib.axes.Axes.set"><span class="n">ax</span><span class="o">.</span><span class="n">set</span></a><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">times</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Amplitude (Am)&#39;</span><span class="p">,</span>
+       <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Signal 1&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/api/_as_gen/matplotlib.axes.SubplotBase.html#matplotlib.axes.SubplotBase" title="View documentation for matplotlib.axes.SubplotBase"><span class="n">ax</span></a> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+<a href="https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.plot.html#matplotlib.axes.Axes.plot" title="View documentation for matplotlib.axes.Axes.plot"><span class="n">ax</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="mf">1e9</span> <span class="o">*</span> <span class="n">signal2</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.set.html#matplotlib.axes.Axes.set" title="View documentation for matplotlib.axes.Axes.set"><span class="n">ax</span><span class="o">.</span><span class="n">set</span></a><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">times</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Signal 2&#39;</span><span class="p">)</span>
+
+<span class="c1"># Power spectrum of the first timeseries</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">welch</span><span class="p">(</span><span class="n">signal1</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#float" title="View documentation for builtins.float"><span class="n">sfreq</span></a><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">nfft</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<a href="https://matplotlib.org/api/_as_gen/matplotlib.axes.SubplotBase.html#matplotlib.axes.SubplotBase" title="View documentation for matplotlib.axes.SubplotBase"><span class="n">ax</span></a> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># Only plot the first 100 frequencies</span>
+<a href="https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.plot.html#matplotlib.axes.Axes.plot" title="View documentation for matplotlib.axes.Axes.plot"><span class="n">ax</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="n">f</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">p</span><span class="p">[:</span><span class="mi">100</span><span class="p">]),</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<a href="https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.set.html#matplotlib.axes.Axes.set" title="View documentation for matplotlib.axes.Axes.set"><span class="n">ax</span><span class="o">.</span><span class="n">set</span></a><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">f</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">99</span><span class="p">]],</span>
+       <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Power (dB)&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Power spectrum of signal 1&#39;</span><span class="p">)</span>
+
+<span class="c1"># Compute the coherence between the two timeseries</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">coh</span> <span class="o">=</span> <span class="n">coherence</span><span class="p">(</span><span class="n">signal1</span><span class="p">,</span> <span class="n">signal2</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#float" title="View documentation for builtins.float"><span class="n">sfreq</span></a><span class="p">,</span> <span class="n">nperseg</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">noverlap</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+<a href="https://matplotlib.org/api/_as_gen/matplotlib.axes.SubplotBase.html#matplotlib.axes.SubplotBase" title="View documentation for matplotlib.axes.SubplotBase"><span class="n">ax</span></a> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+<a href="https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.plot.html#matplotlib.axes.Axes.plot" title="View documentation for matplotlib.axes.Axes.plot"><span class="n">ax</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="n">f</span><span class="p">[:</span><span class="mi">50</span><span class="p">],</span> <span class="n">coh</span><span class="p">[:</span><span class="mi">50</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<a href="https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.set.html#matplotlib.axes.Axes.set" title="View documentation for matplotlib.axes.Axes.set"><span class="n">ax</span><span class="o">.</span><span class="n">set</span></a><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">f</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">49</span><span class="p">]],</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Coherence&#39;</span><span class="p">,</span>
+       <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Coherence between the timeseries&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure.tight_layout" title="View documentation for matplotlib.figure.Figure.tight_layout"><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/sphx_glr_plot_meg_simulated_sesame_frequency_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_meg_simulated_sesame_frequency_001.png" />
+<p>Now we put the signals at two locations on the cortex. To do so, we construct
+a <a class="reference external" href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="(in MNE v0.20.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">mne.SourceEstimate</span></code></a> object to store them in.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># The locations on the cortex where the signal will originate from are</span>
+<span class="c1"># indicated as source space grid points indices.</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="View documentation for builtins.list"><span class="n">vertices</span></a> <span class="o">=</span> <span class="p">[[</span><span class="mi">146374</span><span class="p">],</span> <span class="p">[</span><span class="mi">33830</span><span class="p">]]</span>
+<span class="n">vertno</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="View documentation for mne.Forward"><span class="n">fwd</span></a><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;vertno&#39;</span><span class="p">],</span> <a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="View documentation for mne.Forward"><span class="n">fwd</span></a><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;vertno&#39;</span><span class="p">]])</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="View documentation for builtins.list"><span class="n">true_locs</span></a> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+<span class="k">for</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="View documentation for builtins.list"><span class="n">v</span></a> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="View documentation for builtins.list"><span class="n">vertices</span></a><span class="p">:</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="View documentation for builtins.list"><span class="n">true_locs</span></a><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">vertno</span> <span class="o">==</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="View documentation for builtins.list"><span class="n">v</span></a><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Construct SourceEstimates that describe the signals at the cortical level.</span>
+<a href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="View documentation for mne.SourceEstimate"><span class="n">stc_signal</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="View documentation for mne.SourceEstimate"><span class="n">mne</span><span class="o">.</span><span class="n">SourceEstimate</span></a><span class="p">(</span><span class="n">q</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="View documentation for builtins.list"><span class="n">vertices</span></a><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tstep</span><span class="o">=</span><span class="mf">1.</span> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="View documentation for builtins.float"><span class="n">sfreq</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">subject</span></a><span class="o">=</span><span class="s1">&#39;sample&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we run the signal through the forward model to obtain simulated sensor
+data. We then corrupt the resulting simulated gradiometer recordings
+by empty room noise.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray" title="View documentation for mne.EvokedArray"><span class="n">evoked</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.apply_forward.html#mne.apply_forward" title="View documentation for mne.apply_forward"><span class="n">mne</span><span class="o">.</span><span class="n">apply_forward</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="View documentation for mne.Forward"><span class="n">fwd</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="View documentation for mne.SourceEstimate"><span class="n">stc_signal</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="View documentation for mne.Info"><span class="n">info</span></a><span class="p">)</span>
+<a href="https://mne.tools/stable/generated/mne.simulation.add_noise.html#mne.simulation.add_noise" title="View documentation for mne.simulation.add_noise"><span class="n">mne</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">add_noise</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray" title="View documentation for mne.EvokedArray"><span class="n">evoked</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.Covariance.html#mne.Covariance" title="View documentation for mne.Covariance"><span class="n">noise_cov</span></a><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rand</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>    Average patch normals will be employed in the rotation to the local surface coordinates....
+    Converting to surface-based source orientations...
+    [done]
+/home/sara/Documenti/sesameeg/examples/plot_meg_simulated_sesame_frequency.py:182: RuntimeWarning: The maximum current magnitude is 132.9 nAm, which is very large. Are you trying to apply the forward model to noise-normalized (dSPM, sLORETA, or eLORETA) values? The result will only be correct if currents (in units of Am) are used.
+  evoked = mne.apply_forward(fwd, stc_signal, info)
+Projecting source estimate to sensor space...
+[done]
+Adding noise to 203/203 channels (203 channels in cov)
+
+&lt;Evoked  |  &#39;&#39; (average, N=1), [0, 4.9982] sec, 203 ch, ~8.0 MB&gt;
+</pre></div>
+</div>
+<p>Visualize the data</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.plot" title="View documentation for mne.EvokedArray.plot"><span class="n">evoked</span><span class="o">.</span><span class="n">plot</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/sphx_glr_plot_meg_simulated_sesame_frequency_002.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_meg_simulated_sesame_frequency_002.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 640x300 with 1 Axes&gt;
+</pre></div>
+</div>
+<p>Define the parameters and apply SESAME. We convert the data to the frequency
+domain by setting <code class="docutils literal notranslate"><span class="pre">Fourier_transf=True</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#int" title="View documentation for builtins.int"><span class="n">n_parts</span></a> <span class="o">=</span> <span class="mi">100</span>
+<a href="https://docs.python.org/3/library/functions.html#object" title="View documentation for builtins.object"><span class="n">noise_std</span></a> <span class="o">=</span> <span class="kc">None</span>
+<a href="https://docs.python.org/3/library/functions.html#object" title="View documentation for builtins.object"><span class="n">dip_mom_std</span></a> <span class="o">=</span> <span class="kc">None</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="View documentation for builtins.float"><span class="n">freq_min</span></a> <span class="o">=</span> <span class="mf">9.5</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="View documentation for builtins.float"><span class="n">freq_max</span></a> <span class="o">=</span> <span class="mf">10.5</span>
+
+<a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="View documentation for sesameeg.Sesame"><span class="n">_sesame</span></a> <span class="o">=</span> <a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="View documentation for sesameeg.Sesame"><span class="n">Sesame</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="View documentation for mne.Forward"><span class="n">fwd</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray" title="View documentation for mne.EvokedArray"><span class="n">evoked</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="View documentation for builtins.int"><span class="n">n_parts</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="View documentation for builtins.int"><span class="n">n_parts</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#object" title="View documentation for builtins.object"><span class="n">noise_std</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#object" title="View documentation for builtins.object"><span class="n">noise_std</span></a><span class="p">,</span>
+                 <span class="n">top_min</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#float" title="View documentation for builtins.float"><span class="n">freq_min</span></a><span class="p">,</span> <span class="n">top_max</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#float" title="View documentation for builtins.float"><span class="n">freq_max</span></a><span class="p">,</span>  <a href="https://docs.python.org/3/library/functions.html#object" title="View documentation for builtins.object"><span class="n">dip_mom_std</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#object" title="View documentation for builtins.object"><span class="n">dip_mom_std</span></a><span class="p">,</span>
+                 <span class="n">hyper_q</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">Fourier_transf</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="View documentation for sesameeg.Sesame"><span class="n">_sesame</span></a><span class="o">.</span><span class="n">apply_sesame</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    Estimated number of sources: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="View documentation for sesameeg.Sesame"><span class="n">_sesame</span></a><span class="o">.</span><span class="n">est_n_dips</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    Estimated source locations: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="View documentation for sesameeg.Sesame"><span class="n">_sesame</span></a><span class="o">.</span><span class="n">est_locs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    True source locations: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="View documentation for builtins.list"><span class="n">true_locs</span></a><span class="p">))</span>
+
+<span class="c1"># Compute goodness of fit</span>
+<span class="n">gof</span> <span class="o">=</span> <a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="View documentation for sesameeg.Sesame"><span class="n">_sesame</span></a><span class="o">.</span><span class="n">goodness_of_fit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    Goodness of fit with the recorded data: </span><span class="si">{0}</span><span class="s1">%&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">gof</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">))</span>
+
+<span class="c1"># Compute source dispersion</span>
+<span class="n">sd</span> <span class="o">=</span> <a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="View documentation for sesameeg.Sesame"><span class="n">_sesame</span></a><span class="o">.</span><span class="n">source_dispersion</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    Source Dispersion: </span><span class="si">{0}</span><span class="s1"> mm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">sd</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Computing inverse operator with 203 channels.
+    203 out of 203 channels remain after picking
+Computing neighbours matrix...[done]
+Computing neighbours probabilities...[done]
+Data have been converted to the frequency domain.
+Analyzing data from 9.6002 Hz to 10.4003 Hz
+Estimating dipole moment std...[done]
+ Estimated dipole moment std: 2.1324e-05
+Sampling hyperprior for dipole moment std.
+Estimating noise std...[done]
+ Estimated noise std: 2.6368e-09
+Computing inverse solution. This will take a while...
+Estimated dipole strength variance: 9.2037343747418e-06
+[done]
+    Estimated number of sources: 2
+    Estimated source locations: [4367 3554]
+    True source locations: [3554, 4367]
+    Goodness of fit with the recorded data: 92.41%
+    Source Dispersion: 1.4 mm
+</pre></div>
+</div>
+<p>Visualize the posterior map of the dipoles’ location
+<img class="math" src="../_images/math/80c0f146b8c13abbdb5ff40566e1089f7ea5f116.png" alt="p(r| \textbf{y}, 2)"/> and the estimated sources on the inflated brain.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">est_n_dips</span> <span class="o">=</span> <a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="View documentation for sesameeg.Sesame"><span class="n">_sesame</span></a><span class="o">.</span><span class="n">est_n_dips</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">est_locs</span> <span class="o">=</span> <a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="View documentation for sesameeg.Sesame"><span class="n">_sesame</span></a><span class="o">.</span><span class="n">est_locs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">_n_colors</span><span class="p">(</span><span class="n">est_n_dips</span><span class="p">)</span>
+<a href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="View documentation for mne.SourceEstimate"><span class="n">stc</span></a> <span class="o">=</span> <a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="View documentation for sesameeg.Sesame"><span class="n">_sesame</span></a><span class="o">.</span><span class="n">compute_stc</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">subject</span></a><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="View documentation for builtins.dict"><span class="n">clim</span></a> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="n">lims</span><span class="o">=</span><span class="p">[</span><span class="mf">1e-4</span><span class="p">,</span> <span class="mf">1e-1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">brain</span> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate.plot" title="View documentation for mne.SourceEstimate.plot"><span class="n">stc</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">subject</span></a><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="n">hemi</span><span class="o">=</span><span class="s1">&#39;split&#39;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="View documentation for builtins.dict"><span class="n">clim</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="View documentation for builtins.dict"><span class="n">clim</span></a><span class="p">,</span>
+                 <span class="n">time_label</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">subjects_dir</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="View documentation for builtins.str"><span class="n">subjects_dir</span></a><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="View documentation for builtins.int"><span class="n">nv_lh</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="View documentation for mne.SourceEstimate"><span class="n">stc</span></a><span class="o">.</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="View documentation for builtins.list"><span class="n">vertices</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="View documentation for builtins.int"><span class="n">idx</span></a><span class="p">,</span> <span class="n">loc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">est_locs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">loc</span> <span class="o">&lt;</span> <a href="https://docs.python.org/3/library/functions.html#int" title="View documentation for builtins.int"><span class="n">nv_lh</span></a><span class="p">:</span>
+        <span class="n">brain</span><span class="o">.</span><span class="n">add_foci</span><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="View documentation for mne.SourceEstimate"><span class="n">stc</span></a><span class="o">.</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="View documentation for builtins.list"><span class="n">vertices</span></a><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">loc</span><span class="p">],</span> <span class="n">coords_as_verts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                       <span class="n">hemi</span><span class="o">=</span><span class="s1">&#39;lh&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="View documentation for builtins.int"><span class="n">idx</span></a><span class="p">],</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">brain</span><span class="o">.</span><span class="n">add_foci</span><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="View documentation for mne.SourceEstimate"><span class="n">stc</span></a><span class="o">.</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="View documentation for builtins.list"><span class="n">vertices</span></a><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">loc</span><span class="o">-</span><a href="https://docs.python.org/3/library/functions.html#int" title="View documentation for builtins.int"><span class="n">nv_lh</span></a><span class="p">],</span> <span class="n">coords_as_verts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                       <span class="n">hemi</span><span class="o">=</span><span class="s1">&#39;rh&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="View documentation for builtins.int"><span class="n">idx</span></a><span class="p">],</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">mlab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img alt="../_images/sphx_glr_plot_meg_simulated_sesame_frequency_003.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_meg_simulated_sesame_frequency_003.png" />
+</li>
+<li><img alt="../_images/sphx_glr_plot_meg_simulated_sesame_frequency_004.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_meg_simulated_sesame_frequency_004.png" />
+</li>
+</ul>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Surface stc computed.
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 5 minutes  57.392 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-meg-simulated-sesame-frequency-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/4b5fb72ce610abfe1ce0e0bf494dd270/plot_meg_simulated_sesame_frequency.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_meg_simulated_sesame_frequency.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/ed46595229ec57d2573ed7f004941de9/plot_meg_simulated_sesame_frequency.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_meg_simulated_sesame_frequency.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, SESAMEEG developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

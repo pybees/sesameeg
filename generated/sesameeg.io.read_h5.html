@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>sesameeg.io.read_h5 &#8212; sesameeg 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Mathematical model" href="../explanation_algorithm.html" />
+    <link rel="prev" title="sesameeg.utils.initialize_radius" href="sesameeg.utils.initialize_radius.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          sesameeg</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../auto_examples/index.html">Examples</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../explanation_algorithm.html">Model</a></li>
+                <li><a href="https://github.com/pybees/sesameeg">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="section" id="sesameeg-io-read-h5">
+<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">sesameeg.io</span></code>.read_h5<a class="headerlink" href="#sesameeg-io-read-h5" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="sesameeg.io.read_h5">
+<code class="sig-prename descclassname">sesameeg.io.</code><code class="sig-name descname">read_h5</code><span class="sig-paren">(</span><em class="sig-param">fpath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/io/io.html#read_h5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sesameeg.io.read_h5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load SESAME result from an HDF5 file.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>fpath</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Path and filename of the .h5 file containing the result.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt><strong>res</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>A Python dictionary containing the result</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The keys of the returned dictionary are the following:</p>
+<ul>
+<li><dl>
+<dt>ch_names<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | ‘Not available.’</span></dt><dd><p>The channel names</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>cov_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the noise covariance.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>data_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the data.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>est_locs<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | ‘Not available.’</span></dt><dd><p>The source space grid points indices in which a source is estimated.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>est_n_dips<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | ‘Not available.’</span></dt><dd><p>The estimated number of dipoles.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>est_dip_moms<span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> , shape (est_n_dips[-1], n_ist, 3) | ‘Not available.’</span></dt><dd><p>The moment time courses of the dipoles estimated in the last iteration of SESAME.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>est_dip_mom_std<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, shape (n_iterations, ) | ‘Not available.’</span></dt><dd><p>Estimated values of the parameter <code class="docutils literal notranslate"><span class="pre">dip_mom_std</span></code>. Each array in the list corresponds to a single particle.
+This only applies if <code class="docutils literal notranslate"><span class="pre">hyper_q=True</span></code> has been selected when instantiating <a class="reference internal" href="sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sesame</span></code></a>.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>exponents<span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> | ‘Not available.’</span></dt><dd><p>Array whose entries represent points in the space of artificial
+distributions. It is used to keep track of the path followed
+by SESAME.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>final_dip_mom_std<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | ‘Not available.’</span></dt><dd><p>The weighted average of the last estimated value of <code class="docutils literal notranslate"><span class="pre">dip_mom_std</span></code> in each particle.
+This only applies if <code class="docutils literal notranslate"><span class="pre">hyper_q=True</span></code> has been selected when instantiating <a class="reference internal" href="sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sesame</span></code></a>.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>fmax<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The last frequency (in Hertz) of the frequency band in which data have been analyzed.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>fmin<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The first frequency (in Hertz) of the frequency band in which data have been analyzed.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>fwd_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the forward model.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>lambda<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The parameter of the Poisson prior pdf on the number of dipoles.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>lf_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the lead field.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>max_n_dips<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The maximum number of dipoles allowed in each particle.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>model_sel<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The model selection, i.e. the posterior distribution on the number
+of dipoles.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>prob_map<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (est_n_dips, n_verts)</span></dt><dd><p>Posterior probability map</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>noise_std<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the noise distribution.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>dip_mom_std<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the prior pdf on the dipole moment.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>src_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the source space grid.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>subject<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>The subject name.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>subject_viz<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>The name of the subject’s FreeSurfer folder.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>tmax<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The last instant (in seconds) of the time window in which data have been analyzed.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>tmin<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The first instant (in seconds) of the time window in which data have been analyzed.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Depending on the value of the <code class="docutils literal notranslate"><span class="pre">estimate_all</span></code> parameter used in the call of the
+<a class="reference internal" href="sesameeg.Sesame.html#sesameeg.Sesame.apply_sesame" title="sesameeg.Sesame.apply_sesame"><code class="xref py py-meth docutils literal notranslate"><span class="pre">apply_sesame()</span></code></a> method, the list returned in the fields
+<code class="docutils literal notranslate"><span class="pre">est_locs</span></code>, <code class="docutils literal notranslate"><span class="pre">est_n_dips</span></code> and <code class="docutils literal notranslate"><span class="pre">prob_map</span></code> may contain either
+the corresponding quantity estimated at each iteration or only those estimated at the last iteration.</p>
+</div>
+</dd></dl>
+
+<div style='clear:both'></div></div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, SESAMEEG developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

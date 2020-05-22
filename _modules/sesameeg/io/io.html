@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>sesameeg.io.io &#8212; sesameeg 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          sesameeg</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../auto_examples/index.html">Examples</a></li>
+                <li><a href="../../../api.html">API</a></li>
+                <li><a href="../../../explanation_algorithm.html">Model</a></li>
+                <li><a href="https://github.com/pybees/sesameeg">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for sesameeg.io.io</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">SourceEstimate</span><span class="p">,</span> <span class="n">VolSourceEstimate</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">_check_h5_installed</span><span class="p">,</span> <span class="n">_check_pickle_installed</span>
+
+
+<span class="k">def</span> <span class="nf">_export_to_stc</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="s1">&#39;pmap&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Run the inversion algorithm first!!&#39;</span><span class="p">)</span>
+
+    <span class="n">pmaps</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">pmap</span>
+    <span class="n">fwd</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span>
+    <span class="n">est_n_dips</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">est_n_dips</span>
+    <span class="n">vertno</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;vertno&#39;</span><span class="p">],</span> <span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;vertno&#39;</span><span class="p">]]</span>
+    <span class="n">nv_tot</span> <span class="o">=</span> <span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;nsource&#39;</span><span class="p">]</span>
+
+    <span class="n">pmap_tot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">pmaps</span><span class="p">),</span> <span class="n">nv_tot</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">it</span><span class="p">,</span> <span class="n">bl</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pmaps</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">est_n_dips</span><span class="p">[</span><span class="n">it</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">pmap_tot</span><span class="p">[</span><span class="n">it</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">bl</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">tmin</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">stc</span> <span class="o">=</span> <span class="n">SourceEstimate</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">pmap_tot</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="n">vertno</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span>
+                         <span class="n">tstep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">stc</span>
+
+
+<span class="k">def</span> <span class="nf">_export_to_vol_stc</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="s1">&#39;pmap&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Run the inversion algorithm first!!&#39;</span><span class="p">)</span>
+
+    <span class="n">pmaps</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">pmap</span>
+    <span class="n">est_n_dips</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">est_n_dips</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">vertno</span> <span class="o">=</span> <span class="p">[</span><span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;vertno&#39;</span><span class="p">],</span>
+                  <span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;vertno&#39;</span><span class="p">]]</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">vertno</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;vertno&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span>
+    <span class="n">nv_tot</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;nsource&#39;</span><span class="p">]</span>
+    <span class="n">pmap_tot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">pmaps</span><span class="p">),</span> <span class="n">nv_tot</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">it</span><span class="p">,</span> <span class="n">bl</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pmaps</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">est_n_dips</span><span class="p">[</span><span class="n">it</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">pmap_tot</span><span class="p">[</span><span class="n">it</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">bl</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">vol_stc</span> <span class="o">=</span> <span class="n">VolSourceEstimate</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">pmap_tot</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="n">vertno</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                <span class="n">tstep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">vol_stc</span>
+
+
+<span class="k">def</span> <span class="nf">write_h5</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">inv_op</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">fmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sbj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sbj_viz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">data_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fwd_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cov_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">src_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lf_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">_check_h5_installed</span><span class="p">()</span>
+    <span class="kn">import</span> <span class="nn">h5py</span> <span class="k">as</span> <span class="nn">h5</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+
+    <span class="n">_pmap</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s1">&#39;prob_map&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">pmap</span><span class="p">):</span>
+        <span class="n">_pmap</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">_b</span><span class="p">)</span>
+    <span class="n">_est_cs</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s1">&#39;est_locs&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">est_locs</span><span class="p">):</span>
+        <span class="n">_est_cs</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">_e</span><span class="p">)</span>
+    <span class="n">_est_dip_moms</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s1">&#39;est_dip_moms&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">est_dip_moms</span><span class="p">):</span>
+        <span class="n">_est_dip_moms</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">_e</span><span class="p">)</span>
+
+    <span class="n">_est_ndips</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;est_n_dips&#39;</span><span class="p">,</span>
+                                  <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">est_n_dips</span><span class="p">))</span>
+    <span class="n">_model_sel</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s1">&#39;model_sel&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">model_sel</span><span class="p">):</span>
+        <span class="n">_model_sel</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">_m</span><span class="p">)</span>
+    <span class="n">_exponents</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;exponents&#39;</span><span class="p">,</span>
+                                  <span class="n">data</span><span class="o">=</span><span class="n">inv_op</span><span class="o">.</span><span class="n">e_pdf</span><span class="o">.</span><span class="n">exponents</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">):</span>
+        <span class="n">_ch_names</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;ch_names&#39;</span><span class="p">,</span>
+                                     <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;ch_names&#39;</span><span class="p">]),</span><span class="mi">1</span><span class="p">),</span>
+                                     <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;S10&#39;</span><span class="p">,</span>
+                                     <span class="n">data</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">ch</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+                                               <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;ch_names&#39;</span><span class="p">]))</span>
+    <span class="n">_lam</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;lambda&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">inv_op</span><span class="o">.</span><span class="n">lam</span><span class="p">)</span>
+    <span class="n">_sn</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;noise_std&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">inv_op</span><span class="o">.</span><span class="n">noise_std</span><span class="p">)</span>
+    <span class="n">_sq</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;dip_mom_std&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">inv_op</span><span class="o">.</span><span class="n">dip_mom_std</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
+        <span class="n">_fin_sq</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;final_dip_mom_std&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">inv_op</span><span class="o">.</span><span class="n">final_dip_mom_std</span><span class="p">)</span>
+        <span class="n">_est_dip_mom_std</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s1">&#39;est_dip_mom_std&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_sq</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">):</span>
+            <span class="n">_est_dip_mom_std</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">_sq</span><span class="p">)</span>
+    <span class="n">_np</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;n_parts&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">inv_op</span><span class="o">.</span><span class="n">n_parts</span><span class="p">)</span>
+    <span class="n">_ndm</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;max_n_dips&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">inv_op</span><span class="o">.</span><span class="n">max_n_dips</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_tmin</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;tmin&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">tmin</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_tmax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;tmax&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">tmax</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_fmin</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;fmin&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">fmin</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_fmax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;fmax&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">fmax</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">subsample</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_subsample</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;subsample&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">subsample</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sbj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_sbj</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;subject&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">sbj</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sbj_viz</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_sbj_viz</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;subject_viz&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">sbj_viz</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">data_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_dpath</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;data_path&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fwd_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_fwdpath</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;fwd_path&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">fwd_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cov_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_covpath</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;cov_path&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">fwd_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">src_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_srcpath</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;src_path&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">src_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">lf_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_lfpath</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;lf_path&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">lf_path</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;SESAME solution written in </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fpath</span><span class="p">))</span>
+    <span class="k">return</span>
+
+
+<span class="k">def</span> <span class="nf">write_pkl</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">inv_op</span><span class="p">,</span> <span class="n">sbj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sbj_viz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">fwd_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cov_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">src_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lf_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">save_all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">_check_pickle_installed</span><span class="p">()</span>
+    <span class="kn">import</span> <span class="nn">pickle</span> <span class="k">as</span> <span class="nn">pkl</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">):</span>
+        <span class="n">inv_op</span><span class="o">.</span><span class="n">ch_names</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;ch_names&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sbj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inv_op</span><span class="o">.</span><span class="n">sbj</span> <span class="o">=</span> <span class="n">sbj</span>
+    <span class="k">if</span> <span class="n">sbj_viz</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inv_op</span><span class="o">.</span><span class="n">sbj_viz</span> <span class="o">=</span> <span class="n">sbj_viz</span>
+    <span class="k">if</span> <span class="n">data_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inv_op</span><span class="o">.</span><span class="n">d_path</span> <span class="o">=</span> <span class="n">data_path</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">save_all</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">r_data</span>
+    <span class="k">if</span> <span class="n">fwd_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inv_op</span><span class="o">.</span><span class="n">fwd_path</span> <span class="o">=</span> <span class="n">fwd_path</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">save_all</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span><span class="p">,</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">source_space</span><span class="p">,</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">lead_field</span>
+    <span class="k">if</span> <span class="n">cov_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inv_op</span><span class="o">.</span><span class="n">cov_path</span> <span class="o">=</span> <span class="n">cov_path</span>
+    <span class="k">if</span> <span class="n">src_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inv_op</span><span class="o">.</span><span class="n">src_path</span> <span class="o">=</span> <span class="n">src_path</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">save_all</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">source_space</span>
+    <span class="k">if</span> <span class="n">lf_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inv_op</span><span class="o">.</span><span class="n">lf_path</span> <span class="o">=</span><span class="n">lf_path</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">save_all</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">lead_field</span>
+    <span class="n">pkl</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;SESAME solution written in </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fpath</span><span class="p">))</span>
+    <span class="k">return</span>
+
+
+<div class="viewcode-block" id="read_h5"><a class="viewcode-back" href="../../../generated/sesameeg.io.read_h5.html#sesameeg.io.read_h5">[docs]</a><span class="k">def</span> <span class="nf">read_h5</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Load SESAME result from an HDF5 file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fpath : :py:class:`~str`</span>
+<span class="sd">        Path and filename of the .h5 file containing the result.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    res : :py:class:`~dict`</span>
+<span class="sd">        A Python dictionary containing the result</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The keys of the returned dictionary are the following:</span>
+
+<span class="sd">    * ch_names : :py:class:`~list` | &#39;Not available.&#39;</span>
+<span class="sd">        The channel names</span>
+<span class="sd">    * cov_path : :py:class:`~str` | &#39;Not available.&#39;</span>
+<span class="sd">        Path and filename of the file containing the noise covariance.</span>
+<span class="sd">    * data_path : :py:class:`~str` | &#39;Not available.&#39;</span>
+<span class="sd">        Path and filename of the file containing the data.</span>
+<span class="sd">    * est_locs : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~int` | &#39;Not available.&#39;</span>
+<span class="sd">        The source space grid points indices in which a source is estimated.</span>
+<span class="sd">    * est_n_dips : :py:class:`~list` of :py:class:`~int` | &#39;Not available.&#39;</span>
+<span class="sd">        The estimated number of dipoles.</span>
+<span class="sd">    * est_dip_moms : :py:class:`~numpy.ndarray` , shape (est_n_dips[-1], n_ist, 3) | &#39;Not available.&#39;</span>
+<span class="sd">        The moment time courses of the dipoles estimated in the last iteration of SESAME.</span>
+<span class="sd">    * est_dip_mom_std : :py:class:`~list` of :py:class:`~numpy.ndarray`, shape (n_iterations, ) | &#39;Not available.&#39;</span>
+<span class="sd">        Estimated values of the parameter ``dip_mom_std``. Each array in the list corresponds to a single particle.</span>
+<span class="sd">        This only applies if ``hyper_q=True`` has been selected when instantiating :py:class:`~sesameeg.Sesame`.</span>
+<span class="sd">    * exponents : :py:class:`~numpy.ndarray` | &#39;Not available.&#39;</span>
+<span class="sd">        Array whose entries represent points in the space of artificial</span>
+<span class="sd">        distributions. It is used to keep track of the path followed</span>
+<span class="sd">        by SESAME.</span>
+<span class="sd">    * final_dip_mom_std : :py:class:`~float` | &#39;Not available.&#39;</span>
+<span class="sd">        The weighted average of the last estimated value of ``dip_mom_std`` in each particle.</span>
+<span class="sd">        This only applies if ``hyper_q=True`` has been selected when instantiating :py:class:`~sesameeg.Sesame`.</span>
+<span class="sd">    * fmax : :py:class:`~float` | None</span>
+<span class="sd">        The last frequency (in Hertz) of the frequency band in which data have been analyzed.</span>
+<span class="sd">    * fmin : :py:class:`~float` | None</span>
+<span class="sd">        The first frequency (in Hertz) of the frequency band in which data have been analyzed.</span>
+<span class="sd">    * fwd_path : :py:class:`~str` | &#39;Not available.&#39;</span>
+<span class="sd">        Path and filename of the file containing the forward model.</span>
+<span class="sd">    * lambda : :py:class:`~float`</span>
+<span class="sd">        The parameter of the Poisson prior pdf on the number of dipoles.</span>
+<span class="sd">    * lf_path : :py:class:`~str` | &#39;Not available.&#39;</span>
+<span class="sd">        Path and filename of the file containing the lead field.</span>
+<span class="sd">    * max_n_dips : :py:class:`~int`</span>
+<span class="sd">        The maximum number of dipoles allowed in each particle.</span>
+<span class="sd">    * model_sel : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`</span>
+<span class="sd">        The model selection, i.e. the posterior distribution on the number</span>
+<span class="sd">        of dipoles.</span>
+<span class="sd">    * prob_map : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (est_n_dips, n_verts)</span>
+<span class="sd">        Posterior probability map</span>
+<span class="sd">    * noise_std : :py:class:`~float`</span>
+<span class="sd">        The standard deviation of the noise distribution.</span>
+<span class="sd">    * dip_mom_std : :py:class:`~float`</span>
+<span class="sd">        The standard deviation of the prior pdf on the dipole moment.</span>
+<span class="sd">    * src_path : :py:class:`~str` | &#39;Not available.&#39;</span>
+<span class="sd">        Path and filename of the file containing the source space grid.</span>
+<span class="sd">    * subject : :py:class:`~str` | &#39;Not available.&#39;</span>
+<span class="sd">        The subject name.</span>
+<span class="sd">    * subject_viz : :py:class:`~str` | &#39;Not available.&#39;</span>
+<span class="sd">        The name of the subject&#39;s FreeSurfer folder.</span>
+<span class="sd">    * tmax : :py:class:`~float` | None</span>
+<span class="sd">        The last instant (in seconds) of the time window in which data have been analyzed.</span>
+<span class="sd">    * tmin : :py:class:`~float` | None</span>
+<span class="sd">        The first instant (in seconds) of the time window in which data have been analyzed.</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">       Depending on the value of the ``estimate_all`` parameter used in the call of the</span>
+<span class="sd">       :py:meth:`~sesameeg.Sesame.apply_sesame` method, the list returned in the fields</span>
+<span class="sd">       ``est_locs``, ``est_n_dips`` and ``prob_map`` may contain either</span>
+<span class="sd">       the corresponding quantity estimated at each iteration or only those estimated at the last iteration.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_check_h5_installed</span><span class="p">()</span>
+    <span class="kn">import</span> <span class="nn">h5py</span> <span class="k">as</span> <span class="nn">h5</span>
+
+    <span class="n">f</span> <span class="o">=</span> <span class="n">h5</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="s1">&#39;est_n_dips&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;est_n_dips&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;est_n_dips&#39;</span><span class="p">][:])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;est_n_dips&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Not available.&#39;</span>
+
+    <span class="k">if</span> <span class="s1">&#39;exponents&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;exponents&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;exponents&#39;</span><span class="p">][:]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;exponents&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Not available.&#39;</span>
+
+    <span class="k">if</span> <span class="s1">&#39;ch_names&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">_temp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;ch_names&#39;</span><span class="p">][:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;ch_names&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">_temp</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">_temp</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;ch_names&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Not available.&#39;</span>
+
+    <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;prob_map&#39;</span><span class="p">,</span> <span class="s1">&#39;est_locs&#39;</span><span class="p">,</span> <span class="s1">&#39;model_sel&#39;</span><span class="p">,</span> <span class="s1">&#39;est_dip_mom_std&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">_k</span><span class="p">][</span><span class="n">_key</span><span class="p">][:]</span> <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
+                                                             <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Not available.&#39;</span>
+
+    <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;final_dip_mom_std&#39;</span><span class="p">,</span> <span class="s1">&#39;tmin&#39;</span><span class="p">,</span> <span class="s1">&#39;tmax&#39;</span><span class="p">,</span> <span class="s1">&#39;fmin&#39;</span><span class="p">,</span> <span class="s1">&#39;fmax&#39;</span><span class="p">,</span> <span class="s1">&#39;subsample&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">_k</span><span class="p">][()]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;lambda&#39;</span><span class="p">,</span> <span class="s1">&#39;noise_std&#39;</span><span class="p">,</span> <span class="s1">&#39;dip_mom_std&#39;</span><span class="p">,</span> <span class="s1">&#39;max_n_dips&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;subject&#39;</span><span class="p">,</span> <span class="s1">&#39;subject_viz&#39;</span><span class="p">,</span> <span class="s1">&#39;data_path&#39;</span><span class="p">,</span> <span class="s1">&#39;fwd_path&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;cov_path&#39;</span><span class="p">,</span> <span class="s1">&#39;src_path&#39;</span><span class="p">,</span> <span class="s1">&#39;lf_path&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">_k</span><span class="p">][()]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Not available.&#39;</span>
+
+    <span class="k">if</span> <span class="s1">&#39;est_dip_moms&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">est_dip_moms_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;est_dip_moms&#39;</span><span class="p">][</span><span class="n">_key</span><span class="p">][:]</span> <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;est_dip_moms&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
+                                                                            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
+        <span class="n">est_dip_moms_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;est_locs&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">est_dip_moms_temp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">est_dip_moms_temp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">_temp</span> <span class="o">=</span> <span class="n">est_dip_moms_temp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;est_locs&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">est_dip_moms_aux</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">_temp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">res</span><span class="p">[</span><span class="s1">&#39;est_dip_moms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">est_dip_moms_aux</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">res</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2019, SESAMEEG developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
