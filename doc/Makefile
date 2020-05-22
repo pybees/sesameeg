@@ -182,3 +182,22 @@ pseudoxml:
 	$(SPHINXBUILD) -b pseudoxml $(ALLSPHINXOPTS) $(BUILDDIR)/pseudoxml
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
+install:
+	rm -rf _build/doctrees _build/sesameeg.github.io
+	# first clone the neuropycon/ephypype.github.io repo because it may ask
+	# for password and we don't want to delay this long build in
+	# the middle of it
+	# --no-checkout just fetches the root folder without content
+	# --depth 1 is a speed optimization since we don't need the
+	# history prior to the last commit
+	# -b gh-pages fetches only the branch for the gh-pages
+	git clone -b gh-pages --single-branch --no-checkout --depth 1 https://github.com/pybees/sesameeg _build/sesameeg.github.io
+	touch _build/sesameeg.github.io/.nojekyll
+	make html
+	cd _build/ && \
+	cp -r html/* sesameeg.github.io && \
+	cd sesameeg.github.io && \
+	git add * && \
+	git add .nojekyll && \
+	git commit -a -m 'Make install' && \
+	git push
