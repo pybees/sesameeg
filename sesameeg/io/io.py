@@ -74,7 +74,7 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, fmin=None,
     for i, _m in enumerate(inv_op.model_sel):
         _model_sel.create_dataset(str(i), data=_m)
     _exponents = f.create_dataset('exponents',
-                                  data=inv_op.e_pdf.exponents)
+                                  data=inv_op.posterior.exponents)
     if hasattr(inv_op, 'forward'):
         _ch_names = f.create_dataset('ch_names',
                                      shape=(len(inv_op.forward['info']['ch_names']),1),

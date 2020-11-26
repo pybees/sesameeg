@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="NEWFEAT: reset_attributes">
+    <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="boh..">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/conf.py" afterPath="$PROJECT_DIR$/doc/conf.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/explanation_algorithm.rst" afterPath="$PROJECT_DIR$/doc/explanation_algorithm.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sesameeg/io/io.py" afterPath="$PROJECT_DIR$/sesameeg/io/io.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,8 +21,8 @@
       <file leaf-file-name="sesame.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sesameeg/sesame.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6102">
-              <caret line="552" column="37" lean-forward="false" selection-start-line="552" selection-start-column="37" selection-end-line="552" selection-end-column="37" />
+            <state relative-caret-position="-1698">
+              <caret line="136" column="8" lean-forward="false" selection-start-line="136" selection-start-column="8" selection-end-line="136" selection-end-column="8" />
               <folding>
                 <element signature="e#215#231#0" expanded="true" />
                 <element signature="e#14454#16343#0" expanded="false" />
@@ -65,16 +64,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="conf.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/doc/conf.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="314" column="57" lean-forward="false" selection-start-line="314" selection-start-column="57" selection-end-line="314" selection-end-column="57" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="explanation_algorithm.rst" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/doc/explanation_algorithm.rst">
           <provider selected="true" editor-type-id="text-editor">
@@ -95,21 +84,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plot_meg_simulated_sesame_frequency.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/plot_meg_simulated_sesame_frequency.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="14" column="10" lean-forward="false" selection-start-line="14" selection-start-column="10" selection-end-line="14" selection-end-column="10" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="io.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="io.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sesameeg/io/io.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3798">
-              <caret line="213" column="36" lean-forward="false" selection-start-line="213" selection-start-column="18" selection-end-line="213" selection-end-column="36" />
+            <state relative-caret-position="182">
+              <caret line="76" column="38" lean-forward="true" selection-start-line="76" selection-start-column="38" selection-end-line="76" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -155,8 +134,9 @@
       <find>N_dip_max</find>
       <find>blob</find>
       <find>.emp</find>
-      <find>emp</find>
       <find>e_pdf</find>
+      <find>emp</find>
+      <find>e_p</find>
     </findStrings>
     <replaceStrings>
       <replace>noise_cov</replace>
@@ -202,7 +182,6 @@
         <option value="$PROJECT_DIR$/sesameeg/utils/__init__.py" />
         <option value="$PROJECT_DIR$/doc/api.rst" />
         <option value="$PROJECT_DIR$/sesameeg/metrics/metrics.py" />
-        <option value="$PROJECT_DIR$/sesameeg/io/io.py" />
         <option value="$PROJECT_DIR$/examples/plot_meg_simulated_sesame_frequency.py" />
         <option value="$PROJECT_DIR$/sesameeg/particles.py" />
         <option value="$PROJECT_DIR$/sesameeg/emp_pdf.py" />
@@ -213,6 +192,7 @@
         <option value="$PROJECT_DIR$/sesameeg/sesame.py" />
         <option value="$PROJECT_DIR$/doc/conf.py" />
         <option value="$PROJECT_DIR$/doc/explanation_algorithm.rst" />
+        <option value="$PROJECT_DIR$/sesameeg/io/io.py" />
       </list>
     </option>
   </component>
@@ -231,7 +211,7 @@
     <option name="height" value="730" />
   </component>
   <component name="ProjectView">
-    <navigator proportions="" version="1">
+    <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -244,7 +224,56 @@
       <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes />
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sesameeg_fork" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sesameeg_fork" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sesameeg_fork" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sesameeg_fork" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sesameeg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sesameeg_fork" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sesameeg_fork" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sesameeg" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+    </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -637,7 +666,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588861350431</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="boh..">
+      <created>1606386945363</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1606386945363</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -706,7 +742,8 @@
     <MESSAGE value="tolti refusi &quot;q_in&quot; in particles e emp_pdf&#10;cambiato intervallo temporale N100m in esempi" />
     <MESSAGE value="BUGFIX: errore nel calcolo ampiezze di dipolo negli esempi" />
     <MESSAGE value="NEWFEAT: reset_attributes" />
-    <option name="LAST_COMMIT_MESSAGE" value="NEWFEAT: reset_attributes" />
+    <MESSAGE value="boh.." />
+    <option name="LAST_COMMIT_MESSAGE" value="boh.." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -926,14 +963,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sesameeg/io/io.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3798">
-          <caret line="213" column="36" lean-forward="false" selection-start-line="213" selection-start-column="18" selection-end-line="213" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1062">
@@ -974,20 +1003,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sesameeg/sesame.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6102">
-          <caret line="552" column="37" lean-forward="false" selection-start-line="552" selection-start-column="37" selection-end-line="552" selection-end-column="37" />
-          <folding>
-            <element signature="e#215#231#0" expanded="true" />
-            <element signature="e#14454#16343#0" expanded="false" />
-            <element signature="e#16415#17786#0" expanded="false" />
-            <element signature="e#17829#19147#0" expanded="false" />
-            <element signature="e#19228#24498#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sesameeg/emp_pdf.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
@@ -998,8 +1013,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/doc/conf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="314" column="57" lean-forward="false" selection-start-line="314" selection-start-column="57" selection-end-line="314" selection-end-column="57" />
+        <state relative-caret-position="2701">
+          <caret line="311" column="57" lean-forward="true" selection-start-line="311" selection-start-column="57" selection-end-line="311" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sesameeg/sesame.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1698">
+          <caret line="136" column="8" lean-forward="false" selection-start-line="136" selection-start-column="8" selection-end-line="136" selection-end-column="8" />
+          <folding>
+            <element signature="e#215#231#0" expanded="true" />
+            <element signature="e#14454#16343#0" expanded="false" />
+            <element signature="e#16415#17786#0" expanded="false" />
+            <element signature="e#17829#19147#0" expanded="false" />
+            <element signature="e#19228#24498#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sesameeg/io/io.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="76" column="38" lean-forward="true" selection-start-line="76" selection-start-column="38" selection-end-line="76" selection-end-column="38" />
           <folding />
         </state>
       </provider>
