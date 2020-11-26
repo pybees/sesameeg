@@ -311,7 +311,8 @@ texinfo_documents = [
 intersphinx_mapping = {
     'python': ('https://docs.python.org/{.major}'.format(
         sys.version_info), None),
-    'numpy': ('https://numpy.org/', None),
+    #'numpy': ('https://numpy.org/', None),
+    'numpy': ('https://docs.scipy.org/doc/numpy/', None),
     # 'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
     'matplotlib': ('https://matplotlib.org/', None),
     # 'mayavi': ('http://docs.enthought.com/mayavi/mayavi', None),

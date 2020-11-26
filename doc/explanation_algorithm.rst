@@ -213,8 +213,8 @@ through the following procedure:
 * finally, dipole moments can be reasonably estimated as the mean of the corresponding Gaussian distribution.
 
 
-Reference
----------
+References
+----------
 .. [1] S. Sommariva and A. Sorrentino, `Sequential Monte Carlo samplers for semi-linear inverse problems and application to Magnetoencephalography <https://doi.org/10.1088/0266-5611/30/11/114020>`_. Inverse Problems, 30 114020 (2014).
 .. [2] A. Sorrentino, G. Luria, and R. Aramini, `Bayesian multi-dipole modeling of a single topography in MEG by adaptive Sequential Monte Carlo Samplers <https://iopscience.iop.org/article/10.1088/0266-5611/30/4/045010>`_. Inverse Problems, 30 045010 (2014).
 .. [3] C. Robert and G. Casella, `Monte Carlo Statistical Methods <https://www.springer.com/gp/book/9780387212395>`_, 2nd Edition.  Springer (2004).
