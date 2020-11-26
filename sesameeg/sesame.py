@@ -158,7 +158,7 @@ class Sesame(object):
         self.hyper_q = hyper_q
         self.forward, _info_picked = _select_orient_forward(forward,
                                                             data.info, noise_cov)
-
+        self.fixed_ori = self._read_fwd_ori()
         self.source_space = forward['source_rr']
         self.n_verts = self.source_space.shape[0]
         self.lead_field = forward['sol']['data']
@@ -251,7 +251,7 @@ class Sesame(object):
             self.est_dip_mom_std = list(np.array([]) for _ in range(self.n_parts))
 
         self.posterior = EmpPdf(self.n_parts, self.n_verts, self.lam, dip_mom_std=self.dip_mom_std,
-                                hyper_q=self.hyper_q, verbose=self.verbose)
+                                fixed_ori=self.fixed_ori, hyper_q=self.hyper_q, verbose=self.verbose)
 
         for _part in self.posterior.particles:
             if self.hyper_q:
@@ -387,6 +387,22 @@ class Sesame(object):
             return np.hstack(temp_list)
         else:
             raise ValueError
+
+    def _read_fwd_ori(self):
+        fwd_ori = self.forward['source_ori']
+        if fwd_ori == 1:
+            assert (self.forward['sol']['data'].shape[1] == self.forward['source_rr'].shape[0]), \
+                'Inconsistency between source space and leadfield dimensions.'
+            print('Forward model with fixed source orientation.')
+            return True
+        elif fwd_ori == 2:
+            assert (self.forward['sol']['data'].shape[1] == 3*self.forward['source_rr'].shape[0]), \
+                'Inconsistency between source space and leadfield dimensions.'
+            print('Forward model with free source orientation.')
+            return False
+        else:
+            raise ValueError('Unknown source orientation in the forward model. Please check the "source_ori" '
+                             'attribute of the Forward.')
 
     def _reset_attributes(self):
         self._resample_it = list()
@@ -555,8 +571,11 @@ class Sesame(object):
         else:
             _dip_mom_std = self.dip_mom_std
 
-        ind = np.ravel([[3*est_locs[idip], 3*est_locs[idip]+1,
-                       3*est_locs[idip]+2] for idip in range(est_num)])
+        if self.fixed_ori:
+            ind = np.ravel([est_locs[idip] for idip in range(est_num)])
+        else:
+            ind = np.ravel([[3 * est_locs[idip], 3 * est_locs[idip] + 1,
+                             3 * est_locs[idip] + 2] for idip in range(est_num)])
         Gc = self.lead_field[:, ind]
         sigma = (_dip_mom_std / self.noise_std)**2 * np.dot(Gc, np.transpose(Gc)) +\
             np.eye(n_sens)

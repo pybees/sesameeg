@@ -39,11 +39,12 @@ class Particle(object):
         The prior pdf, evaluated in the particle.
     """
 
-    def __init__(self, n_verts, lam, dip_mom_std=None, hyper_q=False):
+    def __init__(self, n_verts, lam, dip_mom_std=None, fixed_ori = False, hyper_q=False):
         """Initialization: the initial number of dipoles is Poisson
            distribuited; the initial locations are uniformly distribuited
            within the brain grid points, with no dipoles in the same position.
         """
+        self.fixed_ori = fixed_ori
         self.hyper_q = hyper_q
         self.n_dips = 0
         self.dipoles = np.array([])
@@ -109,8 +110,11 @@ class Particle(object):
             sigma = np.eye(n_sens)
         else:
             # 1a: compute the leadfield of the particle
-            idx = np.ravel([[3 * dip.loc, 3 * dip.loc + 1, 3 * dip.loc + 2]
-                            for dip in self.dipoles])
+            if self.fixed_ori:
+                idx = np.ravel([dip.loc for dip in self.dipoles])
+            else:
+                idx = np.ravel([[3 * dip.loc, 3 * dip.loc + 1, 3 * dip.loc + 2]
+                                for dip in self.dipoles])
             Gc = lead_field[:, idx]
             # 1b: compute the variance
             sigma = (self.dip_mom_std / noise_std) ** 2 * np.dot(Gc, np.transpose(Gc)) + \
@@ -149,8 +153,11 @@ class Particle(object):
             inv_sigma = np.eye(n_sens)
         else:
             # 1a: compute the leadfield of the particle
-            idx = np.ravel([[3*dip.loc, 3*dip.loc+1, 3*dip.loc+2]
-                           for dip in self.dipoles])
+            if self.fixed_ori:
+                idx = np.ravel([dip.loc for dip in self.dipoles])
+            else:
+                idx = np.ravel([[3 * dip.loc, 3 * dip.loc + 1, 3 * dip.loc + 2]
+                                for dip in self.dipoles])
             Gc = lead_field[:, idx]
             # 1b: compute the covariance
             sigma = (self.dip_mom_std / noise_std)**2 * np.dot(Gc, np.transpose(Gc)) + \

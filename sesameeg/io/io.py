@@ -58,6 +58,7 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, fmin=None,
 
     f = h5.File(fpath, 'w')
 
+    _fwd_fixed = f.create_dataset('fwd_fixed_ori', data=inv_op.fixed_ori)
     _pmap = f.create_group('prob_map')
     for i, _b in enumerate(inv_op.pmap):
         _pmap.create_dataset(str(i), data=_b)
@@ -271,7 +272,7 @@ def read_h5(fpath):
 
     for _k in ['lambda', 'noise_std', 'dip_mom_std', 'max_n_dips',
                'subject', 'subject_viz', 'data_path', 'fwd_path',
-               'cov_path', 'src_path', 'lf_path']:
+               'cov_path', 'src_path', 'lf_path', 'fwd_fixed_ori']:
         if _k in f.keys():
             res[_k] = f[_k][()]
         else:
@@ -279,12 +280,21 @@ def read_h5(fpath):
 
     if 'est_dip_moms' in f.keys():
         est_dip_moms_temp = np.asarray(list(f['est_dip_moms'][_key][:] for _key in sorted(f['est_dip_moms'].keys(),
-                                                                            key=lambda x: int(x))))
-        est_dip_moms_aux = np.zeros((res['est_locs'][-1].shape[0], est_dip_moms_temp.shape[0], 3))
-        for i in range(est_dip_moms_temp.shape[0]):
-            _temp = est_dip_moms_temp[i, :].reshape(-1, 3)
-            for j in range(res['est_locs'][-1].shape[0]):
-                est_dip_moms_aux[j, i, :] += _temp[j]
+                                                                                          key=lambda x: int(x))))
+        if f['fwd_fixed_ori']:
+            est_dip_moms_aux = np.zeros((res['est_locs'][-1].shape[0], est_dip_moms_temp.shape[0]))
+            for i in range(est_dip_moms_temp.shape[0]):
+                _temp = est_dip_moms_temp[i, :].reshape(-1, 1)
+                for j in range(res['est_locs'][-1].shape[0]):
+                    est_dip_moms_aux[j, i] += _temp[j]
+        elif f['fwd_fixed_ori'] == 'Not available.':
+            print('Uknown forward source orientation. Skipping dipole moments.')
+        else:
+            est_dip_moms_aux = np.zeros((res['est_locs'][-1].shape[0], est_dip_moms_temp.shape[0], 3))
+            for i in range(est_dip_moms_temp.shape[0]):
+                _temp = est_dip_moms_temp[i, :].reshape(-1, 3)
+                for j in range(res['est_locs'][-1].shape[0]):
+                    est_dip_moms_aux[j, i, :] += _temp[j]
         res['est_dip_moms'] = est_dip_moms_aux
     f.close()
     return res

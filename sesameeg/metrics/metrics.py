@@ -101,11 +101,22 @@ def compute_goodness_of_fit(meas_field, est_n_dips, est_locs, est_dip_moms, lead
         raise AttributeError("No dipoles' moment found."
                              " Run compute_q first.")
 
+    if est_dip_moms.shape[1] == est_n_dips:
+        fixed_ori = True
+    elif est_dip_moms.shape[1] == 3*est_n_dips:
+        fixed_ori = False
+    else:
+        raise ValueError('Dimension of est_dip_moms does not match with est_n_dips.')
+
     rec_field = np.zeros(meas_field.shape)
     for i_d in range(est_n_dips):
-        rec_field += np.dot(lead_field[:, 3*est_locs[i_d]:
-                                            3*(est_locs[i_d]+1)],
-                            est_dip_moms[:, 3*i_d:3*(i_d+1)].T)
+        if fixed_ori:
+            rec_field += np.dot(lead_field[:, est_locs[i_d]].reshape(-1, 1),
+                                est_dip_moms[:, i_d].reshape(1, -1))
+        else:
+            rec_field += np.dot(lead_field[:, 3*est_locs[i_d]:
+                                                3*(est_locs[i_d]+1)],
+                                est_dip_moms[:, 3*i_d:3*(i_d+1)].T)
 
     gof = 1 - np.linalg.norm(meas_field - rec_field) \
         / np.linalg.norm(meas_field)
