@@ -76,6 +76,8 @@ where, at time :math:`t\/`,  :math:`G(r_k)` is the lead field matrix computed at
 .. math:: \mathbf{q}_{t}\,  :=\, \left(\mathbf{q}_{\/1,t}, \ldots, \mathbf{q}_{\/{n_D}, t}\right) ,
 .. math:: G\!\left(\/\mathbf{r}\/\right)\, :=\, \left[G(r_1)\lvert\,\cdots\lvert G(r_{n_D})\right].
 
+In the forward model both free- (:math:`G(r_k) \in \mathbb{R}^3`) and fixed- (:math:`G(r_k) \in \mathbb{R}^1`, normal
+to the cortical surface) dipole orientations are allowed.
 
 Statistical model.
 ------------------
@@ -212,6 +214,9 @@ through the following procedure:
 
 * finally, dipole moments can be reasonably estimated as the mean of the corresponding Gaussian distribution.
 
+.. note::
+    The number of components of the estimated dipole moments depends on the dipole orientation constraint in the forward
+    model.
 
 References
 ----------

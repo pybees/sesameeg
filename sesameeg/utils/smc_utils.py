@@ -138,8 +138,8 @@ def estimate_dip_mom_std(r_data, lf):
     r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
         The real part of the data; n_sens is the number of sensors and
         n_ist is the number of time-points or of frequencies.
-    lf : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
-        The leadfield matrix.
+    lf : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)
+        The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)
 
     Returns
     --------

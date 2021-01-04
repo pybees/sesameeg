@@ -183,8 +183,9 @@ def read_h5(fpath):
         The source space grid points indices in which a source is estimated.
     * est_n_dips : :py:class:`~list` of :py:class:`~int` | 'Not available.'
         The estimated number of dipoles.
-    * est_dip_moms : :py:class:`~numpy.ndarray` , shape (est_n_dips[-1], n_ist, 3) | 'Not available.'
+    * est_dip_moms : :py:class:`~numpy.ndarray` , shape (est_n_dips[-1], n_ist, n_comp) | 'Not available.'
         The moment time courses of the dipoles estimated in the last iteration of SESAME.
+        (n_comp = 1, if fixed orientation, 3, if free orientation)
     * est_dip_mom_std : :py:class:`~list` of :py:class:`~numpy.ndarray`, shape (n_iterations, ) | 'Not available.'
         Estimated values of the parameter ``dip_mom_std``. Each array in the list corresponds to a single particle.
         This only applies if ``hyper_q=True`` has been selected when instantiating :py:class:`~sesameeg.Sesame`.

@@ -84,8 +84,8 @@ class EmpPdf(object):
         r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
             The real part of the data; n_sens is the number of sensors and
             n_ist is the number of time-points.
-        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
-            The leadfield matrix.
+        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)
+            The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)
         neigh : :py:class:`~numpy.ndarray` of :py:class:`~int`
             The neighbours of each point in the brain discretization.
         neigh_p : :py:class:`~numpy.ndarray` of :py:class:`~float`

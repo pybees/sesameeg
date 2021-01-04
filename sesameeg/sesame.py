@@ -28,7 +28,8 @@ class Sesame(object):
     Parameters
     ----------
     forward : :py:class:`~mne.Forward` object
-        The forward solution.
+        The forward solution. Sesame automatically detects whether the dipole
+        orientations are free or locally normal to the cortical surface.
     data : instance of :py:class:`~mne.Evoked` | :py:class:`~mne.EvokedArray`
         The MEEG data.
     noise_std : :py:class:`~float` | None
@@ -87,8 +88,8 @@ class Sesame(object):
         The coordinates of the points in the brain discretization.
     n_verts : :py:class:`~int`
         The number of points forming the brain discretization.
-    lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
-        The leadfield matrix.
+    lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)
+        The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)
     distance_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)
         The Euclidean distance between the points in the
         brain discretization.
@@ -122,8 +123,8 @@ class Sesame(object):
         The estimated number of dipoles.
     est_locs : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~int`
         The source space grid points indices in which a source is estimated.
-    est_dip_moms : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_ist x (3*est_n_dips[-1])) | None
-        The sources' moments estimated at the last iteration.
+    est_dip_moms : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_ist x (n_comp*est_n_dips[-1])) | None
+        The sources' moments estimated at the last iteration. (n_comp = 1, if fixed orientation, 3, if free orientation)
         If None, moments can be estimated by calling :py:meth:`~Sesame.compute_dip_mom`
     model_sel : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`
         The model selection, i.e. the posterior distribution on the number

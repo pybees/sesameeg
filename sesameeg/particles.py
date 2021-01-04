@@ -133,8 +133,8 @@ class Particle(object):
         r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
             The real part of the data; n_sens is the number of sensors and
             n_ist is the number of time-points or of frequencies.
-        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
-            The leadfield matrix.
+        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)
+            The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)
         noise_std : :py:class:`~float`
             The standard deviation of the noise distribution.
 
@@ -209,8 +209,8 @@ class Particle(object):
         r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
             The real part of the data; n_sens is the number of sensors and
             n_ist is the number of time-points or of frequencies.
-        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
-            The leadfield matrix.
+        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)
+            The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)
         max_n_dips : :py:class:`~int`
             The maximum number of dipoles allowed in a particle.
         lklh_exp : :py:class:`~float`
@@ -288,8 +288,8 @@ class Particle(object):
         r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
             The real part of the data; n_sens is the number of sensors and
             n_ist is the number of time-points or of frequencies.
-        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
-            The leadfield matrix.
+        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)
+            The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)
         lklh_exp : :py:class:`~float`
             This number represents a point in the sequence of artificial
             distributions used in SESAME.
