@@ -16,7 +16,8 @@ from mne.forward import _select_orient_forward
 from .emp_pdf import EmpPdf
 from .particles import Particle
 from .utils import compute_neighbours_matrix, initialize_radius, \
-    compute_neighbours_probability_matrix, estimate_noise_std, estimate_dip_mom_std
+    compute_neighbours_probability_matrix, estimate_noise_std, estimate_dip_mom_std, \
+    compute_cosine_distance
 from .utils import is_epochs, is_evoked, is_forward
 from .io import _export_to_stc, _export_to_vol_stc, write_h5, write_pkl
 from .metrics import compute_goodness_of_fit, compute_sd
@@ -133,10 +134,13 @@ class Sesame(object):
         Posterior probability map.
     posterior : instance of :class:`~sesameeg.emppdf.EmpPdf`
         The empirical pdf approximated by the particles at each iteration.
+
+    ****** Sara
+    Add parameter distance = 'cosine' or 'euclidean'
     """
 
     def __init__(self, forward, data, noise_std=None, radius=None,
-                 neigh_std=None, n_parts=100, top_min=None,
+                 neigh_std=None, distance='euclidean', n_parts=100, top_min=None,
                  top_max=None, subsample=None, dip_mom_std=None, hyper_q=True,
                  noise_cov=None, lam=0.25, max_n_dips=10, Fourier_transf=False,
                  verbose=False):
@@ -164,7 +168,18 @@ class Sesame(object):
         self.n_verts = self.source_space.shape[0]
         self.lead_field = forward['sol']['data']
 
-        self.distance_matrix = ssd.cdist(self.source_space, self.source_space)
+        self.distance = distance
+        if (not self.fixed_ori) and (self.distance == 'cosine'):
+            print("The cosine distance cannot be used with free-orientation leadfield"
+                  "Using euclidean distance instead.")
+            # TODO: renderlo un warning.
+            self.distance = 'euclidean'
+
+        if self.distance == 'euclidean':
+            self.distance_matrix = ssd.cdist(self.source_space, self.source_space)
+        elif self.distance == 'cosine':
+            self.distance_matrix = compute_cosine_distance(self.forward)
+
         if radius is None:
             self.radius = initialize_radius(self.source_space)
         else:

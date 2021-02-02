@@ -11,6 +11,44 @@ import scipy.special as sps
 from mne.epochs import Epochs, EpochsArray
 from mne.evoked import Evoked, EvokedArray
 from mne.forward import Forward
+from mne.io.pick import channel_type
+
+
+def compute_cosine_distance(fwd):
+    """
+    Define cosine distance
+
+    Parameters:
+    -----------
+    fwd : instance of Forward
+        The forward solution
+
+    Returns:
+    --------
+
+    """
+
+    # Step 1. Understand what sensor type are present in the fwd solution
+    info = fwd['info']
+    picks = np.arange(0, info['nchan'])
+    types = np.array([channel_type(info, idx) for idx in picks])
+    ch_types_used = set(types)
+
+    # Step 2. Extract and normalized leadfield for each sensor type
+    aux_L = fwd['sol']['data']
+    L_norm = np.zeros(aux_L.shape)
+    for this_type in ch_types_used:
+        print('Normalizing leadfield for %s sensors' % this_type)
+        idx = picks[types == this_type]
+        Ns = idx.shape[0]
+        L_this_type = aux_L[idx]
+        L_this_type = L_this_type - np.mean(L_this_type, axis=0)
+        L_norm[idx] = L_this_type / \
+                      np.sqrt(1 / (Ns - 1) * np.sum(L_this_type ** 2, axis=0))
+
+    # Step 3. Compute cosine similarity matrix
+    cosine_distance = np.ones([L_norm.shape[1], L_norm.shape[1]]) - abs(np.corrcoef(L_norm.T))
+    return cosine_distance
 
 
 def compute_neighbours_matrix(src, d_matrix, radius):
