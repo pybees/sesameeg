@@ -17,7 +17,7 @@ from .emp_pdf import EmpPdf
 from .particles import Particle
 from .utils import compute_neighbours_matrix, initialize_radius, \
     compute_neighbours_probability_matrix, estimate_noise_std, estimate_dip_mom_std, \
-    compute_cosine_distance
+    compute_correlation_distance_matix
 from .utils import is_epochs, is_evoked, is_forward
 from .io import _export_to_stc, _export_to_vol_stc, write_h5, write_pkl
 from .metrics import compute_goodness_of_fit, compute_sd
@@ -140,10 +140,10 @@ class Sesame(object):
     """
 
     def __init__(self, forward, data, noise_std=None, radius=None,
-                 neigh_std=None, distance='euclidean', n_parts=100, top_min=None,
+                 neigh_std=None, n_parts=100, top_min=None,
                  top_max=None, subsample=None, dip_mom_std=None, hyper_q=True,
-                 noise_cov=None, lam=0.25, max_n_dips=10, Fourier_transf=False,
-                 verbose=False):
+                 noise_cov=None, lam=0.25, max_n_dips=10, neigh_simil='correlation',
+                 Fourier_transf=False, verbose=False):
 
         if not is_forward(forward):
             raise ValueError('Forward must be an instance of MNE'
@@ -167,27 +167,34 @@ class Sesame(object):
         self.source_space = forward['source_rr']
         self.n_verts = self.source_space.shape[0]
         self.lead_field = forward['sol']['data']
-
-        self.distance = distance
-        if (not self.fixed_ori) and (self.distance == 'cosine'):
-            print("The cosine distance cannot be used with free-orientation leadfield"
-                  "Using euclidean distance instead.")
-            # TODO: renderlo un warning.
-            self.distance = 'euclidean'
-
-        if self.distance == 'euclidean':
-            self.distance_matrix = ssd.cdist(self.source_space, self.source_space)
-        elif self.distance == 'cosine':
-            self.distance_matrix = compute_cosine_distance(self.forward)
+        self.distance_matrix = ssd.cdist(self.source_space, self.source_space)
 
         if radius is None:
             self.radius = initialize_radius(self.source_space)
         else:
             self.radius = radius
-        print('Computing neighbours matrix...', end='')
-        self.neigh = compute_neighbours_matrix(self.source_space,
-                                               self.distance_matrix,
-                                               self.radius)
+        print('Computing neighbours matrix ', end='')
+        if self.fixed_ori:
+            print('using {} similarity...'.format(neigh_simil))
+            if neigh_simil == 'correlation':
+                corr_dist_matr = compute_correlation_distance_matix(self.forward)
+                self.neigh = compute_neighbours_matrix(self.source_space,
+                                                       corr_dist_matr,
+                                                       30,
+                                                       neigh_simil)
+            elif neigh_simil == 'euclidean':
+                print('using Euclidean distance...', end='')
+                self.neigh = compute_neighbours_matrix(self.source_space,
+                                                       self.distance_matrix,
+                                                       self.radius,
+                                                       neigh_simil)
+            else:
+                raise NotImplementedError
+        else:
+            self.neigh = compute_neighbours_matrix(self.source_space,
+                                                   self.distance_matrix,
+                                                   self.radius,
+                                                   'euclidean')
         print('[done]')
 
         if neigh_std is None:
