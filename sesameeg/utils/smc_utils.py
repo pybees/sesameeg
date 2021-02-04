@@ -97,9 +97,9 @@ def compute_neighbours_matrix(src, d_matrix, radius, n_simil):
         The sets of neighbours.
     """
 
-    if n_simil == 'euclidean':
+    if n_simil == 1:
         return _compute_euclidean_neigh_matrix(src, d_matrix, radius)
-    elif n_simil == 'correlation':
+    elif 0 <= n_simil < 1:
         return _compute_correlation_neigh_matrix(src, d_matrix, radius)
     else:
         raise NotImplementedError
@@ -131,8 +131,7 @@ def _compute_euclidean_neigh_matrix(src, d_matrix, radius):
     n_neigh = []
     list_neigh = []
 
-    while (counter < reached_points.shape[0]
-           and src.shape[0] > reached_points.shape[0]):
+    while counter < reached_points.shape[0] < src.shape[0]:
         P = reached_points[counter]
         aux = np.array(sorted(
             np.where(d_matrix[P] <= radius)[0],
@@ -184,7 +183,6 @@ def _compute_euclidean_neigh_matrix(src, d_matrix, radius):
         index_ord = np.argsort(n_matrix[:, 0])
         n_matrix = n_matrix[index_ord]
         return n_matrix
-
     else:
         raise RuntimeError("Some problems during"
                            "computation of neighbours.")
@@ -368,6 +366,10 @@ def is_forward(fwd):
         return True
     else:
         return False
+
+
+def normalize(x):
+    return (x - np.min(x)) / (np.max(x) - np.min(x))
 
 
 def sample_from_sphere():

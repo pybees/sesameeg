@@ -18,7 +18,7 @@ from .particles import Particle
 from .utils import compute_neighbours_matrix, initialize_radius, \
     compute_neighbours_probability_matrix, estimate_noise_std, estimate_dip_mom_std, \
     compute_correlation_distance_matix
-from .utils import is_epochs, is_evoked, is_forward
+from .utils import is_epochs, is_evoked, is_forward, normalize
 from .io import _export_to_stc, _export_to_vol_stc, write_h5, write_pkl
 from .metrics import compute_goodness_of_fit, compute_sd
 
@@ -142,7 +142,7 @@ class Sesame(object):
     def __init__(self, forward, data, noise_std=None, radius=None,
                  neigh_std=None, n_parts=100, top_min=None,
                  top_max=None, subsample=None, dip_mom_std=None, hyper_q=True,
-                 noise_cov=None, lam=0.25, max_n_dips=10, neigh_simil='correlation',
+                 noise_cov=None, lam=0.25, max_n_dips=10, neigh_simil=0.5,
                  Fourier_transf=False, verbose=False):
 
         if not is_forward(forward):
@@ -175,37 +175,68 @@ class Sesame(object):
             self.radius = radius
         print('Computing neighbours matrix ', end='')
         if self.fixed_ori:
-            print('using {} similarity...'.format(neigh_simil))
-            if neigh_simil == 'correlation':
-                corr_dist_matr = compute_correlation_distance_matix(self.forward)
-                self.neigh = compute_neighbours_matrix(self.source_space,
-                                                       corr_dist_matr,
-                                                       30,
-                                                       neigh_simil)
-            elif neigh_simil == 'euclidean':
+            if neigh_simil == 1:
                 print('using Euclidean distance...', end='')
+            elif neigh_simil == 0:
+                print('using correlation distance...')
+            else:
+                print('using combined distance...')
+
+            if neigh_simil == 1:
                 self.neigh = compute_neighbours_matrix(self.source_space,
                                                        self.distance_matrix,
                                                        self.radius,
                                                        neigh_simil)
+            elif 0 <= neigh_simil < 1:
+                corr_dist_matr = compute_correlation_distance_matix(self.forward)
+                combined_dist_matr = (1-neigh_simil)*normalize(corr_dist_matr) + \
+                    neigh_simil*normalize(self.distance_matrix)
+                self.neigh = compute_neighbours_matrix(self.source_space,
+                                                                         combined_dist_matr,
+                                                                         30,
+                                                                         neigh_simil)
             else:
-                raise NotImplementedError
+                raise ValueError
         else:
             self.neigh = compute_neighbours_matrix(self.source_space,
                                                    self.distance_matrix,
                                                    self.radius,
-                                                   'euclidean')
+                                                   n_simil=1)
         print('[done]')
 
+        print('Computing neighbours probabilities...', end='')
         if neigh_std is None:
-            self.neigh_std = self.radius/2
+            self.neigh_std = self.radius / 2
         else:
             self.neigh_std = neigh_std
-        print('Computing neighbours probabilities...', end='')
-        self.neigh_p = compute_neighbours_probability_matrix(self.neigh,
-                                                             self.source_space,
-                                                             self.distance_matrix,
-                                                             self.neigh_std)
+
+        if self.fixed_ori:
+            if neigh_simil == 1:
+                self.neigh_p = compute_neighbours_probability_matrix(self.neigh,
+                                                                     self.source_space,
+                                                                     self.distance_matrix,
+                                                                     self.neigh_std)
+            elif 0 <= neigh_simil < 1:
+                a_matrix = np.zeros(combined_dist_matr.shape, dtype=bool)
+                row_list, col_list = list(), list()
+                for _in, _n in enumerate(self.neigh):
+                    for _x in _n[_n >= 0]:
+                        row_list.append(_in)
+                        col_list.append(_x)
+                a_matrix[(row_list, col_list)] = 1
+                comb_neigh_std = np.max(combined_dist_matr[a_matrix])/2
+                self.neigh_p = compute_neighbours_probability_matrix(self.neigh,
+                                                                     self.source_space,
+                                                                     combined_dist_matr,
+                                                                     comb_neigh_std)
+            else:
+                raise ValueError
+
+        else:
+            self.neigh_p = compute_neighbours_probability_matrix(self.neigh,
+                                                                 self.source_space,
+                                                                 self.distance_matrix,
+                                                                 self.neigh_std)
         print('[done]')
 
         # Prepare data
@@ -474,7 +505,7 @@ class Sesame(object):
             last iteration.
         """
 
-        if self.posterior.exponents[-1] >0:
+        if self.posterior.exponents[-1] > 0:
             print('Resetting SESAME...', end='')
             self._reset_attributes()
             print('[done]')
