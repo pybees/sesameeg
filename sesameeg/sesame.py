@@ -441,7 +441,7 @@ class Sesame(object):
             self.est_dip_mom_std = list(np.array([]) for _ in range(self.n_parts))
 
         self.posterior = EmpPdf(self.n_parts, self.n_verts, self.lam, dip_mom_std=self.dip_mom_std,
-                                hyper_q=self.hyper_q, verbose=self.verbose)
+                                fixed_ori=self.fixed_ori, hyper_q=self.hyper_q, verbose=self.verbose)
 
         for _part in self.posterior.particles:
             if self.hyper_q:
