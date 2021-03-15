@@ -164,9 +164,9 @@ class Sesame(object):
         self.forward, _info_picked = _select_orient_forward(forward,
                                                             data.info, noise_cov)
         self.fixed_ori = self._read_fwd_ori()
-        self.source_space = forward['source_rr']
+        self.source_space = self.forward['source_rr']
         self.n_verts = self.source_space.shape[0]
-        self.lead_field = forward['sol']['data']
+        self.lead_field = self.forward['sol']['data']
         self.distance_matrix = ssd.cdist(self.source_space, self.source_space)
 
         if radius is None:

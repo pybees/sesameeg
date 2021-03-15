@@ -282,13 +282,13 @@ def read_h5(fpath):
     if 'est_dip_moms' in f.keys():
         est_dip_moms_temp = np.asarray(list(f['est_dip_moms'][_key][:] for _key in sorted(f['est_dip_moms'].keys(),
                                                                                           key=lambda x: int(x))))
-        if f['fwd_fixed_ori']:
+        if f['fwd_fixed_ori'][()]:
             est_dip_moms_aux = np.zeros((res['est_locs'][-1].shape[0], est_dip_moms_temp.shape[0]))
             for i in range(est_dip_moms_temp.shape[0]):
                 _temp = est_dip_moms_temp[i, :].reshape(-1, 1)
                 for j in range(res['est_locs'][-1].shape[0]):
                     est_dip_moms_aux[j, i] += _temp[j]
-        elif f['fwd_fixed_ori'] == 'Not available.':
+        elif f['fwd_fixed_ori'][()] == 'Not available.':
             print('Uknown forward source orientation. Skipping dipole moments.')
         else:
             est_dip_moms_aux = np.zeros((res['est_locs'][-1].shape[0], est_dip_moms_temp.shape[0], 3))

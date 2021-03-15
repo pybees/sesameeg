@@ -54,13 +54,13 @@ from mne import pick_types_forward
 
 
 def compute_correlation_distance_matix(fwd):
-    print('Computing correlation distance matrix...')
+    print(' Computing correlation distance matrix...')
     distance_matrix = np.zeros((fwd['sol']['data'].shape[1], fwd['sol']['data'].shape[1]))
     n_ch_tot = fwd['info']['nchan']
     ch_types = set(map(lambda x: channel_type(fwd['info'], x), range(n_ch_tot)))
 
     for _t in ch_types:
-        print('Using {} sensors for computation...'.format(_t))
+        print('  Using {} sensors for computation...'.format(_t))
         if _t in ['mag', 'grad', 'planar1', 'planar2']:
             _fwd_t = pick_types_forward(fwd, meg=_t, ref_meg=False)
         elif _t == 'eeg':
@@ -74,7 +74,7 @@ def compute_correlation_distance_matix(fwd):
 
         distance_matrix += (n_ch_t / n_ch_tot) * _dm_t
 
-    print('[done]')
+    print(' [done]')
     return distance_matrix
 
 
