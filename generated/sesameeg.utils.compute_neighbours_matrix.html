@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="sesameeg.utils.compute_neighbours_probability_matrix" href="sesameeg.utils.compute_neighbours_probability_matrix.html" />
@@ -93,23 +93,23 @@
 <h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">sesameeg.utils</span></code>.compute_neighbours_matrix<a class="headerlink" href="#sesameeg-utils-compute-neighbours-matrix" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="sesameeg.utils.compute_neighbours_matrix">
-<code class="sig-prename descclassname">sesameeg.utils.</code><code class="sig-name descname">compute_neighbours_matrix</code><span class="sig-paren">(</span><em class="sig-param">src</em>, <em class="sig-param">d_matrix</em>, <em class="sig-param">radius</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/utils/smc_utils.html#compute_neighbours_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sesameeg.utils.compute_neighbours_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">sesameeg.utils.</code><code class="sig-name descname">compute_neighbours_matrix</code><span class="sig-paren">(</span><em class="sig-param">src</em>, <em class="sig-param">d_matrix</em>, <em class="sig-param">radius</em>, <em class="sig-param">n_simil</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/utils/smc_utils.html#compute_neighbours_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sesameeg.utils.compute_neighbours_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the set of neighbours of each point in the brain discretization.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>src</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_verts, 3)</span></dt><dd><p>The coordinates of the points in the brain discretization.</p>
+<dt><strong>src</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_verts, 3)</span></dt><dd><p>The coordinates of the points in the brain discretization.</p>
 </dd>
-<dt><strong>d_matrix</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_verts x n_verts)</span></dt><dd><p>The Euclidean distance between the points in the
+<dt><strong>d_matrix</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_verts x n_verts)</span></dt><dd><p>The Euclidean distance between the points in the
 brain discretization.</p>
 </dd>
-<dt><strong>radius</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The maximum distance between two neighbouring points.</p>
+<dt><strong>radius</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The maximum distance between two neighbouring points.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>n_matrix</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, shape (n_verts, n_neigh_max)</span></dt><dd><p>The sets of neighbours.</p>
+<dt><strong>n_matrix</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, shape (n_verts, n_neigh_max)</span></dt><dd><p>The sets of neighbours.</p>
 </dd>
 </dl>
 </dd>
@@ -131,7 +131,7 @@ brain discretization.</p>
     </p>
     <p>
         &copy; Copyright 2019, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>

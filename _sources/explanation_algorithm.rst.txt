@@ -76,6 +76,8 @@ where, at time :math:`t\/`,  :math:`G(r_k)` is the lead field matrix computed at
 .. math:: \mathbf{q}_{t}\,  :=\, \left(\mathbf{q}_{\/1,t}, \ldots, \mathbf{q}_{\/{n_D}, t}\right) ,
 .. math:: G\!\left(\/\mathbf{r}\/\right)\, :=\, \left[G(r_1)\lvert\,\cdots\lvert G(r_{n_D})\right].
 
+In the forward model both free- (:math:`G(r_k) \in \mathbb{R}^3`) and fixed- (:math:`G(r_k) \in \mathbb{R}^1`, normal
+to the cortical surface) dipole orientations are allowed.
 
 Statistical model.
 ------------------
@@ -212,9 +214,12 @@ through the following procedure:
 
 * finally, dipole moments can be reasonably estimated as the mean of the corresponding Gaussian distribution.
 
+.. note::
+    The number of components of the estimated dipole moments depends on the dipole orientation constraint in the forward
+    model.
 
-Reference
----------
+References
+----------
 .. [1] S. Sommariva and A. Sorrentino, `Sequential Monte Carlo samplers for semi-linear inverse problems and application to Magnetoencephalography <https://doi.org/10.1088/0266-5611/30/11/114020>`_. Inverse Problems, 30 114020 (2014).
 .. [2] A. Sorrentino, G. Luria, and R. Aramini, `Bayesian multi-dipole modeling of a single topography in MEG by adaptive Sequential Monte Carlo Samplers <https://iopscience.iop.org/article/10.1088/0266-5611/30/4/045010>`_. Inverse Problems, 30 045010 (2014).
 .. [3] C. Robert and G. Casella, `Monte Carlo Statistical Methods <https://www.springer.com/gp/book/9780387212395>`_, 2nd Edition.  Springer (2004).

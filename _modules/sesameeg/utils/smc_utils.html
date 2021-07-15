@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
-    <script src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 <meta charset='utf-8'>
@@ -98,12 +98,104 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.special</span> <span class="k">as</span> <span class="nn">sps</span>
+<span class="kn">import</span> <span class="nn">scipy.spatial.distance</span> <span class="k">as</span> <span class="nn">ssd</span>
 <span class="kn">from</span> <span class="nn">mne.epochs</span> <span class="kn">import</span> <span class="n">Epochs</span><span class="p">,</span> <span class="n">EpochsArray</span>
 <span class="kn">from</span> <span class="nn">mne.evoked</span> <span class="kn">import</span> <span class="n">Evoked</span><span class="p">,</span> <span class="n">EvokedArray</span>
 <span class="kn">from</span> <span class="nn">mne.forward</span> <span class="kn">import</span> <span class="n">Forward</span>
+<span class="kn">from</span> <span class="nn">mne.io.pick</span> <span class="kn">import</span> <span class="n">channel_type</span>
+<span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">pick_types_forward</span>
 
 
-<div class="viewcode-block" id="compute_neighbours_matrix"><a class="viewcode-back" href="../../../generated/sesameeg.utils.compute_neighbours_matrix.html#sesameeg.utils.compute_neighbours_matrix">[docs]</a><span class="k">def</span> <span class="nf">compute_neighbours_matrix</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+<span class="c1"># def compute_cosine_distance(fwd):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Define cosine distance</span>
+<span class="c1">#</span>
+<span class="c1">#     Parameters:</span>
+<span class="c1">#     -----------</span>
+<span class="c1">#     fwd : instance of Forward</span>
+<span class="c1">#         The forward solution</span>
+<span class="c1">#</span>
+<span class="c1">#     Returns:</span>
+<span class="c1">#     --------</span>
+<span class="c1">#</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#     # Step 1. Understand what sensor type are present in the fwd solution</span>
+<span class="c1">#     info = fwd[&#39;info&#39;]</span>
+<span class="c1">#     picks = np.arange(0, info[&#39;nchan&#39;])</span>
+<span class="c1">#     types = np.array([channel_type(info, idx) for idx in picks])</span>
+<span class="c1">#     ch_types_used = set(types)</span>
+<span class="c1">#</span>
+<span class="c1">#     # Step 2. Extract and normalized leadfield for each sensor type</span>
+<span class="c1">#     aux_L = fwd[&#39;sol&#39;][&#39;data&#39;]</span>
+<span class="c1">#     L_norm = np.zeros(aux_L.shape)</span>
+<span class="c1">#     for this_type in ch_types_used:</span>
+<span class="c1">#         print(&#39;Normalizing leadfield for %s sensors&#39; % this_type)</span>
+<span class="c1">#         idx = picks[types == this_type]</span>
+<span class="c1">#         Ns = idx.shape[0]</span>
+<span class="c1">#         L_this_type = aux_L[idx]</span>
+<span class="c1">#         L_this_type = L_this_type - np.mean(L_this_type, axis=0)</span>
+<span class="c1">#         L_norm[idx] = L_this_type / \</span>
+<span class="c1">#                       np.sqrt(1 / (Ns - 1) * np.sum(L_this_type ** 2, axis=0))</span>
+<span class="c1">#</span>
+<span class="c1">#     # Step 3. Compute cosine similarity matrix</span>
+<span class="c1">#     cosine_distance = np.ones([L_norm.shape[1], L_norm.shape[1]]) - abs(np.corrcoef(L_norm.T))</span>
+<span class="c1">#     return cosine_distance</span>
+
+
+<span class="k">def</span> <span class="nf">compute_correlation_distance_matix</span><span class="p">(</span><span class="n">fwd</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; Computing correlation distance matrix...&#39;</span><span class="p">)</span>
+    <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;sol&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;sol&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">n_ch_tot</span> <span class="o">=</span> <span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;nchan&#39;</span><span class="p">]</span>
+    <span class="n">ch_types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">channel_type</span><span class="p">(</span><span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">],</span> <span class="n">x</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_ch_tot</span><span class="p">)))</span>
+
+    <span class="k">for</span> <span class="n">_t</span> <span class="ow">in</span> <span class="n">ch_types</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  Using </span><span class="si">{}</span><span class="s1"> sensors for computation...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_t</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">_t</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mag&#39;</span><span class="p">,</span> <span class="s1">&#39;grad&#39;</span><span class="p">,</span> <span class="s1">&#39;planar1&#39;</span><span class="p">,</span> <span class="s1">&#39;planar2&#39;</span><span class="p">]:</span>
+            <span class="n">_fwd_t</span> <span class="o">=</span> <span class="n">pick_types_forward</span><span class="p">(</span><span class="n">fwd</span><span class="p">,</span> <span class="n">meg</span><span class="o">=</span><span class="n">_t</span><span class="p">,</span> <span class="n">ref_meg</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">_t</span> <span class="o">==</span> <span class="s1">&#39;eeg&#39;</span><span class="p">:</span>
+            <span class="n">_fwd_t</span> <span class="o">=</span> <span class="n">pick_types_forward</span><span class="p">(</span><span class="n">fwd</span><span class="p">,</span> <span class="n">eeg</span><span class="o">=</span><span class="n">_t</span><span class="p">,</span> <span class="n">ref_meg</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+        <span class="n">n_ch_t</span> <span class="o">=</span> <span class="n">_fwd_t</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;nchan&#39;</span><span class="p">]</span>
+        <span class="n">_lf_t</span> <span class="o">=</span> <span class="n">_fwd_t</span><span class="p">[</span><span class="s1">&#39;sol&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">_dm_t</span> <span class="o">=</span> <span class="n">ssd</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="n">_lf_t</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">_lf_t</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;correlation&#39;</span><span class="p">)</span>
+
+        <span class="n">distance_matrix</span> <span class="o">+=</span> <span class="p">(</span><span class="n">n_ch_t</span> <span class="o">/</span> <span class="n">n_ch_tot</span><span class="p">)</span> <span class="o">*</span> <span class="n">_dm_t</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; [done]&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">distance_matrix</span>
+
+
+<div class="viewcode-block" id="compute_neighbours_matrix"><a class="viewcode-back" href="../../../generated/sesameeg.utils.compute_neighbours_matrix.html#sesameeg.utils.compute_neighbours_matrix">[docs]</a><span class="k">def</span> <span class="nf">compute_neighbours_matrix</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">n_simil</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the set of neighbours of each point in the brain discretization.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    src :  :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)</span>
+<span class="sd">        The coordinates of the points in the brain discretization.</span>
+<span class="sd">    d_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)</span>
+<span class="sd">        The Euclidean distance between the points in the</span>
+<span class="sd">        brain discretization.</span>
+<span class="sd">    radius : :py:class:`~float`</span>
+<span class="sd">        The maximum distance between two neighbouring points.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    n_matrix : :py:class:`~numpy.ndarray` of :py:class:`~int`, shape (n_verts, n_neigh_max)</span>
+<span class="sd">        The sets of neighbours.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">n_simil</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_compute_euclidean_neigh_matrix</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">n_simil</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_compute_correlation_neigh_matrix</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<span class="k">def</span> <span class="nf">_compute_euclidean_neigh_matrix</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute the set of neighbours of each point in the brain discretization.</span>
 
 <span class="sd">    Parameters</span>
@@ -129,8 +221,7 @@
     <span class="n">n_neigh</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">list_neigh</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">while</span> <span class="p">(</span><span class="n">counter</span> <span class="o">&lt;</span> <span class="n">reached_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-           <span class="ow">and</span> <span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">reached_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="k">while</span> <span class="n">counter</span> <span class="o">&lt;</span> <span class="n">reached_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
         <span class="n">P</span> <span class="o">=</span> <span class="n">reached_points</span><span class="p">[</span><span class="n">counter</span><span class="p">]</span>
         <span class="n">aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">d_matrix</span><span class="p">[</span><span class="n">P</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">radius</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
@@ -182,10 +273,43 @@
         <span class="n">index_ord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">n_matrix</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
         <span class="n">n_matrix</span> <span class="o">=</span> <span class="n">n_matrix</span><span class="p">[</span><span class="n">index_ord</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">n_matrix</span>
-
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Some problems during&quot;</span>
-                           <span class="s2">&quot;computation of neighbours.&quot;</span><span class="p">)</span></div>
+                           <span class="s2">&quot;computation of neighbours.&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_compute_correlation_neigh_matrix</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">n_neigh_init</span><span class="p">):</span>
+    <span class="n">n_vert</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># For each vertex find the set of k-nearest neighbours</span>
+    <span class="n">set_n_neigh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">d_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:</span><span class="n">n_neigh_init</span><span class="p">]</span>
+
+    <span class="c1"># Fill in the set of nearest neighbour so to have a reversible kernel</span>
+    <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">d_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ir</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_vert</span><span class="p">):</span>  <span class="c1"># Avoid this for?!?!?!</span>
+        <span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">ir</span><span class="p">,</span> <span class="n">set_n_neigh</span><span class="p">[</span><span class="n">ir</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">adjacency_matrix</span> <span class="o">=</span> <span class="p">((</span><span class="n">adjacency_matrix</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">adjacency_matrix</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">n_neigh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Reorder the set of neighbours and check if the obtained matrix is connected</span>
+    <span class="n">n_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_vert</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">n_neigh</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">reached_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">while</span> <span class="n">counter</span> <span class="o">&lt;</span> <span class="n">reached_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">reached_points</span><span class="p">[</span><span class="n">counter</span><span class="p">]</span>
+        <span class="n">aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">adjacency_matrix</span><span class="p">[</span><span class="n">P</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">d_matrix</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">k</span><span class="p">]))</span>
+        <span class="n">n_matrix</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="p">:</span><span class="n">aux</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">aux</span>
+        <span class="n">reached_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reached_points</span><span class="p">,</span>
+                                   <span class="n">aux</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">in1d</span><span class="p">(</span><span class="n">aux</span><span class="p">,</span> <span class="n">reached_points</span><span class="p">)])</span>
+        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">reached_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">n_vert</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Too small value for the initial number of nearest neighbour:&#39;</span>
+                         <span class="s1">&#39;the neighbour-matrix is not connected&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n_matrix</span>
 
 
 <div class="viewcode-block" id="compute_neighbours_probability_matrix"><a class="viewcode-back" href="../../../generated/sesameeg.utils.compute_neighbours_probability_matrix.html#sesameeg.utils.compute_neighbours_probability_matrix">[docs]</a><span class="k">def</span> <span class="nf">compute_neighbours_probability_matrix</span><span class="p">(</span><span class="n">n_matrix</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">sigma_neigh</span><span class="p">):</span>
@@ -228,8 +352,8 @@
 <span class="sd">    r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)</span>
 <span class="sd">        The real part of the data; n_sens is the number of sensors and</span>
 <span class="sd">        n_ist is the number of time-points or of frequencies.</span>
-<span class="sd">    lf : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)</span>
-<span class="sd">        The leadfield matrix.</span>
+<span class="sd">    lf : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)</span>
+<span class="sd">        The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    --------</span>
@@ -334,6 +458,10 @@
         <span class="k">return</span> <span class="kc">False</span>
 
 
+<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+
 <span class="k">def</span> <span class="nf">sample_from_sphere</span><span class="p">():</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -369,7 +497,7 @@
     </p>
     <p>
         &copy; Copyright 2019, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>

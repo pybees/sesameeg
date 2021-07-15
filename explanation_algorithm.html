@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
-    <script src="_static/js/copybutton.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Quick Start with the mne-project-template" href="quick_start.html" />
@@ -151,7 +151,9 @@ The explicit model for <img class="math" src="_images/math/13b543c8e1304dedb59bc
 <p><img src="_images/math/c74e99d3296aa3987390e7dae8530af36ceea295.png" alt="\mathbf{q}_{t}\,  :=\, \left(\mathbf{q}_{\/1,t}, \ldots, \mathbf{q}_{\/{n_D}, t}\right) ,"/></p>
 </div><div class="math">
 <p><img src="_images/math/ca0d548d9e8191714922dda0b9b83e4e6b10565e.png" alt="G\!\left(\/\mathbf{r}\/\right)\, :=\, \left[G(r_1)\lvert\,\cdots\lvert G(r_{n_D})\right]."/></p>
-</div></div>
+</div><p>In the forward model both free- (<img class="math" src="_images/math/1f0a786deeca6a933fadbf0607c297c2a98efc62.png" alt="G(r_k) \in \mathbb{R}^3"/>) and fixed- (<img class="math" src="_images/math/f3b660d75eb0d5681f1cf900acf454cd1be4118d.png" alt="G(r_k) \in \mathbb{R}^1"/>, normal
+to the cortical surface) dipole orientations are allowed.</p>
+</div>
 <div class="section" id="statistical-model">
 <h2>Statistical model.<a class="headerlink" href="#statistical-model" title="Permalink to this headline">¶</a></h2>
 <p>In a Bayesian approach to the neuromagnetic inverse problem, the MEG/EEG data <img class="math" src="_images/math/b04f62e21c4cd0ae0183708ab43bd04d6a0579f7.png" alt="\mathbf{y}"/>,
@@ -274,9 +276,14 @@ being located in <img class="math" src="_images/math/79a3d439d28652c547386f39b55
 estimates of dipole locations as the local peaks of such a probability map;</p></li>
 <li><p>finally, dipole moments can be reasonably estimated as the mean of the corresponding Gaussian distribution.</p></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The number of components of the estimated dipole moments depends on the dipole orientation constraint in the forward
+model.</p>
 </div>
-<div class="section" id="reference">
-<h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <dl class="footnote brackets">
 <dt class="label" id="id7"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id3">2</a>)</span></dt>
 <dd><ol class="upperalpha simple" start="19">
@@ -310,7 +317,7 @@ estimates of dipole locations as the local peaks of such a probability map;</p><
     </p>
     <p>
         &copy; Copyright 2019, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>

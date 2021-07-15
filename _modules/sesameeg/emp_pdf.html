@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
-    <script src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
@@ -139,10 +139,11 @@
 <span class="sd">    est_locs : :py:class:`~numpy.ndarray` of :py:class:`~int`</span>
 <span class="sd">        Estimated sources locations</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_parts</span><span class="p">,</span> <span class="n">n_verts</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hyper_q</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_parts</span><span class="p">,</span> <span class="n">n_verts</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fixed_ori</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">hyper_q</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixed_ori</span> <span class="o">=</span> <span class="n">fixed_ori</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span> <span class="o">=</span> <span class="n">hyper_q</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Particle</span><span class="p">(</span><span class="n">n_verts</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="n">dip_mom_std</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">Particle</span><span class="p">(</span><span class="n">n_verts</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="n">dip_mom_std</span><span class="p">,</span> <span class="n">fixed_ori</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fixed_ori</span><span class="p">,</span>
                                             <span class="n">hyper_q</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_parts</span><span class="p">)])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logweights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">n_parts</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span>
                                     <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_parts</span><span class="p">)])</span>
@@ -173,8 +174,8 @@
 <span class="sd">        r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)</span>
 <span class="sd">            The real part of the data; n_sens is the number of sensors and</span>
 <span class="sd">            n_ist is the number of time-points.</span>
-<span class="sd">        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)</span>
-<span class="sd">            The leadfield matrix.</span>
+<span class="sd">        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)</span>
+<span class="sd">            The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)</span>
 <span class="sd">        neigh : :py:class:`~numpy.ndarray` of :py:class:`~int`</span>
 <span class="sd">            The neighbours of each point in the brain discretization.</span>
 <span class="sd">        neigh_p : :py:class:`~numpy.ndarray` of :py:class:`~float`</span>
@@ -421,7 +422,7 @@
     </p>
     <p>
         &copy; Copyright 2019, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>

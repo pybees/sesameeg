@@ -54,6 +54,18 @@ dataset and correspond to the response to an auditory stimulus.
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    /usr/local/lib/python3.5/dist-packages/sklearn/externals/joblib/__init__.py:15: FutureWarning: sklearn.externals.joblib is deprecated in 0.21 and will be removed in 0.23. Please import this functionality directly from joblib, which can be installed with: pip install joblib. If this warning is raised when loading pickled models, you may need to re-serialize those models with scikit-learn 0.21+.
+      warnings.warn(msg, category=FutureWarning)
+    /usr/local/lib/python3.5/dist-packages/sklearn/utils/deprecation.py:144: FutureWarning: The sklearn.utils.testing module is  deprecated in version 0.22 and will be removed in version 0.24. The corresponding classes / functions should instead be imported from sklearn.utils. Anything that cannot be imported from sklearn.utils is now part of the private API.
+      warnings.warn(message, FutureWarning)
+    /usr/local/lib/python3.5/dist-packages/sklearn/utils/deprecation.py:144: FutureWarning: The sklearn.datasets.base module is  deprecated in version 0.22 and will be removed in version 0.24. The corresponding classes / functions should instead be imported from sklearn.datasets. Anything that cannot be imported from sklearn.datasets is now part of the private API.
+      warnings.warn(message, FutureWarning)
 
 
 
@@ -94,7 +106,7 @@ comprises the whole brain volume.
 
  .. code-block:: none
 
-    Reading forward solution from /home/sara/mne_data/MNE-sample-data/MEG/sample/sample_audvis-meg-vol-7-fwd.fif...
+    Reading forward solution from /home/gv/mne_data/MNE-sample-data/MEG/sample/sample_audvis-meg-vol-7-fwd.fif...
         Reading a source space...
         [done]
         1 source spaces read
@@ -103,7 +115,7 @@ comprises the whole brain volume.
         Source spaces transformed to the forward solution coordinate frame
         305 out of 306 channels remain after picking
         305 out of 305 channels remain after picking
-    Reading /home/sara/mne_data/MNE-sample-data/MEG/sample/sample_audvis-ave.fif ...
+    Reading /home/gv/mne_data/MNE-sample-data/MEG/sample/sample_audvis-ave.fif ...
         Read a total of 4 projection items:
             PCA-v1 (1 x 102) active
             PCA-v2 (1 x 102) active
@@ -115,7 +127,6 @@ comprises the whole brain volume.
             nave = 55 - aspect type = 100
     Projections have already been applied. Setting proj attribute to True.
     Applying baseline correction (mode: mean)
-
 
 
 
@@ -146,7 +157,6 @@ Define the parameters.
     # fname_cov = op.join(sample.data_path(), 'MEG', subject,
     #                    'sample_audvis-cov.fif')
     # noise_cov = read_cov(fname_cov)
-
 
 
 
@@ -186,7 +196,6 @@ Visualize the selected data.
 
 
 
-
 Apply SESAME.
 
 
@@ -218,7 +227,8 @@ Apply SESAME.
 
     Computing inverse operator with 305 channels.
         305 out of 305 channels remain after picking
-    Computing neighbours matrix...[done]
+    Forward model with free source orientation.
+    Computing neighbours matrix [done]
     Computing neighbours probabilities...[done]
     Analyzing data from 0.045 s to 0.1349 s
     Estimating dipole moment std...[done]
@@ -227,13 +237,12 @@ Apply SESAME.
     Estimating noise std...[done]
      Estimated noise std: 3.9983e-12
     Computing inverse solution. This will take a while...
-    Estimated dipole strength variance: 2.5479137082728325e-08
+    Estimated dipole strength variance: 2.6048225966791784e-08
     [done]
         Estimated number of sources: 2
-        Estimated source locations: [1140 1410]
-        Total computation time: 124.96036553382874
-        Goodness of fit with the recorded data: 68.66%
-
+        Estimated source locations: [1410 1140]
+        Total computation time: 63.028180837631226
+        Goodness of fit with the recorded data: 68.67999999999999%
 
 
 
@@ -261,7 +270,6 @@ Visualize amplitude of the estimated sources as function of time.
 
 .. image:: /auto_examples/images/sphx_glr_plot_meg_auditory_sesame_volume_003.png
     :class: sphx-glr-single-img
-
 
 
 
@@ -304,7 +312,6 @@ Visualize the posterior map of the dipoles' location
 
 
 
-
 Save results.
 
 
@@ -323,10 +330,9 @@ Save results.
 
 
 
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  16.031 seconds)
+   **Total running time of the script:** ( 1 minutes  15.005 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_meg_auditory_sesame_volume.py:

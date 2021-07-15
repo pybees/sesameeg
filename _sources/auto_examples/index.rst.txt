@@ -19,9 +19,9 @@ Introductory examples.
 
 .. only:: html
 
- .. figure:: /auto_examples/images/thumb/sphx_glr_plot_analyse_sample_auditory_thumb.png
+    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_analyse_sample_auditory_thumb.png
 
-     :ref:`sphx_glr_auto_examples_plot_analyse_sample_auditory.py`
+        :ref:`sphx_glr_auto_examples_plot_analyse_sample_auditory.py`
 
 .. raw:: html
 
@@ -35,13 +35,33 @@ Introductory examples.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_meg_sample_auditory_fixed_ori_thumb.png
+
+        :ref:`sphx_glr_auto_examples_plot_meg_sample_auditory_fixed_ori.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_meg_sample_auditory_fixed_ori
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="In this example we shall compute SESAME inverse solution on evoked data in a volume source spac...">
 
 .. only:: html
 
- .. figure:: /auto_examples/images/thumb/sphx_glr_plot_meg_auditory_sesame_volume_thumb.png
+    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_meg_auditory_sesame_volume_thumb.png
 
-     :ref:`sphx_glr_auto_examples_plot_meg_auditory_sesame_volume.py`
+        :ref:`sphx_glr_auto_examples_plot_meg_auditory_sesame_volume.py`
 
 .. raw:: html
 
@@ -59,9 +79,9 @@ Introductory examples.
 
 .. only:: html
 
- .. figure:: /auto_examples/images/thumb/sphx_glr_plot_meg_simulated_sesame_frequency_thumb.png
+    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_meg_simulated_sesame_frequency_thumb.png
 
-     :ref:`sphx_glr_auto_examples_plot_meg_simulated_sesame_frequency.py`
+        :ref:`sphx_glr_auto_examples_plot_meg_simulated_sesame_frequency.py`
 
 .. raw:: html
 
@@ -74,7 +94,7 @@ Introductory examples.
    /auto_examples/plot_meg_simulated_sesame_frequency
 .. raw:: html
 
-    <div class="sphx-glr-clear"></div>
+    <div style='clear:both'></div>
 
 
 
@@ -86,13 +106,13 @@ Introductory examples.
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Python source code: auto_examples_python.zip <//home/sara/Documenti/sesameeg/doc/auto_examples/auto_examples_python.zip>`
+    :download:`Download all examples in Python source code: auto_examples_python.zip <//home/gv/Codici/Python_Scripts/sesameeg_fork/doc/auto_examples/auto_examples_python.zip>`
 
 
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//home/sara/Documenti/sesameeg/doc/auto_examples/auto_examples_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//home/gv/Codici/Python_Scripts/sesameeg_fork/doc/auto_examples/auto_examples_jupyter.zip>`
 
 
 .. only:: html

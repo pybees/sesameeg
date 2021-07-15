@@ -66,7 +66,6 @@ References
 
 
 
-
 Load the info, the forward solution and the noise covariance
 The forward solution also defines the employed brain discretization.
 
@@ -91,7 +90,7 @@ The forward solution also defines the employed brain discretization.
             PCA-v1 (1 x 102)  idle
             PCA-v2 (1 x 102)  idle
             PCA-v3 (1 x 102)  idle
-    Reading forward solution from /home/sara/mne_data/MNE-sample-data/MEG/sample/sample_audvis-meg-eeg-oct-6-fwd.fif...
+    Reading forward solution from /home/gv/mne_data/MNE-sample-data/MEG/sample/sample_audvis-meg-eeg-oct-6-fwd.fif...
         Reading a source space...
         Computing patch statistics...
         Patch information added...
@@ -117,7 +116,6 @@ The forward solution also defines the employed brain discretization.
 
 
 
-
 In this example, to save computation time, we shall only simulate gradiometer
 data. You can try simulating other types of sensors as well.
 
@@ -140,7 +138,6 @@ data. You can try simulating other types of sensors as well.
  .. code-block:: none
 
         203 out of 366 channels remain after picking
-
 
 
 
@@ -212,7 +209,6 @@ over time, but stays close to 10 Hz.
 
 
 
-
 We now simulate two timeseries and plot some basic information about them.
 
 
@@ -261,7 +257,6 @@ We now simulate two timeseries and plot some basic information about them.
 
 
 
-
 Now we put the signals at two locations on the cortex. To do so, we construct
 a :py:class:`mne.SourceEstimate` object to store them in.
 
@@ -279,7 +274,6 @@ a :py:class:`mne.SourceEstimate` object to store them in.
 
     # Construct SourceEstimates that describe the signals at the cortical level.
     stc_signal = mne.SourceEstimate(q, vertices, tmin=0, tstep=1. / sfreq, subject='sample')
-
 
 
 
@@ -311,13 +305,11 @@ by empty room noise.
         Average patch normals will be employed in the rotation to the local surface coordinates....
         Converting to surface-based source orientations...
         [done]
-    /home/sara/Documenti/sesameeg/examples/plot_meg_simulated_sesame_frequency.py:182: RuntimeWarning: The maximum current magnitude is 132.9 nAm, which is very large. Are you trying to apply the forward model to noise-normalized (dSPM, sLORETA, or eLORETA) values? The result will only be correct if currents (in units of Am) are used.
+    /home/gv/Codici/Python_Scripts/sesameeg_fork/examples/plot_meg_simulated_sesame_frequency.py:182: RuntimeWarning: The maximum current magnitude is 128.9 nAm, which is very large. Are you trying to apply the forward model to noise-normalized (dSPM, sLORETA, or eLORETA) values? The result will only be correct if currents (in units of Am) are used.
       evoked = mne.apply_forward(fwd, stc_signal, info)
     Projecting source estimate to sensor space...
     [done]
     Adding noise to 203/203 channels (203 channels in cov)
-
-    <Evoked  |  '' (average, N=1), [0, 4.9982] sec, 203 ch, ~8.0 MB>
 
 
 
@@ -334,15 +326,6 @@ Visualize the data
 .. image:: /auto_examples/images/sphx_glr_plot_meg_simulated_sesame_frequency_002.png
     :class: sphx-glr-single-img
 
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-
-    <Figure size 640x300 with 1 Axes>
 
 
 
@@ -388,24 +371,26 @@ domain by setting ``Fourier_transf=True``.
 
     Computing inverse operator with 203 channels.
         203 out of 203 channels remain after picking
-    Computing neighbours matrix...[done]
+    Forward model with free source orientation.
+    Computing neighbours matrix [done]
     Computing neighbours probabilities...[done]
     Data have been converted to the frequency domain.
     Analyzing data from 9.6002 Hz to 10.4003 Hz
     Estimating dipole moment std...[done]
-     Estimated dipole moment std: 2.1324e-05
+     Estimated dipole moment std: 2.1449e-05
     Sampling hyperprior for dipole moment std.
     Estimating noise std...[done]
-     Estimated noise std: 2.6368e-09
+     Estimated noise std: 2.6522e-09
     Computing inverse solution. This will take a while...
-    Estimated dipole strength variance: 9.2037343747418e-06
+    /home/gv/Codici/Python_Scripts/sesameeg_fork/sesameeg/particles.py:170: RuntimeWarning: invalid value encountered in log
+      self.loglikelihood_unit = - (n_ist * noise_std**2) * np.log(det_sigma)
+    Estimated dipole strength variance: 9.500712482661169e-06
     [done]
         Estimated number of sources: 2
         Estimated source locations: [4367 3554]
         True source locations: [3554, 4367]
-        Goodness of fit with the recorded data: 92.41%
-        Source Dispersion: 1.4 mm
-
+        Goodness of fit with the recorded data: 92.58999999999999%
+        Source Dispersion: 1.54 mm
 
 
 
@@ -460,10 +445,9 @@ Visualize the posterior map of the dipoles' location
 
 
 
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 5 minutes  57.392 seconds)
+   **Total running time of the script:** ( 4 minutes  4.112 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_meg_simulated_sesame_frequency.py:

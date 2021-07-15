@@ -52,7 +52,6 @@ dataset.
 
 
 
-
 Load the forward solution  :math:`\textbf{G}`  and the evoked data
 :math:`\textbf{y}`.
 The forward solution also defines the employed brain discretization.
@@ -84,7 +83,7 @@ The forward solution also defines the employed brain discretization.
 
  .. code-block:: none
 
-    Reading forward solution from /home/sara/mne_data/MNE-sample-data/MEG/sample/sample_audvis-meg-eeg-oct-6-fwd.fif...
+    Reading forward solution from /home/gv/mne_data/MNE-sample-data/MEG/sample/sample_audvis-meg-eeg-oct-6-fwd.fif...
         Reading a source space...
         Computing patch statistics...
         Patch information added...
@@ -104,7 +103,7 @@ The forward solution also defines the employed brain discretization.
         Source spaces transformed to the forward solution coordinate frame
         364 out of 366 channels remain after picking
         305 out of 364 channels remain after picking
-    Reading /home/sara/mne_data/MNE-sample-data/MEG/sample/sample_audvis-ave.fif ...
+    Reading /home/gv/mne_data/MNE-sample-data/MEG/sample/sample_audvis-ave.fif ...
         Read a total of 4 projection items:
             PCA-v1 (1 x 102) active
             PCA-v2 (1 x 102) active
@@ -116,7 +115,6 @@ The forward solution also defines the employed brain discretization.
             nave = 55 - aspect type = 100
     Projections have already been applied. Setting proj attribute to True.
     Applying baseline correction (mode: mean)
-
 
 
 
@@ -155,7 +153,6 @@ Define the parameters.
 
 
 
-
 Visualize the selected data.
 
 
@@ -173,7 +170,6 @@ Visualize the selected data.
 
 .. image:: /auto_examples/images/sphx_glr_plot_analyse_sample_auditory_001.png
     :class: sphx-glr-single-img
-
 
 
 
@@ -211,7 +207,8 @@ Apply SESAME.
 
     Computing inverse operator with 305 channels.
         305 out of 305 channels remain after picking
-    Computing neighbours matrix...[done]
+    Forward model with free source orientation.
+    Computing neighbours matrix [done]
     Computing neighbours probabilities...[done]
     Analyzing data from 0.045 s to 0.1349 s
     Estimating dipole moment std...[done]
@@ -220,13 +217,12 @@ Apply SESAME.
     Estimating noise std...[done]
      Estimated noise std: 3.9983e-12
     Computing inverse solution. This will take a while...
-    Estimated dipole strength variance: 2.990188751479008e-08
+    Estimated dipole strength variance: 3.042870043769498e-08
     [done]
         Estimated number of sources: 2
-        Estimated source locations: [5624 1677]
-        Goodness of fit with the recorded data: 69.67999999999999%
-        Source Dispersion: 1.04 mm
-
+        Estimated source locations: [5624 1745]
+        Goodness of fit with the recorded data: 69.92%
+        Source Dispersion: 0.52 mm
 
 
 
@@ -254,7 +250,6 @@ Visualize the amplitude of the estimated sources as function of time.
 
 .. image:: /auto_examples/images/sphx_glr_plot_analyse_sample_auditory_002.png
     :class: sphx-glr-single-img
-
 
 
 
@@ -304,6 +299,7 @@ Visualize the posterior map of the dipoles' location
  .. code-block:: none
 
     Surface stc computed.
+    Using mayavi 3d backend.
 
 
 
@@ -326,10 +322,9 @@ Save results.
 
 
 
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  10.946 seconds)
+   **Total running time of the script:** ( 0 minutes  55.208 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_analyse_sample_auditory.py:

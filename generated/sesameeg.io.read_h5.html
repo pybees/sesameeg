@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Mathematical model" href="../explanation_algorithm.html" />
@@ -98,13 +98,13 @@
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>fpath</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Path and filename of the .h5 file containing the result.</p>
+<dt><strong>fpath</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Path and filename of the .h5 file containing the result.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>res</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>A Python dictionary containing the result</p>
+<dt><strong>res</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></dt><dd><p>A Python dictionary containing the result</p>
 </dd>
 </dl>
 </dd>
@@ -113,127 +113,128 @@
 <p>The keys of the returned dictionary are the following:</p>
 <ul>
 <li><dl>
-<dt>ch_names<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | ‘Not available.’</span></dt><dd><p>The channel names</p>
+<dt>ch_names<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | ‘Not available.’</span></dt><dd><p>The channel names</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>cov_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the noise covariance.</p>
+<dt>cov_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the noise covariance.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>data_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the data.</p>
+<dt>data_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the data.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>est_locs<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | ‘Not available.’</span></dt><dd><p>The source space grid points indices in which a source is estimated.</p>
+<dt>est_locs<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | ‘Not available.’</span></dt><dd><p>The source space grid points indices in which a source is estimated.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>est_n_dips<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | ‘Not available.’</span></dt><dd><p>The estimated number of dipoles.</p>
+<dt>est_n_dips<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | ‘Not available.’</span></dt><dd><p>The estimated number of dipoles.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>est_dip_moms<span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> , shape (est_n_dips[-1], n_ist, 3) | ‘Not available.’</span></dt><dd><p>The moment time courses of the dipoles estimated in the last iteration of SESAME.</p>
+<dt>est_dip_moms<span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> , shape (est_n_dips[-1], n_ist, n_comp) | ‘Not available.’</span></dt><dd><p>The moment time courses of the dipoles estimated in the last iteration of SESAME.
+(n_comp = 1, if fixed orientation, 3, if free orientation)</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>est_dip_mom_std<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, shape (n_iterations, ) | ‘Not available.’</span></dt><dd><p>Estimated values of the parameter <code class="docutils literal notranslate"><span class="pre">dip_mom_std</span></code>. Each array in the list corresponds to a single particle.
+<dt>est_dip_mom_std<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>, shape (n_iterations, ) | ‘Not available.’</span></dt><dd><p>Estimated values of the parameter <code class="docutils literal notranslate"><span class="pre">dip_mom_std</span></code>. Each array in the list corresponds to a single particle.
 This only applies if <code class="docutils literal notranslate"><span class="pre">hyper_q=True</span></code> has been selected when instantiating <a class="reference internal" href="sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sesame</span></code></a>.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>exponents<span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> | ‘Not available.’</span></dt><dd><p>Array whose entries represent points in the space of artificial
+<dt>exponents<span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> | ‘Not available.’</span></dt><dd><p>Array whose entries represent points in the space of artificial
 distributions. It is used to keep track of the path followed
 by SESAME.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>final_dip_mom_std<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | ‘Not available.’</span></dt><dd><p>The weighted average of the last estimated value of <code class="docutils literal notranslate"><span class="pre">dip_mom_std</span></code> in each particle.
+<dt>final_dip_mom_std<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | ‘Not available.’</span></dt><dd><p>The weighted average of the last estimated value of <code class="docutils literal notranslate"><span class="pre">dip_mom_std</span></code> in each particle.
 This only applies if <code class="docutils literal notranslate"><span class="pre">hyper_q=True</span></code> has been selected when instantiating <a class="reference internal" href="sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sesame</span></code></a>.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>fmax<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The last frequency (in Hertz) of the frequency band in which data have been analyzed.</p>
+<dt>fmax<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The last frequency (in Hertz) of the frequency band in which data have been analyzed.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>fmin<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The first frequency (in Hertz) of the frequency band in which data have been analyzed.</p>
+<dt>fmin<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The first frequency (in Hertz) of the frequency band in which data have been analyzed.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>fwd_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the forward model.</p>
+<dt>fwd_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the forward model.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>lambda<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The parameter of the Poisson prior pdf on the number of dipoles.</p>
+<dt>lambda<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The parameter of the Poisson prior pdf on the number of dipoles.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>lf_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the lead field.</p>
+<dt>lf_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the lead field.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>max_n_dips<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The maximum number of dipoles allowed in each particle.</p>
+<dt>max_n_dips<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The maximum number of dipoles allowed in each particle.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>model_sel<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The model selection, i.e. the posterior distribution on the number
+<dt>model_sel<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The model selection, i.e. the posterior distribution on the number
 of dipoles.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>prob_map<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (est_n_dips, n_verts)</span></dt><dd><p>Posterior probability map</p>
+<dt>prob_map<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (est_n_dips, n_verts)</span></dt><dd><p>Posterior probability map</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>noise_std<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the noise distribution.</p>
+<dt>noise_std<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the noise distribution.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>dip_mom_std<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the prior pdf on the dipole moment.</p>
+<dt>dip_mom_std<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the prior pdf on the dipole moment.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>src_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the source space grid.</p>
+<dt>src_path<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>Path and filename of the file containing the source space grid.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>subject<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>The subject name.</p>
+<dt>subject<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>The subject name.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>subject_viz<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>The name of the subject’s FreeSurfer folder.</p>
+<dt>subject_viz<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | ‘Not available.’</span></dt><dd><p>The name of the subject’s FreeSurfer folder.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>tmax<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The last instant (in seconds) of the time window in which data have been analyzed.</p>
+<dt>tmax<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The last instant (in seconds) of the time window in which data have been analyzed.</p>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt>tmin<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The first instant (in seconds) of the time window in which data have been analyzed.</p>
+<dt>tmin<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The first instant (in seconds) of the time window in which data have been analyzed.</p>
 </dd>
 </dl>
 </li>
@@ -262,7 +263,7 @@ the corresponding quantity estimated at each iteration or only those estimated a
     </p>
     <p>
         &copy; Copyright 2019, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>

@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="sesameeg.utils.compute_neighbours_matrix" href="sesameeg.utils.compute_neighbours_matrix.html" />
@@ -93,43 +93,43 @@
 <h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">sesameeg</span></code>.EmpPdf<a class="headerlink" href="#sesameeg-emppdf" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="sesameeg.EmpPdf">
-<em class="property">class </em><code class="sig-prename descclassname">sesameeg.</code><code class="sig-name descname">EmpPdf</code><span class="sig-paren">(</span><em class="sig-param">n_parts</em>, <em class="sig-param">n_verts</em>, <em class="sig-param">lam</em>, <em class="sig-param">dip_mom_std=None</em>, <em class="sig-param">hyper_q=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/emp_pdf.html#EmpPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sesameeg.EmpPdf" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">sesameeg.</code><code class="sig-name descname">EmpPdf</code><span class="sig-paren">(</span><em class="sig-param">n_parts</em>, <em class="sig-param">n_verts</em>, <em class="sig-param">lam</em>, <em class="sig-param">dip_mom_std=None</em>, <em class="sig-param">fixed_ori=False</em>, <em class="sig-param">hyper_q=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/emp_pdf.html#EmpPdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sesameeg.EmpPdf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Empirical probability density function (pdf) class for SESAME.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>n_parts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of particles forming the empirical pdf.</p>
+<dt><strong>n_parts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of particles forming the empirical pdf.</p>
 </dd>
-<dt><strong>n_verts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of the points in the given brain discretization.</p>
+<dt><strong>n_verts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of the points in the given brain discretization.</p>
 </dd>
-<dt><strong>lam</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The parameter of the prior Poisson pdf of the number of dipoles.</p>
+<dt><strong>lam</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The parameter of the prior Poisson pdf of the number of dipoles.</p>
 </dd>
-<dt><strong>dip_mom_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the prior of the dipole moment.</p>
+<dt><strong>dip_mom_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the prior of the dipole moment.</p>
 </dd>
-<dt><strong>hyper_q</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True, use hyperprior in dipole strength</p>
+<dt><strong>hyper_q</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True, use hyperprior in dipole strength</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Attributes</dt>
 <dd class="field-even"><dl>
-<dt><strong>particles</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">Particle</span></code>, shape(n_parts,)</span></dt><dd><p>The EmpPdf’s particles.</p>
+<dt><strong>particles</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">Particle</span></code>, shape(n_parts,)</span></dt><dd><p>The EmpPdf’s particles.</p>
 </dd>
-<dt><strong>logweights</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape(n_parts,)</span></dt><dd><p>The logarithm of the weights of the particles forming the
+<dt><strong>logweights</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape(n_parts,)</span></dt><dd><p>The logarithm of the weights of the particles forming the
 empirical pdf.</p>
 </dd>
-<dt><strong>ESS</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The Effective Sample Size</p>
+<dt><strong>ESS</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The Effective Sample Size</p>
 </dd>
-<dt><strong>exponents</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Array whose entries represent points in the space of artificial
+<dt><strong>exponents</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Array whose entries represent points in the space of artificial
 distributions. It is used to keep track of the path followed
 by SESAME.</p>
 </dd>
-<dt><strong>model_sel</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Marginal posterior probability of the number of sources.</p>
+<dt><strong>model_sel</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Marginal posterior probability of the number of sources.</p>
 </dd>
-<dt><strong>est_n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Estimated number of sources.</p>
+<dt><strong>est_n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>Estimated number of sources.</p>
 </dd>
-<dt><strong>pmap</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape(est_n_dips x n_verts)</span></dt><dd><p>Intensity measure of the point process.</p>
+<dt><strong>pmap</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape(est_n_dips x n_verts)</span></dt><dd><p>Intensity measure of the point process.</p>
 </dd>
-<dt><strong>est_locs</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>Estimated sources locations</p>
+<dt><strong>est_locs</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>Estimated sources locations</p>
 </dd>
 </dl>
 </dd>
@@ -148,7 +148,7 @@ Moreover, the method updates the particle weights.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>noise_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the noise distribution.</p>
+<dt><strong>noise_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the noise distribution.</p>
 </dd>
 </dl>
 </dd>
@@ -163,10 +163,10 @@ their locations from the posterior pdf.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>D</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_verts x n_verts)</span></dt><dd><p>The Euclidean distance between the points in the
+<dt><strong>D</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_verts x n_verts)</span></dt><dd><p>The Euclidean distance between the points in the
 brain discretization.</p>
 </dd>
-<dt><strong>max_n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The maximum number of dipoles allowed in a particle.</p>
+<dt><strong>max_n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The maximum number of dipoles allowed in a particle.</p>
 </dd>
 </dl>
 </dd>
@@ -191,24 +191,24 @@ all but one particle have negligible weights).</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>n_verts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of the points in the given brain discretization.</p>
+<dt><strong>n_verts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of the points in the given brain discretization.</p>
 </dd>
-<dt><strong>r_data</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_sens, n_ist)</span></dt><dd><p>The real part of the data; n_sens is the number of sensors and
+<dt><strong>r_data</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_sens, n_ist)</span></dt><dd><p>The real part of the data; n_sens is the number of sensors and
 n_ist is the number of time-points.</p>
 </dd>
-<dt><strong>lead_field</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_sens x 3*n_verts)</span></dt><dd><p>The leadfield matrix.</p>
+<dt><strong>lead_field</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_sens x n_comp*n_verts)</span></dt><dd><p>The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)</p>
 </dd>
-<dt><strong>neigh</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The neighbours of each point in the brain discretization.</p>
+<dt><strong>neigh</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The neighbours of each point in the brain discretization.</p>
 </dd>
-<dt><strong>neigh_p</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The neighbours’ probabilities.</p>
+<dt><strong>neigh_p</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The neighbours’ probabilities.</p>
 </dd>
-<dt><strong>noise_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the noise distribution.</p>
+<dt><strong>noise_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the noise distribution.</p>
 </dd>
-<dt><strong>sigma_q</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the prior of the dipole moment</p>
+<dt><strong>sigma_q</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the prior of the dipole moment</p>
 </dd>
-<dt><strong>lam</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The parameter of the prior Poisson pdf of the number of dipoles.</p>
+<dt><strong>lam</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The parameter of the prior Poisson pdf of the number of dipoles.</p>
 </dd>
-<dt><strong>max_n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The maximum number of dipoles allowed in a particle.</p>
+<dt><strong>max_n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The maximum number of dipoles allowed in a particle.</p>
 </dd>
 </dl>
 </dd>
@@ -232,7 +232,7 @@ n_ist is the number of time-points.</p>
     </p>
     <p>
         &copy; Copyright 2019, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>

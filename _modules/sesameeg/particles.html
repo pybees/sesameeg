@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
-    <script src="../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
@@ -129,11 +129,12 @@
 <span class="sd">        The prior pdf, evaluated in the particle.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_verts</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hyper_q</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_verts</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fixed_ori</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">hyper_q</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialization: the initial number of dipoles is Poisson</span>
 <span class="sd">           distribuited; the initial locations are uniformly distribuited</span>
 <span class="sd">           within the brain grid points, with no dipoles in the same position.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixed_ori</span> <span class="o">=</span> <span class="n">fixed_ori</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span> <span class="o">=</span> <span class="n">hyper_q</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_dips</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dipoles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
@@ -199,8 +200,11 @@
             <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n_sens</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># 1a: compute the leadfield of the particle</span>
-            <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">([[</span><span class="mi">3</span> <span class="o">*</span> <span class="n">dip</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">dip</span><span class="o">.</span><span class="n">loc</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">dip</span><span class="o">.</span><span class="n">loc</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
-                            <span class="k">for</span> <span class="n">dip</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dipoles</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_ori</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">([</span><span class="n">dip</span><span class="o">.</span><span class="n">loc</span> <span class="k">for</span> <span class="n">dip</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dipoles</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">([[</span><span class="mi">3</span> <span class="o">*</span> <span class="n">dip</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">dip</span><span class="o">.</span><span class="n">loc</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">dip</span><span class="o">.</span><span class="n">loc</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
+                                <span class="k">for</span> <span class="n">dip</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dipoles</span><span class="p">])</span>
             <span class="n">Gc</span> <span class="o">=</span> <span class="n">lead_field</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">]</span>
             <span class="c1"># 1b: compute the variance</span>
             <span class="n">sigma</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dip_mom_std</span> <span class="o">/</span> <span class="n">noise_std</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Gc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Gc</span><span class="p">))</span> <span class="o">+</span> \
@@ -219,8 +223,8 @@
 <span class="sd">        r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)</span>
 <span class="sd">            The real part of the data; n_sens is the number of sensors and</span>
 <span class="sd">            n_ist is the number of time-points or of frequencies.</span>
-<span class="sd">        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)</span>
-<span class="sd">            The leadfield matrix.</span>
+<span class="sd">        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)</span>
+<span class="sd">            The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)</span>
 <span class="sd">        noise_std : :py:class:`~float`</span>
 <span class="sd">            The standard deviation of the noise distribution.</span>
 
@@ -239,8 +243,11 @@
             <span class="n">inv_sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n_sens</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># 1a: compute the leadfield of the particle</span>
-            <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">([[</span><span class="mi">3</span><span class="o">*</span><span class="n">dip</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">dip</span><span class="o">.</span><span class="n">loc</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="o">*</span><span class="n">dip</span><span class="o">.</span><span class="n">loc</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span>
-                           <span class="k">for</span> <span class="n">dip</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dipoles</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_ori</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">([</span><span class="n">dip</span><span class="o">.</span><span class="n">loc</span> <span class="k">for</span> <span class="n">dip</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dipoles</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">([[</span><span class="mi">3</span> <span class="o">*</span> <span class="n">dip</span><span class="o">.</span><span class="n">loc</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">dip</span><span class="o">.</span><span class="n">loc</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">dip</span><span class="o">.</span><span class="n">loc</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
+                                <span class="k">for</span> <span class="n">dip</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dipoles</span><span class="p">])</span>
             <span class="n">Gc</span> <span class="o">=</span> <span class="n">lead_field</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">]</span>
             <span class="c1"># 1b: compute the covariance</span>
             <span class="n">sigma</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dip_mom_std</span> <span class="o">/</span> <span class="n">noise_std</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Gc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Gc</span><span class="p">))</span> <span class="o">+</span> \
@@ -292,8 +299,8 @@
 <span class="sd">        r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)</span>
 <span class="sd">            The real part of the data; n_sens is the number of sensors and</span>
 <span class="sd">            n_ist is the number of time-points or of frequencies.</span>
-<span class="sd">        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)</span>
-<span class="sd">            The leadfield matrix.</span>
+<span class="sd">        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)</span>
+<span class="sd">            The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)</span>
 <span class="sd">        max_n_dips : :py:class:`~int`</span>
 <span class="sd">            The maximum number of dipoles allowed in a particle.</span>
 <span class="sd">        lklh_exp : :py:class:`~float`</span>
@@ -371,8 +378,8 @@
 <span class="sd">        r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)</span>
 <span class="sd">            The real part of the data; n_sens is the number of sensors and</span>
 <span class="sd">            n_ist is the number of time-points or of frequencies.</span>
-<span class="sd">        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)</span>
-<span class="sd">            The leadfield matrix.</span>
+<span class="sd">        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)</span>
+<span class="sd">            The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)</span>
 <span class="sd">        lklh_exp : :py:class:`~float`</span>
 <span class="sd">            This number represents a point in the sequence of artificial</span>
 <span class="sd">            distributions used in SESAME.</span>
@@ -476,7 +483,7 @@
     </p>
     <p>
         &copy; Copyright 2019, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>

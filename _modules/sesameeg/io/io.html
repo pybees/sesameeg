@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/gallery.css" />
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
-    <script src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 <meta charset='utf-8'>
@@ -148,6 +148,7 @@
 
     <span class="n">f</span> <span class="o">=</span> <span class="n">h5</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
 
+    <span class="n">_fwd_fixed</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;fwd_fixed_ori&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">inv_op</span><span class="o">.</span><span class="n">fixed_ori</span><span class="p">)</span>
     <span class="n">_pmap</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s1">&#39;prob_map&#39;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">pmap</span><span class="p">):</span>
         <span class="n">_pmap</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">_b</span><span class="p">)</span>
@@ -164,7 +165,7 @@
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">model_sel</span><span class="p">):</span>
         <span class="n">_model_sel</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">_m</span><span class="p">)</span>
     <span class="n">_exponents</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;exponents&#39;</span><span class="p">,</span>
-                                  <span class="n">data</span><span class="o">=</span><span class="n">inv_op</span><span class="o">.</span><span class="n">e_pdf</span><span class="o">.</span><span class="n">exponents</span><span class="p">)</span>
+                                  <span class="n">data</span><span class="o">=</span><span class="n">inv_op</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">exponents</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">):</span>
         <span class="n">_ch_names</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s1">&#39;ch_names&#39;</span><span class="p">,</span>
                                      <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;ch_names&#39;</span><span class="p">]),</span><span class="mi">1</span><span class="p">),</span>
@@ -272,8 +273,9 @@
 <span class="sd">        The source space grid points indices in which a source is estimated.</span>
 <span class="sd">    * est_n_dips : :py:class:`~list` of :py:class:`~int` | &#39;Not available.&#39;</span>
 <span class="sd">        The estimated number of dipoles.</span>
-<span class="sd">    * est_dip_moms : :py:class:`~numpy.ndarray` , shape (est_n_dips[-1], n_ist, 3) | &#39;Not available.&#39;</span>
+<span class="sd">    * est_dip_moms : :py:class:`~numpy.ndarray` , shape (est_n_dips[-1], n_ist, n_comp) | &#39;Not available.&#39;</span>
 <span class="sd">        The moment time courses of the dipoles estimated in the last iteration of SESAME.</span>
+<span class="sd">        (n_comp = 1, if fixed orientation, 3, if free orientation)</span>
 <span class="sd">    * est_dip_mom_std : :py:class:`~list` of :py:class:`~numpy.ndarray`, shape (n_iterations, ) | &#39;Not available.&#39;</span>
 <span class="sd">        Estimated values of the parameter ``dip_mom_std``. Each array in the list corresponds to a single particle.</span>
 <span class="sd">        This only applies if ``hyper_q=True`` has been selected when instantiating :py:class:`~sesameeg.Sesame`.</span>
@@ -361,7 +363,7 @@
 
     <span class="k">for</span> <span class="n">_k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;lambda&#39;</span><span class="p">,</span> <span class="s1">&#39;noise_std&#39;</span><span class="p">,</span> <span class="s1">&#39;dip_mom_std&#39;</span><span class="p">,</span> <span class="s1">&#39;max_n_dips&#39;</span><span class="p">,</span>
                <span class="s1">&#39;subject&#39;</span><span class="p">,</span> <span class="s1">&#39;subject_viz&#39;</span><span class="p">,</span> <span class="s1">&#39;data_path&#39;</span><span class="p">,</span> <span class="s1">&#39;fwd_path&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;cov_path&#39;</span><span class="p">,</span> <span class="s1">&#39;src_path&#39;</span><span class="p">,</span> <span class="s1">&#39;lf_path&#39;</span><span class="p">]:</span>
+               <span class="s1">&#39;cov_path&#39;</span><span class="p">,</span> <span class="s1">&#39;src_path&#39;</span><span class="p">,</span> <span class="s1">&#39;lf_path&#39;</span><span class="p">,</span> <span class="s1">&#39;fwd_fixed_ori&#39;</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">res</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">_k</span><span class="p">][()]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -369,12 +371,21 @@
 
     <span class="k">if</span> <span class="s1">&#39;est_dip_moms&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="n">est_dip_moms_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;est_dip_moms&#39;</span><span class="p">][</span><span class="n">_key</span><span class="p">][:]</span> <span class="k">for</span> <span class="n">_key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;est_dip_moms&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
-                                                                            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
-        <span class="n">est_dip_moms_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;est_locs&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">est_dip_moms_temp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">est_dip_moms_temp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="n">_temp</span> <span class="o">=</span> <span class="n">est_dip_moms_temp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;est_locs&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-                <span class="n">est_dip_moms_aux</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">_temp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                                                                                          <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">))))</span>
+        <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;fwd_fixed_ori&#39;</span><span class="p">][()]:</span>
+            <span class="n">est_dip_moms_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;est_locs&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">est_dip_moms_temp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">est_dip_moms_temp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">_temp</span> <span class="o">=</span> <span class="n">est_dip_moms_temp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;est_locs&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                    <span class="n">est_dip_moms_aux</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">_temp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">f</span><span class="p">[</span><span class="s1">&#39;fwd_fixed_ori&#39;</span><span class="p">][()]</span> <span class="o">==</span> <span class="s1">&#39;Not available.&#39;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Uknown forward source orientation. Skipping dipole moments.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">est_dip_moms_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;est_locs&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">est_dip_moms_temp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">est_dip_moms_temp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">_temp</span> <span class="o">=</span> <span class="n">est_dip_moms_temp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;est_locs&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                    <span class="n">est_dip_moms_aux</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+=</span> <span class="n">_temp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
         <span class="n">res</span><span class="p">[</span><span class="s1">&#39;est_dip_moms&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">est_dip_moms_aux</span>
     <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">res</span></div>
@@ -392,7 +403,7 @@
     </p>
     <p>
         &copy; Copyright 2019, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>

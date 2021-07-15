@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
-    <script src="../_static/js/copybutton.js"></script>
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="sesameeg.Dipole" href="sesameeg.Dipole.html" />
@@ -93,117 +93,120 @@
 <h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">sesameeg</span></code>.Sesame<a class="headerlink" href="#sesameeg-sesame" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="sesameeg.Sesame">
-<em class="property">class </em><code class="sig-prename descclassname">sesameeg.</code><code class="sig-name descname">Sesame</code><span class="sig-paren">(</span><em class="sig-param">forward</em>, <em class="sig-param">data</em>, <em class="sig-param">noise_std=None</em>, <em class="sig-param">radius=None</em>, <em class="sig-param">neigh_std=None</em>, <em class="sig-param">n_parts=100</em>, <em class="sig-param">top_min=None</em>, <em class="sig-param">top_max=None</em>, <em class="sig-param">subsample=None</em>, <em class="sig-param">dip_mom_std=None</em>, <em class="sig-param">hyper_q=True</em>, <em class="sig-param">noise_cov=None</em>, <em class="sig-param">lam=0.25</em>, <em class="sig-param">max_n_dips=10</em>, <em class="sig-param">Fourier_transf=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/sesame.html#Sesame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sesameeg.Sesame" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">sesameeg.</code><code class="sig-name descname">Sesame</code><span class="sig-paren">(</span><em class="sig-param">forward</em>, <em class="sig-param">data</em>, <em class="sig-param">noise_std=None</em>, <em class="sig-param">radius=None</em>, <em class="sig-param">neigh_std=None</em>, <em class="sig-param">n_parts=100</em>, <em class="sig-param">top_min=None</em>, <em class="sig-param">top_max=None</em>, <em class="sig-param">subsample=None</em>, <em class="sig-param">dip_mom_std=None</em>, <em class="sig-param">hyper_q=True</em>, <em class="sig-param">noise_cov=None</em>, <em class="sig-param">lam=0.25</em>, <em class="sig-param">max_n_dips=10</em>, <em class="sig-param">neigh_simil=0.5</em>, <em class="sig-param">Fourier_transf=False</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/sesame.html#Sesame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sesameeg.Sesame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sequential Semi-Analytic Monte-Carlo Estimation (SESAME) of sources.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>forward</strong><span class="classifier"><a class="reference external" href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="(in MNE v0.20.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Forward</span></code></a> object</span></dt><dd><p>The forward solution.</p>
+<dt><strong>forward</strong><span class="classifier"><a class="reference external" href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="(in MNE v0.23.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Forward</span></code></a> object</span></dt><dd><p>The forward solution. Sesame automatically detects whether the dipole
+orientations are free or locally normal to the cortical surface.</p>
 </dd>
-<dt><strong>data</strong><span class="classifier">instance of <a class="reference external" href="https://mne.tools/stable/generated/mne.Evoked.html#mne.Evoked" title="(in MNE v0.20.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Evoked</span></code></a> | <a class="reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray" title="(in MNE v0.20.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvokedArray</span></code></a></span></dt><dd><p>The MEEG data.</p>
+<dt><strong>data</strong><span class="classifier">instance of <a class="reference external" href="https://mne.tools/stable/generated/mne.Evoked.html#mne.Evoked" title="(in MNE v0.23.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Evoked</span></code></a> | <a class="reference external" href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray" title="(in MNE v0.23.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvokedArray</span></code></a></span></dt><dd><p>The MEEG data.</p>
 </dd>
-<dt><strong>noise_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The standard deviation of the noise distribution.
+<dt><strong>noise_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The standard deviation of the noise distribution.
 If None, it is estimated from the data</p>
 </dd>
-<dt><strong>radius</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The maximum distance in cm between two neighbouring vertices
+<dt><strong>radius</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The maximum distance in cm between two neighbouring vertices
 of the brain discretization. If None, radius is set to 1 cm.</p>
 </dd>
-<dt><strong>neigh_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The standard deviation of the probability distribution of
+<dt><strong>neigh_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The standard deviation of the probability distribution of
 neighbours. If None, neighb_std is set to radius/2.</p>
 </dd>
-<dt><strong>n_parts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of particles forming the empirical pdf.</p>
+<dt><strong>n_parts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of particles forming the empirical pdf.</p>
 </dd>
-<dt><strong>top_min</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>First topography to be included in the segment of data to be analyzed.
+<dt><strong>top_min</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>First topography to be included in the segment of data to be analyzed.
 It is meant to be expressed either in seconds in the time domain or
 in Hertz in the frequency domain.
 If None, it is set to the first topography of the input data.</p>
 </dd>
-<dt><strong>top_max</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>Last topography to be included in the segment of data to be analyzed.
+<dt><strong>top_max</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>Last topography to be included in the segment of data to be analyzed.
 It is meant to be expressed either in seconds in the time domain or
 in Hertz in the frequency domain.
 If None, it is set to the last topography of the input data.</p>
 </dd>
-<dt><strong>subsample</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | None</span></dt><dd><p>The step used to subsample the data. If None no subsampling is
+<dt><strong>subsample</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | None</span></dt><dd><p>The step used to subsample the data. If None no subsampling is
 applied.</p>
 </dd>
-<dt><strong>dip_mom_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The standard deviation of the prior pdf on the dipole moment.
+<dt><strong>dip_mom_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>The standard deviation of the prior pdf on the dipole moment.
 If None, it is estimated from the forward model and the data.</p>
 </dd>
-<dt><strong>hyper_q</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True an hyperprior pdf on the dipole moment std will be used.
+<dt><strong>hyper_q</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True an hyperprior pdf on the dipole moment std will be used.
 Default is True.</p>
 </dd>
-<dt><strong>noise_cov</strong><span class="classifier">instance of <a class="reference external" href="https://mne.tools/stable/generated/mne.Covariance.html#mne.Covariance" title="(in MNE v0.20.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Covariance</span></code></a> | None</span></dt><dd><p>The noise covariance matrix used to prewhiten the data. If None,
+<dt><strong>noise_cov</strong><span class="classifier">instance of <a class="reference external" href="https://mne.tools/stable/generated/mne.Covariance.html#mne.Covariance" title="(in MNE v0.23.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Covariance</span></code></a> | None</span></dt><dd><p>The noise covariance matrix used to prewhiten the data. If None,
 no prewhitening is applied.</p>
 </dd>
-<dt><strong>lam</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The parameter of the Poisson prior pdf on the number of dipoles.</p>
+<dt><strong>lam</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The parameter of the Poisson prior pdf on the number of dipoles.</p>
 </dd>
-<dt><strong>max_n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The maximum number of dipoles allowed in a particle.</p>
+<dt><strong>max_n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The maximum number of dipoles allowed in a particle.</p>
 </dd>
-<dt><strong>Fourier_transf</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True data are converted to the frequency domain.</p>
+<dt><strong>Fourier_transf</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True data are converted to the frequency domain.</p>
 </dd>
-<dt><strong>verbose</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True, increase verbose level.</p>
+<dt><strong>verbose</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True, increase verbose level.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Attributes</dt>
 <dd class="field-even"><dl>
-<dt><strong>n_parts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of particles forming the empirical pdf.</p>
+<dt><strong>n_parts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of particles forming the empirical pdf.</p>
 </dd>
-<dt><strong>lam</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The parameter of the Poisson prior pdf on the number of dipoles.</p>
+<dt><strong>lam</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The parameter of the Poisson prior pdf on the number of dipoles.</p>
 </dd>
-<dt><strong>max_n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The maximum number of dipoles allowed in a particle.</p>
+<dt><strong>max_n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The maximum number of dipoles allowed in a particle.</p>
 </dd>
-<dt><strong>forward</strong><span class="classifier">instance of <a class="reference external" href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="(in MNE v0.20.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Forward</span></code></a></span></dt><dd><p>The forward solution.</p>
+<dt><strong>forward</strong><span class="classifier">instance of <a class="reference external" href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="(in MNE v0.23.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Forward</span></code></a></span></dt><dd><p>The forward solution.</p>
 </dd>
-<dt><strong>source_space</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_verts, 3)</span></dt><dd><p>The coordinates of the points in the brain discretization.</p>
+<dt><strong>source_space</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_verts, 3)</span></dt><dd><p>The coordinates of the points in the brain discretization.</p>
 </dd>
-<dt><strong>n_verts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of points forming the brain discretization.</p>
+<dt><strong>n_verts</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The number of points forming the brain discretization.</p>
 </dd>
-<dt><strong>lead_field</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_sens x 3*n_verts)</span></dt><dd><p>The leadfield matrix.</p>
+<dt><strong>lead_field</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_sens x n_comp*n_verts)</span></dt><dd><p>The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)</p>
 </dd>
-<dt><strong>distance_matrix</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_verts x n_verts)</span></dt><dd><p>The Euclidean distance between the points in the
+<dt><strong>distance_matrix</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_verts x n_verts)</span></dt><dd><p>The Euclidean distance between the points in the
 brain discretization.</p>
 </dd>
-<dt><strong>neigh</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, shape (n_vert, n_max_neigh)</span></dt><dd><p>The set of neighbours of each point in the brain discretization.
+<dt><strong>neigh</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, shape (n_vert, n_max_neigh)</span></dt><dd><p>The set of neighbours of each point in the brain discretization.
 n_max_neigh is the cardinality of the biggest set.</p>
 </dd>
-<dt><strong>radius</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The radius used to compute the neighbours.</p>
+<dt><strong>radius</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The radius used to compute the neighbours.</p>
 </dd>
-<dt><strong>neigh_p</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_vert, n_max_neigh)</span></dt><dd><p>The neighbours’ probabilities.</p>
+<dt><strong>neigh_p</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_vert, n_max_neigh)</span></dt><dd><p>The neighbours’ probabilities.</p>
 </dd>
-<dt><strong>neigh_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation used to compute the neigh_p matrix.</p>
+<dt><strong>neigh_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation used to compute the neigh_p matrix.</p>
 </dd>
-<dt><strong>s_min</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The first sample of the segment of data that are analyzed.</p>
+<dt><strong>s_min</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The first sample of the segment of data that are analyzed.</p>
 </dd>
-<dt><strong>s_max</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The last sample of the segment of data that are analyzed.</p>
+<dt><strong>s_max</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The last sample of the segment of data that are analyzed.</p>
 </dd>
-<dt><strong>subsample</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | None</span></dt><dd><p>The step used to subsample the data.</p>
+<dt><strong>subsample</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> | None</span></dt><dd><p>The step used to subsample the data.</p>
 </dd>
-<dt><strong>r_data</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_sens, n_ist)</span></dt><dd><p>The real part of the data; n_sens is the number of sensors and
+<dt><strong>r_data</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_sens, n_ist)</span></dt><dd><p>The real part of the data; n_sens is the number of sensors and
 n_ist is the number of time-points or of frequencies.</p>
 </dd>
-<dt><strong>dip_mom_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the prior on the dipole moment.</p>
+<dt><strong>dip_mom_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the prior on the dipole moment.</p>
 </dd>
-<dt><strong>hyper_q</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True use hyperprior on dipole moment std.</p>
+<dt><strong>hyper_q</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True use hyperprior on dipole moment std.</p>
 </dd>
-<dt><strong>noise_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the noise distribution.</p>
+<dt><strong>noise_std</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The standard deviation of the noise distribution.</p>
 </dd>
-<dt><strong>_resample_it</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The iterations during which a resampling step has been performed</p>
+<dt><strong>_resample_it</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The iterations during which a resampling step has been performed</p>
 </dd>
-<dt><strong>est_n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The estimated number of dipoles.</p>
+<dt><strong>est_n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The estimated number of dipoles.</p>
 </dd>
-<dt><strong>est_locs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The source space grid points indices in which a source is estimated.</p>
+<dt><strong>est_locs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The source space grid points indices in which a source is estimated.</p>
 </dd>
-<dt><strong>est_dip_moms</strong><span class="classifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_ist x (3*est_n_dips[-1])) | None</span></dt><dd><p>The sources’ moments estimated at the last iteration.
+<dt><strong>est_dip_moms</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_ist x (n_comp*est_n_dips[-1])) | None</span></dt><dd><p>The sources’ moments estimated at the last iteration. (n_comp = 1, if fixed orientation, 3, if free orientation)
 If None, moments can be estimated by calling <a class="reference internal" href="#sesameeg.Sesame.compute_dip_mom" title="sesameeg.Sesame.compute_dip_mom"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_dip_mom()</span></code></a></p>
 </dd>
-<dt><strong>model_sel</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The model selection, i.e. the posterior distribution on the number
+<dt><strong>model_sel</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The model selection, i.e. the posterior distribution on the number
 of dipoles.</p>
 </dd>
-<dt><strong>pmap</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (est_n_dips, n_verts)</span></dt><dd><p>Posterior probability map.</p>
+<dt><strong>pmap</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (est_n_dips, n_verts)</span></dt><dd><p>Posterior probability map.</p>
 </dd>
 <dt><strong>posterior</strong><span class="classifier">instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">EmpPdf</span></code></span></dt><dd><p>The empirical pdf approximated by the particles at each iteration.</p>
 </dd>
+<dt><strong>****</strong> Sara**</dt><dd></dd>
+<dt><strong>Add parameter distance = ‘cosine’ or ‘euclidean’</strong></dt><dd></dd>
 </dl>
 </dd>
 </dl>
@@ -214,12 +217,12 @@ of dipoles.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>estimate_all</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True compute the posterior probability map and estimate the
+<dt><strong>estimate_all</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True compute the posterior probability map and estimate the
 number of dipoles and their locations at each iteration.
 If False compute the above quantities only at the last
 iteration.</p>
 </dd>
-<dt><strong>estimate_dip_mom</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True compute a point-estimate of the dipole moment at the
+<dt><strong>estimate_dip_mom</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True compute a point-estimate of the dipole moment at the
 last iteration.</p>
 </dd>
 </dl>
@@ -234,7 +237,7 @@ last iteration.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>est_locs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The estimated source locations.</p>
+<dt><strong>est_locs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The estimated source locations.</p>
 </dd>
 </dl>
 </dd>
@@ -253,13 +256,13 @@ source being located in <img class="math" src="../_images/math/79a3d439d28652c54
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>subject</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The subject name.</p>
+<dt><strong>subject</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The subject name.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>stc</strong><span class="classifier"><a class="reference external" href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="(in MNE v0.20.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SourceEstimate</span></code></a> | <a class="reference external" href="https://mne.tools/stable/generated/mne.VolSourceEstimate.html#mne.VolSourceEstimate" title="(in MNE v0.20.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">VolSourceEstimate</span></code></a></span></dt><dd><p>The source estimate object containing the posterior map of the
+<dt><strong>stc</strong><span class="classifier"><a class="reference external" href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="(in MNE v0.23.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SourceEstimate</span></code></a> | <a class="reference external" href="https://mne.tools/stable/generated/mne.VolSourceEstimate.html#mne.VolSourceEstimate" title="(in MNE v0.23.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">VolSourceEstimate</span></code></a></span></dt><dd><p>The source estimate object containing the posterior map of the
 dipoles’ location.</p>
 </dd>
 </dl>
@@ -282,7 +285,7 @@ is the Frobenius norm.</p>
 <dl class="field-list">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><dl>
-<dt><strong>gof</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The goodness of fit with the recorded data.</p>
+<dt><strong>gof</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The goodness of fit with the recorded data.</p>
 </dd>
 </dl>
 </dd>
@@ -296,21 +299,21 @@ is the Frobenius norm.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>fpath</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The path to the save file.</p>
+<dt><strong>fpath</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The path to the save file.</p>
 </dd>
-<dt><strong>sbj</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The subject name.</p>
+<dt><strong>sbj</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The subject name.</p>
 </dd>
-<dt><strong>sbj_viz</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The name of the subject’s FreeSurfer folder.</p>
+<dt><strong>sbj_viz</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The name of the subject’s FreeSurfer folder.</p>
 </dd>
-<dt><strong>data_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the data file.</p>
+<dt><strong>data_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the data file.</p>
 </dd>
-<dt><strong>fwd_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the forward solution file.</p>
+<dt><strong>fwd_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the forward solution file.</p>
 </dd>
-<dt><strong>cov_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the noise covariance file.</p>
+<dt><strong>cov_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the noise covariance file.</p>
 </dd>
-<dt><strong>src_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the source space file.</p>
+<dt><strong>src_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the source space file.</p>
 </dd>
-<dt><strong>lf_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the leadfield matrix file.</p>
+<dt><strong>lf_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the leadfield matrix file.</p>
 </dd>
 </dl>
 </dd>
@@ -324,23 +327,23 @@ is the Frobenius norm.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl>
-<dt><strong>fpath</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The path to the save file.</p>
+<dt><strong>fpath</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The path to the save file.</p>
 </dd>
-<dt><strong>sbj</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The subject name.</p>
+<dt><strong>sbj</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The subject name.</p>
 </dd>
-<dt><strong>sbj_viz</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The name of the subject’s FreeSurfer folder.</p>
+<dt><strong>sbj_viz</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The name of the subject’s FreeSurfer folder.</p>
 </dd>
-<dt><strong>data_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the data file.</p>
+<dt><strong>data_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the data file.</p>
 </dd>
-<dt><strong>fwd_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the forward solution file.</p>
+<dt><strong>fwd_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the forward solution file.</p>
 </dd>
-<dt><strong>cov_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the noise covariance file.</p>
+<dt><strong>cov_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the noise covariance file.</p>
 </dd>
-<dt><strong>src_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the source space file.</p>
+<dt><strong>src_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the source space file.</p>
 </dd>
-<dt><strong>lf_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the leadfield matrix file.</p>
+<dt><strong>lf_path</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>The path to the leadfield matrix file.</p>
 </dd>
-<dt><strong>save_all</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True, save the data and the forward model. Default to False.</p>
+<dt><strong>save_all</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True, save the data and the forward model. Default to False.</p>
 </dd>
 </dl>
 </dd>
@@ -362,7 +365,7 @@ the <img class="math" src="../_images/math/e3fc28292267f066fee7718c64f4bbfece521
 <dl class="field-list">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><dl>
-<dt><strong>sd</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The Source Dispersion of SESAME result</p>
+<dt><strong>sd</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The Source Dispersion of SESAME result</p>
 </dd>
 </dl>
 </dd>
@@ -377,13 +380,17 @@ the <img class="math" src="../_images/math/e3fc28292267f066fee7718c64f4bbfece521
 <img alt="../_images/sphx_glr_plot_analyse_sample_auditory_thumb.png" src="../_images/sphx_glr_plot_analyse_sample_auditory_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_analyse_sample_auditory.html#sphx-glr-auto-examples-plot-analyse-sample-auditory-py"><span class="std std-ref">Compute SESAME inverse solution on evoked data</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="In this example we shall compute SESAME inverse solution on evoked data in a volume source spac..."><div class="figure align-default" id="id2">
-<img alt="../_images/sphx_glr_plot_meg_auditory_sesame_volume_thumb.png" src="../_images/sphx_glr_plot_meg_auditory_sesame_volume_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_meg_auditory_sesame_volume.html#sphx-glr-auto-examples-plot-meg-auditory-sesame-volume-py"><span class="std std-ref">Compute SESAME inverse solution on evoked data in volume source space</span></a></span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an..."><div class="figure align-default" id="id2">
+<img alt="../_images/sphx_glr_plot_meg_sample_auditory_fixed_ori_thumb.png" src="../_images/sphx_glr_plot_meg_sample_auditory_fixed_ori_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_meg_sample_auditory_fixed_ori.html#sphx-glr-auto-examples-plot-meg-sample-auditory-fixed-ori-py"><span class="std std-ref">Compute SESAME inverse solution on evoked data with source constraints</span></a></span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="In the present example we shall devise a synthetic scenario in which two dipolar sources are ac..."><div class="figure align-default" id="id3">
+</div><div class="sphx-glr-thumbcontainer" tooltip="In this example we shall compute SESAME inverse solution on evoked data in a volume source spac..."><div class="figure align-default" id="id3">
+<img alt="../_images/sphx_glr_plot_meg_auditory_sesame_volume_thumb.png" src="../_images/sphx_glr_plot_meg_auditory_sesame_volume_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_meg_auditory_sesame_volume.html#sphx-glr-auto-examples-plot-meg-auditory-sesame-volume-py"><span class="std std-ref">Compute SESAME inverse solution on evoked data in volume source space</span></a></span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In the present example we shall devise a synthetic scenario in which two dipolar sources are ac..."><div class="figure align-default" id="id4">
 <img alt="../_images/sphx_glr_plot_meg_simulated_sesame_frequency_thumb.png" src="../_images/sphx_glr_plot_meg_simulated_sesame_frequency_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_meg_simulated_sesame_frequency.html#sphx-glr-auto-examples-plot-meg-simulated-sesame-frequency-py"><span class="std std-ref">Compute SESAME inverse solution on simulated data in the frequency domain</span></a></span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_meg_simulated_sesame_frequency.html#sphx-glr-auto-examples-plot-meg-simulated-sesame-frequency-py"><span class="std std-ref">Compute SESAME inverse solution on simulated data in the frequency domain</span></a></span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 </div>
 </div><div style='clear:both'></div></div>
 </div>
@@ -401,7 +408,7 @@ the <img class="math" src="../_images/math/e3fc28292267f066fee7718c64f4bbfece521
     </p>
     <p>
         &copy; Copyright 2019, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
     </p>
   </div>
 </footer>
