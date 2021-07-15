@@ -8,12 +8,104 @@
 
 import numpy as np
 import scipy.special as sps
+import scipy.spatial.distance as ssd
 from mne.epochs import Epochs, EpochsArray
 from mne.evoked import Evoked, EvokedArray
 from mne.forward import Forward
+from mne.io.pick import channel_type
+from mne import pick_types_forward
 
 
-def compute_neighbours_matrix(src, d_matrix, radius):
+# def compute_cosine_distance(fwd):
+#     """
+#     Define cosine distance
+#
+#     Parameters:
+#     -----------
+#     fwd : instance of Forward
+#         The forward solution
+#
+#     Returns:
+#     --------
+#
+#     """
+#
+#     # Step 1. Understand what sensor type are present in the fwd solution
+#     info = fwd['info']
+#     picks = np.arange(0, info['nchan'])
+#     types = np.array([channel_type(info, idx) for idx in picks])
+#     ch_types_used = set(types)
+#
+#     # Step 2. Extract and normalized leadfield for each sensor type
+#     aux_L = fwd['sol']['data']
+#     L_norm = np.zeros(aux_L.shape)
+#     for this_type in ch_types_used:
+#         print('Normalizing leadfield for %s sensors' % this_type)
+#         idx = picks[types == this_type]
+#         Ns = idx.shape[0]
+#         L_this_type = aux_L[idx]
+#         L_this_type = L_this_type - np.mean(L_this_type, axis=0)
+#         L_norm[idx] = L_this_type / \
+#                       np.sqrt(1 / (Ns - 1) * np.sum(L_this_type ** 2, axis=0))
+#
+#     # Step 3. Compute cosine similarity matrix
+#     cosine_distance = np.ones([L_norm.shape[1], L_norm.shape[1]]) - abs(np.corrcoef(L_norm.T))
+#     return cosine_distance
+
+
+def compute_correlation_distance_matix(fwd):
+    print(' Computing correlation distance matrix...')
+    distance_matrix = np.zeros((fwd['sol']['data'].shape[1], fwd['sol']['data'].shape[1]))
+    n_ch_tot = fwd['info']['nchan']
+    ch_types = set(map(lambda x: channel_type(fwd['info'], x), range(n_ch_tot)))
+
+    for _t in ch_types:
+        print('  Using {} sensors for computation...'.format(_t))
+        if _t in ['mag', 'grad', 'planar1', 'planar2']:
+            _fwd_t = pick_types_forward(fwd, meg=_t, ref_meg=False)
+        elif _t == 'eeg':
+            _fwd_t = pick_types_forward(fwd, eeg=_t, ref_meg=False)
+        else:
+            raise NotImplementedError
+
+        n_ch_t = _fwd_t['info']['nchan']
+        _lf_t = _fwd_t['sol']['data']
+        _dm_t = ssd.cdist(_lf_t.T, _lf_t.T, metric='correlation')
+
+        distance_matrix += (n_ch_t / n_ch_tot) * _dm_t
+
+    print(' [done]')
+    return distance_matrix
+
+
+def compute_neighbours_matrix(src, d_matrix, radius, n_simil):
+    """Compute the set of neighbours of each point in the brain discretization.
+
+    Parameters
+    -----------
+    src :  :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)
+        The coordinates of the points in the brain discretization.
+    d_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)
+        The Euclidean distance between the points in the
+        brain discretization.
+    radius : :py:class:`~float`
+        The maximum distance between two neighbouring points.
+
+    Returns
+    --------
+    n_matrix : :py:class:`~numpy.ndarray` of :py:class:`~int`, shape (n_verts, n_neigh_max)
+        The sets of neighbours.
+    """
+
+    if n_simil == 1:
+        return _compute_euclidean_neigh_matrix(src, d_matrix, radius)
+    elif 0 <= n_simil < 1:
+        return _compute_correlation_neigh_matrix(src, d_matrix, radius)
+    else:
+        raise NotImplementedError
+
+
+def _compute_euclidean_neigh_matrix(src, d_matrix, radius):
     """Compute the set of neighbours of each point in the brain discretization.
 
     Parameters
@@ -39,8 +131,7 @@ def compute_neighbours_matrix(src, d_matrix, radius):
     n_neigh = []
     list_neigh = []
 
-    while (counter < reached_points.shape[0]
-           and src.shape[0] > reached_points.shape[0]):
+    while counter < reached_points.shape[0] < src.shape[0]:
         P = reached_points[counter]
         aux = np.array(sorted(
             np.where(d_matrix[P] <= radius)[0],
@@ -92,10 +183,43 @@ def compute_neighbours_matrix(src, d_matrix, radius):
         index_ord = np.argsort(n_matrix[:, 0])
         n_matrix = n_matrix[index_ord]
         return n_matrix
-
     else:
         raise RuntimeError("Some problems during"
                            "computation of neighbours.")
+
+
+def _compute_correlation_neigh_matrix(src, d_matrix, n_neigh_init):
+    n_vert = src.shape[0]
+
+    # For each vertex find the set of k-nearest neighbours
+    set_n_neigh = np.argsort(d_matrix, axis=1)[:, :n_neigh_init]
+
+    # Fill in the set of nearest neighbour so to have a reversible kernel
+    adjacency_matrix = np.zeros(d_matrix.shape)
+    for ir in np.arange(n_vert):  # Avoid this for?!?!?!
+        adjacency_matrix[ir, set_n_neigh[ir]] = 1
+    adjacency_matrix = ((adjacency_matrix.T + adjacency_matrix) > 0)
+    n_neigh = np.sum(adjacency_matrix, axis=1)
+
+    # Reorder the set of neighbours and check if the obtained matrix is connected
+    n_matrix = np.zeros([n_vert, np.max(n_neigh)], dtype=int) - 1
+    counter = 0
+    reached_points = np.array([0])
+
+    while counter < reached_points.shape[0]:
+        P = reached_points[counter]
+        aux = np.array(sorted(
+            np.where(adjacency_matrix[P])[0],
+            key=lambda k: d_matrix[P, k]))
+        n_matrix[P, :aux.shape[0]] = aux
+        reached_points = np.append(reached_points,
+                                   aux[~np.in1d(aux, reached_points)])
+        counter += 1
+    if reached_points.shape[0] < n_vert:
+        raise ValueError('Too small value for the initial number of nearest neighbour:'
+                         'the neighbour-matrix is not connected')
+    else:
+        return n_matrix
 
 
 def compute_neighbours_probability_matrix(n_matrix, src, d_matrix, sigma_neigh):
@@ -138,8 +262,8 @@ def estimate_dip_mom_std(r_data, lf):
     r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
         The real part of the data; n_sens is the number of sensors and
         n_ist is the number of time-points or of frequencies.
-    lf : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
-        The leadfield matrix.
+    lf : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)
+        The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)
 
     Returns
     --------
@@ -242,6 +366,10 @@ def is_forward(fwd):
         return True
     else:
         return False
+
+
+def normalize(x):
+    return (x - np.min(x)) / (np.max(x) - np.min(x))
 
 
 def sample_from_sphere():

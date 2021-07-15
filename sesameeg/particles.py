@@ -39,11 +39,12 @@ class Particle(object):
         The prior pdf, evaluated in the particle.
     """
 
-    def __init__(self, n_verts, lam, dip_mom_std=None, hyper_q=False):
+    def __init__(self, n_verts, lam, dip_mom_std=None, fixed_ori = False, hyper_q=False):
         """Initialization: the initial number of dipoles is Poisson
            distribuited; the initial locations are uniformly distribuited
            within the brain grid points, with no dipoles in the same position.
         """
+        self.fixed_ori = fixed_ori
         self.hyper_q = hyper_q
         self.n_dips = 0
         self.dipoles = np.array([])
@@ -109,8 +110,11 @@ class Particle(object):
             sigma = np.eye(n_sens)
         else:
             # 1a: compute the leadfield of the particle
-            idx = np.ravel([[3 * dip.loc, 3 * dip.loc + 1, 3 * dip.loc + 2]
-                            for dip in self.dipoles])
+            if self.fixed_ori:
+                idx = np.ravel([dip.loc for dip in self.dipoles])
+            else:
+                idx = np.ravel([[3 * dip.loc, 3 * dip.loc + 1, 3 * dip.loc + 2]
+                                for dip in self.dipoles])
             Gc = lead_field[:, idx]
             # 1b: compute the variance
             sigma = (self.dip_mom_std / noise_std) ** 2 * np.dot(Gc, np.transpose(Gc)) + \
@@ -129,8 +133,8 @@ class Particle(object):
         r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
             The real part of the data; n_sens is the number of sensors and
             n_ist is the number of time-points or of frequencies.
-        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
-            The leadfield matrix.
+        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)
+            The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)
         noise_std : :py:class:`~float`
             The standard deviation of the noise distribution.
 
@@ -149,8 +153,11 @@ class Particle(object):
             inv_sigma = np.eye(n_sens)
         else:
             # 1a: compute the leadfield of the particle
-            idx = np.ravel([[3*dip.loc, 3*dip.loc+1, 3*dip.loc+2]
-                           for dip in self.dipoles])
+            if self.fixed_ori:
+                idx = np.ravel([dip.loc for dip in self.dipoles])
+            else:
+                idx = np.ravel([[3 * dip.loc, 3 * dip.loc + 1, 3 * dip.loc + 2]
+                                for dip in self.dipoles])
             Gc = lead_field[:, idx]
             # 1b: compute the covariance
             sigma = (self.dip_mom_std / noise_std)**2 * np.dot(Gc, np.transpose(Gc)) + \
@@ -202,8 +209,8 @@ class Particle(object):
         r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
             The real part of the data; n_sens is the number of sensors and
             n_ist is the number of time-points or of frequencies.
-        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
-            The leadfield matrix.
+        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)
+            The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)
         max_n_dips : :py:class:`~int`
             The maximum number of dipoles allowed in a particle.
         lklh_exp : :py:class:`~float`
@@ -281,8 +288,8 @@ class Particle(object):
         r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
             The real part of the data; n_sens is the number of sensors and
             n_ist is the number of time-points or of frequencies.
-        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
-            The leadfield matrix.
+        lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)
+            The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)
         lklh_exp : :py:class:`~float`
             This number represents a point in the sequence of artificial
             distributions used in SESAME.
