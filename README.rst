@@ -39,7 +39,7 @@ and it should not give any error messages.
 Bug reports
 ===========
 
-Use the `github issue tracker <https://github.com/sarasommariva/sesameeg_doc/issues>`_ to report bugs.
+Use the `github issue tracker <https://github.com/pybees/sesameeg/issues>`_ to report bugs.
 
 
 Authors of the code

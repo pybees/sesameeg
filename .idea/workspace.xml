@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="Implementato vincolo corticale. Modifiche a sesame, gof e write/read h5. Creato esempio">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/mne-project-template.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mne-project-template.iml" afterDir="false" />
+    <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="BUG: piccolo bug in read_h5 (est_dip_moms)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sesameeg/io/io.py" beforeDir="false" afterPath="$PROJECT_DIR$/sesameeg/io/io.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sesameeg/sesame.py" beforeDir="false" afterPath="$PROJECT_DIR$/sesameeg/sesame.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sesameeg/utils/smc_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/sesameeg/utils/smc_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.rst" beforeDir="false" afterPath="$PROJECT_DIR$/README.rst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -524,7 +520,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612470244174</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="BUG: piccolo bug in read_h5 (est_dip_moms)">
+      <created>1615822525047</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1615822525047</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -563,7 +566,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Prima versione funzionante, aggiunti i files non versionati" />
     <MESSAGE value="cambiato il readme" />
     <MESSAGE value="Corretta la stima di q in caso di hyperprior. &#10;Aggiunto q e stima finale di s_q in write/read h5. &#10;Cambiato fattore in stima iniziale di s_q: 1.5 invece di 15" />
     <MESSAGE value="Sistemato write/read h5 e write pkl &#10;Sistemato sd, mld e gof&#10;Calcolo sd nell'esempio" />
@@ -588,7 +590,8 @@
     <MESSAGE value="Dinamica basata su distanza di correlazione fra le leadfields. [VERSIONE PROVVISORIA]" />
     <MESSAGE value="[BUG] Corretto bug in reset sesame con fixed_ori" />
     <MESSAGE value="[PROVVISORIO] Matrice distanza combinata per calcolo vicini (con orientazioni fisse)" />
-    <option name="LAST_COMMIT_MESSAGE" value="[PROVVISORIO] Matrice distanza combinata per calcolo vicini (con orientazioni fisse)" />
+    <MESSAGE value="BUG: piccolo bug in read_h5 (est_dip_moms)" />
+    <option name="LAST_COMMIT_MESSAGE" value="BUG: piccolo bug in read_h5 (est_dip_moms)" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/doc/api.rst">
