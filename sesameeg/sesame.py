@@ -16,8 +16,9 @@ from mne.forward import _select_orient_forward
 from .emp_pdf import EmpPdf
 from .particles import Particle
 from .utils import compute_neighbours_matrix, initialize_radius, \
-    compute_neighbours_probability_matrix, estimate_noise_std, estimate_dip_mom_std
-from .utils import is_epochs, is_evoked, is_forward
+    compute_neighbours_probability_matrix, estimate_noise_std, estimate_dip_mom_std, \
+    compute_correlation_distance_matix
+from .utils import is_epochs, is_evoked, is_forward, normalize
 from .io import _export_to_stc, _export_to_vol_stc, write_h5, write_pkl
 from .metrics import compute_goodness_of_fit, compute_sd
 
@@ -28,7 +29,8 @@ class Sesame(object):
     Parameters
     ----------
     forward : :py:class:`~mne.Forward` object
-        The forward solution.
+        The forward solution. Sesame automatically detects whether the dipole
+        orientations are free or locally normal to the cortical surface.
     data : instance of :py:class:`~mne.Evoked` | :py:class:`~mne.EvokedArray`
         The MEEG data.
     noise_std : :py:class:`~float` | None
@@ -87,8 +89,8 @@ class Sesame(object):
         The coordinates of the points in the brain discretization.
     n_verts : :py:class:`~int`
         The number of points forming the brain discretization.
-    lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x 3*n_verts)
-        The leadfield matrix.
+    lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)
+        The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)
     distance_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)
         The Euclidean distance between the points in the
         brain discretization.
@@ -122,8 +124,8 @@ class Sesame(object):
         The estimated number of dipoles.
     est_locs : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~int`
         The source space grid points indices in which a source is estimated.
-    est_dip_moms : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_ist x (3*est_n_dips[-1])) | None
-        The sources' moments estimated at the last iteration.
+    est_dip_moms : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_ist x (n_comp*est_n_dips[-1])) | None
+        The sources' moments estimated at the last iteration. (n_comp = 1, if fixed orientation, 3, if free orientation)
         If None, moments can be estimated by calling :py:meth:`~Sesame.compute_dip_mom`
     model_sel : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`
         The model selection, i.e. the posterior distribution on the number
@@ -132,13 +134,16 @@ class Sesame(object):
         Posterior probability map.
     posterior : instance of :class:`~sesameeg.emppdf.EmpPdf`
         The empirical pdf approximated by the particles at each iteration.
+
+    ****** Sara
+    Add parameter distance = 'cosine' or 'euclidean'
     """
 
     def __init__(self, forward, data, noise_std=None, radius=None,
                  neigh_std=None, n_parts=100, top_min=None,
                  top_max=None, subsample=None, dip_mom_std=None, hyper_q=True,
-                 noise_cov=None, lam=0.25, max_n_dips=10, Fourier_transf=False,
-                 verbose=False):
+                 noise_cov=None, lam=0.25, max_n_dips=10, neigh_simil=0.5,
+                 Fourier_transf=False, verbose=False):
 
         if not is_forward(forward):
             raise ValueError('Forward must be an instance of MNE'
@@ -158,31 +163,80 @@ class Sesame(object):
         self.hyper_q = hyper_q
         self.forward, _info_picked = _select_orient_forward(forward,
                                                             data.info, noise_cov)
-
-        self.source_space = forward['source_rr']
+        self.fixed_ori = self._read_fwd_ori()
+        self.source_space = self.forward['source_rr']
         self.n_verts = self.source_space.shape[0]
-        self.lead_field = forward['sol']['data']
-
+        self.lead_field = self.forward['sol']['data']
         self.distance_matrix = ssd.cdist(self.source_space, self.source_space)
+
         if radius is None:
             self.radius = initialize_radius(self.source_space)
         else:
             self.radius = radius
-        print('Computing neighbours matrix...', end='')
-        self.neigh = compute_neighbours_matrix(self.source_space,
-                                               self.distance_matrix,
-                                               self.radius)
+        print('Computing neighbours matrix ', end='')
+        if self.fixed_ori:
+            if neigh_simil == 1:
+                print('using Euclidean distance...', end='')
+            elif neigh_simil == 0:
+                print('using correlation distance...')
+            else:
+                print('using combined distance...')
+
+            if neigh_simil == 1:
+                self.neigh = compute_neighbours_matrix(self.source_space,
+                                                       self.distance_matrix,
+                                                       self.radius,
+                                                       neigh_simil)
+            elif 0 <= neigh_simil < 1:
+                corr_dist_matr = compute_correlation_distance_matix(self.forward)
+                combined_dist_matr = (1-neigh_simil)*normalize(corr_dist_matr) + \
+                    neigh_simil*normalize(self.distance_matrix)
+                self.neigh = compute_neighbours_matrix(self.source_space,
+                                                                         combined_dist_matr,
+                                                                         30,
+                                                                         neigh_simil)
+            else:
+                raise ValueError
+        else:
+            self.neigh = compute_neighbours_matrix(self.source_space,
+                                                   self.distance_matrix,
+                                                   self.radius,
+                                                   n_simil=1)
         print('[done]')
 
+        print('Computing neighbours probabilities...', end='')
         if neigh_std is None:
-            self.neigh_std = self.radius/2
+            self.neigh_std = self.radius / 2
         else:
             self.neigh_std = neigh_std
-        print('Computing neighbours probabilities...', end='')
-        self.neigh_p = compute_neighbours_probability_matrix(self.neigh,
-                                                             self.source_space,
-                                                             self.distance_matrix,
-                                                             self.neigh_std)
+
+        if self.fixed_ori:
+            if neigh_simil == 1:
+                self.neigh_p = compute_neighbours_probability_matrix(self.neigh,
+                                                                     self.source_space,
+                                                                     self.distance_matrix,
+                                                                     self.neigh_std)
+            elif 0 <= neigh_simil < 1:
+                a_matrix = np.zeros(combined_dist_matr.shape, dtype=bool)
+                row_list, col_list = list(), list()
+                for _in, _n in enumerate(self.neigh):
+                    for _x in _n[_n >= 0]:
+                        row_list.append(_in)
+                        col_list.append(_x)
+                a_matrix[(row_list, col_list)] = 1
+                comb_neigh_std = np.max(combined_dist_matr[a_matrix])/2
+                self.neigh_p = compute_neighbours_probability_matrix(self.neigh,
+                                                                     self.source_space,
+                                                                     combined_dist_matr,
+                                                                     comb_neigh_std)
+            else:
+                raise ValueError
+
+        else:
+            self.neigh_p = compute_neighbours_probability_matrix(self.neigh,
+                                                                 self.source_space,
+                                                                 self.distance_matrix,
+                                                                 self.neigh_std)
         print('[done]')
 
         # Prepare data
@@ -251,7 +305,7 @@ class Sesame(object):
             self.est_dip_mom_std = list(np.array([]) for _ in range(self.n_parts))
 
         self.posterior = EmpPdf(self.n_parts, self.n_verts, self.lam, dip_mom_std=self.dip_mom_std,
-                                hyper_q=self.hyper_q, verbose=self.verbose)
+                                fixed_ori=self.fixed_ori, hyper_q=self.hyper_q, verbose=self.verbose)
 
         for _part in self.posterior.particles:
             if self.hyper_q:
@@ -388,6 +442,22 @@ class Sesame(object):
         else:
             raise ValueError
 
+    def _read_fwd_ori(self):
+        fwd_ori = self.forward['source_ori']
+        if fwd_ori == 1:
+            assert (self.forward['sol']['data'].shape[1] == self.forward['source_rr'].shape[0]), \
+                'Inconsistency between source space and leadfield dimensions.'
+            print('Forward model with fixed source orientation.')
+            return True
+        elif fwd_ori == 2:
+            assert (self.forward['sol']['data'].shape[1] == 3*self.forward['source_rr'].shape[0]), \
+                'Inconsistency between source space and leadfield dimensions.'
+            print('Forward model with free source orientation.')
+            return False
+        else:
+            raise ValueError('Unknown source orientation in the forward model. Please check the "source_ori" '
+                             'attribute of the Forward.')
+
     def _reset_attributes(self):
         self._resample_it = list()
         self.est_n_dips = list()
@@ -402,7 +472,7 @@ class Sesame(object):
             self.est_dip_mom_std = list(np.array([]) for _ in range(self.n_parts))
 
         self.posterior = EmpPdf(self.n_parts, self.n_verts, self.lam, dip_mom_std=self.dip_mom_std,
-                                hyper_q=self.hyper_q, verbose=self.verbose)
+                                fixed_ori=self.fixed_ori, hyper_q=self.hyper_q, verbose=self.verbose)
 
         for _part in self.posterior.particles:
             if self.hyper_q:
@@ -435,7 +505,7 @@ class Sesame(object):
             last iteration.
         """
 
-        if self.posterior.exponents[-1] >0:
+        if self.posterior.exponents[-1] > 0:
             print('Resetting SESAME...', end='')
             self._reset_attributes()
             print('[done]')
@@ -555,8 +625,11 @@ class Sesame(object):
         else:
             _dip_mom_std = self.dip_mom_std
 
-        ind = np.ravel([[3*est_locs[idip], 3*est_locs[idip]+1,
-                       3*est_locs[idip]+2] for idip in range(est_num)])
+        if self.fixed_ori:
+            ind = np.ravel([est_locs[idip] for idip in range(est_num)])
+        else:
+            ind = np.ravel([[3 * est_locs[idip], 3 * est_locs[idip] + 1,
+                             3 * est_locs[idip] + 2] for idip in range(est_num)])
         Gc = self.lead_field[:, ind]
         sigma = (_dip_mom_std / self.noise_std)**2 * np.dot(Gc, np.transpose(Gc)) +\
             np.eye(n_sens)

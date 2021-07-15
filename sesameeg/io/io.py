@@ -58,6 +58,7 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, fmin=None,
 
     f = h5.File(fpath, 'w')
 
+    _fwd_fixed = f.create_dataset('fwd_fixed_ori', data=inv_op.fixed_ori)
     _pmap = f.create_group('prob_map')
     for i, _b in enumerate(inv_op.pmap):
         _pmap.create_dataset(str(i), data=_b)
@@ -74,7 +75,7 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, fmin=None,
     for i, _m in enumerate(inv_op.model_sel):
         _model_sel.create_dataset(str(i), data=_m)
     _exponents = f.create_dataset('exponents',
-                                  data=inv_op.e_pdf.exponents)
+                                  data=inv_op.posterior.exponents)
     if hasattr(inv_op, 'forward'):
         _ch_names = f.create_dataset('ch_names',
                                      shape=(len(inv_op.forward['info']['ch_names']),1),
@@ -182,8 +183,9 @@ def read_h5(fpath):
         The source space grid points indices in which a source is estimated.
     * est_n_dips : :py:class:`~list` of :py:class:`~int` | 'Not available.'
         The estimated number of dipoles.
-    * est_dip_moms : :py:class:`~numpy.ndarray` , shape (est_n_dips[-1], n_ist, 3) | 'Not available.'
+    * est_dip_moms : :py:class:`~numpy.ndarray` , shape (est_n_dips[-1], n_ist, n_comp) | 'Not available.'
         The moment time courses of the dipoles estimated in the last iteration of SESAME.
+        (n_comp = 1, if fixed orientation, 3, if free orientation)
     * est_dip_mom_std : :py:class:`~list` of :py:class:`~numpy.ndarray`, shape (n_iterations, ) | 'Not available.'
         Estimated values of the parameter ``dip_mom_std``. Each array in the list corresponds to a single particle.
         This only applies if ``hyper_q=True`` has been selected when instantiating :py:class:`~sesameeg.Sesame`.
@@ -271,7 +273,7 @@ def read_h5(fpath):
 
     for _k in ['lambda', 'noise_std', 'dip_mom_std', 'max_n_dips',
                'subject', 'subject_viz', 'data_path', 'fwd_path',
-               'cov_path', 'src_path', 'lf_path']:
+               'cov_path', 'src_path', 'lf_path', 'fwd_fixed_ori']:
         if _k in f.keys():
             res[_k] = f[_k][()]
         else:
@@ -279,12 +281,21 @@ def read_h5(fpath):
 
     if 'est_dip_moms' in f.keys():
         est_dip_moms_temp = np.asarray(list(f['est_dip_moms'][_key][:] for _key in sorted(f['est_dip_moms'].keys(),
-                                                                            key=lambda x: int(x))))
-        est_dip_moms_aux = np.zeros((res['est_locs'][-1].shape[0], est_dip_moms_temp.shape[0], 3))
-        for i in range(est_dip_moms_temp.shape[0]):
-            _temp = est_dip_moms_temp[i, :].reshape(-1, 3)
-            for j in range(res['est_locs'][-1].shape[0]):
-                est_dip_moms_aux[j, i, :] += _temp[j]
+                                                                                          key=lambda x: int(x))))
+        if f['fwd_fixed_ori'][()]:
+            est_dip_moms_aux = np.zeros((res['est_locs'][-1].shape[0], est_dip_moms_temp.shape[0]))
+            for i in range(est_dip_moms_temp.shape[0]):
+                _temp = est_dip_moms_temp[i, :].reshape(-1, 1)
+                for j in range(res['est_locs'][-1].shape[0]):
+                    est_dip_moms_aux[j, i] += _temp[j]
+        elif f['fwd_fixed_ori'][()] == 'Not available.':
+            print('Uknown forward source orientation. Skipping dipole moments.')
+        else:
+            est_dip_moms_aux = np.zeros((res['est_locs'][-1].shape[0], est_dip_moms_temp.shape[0], 3))
+            for i in range(est_dip_moms_temp.shape[0]):
+                _temp = est_dip_moms_temp[i, :].reshape(-1, 3)
+                for j in range(res['est_locs'][-1].shape[0]):
+                    est_dip_moms_aux[j, i, :] += _temp[j]
         res['est_dip_moms'] = est_dip_moms_aux
     f.close()
     return res
