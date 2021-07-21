@@ -13,7 +13,7 @@ from mne.epochs import Epochs, EpochsArray
 from mne.evoked import Evoked, EvokedArray
 from mne.forward import Forward
 from mne.io.pick import channel_type
-from mne import pick_types_forward
+from mne import pick_types_forward, read_labels_from_annot
 
 
 # def compute_cosine_distance(fwd):
@@ -370,6 +370,37 @@ def is_forward(fwd):
 
 def normalize(x):
     return (x - np.min(x)) / (np.max(x) - np.min(x))
+
+
+def prior_loc_from_labels(subject, subjects_dir, fwd, parc, sel_labels):
+    labels = read_labels_from_annot(subject=subject, parc=parc, hemi='both',
+                                    surf_name='inflated', subjects_dir=subjects_dir)
+
+    def get_idx(sel_label):
+        for i, l in enumerate(labels):
+            if l.name == sel_label:
+                return i
+
+    _ssgrid = fwd['source_rr']
+    _src_vertno_lh = fwd['src'][0]['vertno']
+    _src_vertno_rh = fwd['src'][1]['vertno']
+    prior_loc_arr = np.zeros(_ssgrid.shape[0])
+    labels_idx = list(map(lambda x: get_idx(x), sel_labels))
+    for _l_idx in labels_idx:
+        _l = labels[_l_idx]
+        if _l.name.endswith('lh'):
+            vertices0 = _l.get_vertices_used(_src_vertno_lh)
+            vertices1 = [_v for _v in vertices0 if _v in _src_vertno_lh]
+            vertices2 = np.asarray(list(map(lambda x: np.argwhere(_src_vertno_lh == x)[0][0], vertices1)))
+            prior_loc_arr[vertices2] += 1
+        elif _l.name.endswith('rh'):
+            vertices0 = _l.get_vertices_used(_src_vertno_rh)
+            vertices1 = [_v for _v in vertices0 if _v in _src_vertno_rh]
+            vertices2 = np.asarray(list(map(lambda x: np.argwhere(_src_vertno_rh == x)[0][0], vertices1)))
+            prior_loc_arr[vertices2 + _src_vertno_lh.shape[0]] += 1
+        else:
+            raise ValueError
+    return prior_loc_arr
 
 
 def sample_from_sphere():

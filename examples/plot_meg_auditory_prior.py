@@ -4,7 +4,9 @@ Compute SESAME inverse solution on evoked data
 ==============================================
 
 In this example we shall apply SESAME on an evoked dataset,
-corresponding to the response to an auditory stimulus. Data are taken from the MNE-Python
+corresponding to the response to an auditory stimulus and we manually select a priori source location
+probability to reside in a subset of ROIs in a given brain parcellization.
+Data are taken from the MNE-Python
 `sample <https://mne.tools/stable/generated/mne.datasets.sample.data_path.html#mne.datasets.sample.data_path>`_
 dataset.
 """
@@ -19,12 +21,12 @@ dataset.
 from os import path as op
 import numpy as np
 import matplotlib.pyplot as plt
-#from mayavi import mlab
 
 from mne.datasets import sample
 from mne import read_forward_solution, pick_types_forward, read_evokeds
 from mne.label import _n_colors
 
+from sesameeg.utils import prior_loc_from_labels
 from sesameeg import Sesame
 
 
@@ -80,6 +82,12 @@ noise_cov = None
 # noise_cov = read_cov(fname_cov)
 
 ###############################################################################
+# A priori select some ROIs
+prior_rois = prior_loc_from_labels(subject, subjects_dir, fwd, 'aparc',
+                                   ['middletemporal-lh', 'middletemporal-rh',
+                                    'superiortemporal-lh', 'superiortemporal-rh' ])
+
+###############################################################################
 # Visualize the selected data.
 
 fig = evoked.plot(show=False)
@@ -92,7 +100,8 @@ plt.show()
 # Apply SESAME.
 _sesame = Sesame(fwd, evoked, n_parts=n_parts, noise_std=noise_std,
                  top_min=time_min, top_max=time_max, dip_mom_std=dip_mom_std,
-                 hyper_q=True, noise_cov=noise_cov, subsample=subsample)
+                 hyper_q=True, noise_cov=noise_cov, subsample=subsample,
+                 prior_locs=prior_rois)
 _sesame.apply_sesame()
 
 print('    Estimated number of sources: {0}'.format(_sesame.est_n_dips[-1]))
@@ -120,7 +129,6 @@ for idx, amp in enumerate(amplitude):
     plt.plot(1e3*times, 1e9*amp, color=colors[idx], linewidth=2)
 plt.xlabel('Time (ms)')
 plt.ylabel('Source amplitude (nAm)')
-#plt.show()
 
 ###############################################################################
 # Visualize the posterior map of the dipoles' location
@@ -140,7 +148,6 @@ for idx, loc in enumerate(est_locs):
                        hemi='rh', color=colors[idx], scale_factor=0.3)
 
 plt.show()
-#mlab.show()
 
 #######################################################################################
 # Save results.

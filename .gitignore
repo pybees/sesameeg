@@ -66,3 +66,6 @@ doc/generated/
 
 # PyBuilder
 target/
+/SESAMEEG_Test_correlation_similarity_2.ipynb
+/Untitled.ipynb
+/.ipynb_checkpoints/

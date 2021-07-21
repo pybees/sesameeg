@@ -49,11 +49,14 @@ class EmpPdf(object):
     est_locs : :py:class:`~numpy.ndarray` of :py:class:`~int`
         Estimated sources locations
     """
-    def __init__(self, n_parts, n_verts, lam, dip_mom_std=None, fixed_ori=False, hyper_q=False, verbose=False):
+    def __init__(self, n_parts, n_verts, lam, dip_mom_std=None, prior_locs=None, fixed_ori=False,
+                 hyper_q=False, verbose=False):
 
+        self.prior_locs = prior_locs
         self.fixed_ori = fixed_ori
         self.hyper_q = hyper_q
-        self.particles = np.array([Particle(n_verts, lam, dip_mom_std=dip_mom_std, fixed_ori=self.fixed_ori,
+        self.particles = np.array([Particle(n_verts, lam, dip_mom_std=dip_mom_std, prior_locs=self.prior_locs,
+                                            fixed_ori=self.fixed_ori,
                                             hyper_q=self.hyper_q) for _ in itertools.repeat(None, n_parts)])
         self.logweights = np.array([np.log(1/n_parts) for _
                                     in itertools.repeat(None, n_parts)])
@@ -70,7 +73,7 @@ class EmpPdf(object):
         for i_p, _part in enumerate(self.particles):
             s += ("'---- Particle {0} (W = {1},  number of dipoles = {2}):"
                   " \n {3} \n".
-                  format(i_p+1, np.exp(self.logweights[i_p]), _part.nu, _part))
+                  format(i_p+1, np.exp(self.logweights[i_p]), _part.n_dips, _part))
         return s
 
     def sample(self, n_verts, r_data, lead_field, neigh, neigh_p,

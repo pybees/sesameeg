@@ -39,11 +39,13 @@ class Particle(object):
         The prior pdf, evaluated in the particle.
     """
 
-    def __init__(self, n_verts, lam, dip_mom_std=None, fixed_ori = False, hyper_q=False):
+    def __init__(self, n_verts, lam, dip_mom_std=None, prior_locs=None, fixed_ori = False,
+                 hyper_q=False):
         """Initialization: the initial number of dipoles is Poisson
            distribuited; the initial locations are uniformly distribuited
            within the brain grid points, with no dipoles in the same position.
         """
+        self.prior_locs = prior_locs
         self.fixed_ori = fixed_ori
         self.hyper_q = hyper_q
         self.n_dips = 0
@@ -78,11 +80,13 @@ class Particle(object):
             The number of dipoles to add.
         """
 
-        new_locs = np.random.randint(0, n_verts, num_dip)
+        # new_locs = np.random.randint(0, n_verts, num_dip)
+        new_locs = self.sample_prior_locs(num_dip)
 
         for loc in new_locs:
             while loc in [dip.loc for dip in self.dipoles]:
-                loc = np.random.randint(0, n_verts)
+                # loc = np.random.randint(0, n_verts)
+                loc = self.sample_prior_locs(num_dip=1)[0]
 
             self.dipoles = np.append(self.dipoles, Dipole(loc))
             self.n_dips += 1
@@ -190,6 +194,12 @@ class Particle(object):
 
         self.prior = 1/np.math.factorial(self.n_dips) * np.exp(-lam) *\
             (lam**self.n_dips)
+
+        _where = np.zeros(self.prior_locs.shape[0])
+        for _d in self.dipoles:
+            _where[_d.loc] += 1
+        _loc_factor = self.prior_locs.prod(where=_where.astype(bool))
+        self.prior *= _loc_factor
 
         if hasattr(self, 'dip_mom_std') and self.hyper_q is True:
             self.prior /= self.dip_mom_std
@@ -379,3 +389,11 @@ class Particle(object):
             self = copy.deepcopy(prop_part)
 
         return self
+
+    def sample_prior_locs(self, num_dip=1):
+        nz_pla = np.nonzero(self.prior_locs)[0]
+        pl_arr = self.prior_locs[nz_pla]
+        outer_part = np.cumsum(pl_arr)
+        u = np.random.uniform(size=num_dip)
+        loc_aux = np.digitize(u, outer_part)
+        return nz_pla[loc_aux]

@@ -134,16 +134,16 @@ class Sesame(object):
         Posterior probability map.
     posterior : instance of :class:`~sesameeg.emppdf.EmpPdf`
         The empirical pdf approximated by the particles at each iteration.
-
-    ****** Sara
-    Add parameter distance = 'cosine' or 'euclidean'
+    prior_locs :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, ) | None
+        The prior probability of active source locations. If None, each source space grid point is assigned an
+        uniform prior probability.
     """
 
     def __init__(self, forward, data, noise_std=None, radius=None,
                  neigh_std=None, n_parts=100, top_min=None,
-                 top_max=None, subsample=None, dip_mom_std=None, hyper_q=True,
-                 noise_cov=None, lam=0.25, max_n_dips=10, neigh_simil=0.5,
-                 Fourier_transf=False, verbose=False):
+                 top_max=None, prior_locs=None, subsample=None, dip_mom_std=None,
+                 hyper_q=True, noise_cov=None, lam=0.25, max_n_dips=10,
+                 neigh_simil=0.5, Fourier_transf=False, verbose=False):
 
         if not is_forward(forward):
             raise ValueError('Forward must be an instance of MNE'
@@ -168,6 +168,8 @@ class Sesame(object):
         self.n_verts = self.source_space.shape[0]
         self.lead_field = self.forward['sol']['data']
         self.distance_matrix = ssd.cdist(self.source_space, self.source_space)
+        self.prior_locs = self._get_prior_locs(prior_locs, self.n_verts)
+        # assert(np.sum(self.prior_locs == 1))
 
         if radius is None:
             self.radius = initialize_radius(self.source_space)
@@ -305,7 +307,8 @@ class Sesame(object):
             self.est_dip_mom_std = list(np.array([]) for _ in range(self.n_parts))
 
         self.posterior = EmpPdf(self.n_parts, self.n_verts, self.lam, dip_mom_std=self.dip_mom_std,
-                                fixed_ori=self.fixed_ori, hyper_q=self.hyper_q, verbose=self.verbose)
+                                prior_locs=self.prior_locs, fixed_ori=self.fixed_ori,
+                                hyper_q=self.hyper_q, verbose=self.verbose)
 
         for _part in self.posterior.particles:
             if self.hyper_q:
@@ -322,6 +325,21 @@ class Sesame(object):
 
             _part.compute_loglikelihood_unit(self.r_data, self.lead_field,
                                              noise_std=self.noise_std)
+
+    @staticmethod
+    def _get_prior_locs(p_locs, n_verts):
+        _error = 'Prior source location probabilities should be given as a one dimensional ' \
+                 'array of the same shape as the source space.'
+        if p_locs is None:
+            pl_array = np.ones(n_verts)
+            return pl_array / np.sum(pl_array)
+        else:
+            if isinstance(p_locs, np.ndarray):
+                if (p_locs.ndim != 1) or (p_locs.shape[0] != n_verts):
+                    raise ValueError(_error)
+                return p_locs / np.sum(p_locs)
+            else:
+                raise ValueError(_error)
 
     def _get_topographies(self, evoked, top_min, top_max, freqs=None):
         if self.fourier is False:
