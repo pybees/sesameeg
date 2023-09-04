@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import copy
 # Authors: Gianvittorio Luria <luria@dima.unige.it>
 #          Sara Sommariva <sommariva@dima.unige.it>
 #          Alberto Sorrentino <sorrentino@dima.unige.it>
@@ -8,6 +8,8 @@
 
 import itertools
 import numpy as np
+from multiprocessing import Pool
+from functools import partialmethod, partial
 from .particles import Particle
 
 
@@ -76,6 +78,11 @@ class EmpPdf(object):
                   format(i_p+1, np.exp(self.logweights[i_p]), _part.n_dips, _part))
         return s
 
+    def sample_single_part(self, part, n_verts, data, lf, neigh,
+                           neigh_p, nstd, lam, max_n_dips):
+        return part.explore(n_verts, data, lf, self.exponents[-1], neigh, neigh_p,
+                            nstd, lam, max_n_dips)
+
     def sample(self, n_verts, r_data, lead_field, neigh, neigh_p,
                noise_std, lam, max_n_dips):
         """Perform a full evolution step of the whole empirical pdf.
@@ -104,15 +111,44 @@ class EmpPdf(object):
         """
 
         for i_part, _part in enumerate(self.particles):
-            if self.hyper_q:
-                _part = _part.evol_dip_mom_std(r_data, lead_field, self.exponents[-1], noise_std, lam)
-
-            _part = _part.evol_n_dips(n_verts, r_data, lead_field, max_n_dips,
-                                      self.exponents[-1], noise_std, lam)
-            for dip_idx in reversed(range(_part.n_dips)):
-                _part = _part.evol_loc(dip_idx, neigh, neigh_p, r_data, lead_field,
-                                       self.exponents[-1], noise_std, lam)
+            _part = _part.explore(n_verts, r_data, lead_field, self.exponents[-1], neigh, neigh_p,
+                                  noise_std, lam, max_n_dips)
             self.particles[i_part] = _part
+
+        # OLD
+        # for i_part, _part in enumerate(self.particles):
+        #     if self.hyper_q:
+        #         _part = _part.evol_dip_mom_std(r_data, lead_field, self.exponents[-1], noise_std, lam)
+        #
+        #     _part = _part.evol_n_dips(n_verts, r_data, lead_field, max_n_dips,
+        #                               self.exponents[-1], noise_std, lam)
+        #     for dip_idx in reversed(range(_part.n_dips)):
+        #        _part = _part.evol_single_loc(dip_idx, neigh, neigh_p, r_data, lead_field,
+        #                                      self.exponents[-1], noise_std, lam)
+        #
+        #     self.particles[i_part] = _part
+
+        # PROVA con Partial
+        #
+        # _g = partialmethod(self.sample_single_part, n_verts=n_verts, data=r_data, lf=lead_field,
+        #                    neigh=neigh, neigh_p=neigh_p, nstd=noise_std, lam=lam, max_n_dips=max_n_dips)
+        #
+        # _f = partial(self.sample_single_part, n_verts=n_verts, data=r_data, lf=lead_field,
+        #              neigh=neigh, neigh_p=neigh_p, nstd=noise_std, lam=lam, max_n_dips=max_n_dips)
+        #
+        # with Pool() as pool:
+        #     result = pool.map(_f, self.particles)
+        #
+        # self.particles = copy.deepcopy(np.asarray(result))
+        # del result
+        #
+
+        # PROVA come Giacomo
+        # with Pool() as pool:
+        #     result = np.asarray(pool.map(self.prova,
+        #                                  [(_part, n_verts, r_data, lead_field, neigh, neigh_p, noise_std,
+        #                                   lam, max_n_dips) for _part in self.particles]))
+        #     self.particles = copy.deepcopy(result)
 
     def resample(self):
         """Performs a systematic resampling step of the whole empirical pdf

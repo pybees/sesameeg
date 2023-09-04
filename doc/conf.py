@@ -15,6 +15,8 @@
 import sys
 import os
 import warnings
+import pyvista
+import numpy as np
 
 import sphinx_gallery
 # import sphinx_rtd_theme
@@ -75,7 +77,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'sesameeg'
-copyright = u"2019, SESAMEEG developers"
+copyright = u"2023, SESAMEEG developers"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -144,8 +146,8 @@ html_theme_options = {
     'navbar_pagenav': False,
     'globaltoc_includehidden': False,
     'navbar_links': [
-        ("Examples", "auto_examples/index"),
         ("API", "api"),
+        ("Examples", "auto_examples/index"),
         ("Model", "explanation_algorithm"),
         ("GitHub", "https://github.com/pybees/sesameeg", True)
     ],
@@ -311,28 +313,34 @@ texinfo_documents = [
 intersphinx_mapping = {
     'python': ('https://docs.python.org/{.major}'.format(
         sys.version_info), None),
-    #'numpy': ('https://numpy.org/', None),
     'numpy': ('https://docs.scipy.org/doc/numpy/', None),
-    # 'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
     'matplotlib': ('https://matplotlib.org/', None),
-    # 'mayavi': ('http://docs.enthought.com/mayavi/mayavi', None),
-    # 'sklearn': ('http://scikit-learn.org/stable', None),
+    'pyvista': ('https://docs.pyvista.org/version/stable/', None),
+    'nilearn': ('https://nilearn.github.io/stable/', None),
     'mne': ('https://mne.tools/stable/', None)
 }
 
-try:
-    mlab = mne.utils._import_mlab()
-    find_mayavi_figures = True
-    # Do not pop up any mayavi windows while running the
-    # examples. These are very annoying since they steal the focus.
-    mlab.options.offscreen = True
-except Exception:
-    find_mayavi_figures = False
+# try:
+#     mlab = mne.utils._import_mlab()
+#     find_mayavi_figures = True
+#     # Do not pop up any mayavi windows while running the
+#     # examples. These are very annoying since they steal the focus.
+#     mlab.options.offscreen = True
+# except Exception:
+#     find_mayavi_figures = False
+
+# necessary when building the sphinx gallery
+pyvista.BUILDING_GALLERY = True
+# pyvista.OFF_SCREEN = True
+
+# Optional - set parameters like theme or window size
+pyvista.set_plot_theme('document')
+pyvista.global_theme.window_size = np.array([1024, 768]) * 2
 
 # sphinx-gallery configuration
 sphinx_gallery_conf = {
     'plot_gallery': 'True',  # Avoid annoying Unicode/bool default warning
-    'image_scrapers': ('matplotlib', 'mayavi'),
+    'image_scrapers': ('matplotlib', 'pyvista'),
     'doc_module': 'sesameeg',
     'backreferences_dir': os.path.join('generated'),
     'reference_url': {'sesameeg': None}
@@ -346,4 +354,6 @@ warnings.filterwarnings("ignore", category=UserWarning,
 
 def setup(app):
     # a copy button to copy snippet of code from the documentation
-    app.add_javascript('js/copybutton.js')
+    #app.add_javascript('js/copybutton.js')
+    app.add_js_file('js/copybutton.js')
+

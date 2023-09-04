@@ -20,30 +20,56 @@ from .utils import compute_neighbours_matrix, initialize_radius, \
     compute_correlation_distance_matix
 from .utils import is_epochs, is_evoked, is_forward, normalize
 from .io import _export_to_stc, _export_to_vol_stc, write_h5, write_pkl
+from .viz import plot_amplitudes, plot_stc, plot_vol_stc, plot_cloud_sources
 from .metrics import compute_goodness_of_fit, compute_sd
 
 
 class Sesame(object):
-    """Sequential Semi-Analytic Monte-Carlo Estimation (SESAME) of sources.
+    """Sequential Semi-Analytic Monte-Carlo Estimator (SESAME).
 
     Parameters
     ----------
-    forward : :py:class:`~mne.Forward` object
-        The forward solution. Sesame automatically detects whether the dipole
-        orientations are free or locally normal to the cortical surface.
-    data : instance of :py:class:`~mne.Evoked` | :py:class:`~mne.EvokedArray`
-        The MEEG data.
-    noise_std : :py:class:`~float` | None
-        The standard deviation of the noise distribution.
-        If None, it is estimated from the data
-    radius : :py:class:`~float` | None
-        The maximum distance in cm between two neighbouring vertices
-        of the brain discretization. If None, radius is set to 1 cm.
-    neigh_std : :py:class:`~float` | None
-        The standard deviation of the probability distribution of
-        neighbours. If None, neighb_std is set to radius/2.
+    source_space : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)
+        The coordinates of the points in the brain discretization.
+    lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_comp*n_verts)
+        The lead field matrix. (if ``fixed_ori=True`` it must be ``n_comp = 1``;  if ``fixed_ori=False``
+        it must be ``n_comp = 3``)
+    data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
+        The MEEG data; ``n_sens`` is the number of sensors and
+        ``n_ist`` is the number of time-points or of frequencies.
     n_parts : :py:class:`~int`
         The number of particles forming the empirical pdf.
+    s_min : :py:class:`~int`
+        The first analyzed sample in the data array.
+    s_max : :py:class:`~int`
+        The last analyzed sample in the data array.
+    n_matrix : :py:class:`~numpy.ndarray` of :py:class:`~int`, shape (n_verts, n_max_neigh) | None
+        The set of neighbours of each point in the brain discretization. If None, it is automatically computed.
+        ``n_max_neigh`` is the cardinality of the biggest set.
+    np_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, n_max_neigh) | None
+        The neighbours' probabilities. If None, it is automatically computed.
+    noise_std : :py:class:`~float` | None
+        The standard deviation of the noise distribution.
+        If None, it is estimated from the data.
+    dip_mom_std : :py:class:`~float` | None
+        The standard deviation of the prior pdf on the dipole moment.
+        If None, it is estimated from the forward model and the data.
+    fixed_ori : :py:class:`~bool`
+        If True, the forward solution is assumed to be computed in the surface-based source coordinate system.
+    radius : :py:class:`~float` | None
+        The maximum distance in cm between two neighbouring vertices
+        of the brain discretization. If None, ``radius`` is set to 1 cm.
+    neigh_std : :py:class:`~float` | None
+        The standard deviation of the probability distribution of
+        neighbours. If None, ``neighb_std`` is set to radius/2.
+    prior_locs : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_vert) | None
+        The prior probability of source location. If None, a uniform prior probability is used.
+        Default is None.
+    subsample : :py:class:`~int` | None
+        The step used to subsample the data. If None no subsampling is
+        applied.
+    hyper_q : :py:class:`~bool`
+        If True, a hyperprior pdf on the dipole moment std will be used.
     top_min : :py:class:`~float` | None
         First topography to be included in the segment of data to be analyzed.
         It is meant to be expressed either in seconds in the time domain or
@@ -54,220 +80,190 @@ class Sesame(object):
         It is meant to be expressed either in seconds in the time domain or
         in Hertz in the frequency domain.
         If None, it is set to the last topography of the input data.
-    subsample : :py:class:`~int` | None
-        The step used to subsample the data. If None no subsampling is
-        applied.
-    dip_mom_std : :py:class:`~float` | None
-        The standard deviation of the prior pdf on the dipole moment.
-        If None, it is estimated from the forward model and the data.
-    hyper_q : :py:class:`~bool`
-        If True an hyperprior pdf on the dipole moment std will be used.
-        Default is True.
-    noise_cov : instance of :py:class:`~mne.Covariance` | None
-        The noise covariance matrix used to prewhiten the data. If None,
-        no prewhitening is applied.
     lam : :py:class:`~float`
         The parameter of the Poisson prior pdf on the number of dipoles.
     max_n_dips : :py:class:`~int`
         The maximum number of dipoles allowed in a particle.
-    Fourier_transf : :py:class:`~bool`
-        If True data are converted to the frequency domain.
+    fourier : :py:class:`~bool`
+        If True, data are converted to the frequency domain.
     verbose : :py:class:`~bool`
         If True, increase verbose level.
+    **kwargs :
+        Additional keyword arguments are passed to the Sesame constructor.
 
     Attributes
     ----------
-    n_parts : :py:class:`~int`
-        The number of particles forming the empirical pdf.
-    lam : :py:class:`~float`
-        The parameter of the Poisson prior pdf on the number of dipoles.
-    max_n_dips : :py:class:`~int`
-        The maximum number of dipoles allowed in a particle.
-    forward : instance of :py:class:`~mne.Forward`
-        The forward solution.
-    source_space : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)
-        The coordinates of the points in the brain discretization.
-    n_verts : :py:class:`~int`
-        The number of points forming the brain discretization.
-    lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)
-        The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)
+    dip_mom_std : :py:class:`~float`
+        The standard deviation of the prior on the dipole moment.
     distance_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)
         The Euclidean distance between the points in the
         brain discretization.
+    est_dip_moms : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_ist x (n_comp*est_n_dips[-1])) | None
+        The sources' moments estimated at the last iteration. (n_comp = 1, if fixed orientation, 3, if free orientation)
+        If None, moments can be estimated by calling :py:meth:`~Sesame.compute_dip_mom`
+    est_locs : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~int`
+        The source space grid points indices in which a source is estimated.
+    est_n_dips : :py:class:`~list` of :py:class:`~int`
+        The estimated number of dipoles.
+    fourier : :py:class:`~bool`
+        If True, data are in the frequency domain.
+    hyper_q : :py:class:`~bool`
+        If True use hyperprior on dipole moment std.
+    lam : :py:class:`~float`
+        The parameter of the Poisson prior pdf on the number of dipoles.
+    lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)
+        The leadfield matrix. (``n_comp = 1`` if ``fixed_ori=True``; ``n_comp = 3`` if ``fixed_ori=False``)
+    max_n_dips : :py:class:`~int`
+        The maximum number of dipoles allowed in a particle.
+    model_sel : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`
+        The model selection, i.e. the posterior distribution on the number
+        of dipoles.
+    n_verts : :py:class:`~int`
+        The number of points forming the brain discretization.
+    n_parts : :py:class:`~int`
+        The number of particles forming the empirical pdf.
     neigh : :py:class:`~numpy.ndarray` of :py:class:`~int`, shape (n_vert, n_max_neigh)
         The set of neighbours of each point in the brain discretization.
         n_max_neigh is the cardinality of the biggest set.
-    radius : :py:class:`~float`
-        The radius used to compute the neighbours.
     neigh_p : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_vert, n_max_neigh)
         The neighbours' probabilities.
     neigh_std : :py:class:`~float`
         The standard deviation used to compute the neigh_p matrix.
-    s_min : :py:class:`~int`
-        The first sample of the segment of data that are analyzed.
-    s_max : :py:class:`~int`
-        The last sample of the segment of data that are analyzed.
-    subsample : :py:class:`~int` | None
-        The step used to subsample the data.
-    r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
-        The real part of the data; n_sens is the number of sensors and
-        n_ist is the number of time-points or of frequencies.
-    dip_mom_std : :py:class:`~float`
-        The standard deviation of the prior on the dipole moment.
-    hyper_q : :py:class:`~bool`
-        If True use hyperprior on dipole moment std.
     noise_std : :py:class:`~float`
         The standard deviation of the noise distribution.
-    _resample_it : :py:class:`~list` of :py:class:`~int`
-        The iterations during which a resampling step has been performed
-    est_n_dips : :py:class:`~list` of :py:class:`~int`
-        The estimated number of dipoles.
-    est_locs : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~int`
-        The source space grid points indices in which a source is estimated.
-    est_dip_moms : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_ist x (n_comp*est_n_dips[-1])) | None
-        The sources' moments estimated at the last iteration. (n_comp = 1, if fixed orientation, 3, if free orientation)
-        If None, moments can be estimated by calling :py:meth:`~Sesame.compute_dip_mom`
-    model_sel : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`
-        The model selection, i.e. the posterior distribution on the number
-        of dipoles.
     pmap : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (est_n_dips, n_verts)
         Posterior probability map.
     posterior : instance of :class:`~sesameeg.emppdf.EmpPdf`
         The empirical pdf approximated by the particles at each iteration.
-    prior_locs :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, ) | None
-        The prior probability of active source locations. If None, each source space grid point is assigned an
+    prior_locs : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, ) | None
+        The prior probability of active source locations. If None, each source space grid point is assigned a
         uniform prior probability.
+    r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)
+        The real part of the data; n_sens is the number of sensors and
+        n_ist is the number of time-points or of frequencies.
+    radius : :py:class:`~float`
+        The radius used to compute the neighbours.
+    _resample_it : :py:class:`~list` of :py:class:`~int`
+        The iterations during which a resampling step has been performed
+    s_min : :py:class:`~int`
+        The first sample of the segment of data that are analyzed.
+    s_max : :py:class:`~int`
+        The last sample of the segment of data that are analyzed.
+    source_space : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)
+        The coordinates of the points in the brain discretization.
+    subsample : :py:class:`~int` | None
+        The step used to subsample the data.
+
+    data_times : :py:class:`~numpy.ndarray`
+        Time vector in seconds. Only when instantiated by means of :func:`~sesameeg.mne.prepare_sesame`
+        and when ``fourier=False``
+    data_freqs : :py:class:`~numpy.ndarray`
+        Frequency vector in Hertz. Only when instantiated by means of :func:`~sesameeg.mne.prepare_sesame`
+        and when ``fourier=True``
+    forward : instance of :py:class:`~mne.Forward`
+        The forward solution. Only when instantiated by means of :func:`~sesameeg.mne.prepare_sesame`
+    subject : :py:class:`~str`
+        Subject name in Freesurfer subjects dir. Only when instantiated by means
+        of :func:`~sesameeg.mne.prepare_sesame`.
+    subjects_dir : :py:class:`~str` | None
+        If not None, this directory will be used as the subjects directory instead of the value set using
+        the SUBJECTS_DIR environment variable. Only when instantiated by means
+        of :func:`~sesameeg.mne.prepare_sesame`
+    trans_matrix : instance of :py:class:`~mne.Transform`
+        MRI<->Head coordinate transformation. Only when instantiated by
+        means of :func:`~sesameeg.mne.prepare_sesame`
     """
 
-    def __init__(self, forward, data, noise_std=None, radius=None,
-                 neigh_std=None, n_parts=100, top_min=None,
-                 top_max=None, prior_locs=None, subsample=None, dip_mom_std=None,
-                 hyper_q=True, noise_cov=None, lam=0.25, max_n_dips=10,
-                 neigh_simil=0.5, Fourier_transf=False, verbose=False):
+    def __init__(self, source_space, lead_field, data,
+                 n_parts=100,
+                 s_min=None,
+                 s_max=None,
+                 n_matrix=None,
+                 np_matrix=None,
+                 noise_std=None,
+                 dip_mom_std=None,
+                 fixed_ori=False,
+                 radius=None,
+                 neigh_std=None,
+                 prior_locs=None,
+                 subsample=None,
+                 hyper_q=True,
+                 lam=0.25,
+                 max_n_dips=10,
+                 fourier=False,
+                 verbose=False,
+                 **kwargs):
 
-        if not is_forward(forward):
-            raise ValueError('Forward must be an instance of MNE'
-                             ' class Forward.')
-
-        if not is_evoked(data):
-            raise ValueError('Data must be an instance of MNE class '
-                             'Evoked or EvokedArray.')
-
-        # 1) Choosen by the user
-        self.fourier = Fourier_transf
+        # 1) Chosen by the user
+        self.fourier = fourier
         self.n_parts = n_parts
         self.lam = lam
         self.max_n_dips = max_n_dips
         self.subsample = subsample
         self.verbose = verbose
         self.hyper_q = hyper_q
-        self.forward, _info_picked = _select_orient_forward(forward,
-                                                            data.info, noise_cov)
-        self.fixed_ori = self._read_fwd_ori()
-        self.source_space = self.forward['source_rr']
+        self.fixed_ori = fixed_ori
+        self.source_space = source_space
+        self.stc = None
         self.n_verts = self.source_space.shape[0]
-        self.lead_field = self.forward['sol']['data']
+        self.lead_field = lead_field
         self.distance_matrix = ssd.cdist(self.source_space, self.source_space)
         self.prior_locs = self._get_prior_locs(prior_locs, self.n_verts)
         # assert(np.sum(self.prior_locs == 1))
 
-        if radius is None:
-            self.radius = initialize_radius(self.source_space)
-        else:
-            self.radius = radius
-        print('Computing neighbours matrix ', end='')
-        if self.fixed_ori:
-            if neigh_simil == 1:
-                print('using Euclidean distance...', end='')
-            elif neigh_simil == 0:
-                print('using correlation distance...')
+        # Kwargs
+        self.forward = None
+        self.trans_matrix = None
+        self.subject = None
+        self.subjects_dir = None
+        self.data_times = None
+        self.data_freqs = None
+        for k, v in kwargs.items():
+            if k in self.__dict__:
+                setattr(self, k, v)
             else:
-                print('using combined distance...')
+                raise KeyError(k)
 
-            if neigh_simil == 1:
-                self.neigh = compute_neighbours_matrix(self.source_space,
-                                                       self.distance_matrix,
-                                                       self.radius,
-                                                       neigh_simil)
-            elif 0 <= neigh_simil < 1:
-                corr_dist_matr = compute_correlation_distance_matix(self.forward)
-                combined_dist_matr = (1-neigh_simil)*normalize(corr_dist_matr) + \
-                    neigh_simil*normalize(self.distance_matrix)
-                self.neigh = compute_neighbours_matrix(self.source_space,
-                                                                         combined_dist_matr,
-                                                                         30,
-                                                                         neigh_simil)
+        if n_matrix is None:
+            print('Computing neighbours matrix ', end='')
+            if radius is None:
+                self.radius = initialize_radius(self.source_space)
             else:
-                raise ValueError
-        else:
+                self.radius = radius
             self.neigh = compute_neighbours_matrix(self.source_space,
                                                    self.distance_matrix,
                                                    self.radius,
                                                    n_simil=1)
-        print('[done]')
-
-        print('Computing neighbours probabilities...', end='')
-        if neigh_std is None:
-            self.neigh_std = self.radius / 2
+            print('[done]')
         else:
-            self.neigh_std = neigh_std
+            self.neigh = n_matrix
 
-        if self.fixed_ori:
-            if neigh_simil == 1:
-                self.neigh_p = compute_neighbours_probability_matrix(self.neigh,
-                                                                     self.source_space,
-                                                                     self.distance_matrix,
-                                                                     self.neigh_std)
-            elif 0 <= neigh_simil < 1:
-                a_matrix = np.zeros(combined_dist_matr.shape, dtype=bool)
-                row_list, col_list = list(), list()
-                for _in, _n in enumerate(self.neigh):
-                    for _x in _n[_n >= 0]:
-                        row_list.append(_in)
-                        col_list.append(_x)
-                a_matrix[(row_list, col_list)] = 1
-                comb_neigh_std = np.max(combined_dist_matr[a_matrix])/2
-                self.neigh_p = compute_neighbours_probability_matrix(self.neigh,
-                                                                     self.source_space,
-                                                                     combined_dist_matr,
-                                                                     comb_neigh_std)
+        if np_matrix is None:
+            print('Computing neighbours probabilities...', end='')
+            if neigh_std is None:
+                self.neigh_std = self.radius / 2
             else:
-                raise ValueError
-
-        else:
+                self.neigh_std = neigh_std
             self.neigh_p = compute_neighbours_probability_matrix(self.neigh,
                                                                  self.source_space,
                                                                  self.distance_matrix,
                                                                  self.neigh_std)
-        print('[done]')
-
-        # Prepare data
-        if is_evoked(data):
-            _data = self._prepare_evoked_data(data, top_min, top_max)
+            print('[done]')
         else:
-            raise ValueError
+            self.neigh_p = np_matrix
 
-        # Perform whitening if a noise covariance is provided
-        if noise_cov is not None:
-            if self.fourier:
-                raise NotImplementedError('Still to implement whitening in the frequency domain')
-            else:
-                if is_evoked(data):
-                    _sf = np.sqrt(data.nave)
-                elif is_epochs(data):
-                    _sf = 1.0
-                else:
-                    raise ValueError
+        #  Data
+        if s_min is None:
+            s_min = 0
+        if s_max is None:
+            s_max = data.shape[1] - 1
+        if subsample is not None:
+            print(f'Subsampling data with step {subsample}')
+            self.r_data = data[:, s_min:s_max + 1:subsample]
+        else:
+            self.r_data = data[:, s_min:s_max + 1]
 
-                whitener, _ = compute_whitener(noise_cov, info=_info_picked, pca=True,
-                                               picks=_info_picked['ch_names'])
-                _data = _sf * np.dot(whitener, _data)
-                self.lead_field = (_sf * np.dot(whitener, self.lead_field))
-                print('Data and leadfield have been prewhitened.')
-
-        self.r_data = _data.real
-        del _data
-
+        # Dipole moment std
         if dip_mom_std is None:
             print('Estimating dipole moment std...', end='')
             self.dip_mom_std = estimate_dip_mom_std(self.r_data, self.lead_field)
@@ -284,6 +280,7 @@ class Sesame(object):
         if self.hyper_q:
             print('Sampling hyperprior for dipole moment std.')
 
+        # Noise std
         if noise_std is None:
             print('Estimating noise std...', end='')
             self.noise_std = estimate_noise_std(self.r_data)
@@ -335,6 +332,7 @@ class Sesame(object):
             return pl_array / np.sum(pl_array)
         else:
             if isinstance(p_locs, np.ndarray):
+                print('Sampling user defined prior probability distribution for dipole locations.')
                 if (p_locs.ndim != 1) or (p_locs.shape[0] != n_verts):
                     raise ValueError(_error)
                 return p_locs / np.sum(p_locs)
@@ -385,9 +383,9 @@ class Sesame(object):
                     raise ValueError('top_max value should be a float')
             print('Analyzing data from {0} Hz to {1} Hz'.format(round(self.top_min, 4), round(self.top_max, 4)))
 
-    def _prepare_epochs_data(self, epochs, top_min, top_max):
+    def _prepare_epochs_data(self, epochs, top_min, top_max, epochs_avg):
         ep_data = epochs.get_data()
-        evoked = EvokedArray(ep_data[0], epochs.info)
+        evoked = EvokedArray(ep_data[0], epochs.info, tmin=epochs.times[0])
         if self.fourier is False:
             self._get_topographies(evoked, top_min, top_max)
             temp_list = list()
@@ -398,7 +396,11 @@ class Sesame(object):
                     temp_list.append(_e[:, self.s_min:self.s_max + 1:self.subsample])
                 else:
                     temp_list.append(_e[:, self.s_min:self.s_max + 1])
-            return np.hstack(temp_list)
+            if epochs_avg is True:
+                print(f'Averaging {len(temp_list)} epochs.')
+                return np.mean(np.array(temp_list), axis=0)
+            else:
+                return np.hstack(temp_list)
         elif self.fourier is True:
             tstep = 1 / evoked.info['sfreq']
             evoked_f = evoked.copy()
@@ -411,6 +413,8 @@ class Sesame(object):
 
             temp_list = list()
             temp_list2 = list()
+            temp_list2_r = list()
+            temp_list2_i = list()
             for ie, _e in enumerate(ep_data):
                 _e *= np.hamming(_e.shape[1])
                 _e_f = np.fft.rfft(_e)
@@ -420,10 +424,24 @@ class Sesame(object):
                     temp_list.append(_e_f[:, self.s_min:self.s_max + 1:self.subsample])
                 else:
                     temp_list.append(_e_f[:, self.s_min:self.s_max + 1])
+                self._tl = temp_list
 
-                for _data_temp in temp_list:
-                    for l in _data_temp.T:
-                        temp_list2.append(np.vstack([np.real(l), np.imag(l)]).T)
+            for _data_temp in temp_list:
+                temp_list2.append(np.real(_data_temp))
+                temp_list2.append(np.imag(_data_temp))
+
+                temp_list2_r.append(np.real(_data_temp))
+                temp_list2_i.append(np.imag(_data_temp))
+
+                #for _l in _data_temp.T:
+                #    temp_list2.append(np.vstack([np.real(_l), np.imag(_l)]).T)
+            if epochs_avg is True:
+                print(f'Averaging {len(temp_list)} epochs.')
+                _r_mean = np.mean(np.array(temp_list2_r), axis=0)
+                _i_mean = np.mean(np.array(temp_list2_i), axis=0)
+
+                return np.hstack([_r_mean, _i_mean])
+            else:
                 return np.hstack(temp_list2)
         else:
             raise ValueError
@@ -454,8 +472,8 @@ class Sesame(object):
             else:
                 _data_temp = evoked_f.data[:, self.s_min:self.s_max + 1]
             temp_list = list()
-            for l in _data_temp.T:
-                temp_list.append(np.vstack([np.real(l), np.imag(l)]).T)
+            for _l in _data_temp.T:
+                temp_list.append(np.vstack([np.real(_l), np.imag(_l)]).T)
             return np.hstack(temp_list)
         else:
             raise ValueError
@@ -490,7 +508,8 @@ class Sesame(object):
             self.est_dip_mom_std = list(np.array([]) for _ in range(self.n_parts))
 
         self.posterior = EmpPdf(self.n_parts, self.n_verts, self.lam, dip_mom_std=self.dip_mom_std,
-                                fixed_ori=self.fixed_ori, hyper_q=self.hyper_q, verbose=self.verbose)
+                                prior_locs=self.prior_locs, fixed_ori=self.fixed_ori,
+                                hyper_q=self.hyper_q, verbose=self.verbose)
 
         for _part in self.posterior.particles:
             if self.hyper_q:
@@ -620,7 +639,13 @@ class Sesame(object):
                     print('Estimated dipole strength variance: {}'.format(self.final_dip_mom_std))
             else:
                 self.compute_dip_mom(self.est_locs[-1])
-        print('[done]')
+
+        print(f'    Estimated number of sources: {self.est_n_dips[-1]}')
+        if self.est_n_dips[-1] > 0:
+            print('    Estimated source locations:')
+            for _iloc, _loc in enumerate(self.est_locs[-1]):
+                print(f'        * source {_iloc + 1}: {self.source_space[_loc]}')
+        print(f'[done in {self.posterior.exponents.shape[0]} iterations]')
 
     def compute_dip_mom(self, est_locs):
         """Compute a point estimate for the dipole moments.
@@ -639,7 +664,7 @@ class Sesame(object):
             est_sq = np.asarray([self.est_dip_mom_std[p][-1] for p in range(self.n_parts)])
             _dip_mom_std = np.dot(weights, est_sq)
             self.final_dip_mom_std = _dip_mom_std
-            print('Estimated dipole strength variance: {}'.format(_dip_mom_std))
+            print('    Estimated dipole strength variance: {}'.format(_dip_mom_std))
         else:
             _dip_mom_std = self.dip_mom_std
 
@@ -710,7 +735,7 @@ class Sesame(object):
         sd = compute_sd(self.source_space, pmap_tot, est_pos)
         return sd
 
-    def compute_stc(self, subject=None):
+    def compute_stc(self):
         """Compute and export in an .stc file the posterior pdf
             :math:`p(r|\\mathbf{y}, \\hat{n}_D)`, being :math:`\\hat{n}_D`
             the estimated number of sources.
@@ -724,19 +749,69 @@ class Sesame(object):
                 The subject name.
 
             Returns
-            --------
+            -------
             stc : :py:class:`~mne.SourceEstimate` | :py:class:`~mne.VolSourceEstimate`
                 The source estimate object containing the posterior map of the
                 dipoles' location.
             """
-        if self.forward['src'].kind == 'surface':
-            print('Surface stc computed.')
-            return _export_to_stc(self, subject=subject)
-        elif self.forward['src'].kind == 'volume':
-            print('Volume stc computed  ')
-            return _export_to_vol_stc(self, subject=subject)
+        if self.forward is not None:
+            if self.forward['src'].kind == 'surface':
+                print('Surface stc computed.')
+                return _export_to_stc(self, subject=self.subject)
+            elif self.forward['src'].kind == 'volume':
+                print('Volume stc computed  ')
+                return _export_to_vol_stc(self, subject=self.subject)
+            else:
+                raise ValueError('src can be either surface or volume')
         else:
-            raise ValueError('src can be either surface or volume')
+            raise AttributeError('This method works only within MNE-Python environment. '
+                                 'Use sesameeg.mne.prepare_sesame to instantiate the inverse operator.')
+
+    def plot_source_amplitudes(self):
+        """
+        Plot the  amplitude of the estimated sources as function of time.
+        """
+        plot_amplitudes(self, title=self.subject)
+
+    def plot_sources(self, plot_kwargs=None, savepath=None, save_kwargs=None,
+                     true_sources=None, force_open=False):
+        """
+        Plot the estimated sources. The default behaviour of the method is the following:
+
+        * if ``Sesame`` has been instantiated through :py:meth:`~mne.prepare_sesame`, it visualizes the posterior map of the dipoles’ location and the estimated sources
+
+          * on the inflated brain, if ``Sesame.forward`` is of kind ``surface``;
+
+          * on the MRI, if ``Sesame.forward`` is of kind ``volume``.
+
+        * if ``Sesame`` has been instantiated through :py:class:`~Sesame`, it visualizes the posterior map of the dipoles’ location and the estimated sources as a :py:class:`~pyvista.PolyData` object.
+
+        Parameters
+        ----------
+        plot_kwargs : :py:class:`~dict` | None
+            Additional arguments to :py:func:`~mne.viz.plot_source_estimates` or
+            :py:func:`~nilearn.plotting.plot_stat_map` (e.g., dict(surface='white')).
+        savepath : :py:class:`~str` | None
+            File path to write image to. If None, no image is written.
+        save_kwargs : :py:class:`~dict` | None
+            Additional arguments to :py:meth:`~pyvista.Plotter.screenshot`
+            or :py:func:`~matplotlib.pyplot.savefig`.
+        true_sources : :py:class:`~numpy.ndarray` | None
+            In simulation settings, indexes of source space points in which true sources are located.
+        force_open : :py:class:`~bool`
+            If True, force the image to stay open.
+        """
+        if self.forward is not None:
+            self.stc = self.compute_stc()
+            stc_kind = type(self.stc).__name__
+            if stc_kind == 'SourceEstimate':
+                plot_stc(self, true_idxs=true_sources, savepath=savepath,
+                         plot_kwargs=plot_kwargs, save_kwargs=save_kwargs, force_open=force_open)
+            elif stc_kind == 'VolSourceEstimate':
+                plot_vol_stc(self, savepath=savepath, plot_kwargs=plot_kwargs,
+                             save_kwargs=save_kwargs)
+        else:
+            plot_cloud_sources(self, savepath=savepath)
 
     def save_h5(self, fpath, sbj=None, sbj_viz=None, data_path=None,
                 fwd_path=None, cov_path=None, src_path=None, lf_path=None):
@@ -775,7 +850,7 @@ class Sesame(object):
     def save_pkl(self, fpath, sbj=None, sbj_viz=None, data_path=None,
                  fwd_path=None, cov_path=None, src_path=None,
                  lf_path=None, save_all=False):
-        """Save SESAME result to an Python pickle file.
+        """Save SESAME result to a Python pickle file.
 
         Parameters
         ----------

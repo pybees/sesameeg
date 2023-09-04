@@ -280,7 +280,7 @@ class Particle(object):
                 self = copy.deepcopy(prop_part)
         return self
 
-    def evol_loc(self, dip_idx, neigh, neigh_p, r_data, lead_field,
+    def evol_single_loc(self, dip_idx, neigh, neigh_p, r_data, lead_field,
                  lklh_exp, noise_std, lam):
         """Perform a Markov Chain Monte Carlo step in order to explore the
            dipole location component of the state space. The dipole is
@@ -360,6 +360,12 @@ class Particle(object):
 
         return self
 
+    def evol_loc(self, neigh, neigh_p, r_data, lead_field, lklh_exp, noise_std, lam):
+        for dip_idx in reversed(range(self.n_dips)):
+            self = self.evol_single_loc(dip_idx, neigh, neigh_p, r_data, lead_field,
+                                   lklh_exp, noise_std, lam)
+        return self
+
     def evol_dip_mom_std(self, r_data, lead_field, lklh_exp, noise_std, lam):
 
         if not hasattr(self, 'dip_mom_std'):
@@ -388,6 +394,16 @@ class Particle(object):
         if np.random.rand() < alpha:
             self = copy.deepcopy(prop_part)
 
+        return self
+
+    def explore(self, n_verts, r_data, lead_field, lklh_exp, neigh, neigh_p,
+                noise_std, lam, max_n_dips):
+        if self.hyper_q:
+            self = self.evol_dip_mom_std(r_data, lead_field, lklh_exp, noise_std, lam)
+
+        self = self.evol_n_dips(n_verts, r_data, lead_field, max_n_dips,
+                                  lklh_exp, noise_std, lam)
+        self = self.evol_loc(neigh, neigh_p, r_data, lead_field, lklh_exp, noise_std, lam)
         return self
 
     def sample_prior_locs(self, num_dip=1):
