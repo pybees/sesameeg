@@ -84,6 +84,7 @@ copyright = u"2023, SESAMEEG developers"
 # built documents.
 #
 # The short X.Y version.
+sys.path.append("../")
 from sesameeg import __version__
 version = __version__
 # The full version, including alpha/beta/rc tags.
