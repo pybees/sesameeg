@@ -1,4 +1,4 @@
-:mod:`sesameeg.utils`.initialize_radius
+﻿:mod:`sesameeg.utils`.initialize_radius
 ====================================================
 
 .. currentmodule:: sesameeg.utils

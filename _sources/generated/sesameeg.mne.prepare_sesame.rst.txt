@@ -1,0 +1,12 @@
+﻿:mod:`sesameeg.mne`.prepare_sesame
+===============================================
+
+.. currentmodule:: sesameeg.mne
+
+.. autofunction:: prepare_sesame
+
+.. include:: sesameeg.mne.prepare_sesame.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

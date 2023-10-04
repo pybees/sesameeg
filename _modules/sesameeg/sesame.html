@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
-    <title>sesameeg.sesame &#8212; sesameeg 0.0.1 documentation</title>
-    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
-    <script type="text/javascript" src="../../_static/js/copybutton.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sesameeg.sesame &#8212; sesameeg 0.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=284a2d1d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <script src="../../_static/documentation_options.js?v=e3a6060d"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/copybutton.js?v=26522df0"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js "></script>
-<script type="text/javascript" src="../../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
 
   </head><body>
 
@@ -37,14 +39,14 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           sesameeg</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.0.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
           <ul class="nav navbar-nav">
             
-                <li><a href="../../auto_examples/index.html">Examples</a></li>
                 <li><a href="../../api.html">API</a></li>
+                <li><a href="../../auto_examples/index.html">Examples</a></li>
                 <li><a href="../../explanation_algorithm.html">Model</a></li>
                 <li><a href="https://github.com/pybees/sesameeg">GitHub</a></li>
             
@@ -110,30 +112,58 @@
     <span class="n">compute_correlation_distance_matix</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">is_epochs</span><span class="p">,</span> <span class="n">is_evoked</span><span class="p">,</span> <span class="n">is_forward</span><span class="p">,</span> <span class="n">normalize</span>
 <span class="kn">from</span> <span class="nn">.io</span> <span class="kn">import</span> <span class="n">_export_to_stc</span><span class="p">,</span> <span class="n">_export_to_vol_stc</span><span class="p">,</span> <span class="n">write_h5</span><span class="p">,</span> <span class="n">write_pkl</span>
+<span class="kn">from</span> <span class="nn">.viz</span> <span class="kn">import</span> <span class="n">plot_amplitudes</span><span class="p">,</span> <span class="n">plot_stc</span><span class="p">,</span> <span class="n">plot_vol_stc</span><span class="p">,</span> <span class="n">plot_cloud_sources</span>
 <span class="kn">from</span> <span class="nn">.metrics</span> <span class="kn">import</span> <span class="n">compute_goodness_of_fit</span><span class="p">,</span> <span class="n">compute_sd</span>
 
 
-<div class="viewcode-block" id="Sesame"><a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame">[docs]</a><span class="k">class</span> <span class="nc">Sesame</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Sequential Semi-Analytic Monte-Carlo Estimation (SESAME) of sources.</span>
+<div class="viewcode-block" id="Sesame">
+<a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame">[docs]</a>
+<span class="k">class</span> <span class="nc">Sesame</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sequential Semi-Analytic Monte-Carlo Estimator (SESAME).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    forward : :py:class:`~mne.Forward` object</span>
-<span class="sd">        The forward solution. Sesame automatically detects whether the dipole</span>
-<span class="sd">        orientations are free or locally normal to the cortical surface.</span>
-<span class="sd">    data : instance of :py:class:`~mne.Evoked` | :py:class:`~mne.EvokedArray`</span>
-<span class="sd">        The MEEG data.</span>
-<span class="sd">    noise_std : :py:class:`~float` | None</span>
-<span class="sd">        The standard deviation of the noise distribution.</span>
-<span class="sd">        If None, it is estimated from the data</span>
-<span class="sd">    radius : :py:class:`~float` | None</span>
-<span class="sd">        The maximum distance in cm between two neighbouring vertices</span>
-<span class="sd">        of the brain discretization. If None, radius is set to 1 cm.</span>
-<span class="sd">    neigh_std : :py:class:`~float` | None</span>
-<span class="sd">        The standard deviation of the probability distribution of</span>
-<span class="sd">        neighbours. If None, neighb_std is set to radius/2.</span>
+<span class="sd">    source_space : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)</span>
+<span class="sd">        The coordinates of the points in the brain discretization.</span>
+<span class="sd">    lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_comp*n_verts)</span>
+<span class="sd">        The lead field matrix. (if ``fixed_ori=True`` it must be ``n_comp = 1``;  if ``fixed_ori=False``</span>
+<span class="sd">        it must be ``n_comp = 3``)</span>
+<span class="sd">    data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)</span>
+<span class="sd">        The MEEG data; ``n_sens`` is the number of sensors and</span>
+<span class="sd">        ``n_ist`` is the number of time-points or of frequencies.</span>
 <span class="sd">    n_parts : :py:class:`~int`</span>
 <span class="sd">        The number of particles forming the empirical pdf.</span>
+<span class="sd">    s_min : :py:class:`~int`</span>
+<span class="sd">        The first analyzed sample in the data array.</span>
+<span class="sd">    s_max : :py:class:`~int`</span>
+<span class="sd">        The last analyzed sample in the data array.</span>
+<span class="sd">    n_matrix : :py:class:`~numpy.ndarray` of :py:class:`~int`, shape (n_verts, n_max_neigh) | None</span>
+<span class="sd">        The set of neighbours of each point in the brain discretization. If None, it is automatically computed.</span>
+<span class="sd">        ``n_max_neigh`` is the cardinality of the biggest set.</span>
+<span class="sd">    np_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, n_max_neigh) | None</span>
+<span class="sd">        The neighbours&#39; probabilities. If None, it is automatically computed.</span>
+<span class="sd">    noise_std : :py:class:`~float` | None</span>
+<span class="sd">        The standard deviation of the noise distribution.</span>
+<span class="sd">        If None, it is estimated from the data.</span>
+<span class="sd">    dip_mom_std : :py:class:`~float` | None</span>
+<span class="sd">        The standard deviation of the prior pdf on the dipole moment.</span>
+<span class="sd">        If None, it is estimated from the forward model and the data.</span>
+<span class="sd">    fixed_ori : :py:class:`~bool`</span>
+<span class="sd">        If True, the forward solution is assumed to be computed in the surface-based source coordinate system.</span>
+<span class="sd">    radius : :py:class:`~float` | None</span>
+<span class="sd">        The maximum distance in cm between two neighbouring vertices</span>
+<span class="sd">        of the brain discretization. If None, ``radius`` is set to 1 cm.</span>
+<span class="sd">    neigh_std : :py:class:`~float` | None</span>
+<span class="sd">        The standard deviation of the probability distribution of</span>
+<span class="sd">        neighbours. If None, ``neighb_std`` is set to radius/2.</span>
+<span class="sd">    prior_locs : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_vert) | None</span>
+<span class="sd">        The prior probability of source location. If None, a uniform prior probability is used.</span>
+<span class="sd">        Default is None.</span>
+<span class="sd">    subsample : :py:class:`~int` | None</span>
+<span class="sd">        The step used to subsample the data. If None no subsampling is</span>
+<span class="sd">        applied.</span>
+<span class="sd">    hyper_q : :py:class:`~bool`</span>
+<span class="sd">        If True, a hyperprior pdf on the dipole moment std will be used.</span>
 <span class="sd">    top_min : :py:class:`~float` | None</span>
 <span class="sd">        First topography to be included in the segment of data to be analyzed.</span>
 <span class="sd">        It is meant to be expressed either in seconds in the time domain or</span>
@@ -144,218 +174,190 @@
 <span class="sd">        It is meant to be expressed either in seconds in the time domain or</span>
 <span class="sd">        in Hertz in the frequency domain.</span>
 <span class="sd">        If None, it is set to the last topography of the input data.</span>
-<span class="sd">    subsample : :py:class:`~int` | None</span>
-<span class="sd">        The step used to subsample the data. If None no subsampling is</span>
-<span class="sd">        applied.</span>
-<span class="sd">    dip_mom_std : :py:class:`~float` | None</span>
-<span class="sd">        The standard deviation of the prior pdf on the dipole moment.</span>
-<span class="sd">        If None, it is estimated from the forward model and the data.</span>
-<span class="sd">    hyper_q : :py:class:`~bool`</span>
-<span class="sd">        If True an hyperprior pdf on the dipole moment std will be used.</span>
-<span class="sd">        Default is True.</span>
-<span class="sd">    noise_cov : instance of :py:class:`~mne.Covariance` | None</span>
-<span class="sd">        The noise covariance matrix used to prewhiten the data. If None,</span>
-<span class="sd">        no prewhitening is applied.</span>
 <span class="sd">    lam : :py:class:`~float`</span>
 <span class="sd">        The parameter of the Poisson prior pdf on the number of dipoles.</span>
 <span class="sd">    max_n_dips : :py:class:`~int`</span>
 <span class="sd">        The maximum number of dipoles allowed in a particle.</span>
-<span class="sd">    Fourier_transf : :py:class:`~bool`</span>
-<span class="sd">        If True data are converted to the frequency domain.</span>
+<span class="sd">    fourier : :py:class:`~bool`</span>
+<span class="sd">        If True, data are converted to the frequency domain.</span>
 <span class="sd">    verbose : :py:class:`~bool`</span>
 <span class="sd">        If True, increase verbose level.</span>
+<span class="sd">    **kwargs :</span>
+<span class="sd">        Additional keyword arguments are passed to the Sesame constructor.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    n_parts : :py:class:`~int`</span>
-<span class="sd">        The number of particles forming the empirical pdf.</span>
-<span class="sd">    lam : :py:class:`~float`</span>
-<span class="sd">        The parameter of the Poisson prior pdf on the number of dipoles.</span>
-<span class="sd">    max_n_dips : :py:class:`~int`</span>
-<span class="sd">        The maximum number of dipoles allowed in a particle.</span>
-<span class="sd">    forward : instance of :py:class:`~mne.Forward`</span>
-<span class="sd">        The forward solution.</span>
-<span class="sd">    source_space : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)</span>
-<span class="sd">        The coordinates of the points in the brain discretization.</span>
-<span class="sd">    n_verts : :py:class:`~int`</span>
-<span class="sd">        The number of points forming the brain discretization.</span>
-<span class="sd">    lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)</span>
-<span class="sd">        The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)</span>
+<span class="sd">    dip_mom_std : :py:class:`~float`</span>
+<span class="sd">        The standard deviation of the prior on the dipole moment.</span>
 <span class="sd">    distance_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)</span>
 <span class="sd">        The Euclidean distance between the points in the</span>
 <span class="sd">        brain discretization.</span>
+<span class="sd">    est_dip_moms : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_ist x (n_comp*est_n_dips[-1])) | None</span>
+<span class="sd">        The sources&#39; moments estimated at the last iteration. (n_comp = 1, if fixed orientation, 3, if free orientation)</span>
+<span class="sd">        If None, moments can be estimated by calling :py:meth:`~Sesame.compute_dip_mom`</span>
+<span class="sd">    est_locs : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~int`</span>
+<span class="sd">        The source space grid points indices in which a source is estimated.</span>
+<span class="sd">    est_n_dips : :py:class:`~list` of :py:class:`~int`</span>
+<span class="sd">        The estimated number of dipoles.</span>
+<span class="sd">    fourier : :py:class:`~bool`</span>
+<span class="sd">        If True, data are in the frequency domain.</span>
+<span class="sd">    hyper_q : :py:class:`~bool`</span>
+<span class="sd">        If True use hyperprior on dipole moment std.</span>
+<span class="sd">    lam : :py:class:`~float`</span>
+<span class="sd">        The parameter of the Poisson prior pdf on the number of dipoles.</span>
+<span class="sd">    lead_field : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens x n_comp*n_verts)</span>
+<span class="sd">        The leadfield matrix. (``n_comp = 1`` if ``fixed_ori=True``; ``n_comp = 3`` if ``fixed_ori=False``)</span>
+<span class="sd">    max_n_dips : :py:class:`~int`</span>
+<span class="sd">        The maximum number of dipoles allowed in a particle.</span>
+<span class="sd">    model_sel : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`</span>
+<span class="sd">        The model selection, i.e. the posterior distribution on the number</span>
+<span class="sd">        of dipoles.</span>
+<span class="sd">    n_verts : :py:class:`~int`</span>
+<span class="sd">        The number of points forming the brain discretization.</span>
+<span class="sd">    n_parts : :py:class:`~int`</span>
+<span class="sd">        The number of particles forming the empirical pdf.</span>
 <span class="sd">    neigh : :py:class:`~numpy.ndarray` of :py:class:`~int`, shape (n_vert, n_max_neigh)</span>
 <span class="sd">        The set of neighbours of each point in the brain discretization.</span>
 <span class="sd">        n_max_neigh is the cardinality of the biggest set.</span>
-<span class="sd">    radius : :py:class:`~float`</span>
-<span class="sd">        The radius used to compute the neighbours.</span>
 <span class="sd">    neigh_p : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_vert, n_max_neigh)</span>
 <span class="sd">        The neighbours&#39; probabilities.</span>
 <span class="sd">    neigh_std : :py:class:`~float`</span>
 <span class="sd">        The standard deviation used to compute the neigh_p matrix.</span>
-<span class="sd">    s_min : :py:class:`~int`</span>
-<span class="sd">        The first sample of the segment of data that are analyzed.</span>
-<span class="sd">    s_max : :py:class:`~int`</span>
-<span class="sd">        The last sample of the segment of data that are analyzed.</span>
-<span class="sd">    subsample : :py:class:`~int` | None</span>
-<span class="sd">        The step used to subsample the data.</span>
-<span class="sd">    r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)</span>
-<span class="sd">        The real part of the data; n_sens is the number of sensors and</span>
-<span class="sd">        n_ist is the number of time-points or of frequencies.</span>
-<span class="sd">    dip_mom_std : :py:class:`~float`</span>
-<span class="sd">        The standard deviation of the prior on the dipole moment.</span>
-<span class="sd">    hyper_q : :py:class:`~bool`</span>
-<span class="sd">        If True use hyperprior on dipole moment std.</span>
 <span class="sd">    noise_std : :py:class:`~float`</span>
 <span class="sd">        The standard deviation of the noise distribution.</span>
-<span class="sd">    _resample_it : :py:class:`~list` of :py:class:`~int`</span>
-<span class="sd">        The iterations during which a resampling step has been performed</span>
-<span class="sd">    est_n_dips : :py:class:`~list` of :py:class:`~int`</span>
-<span class="sd">        The estimated number of dipoles.</span>
-<span class="sd">    est_locs : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~int`</span>
-<span class="sd">        The source space grid points indices in which a source is estimated.</span>
-<span class="sd">    est_dip_moms : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_ist x (n_comp*est_n_dips[-1])) | None</span>
-<span class="sd">        The sources&#39; moments estimated at the last iteration. (n_comp = 1, if fixed orientation, 3, if free orientation)</span>
-<span class="sd">        If None, moments can be estimated by calling :py:meth:`~Sesame.compute_dip_mom`</span>
-<span class="sd">    model_sel : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`</span>
-<span class="sd">        The model selection, i.e. the posterior distribution on the number</span>
-<span class="sd">        of dipoles.</span>
 <span class="sd">    pmap : :py:class:`~list` of :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (est_n_dips, n_verts)</span>
 <span class="sd">        Posterior probability map.</span>
 <span class="sd">    posterior : instance of :class:`~sesameeg.emppdf.EmpPdf`</span>
 <span class="sd">        The empirical pdf approximated by the particles at each iteration.</span>
+<span class="sd">    prior_locs : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, ) | None</span>
+<span class="sd">        The prior probability of active source locations. If None, each source space grid point is assigned a</span>
+<span class="sd">        uniform prior probability.</span>
+<span class="sd">    r_data : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_sens, n_ist)</span>
+<span class="sd">        The real part of the data; n_sens is the number of sensors and</span>
+<span class="sd">        n_ist is the number of time-points or of frequencies.</span>
+<span class="sd">    radius : :py:class:`~float`</span>
+<span class="sd">        The radius used to compute the neighbours.</span>
+<span class="sd">    _resample_it : :py:class:`~list` of :py:class:`~int`</span>
+<span class="sd">        The iterations during which a resampling step has been performed</span>
+<span class="sd">    s_min : :py:class:`~int`</span>
+<span class="sd">        The first sample of the segment of data that are analyzed.</span>
+<span class="sd">    s_max : :py:class:`~int`</span>
+<span class="sd">        The last sample of the segment of data that are analyzed.</span>
+<span class="sd">    source_space : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)</span>
+<span class="sd">        The coordinates of the points in the brain discretization.</span>
+<span class="sd">    subsample : :py:class:`~int` | None</span>
+<span class="sd">        The step used to subsample the data.</span>
 
-<span class="sd">    ****** Sara</span>
-<span class="sd">    Add parameter distance = &#39;cosine&#39; or &#39;euclidean&#39;</span>
+<span class="sd">    data_times : :py:class:`~numpy.ndarray`</span>
+<span class="sd">        Time vector in seconds. Only when instantiated by means of :func:`~sesameeg.mne.prepare_sesame`</span>
+<span class="sd">        and when ``fourier=False``</span>
+<span class="sd">    data_freqs : :py:class:`~numpy.ndarray`</span>
+<span class="sd">        Frequency vector in Hertz. Only when instantiated by means of :func:`~sesameeg.mne.prepare_sesame`</span>
+<span class="sd">        and when ``fourier=True``</span>
+<span class="sd">    forward : instance of :py:class:`~mne.Forward`</span>
+<span class="sd">        The forward solution. Only when instantiated by means of :func:`~sesameeg.mne.prepare_sesame`</span>
+<span class="sd">    subject : :py:class:`~str`</span>
+<span class="sd">        Subject name in Freesurfer subjects dir. Only when instantiated by means</span>
+<span class="sd">        of :func:`~sesameeg.mne.prepare_sesame`.</span>
+<span class="sd">    subjects_dir : :py:class:`~str` | None</span>
+<span class="sd">        If not None, this directory will be used as the subjects directory instead of the value set using</span>
+<span class="sd">        the SUBJECTS_DIR environment variable. Only when instantiated by means</span>
+<span class="sd">        of :func:`~sesameeg.mne.prepare_sesame`</span>
+<span class="sd">    trans_matrix : instance of :py:class:`~mne.Transform`</span>
+<span class="sd">        MRI&lt;-&gt;Head coordinate transformation. Only when instantiated by</span>
+<span class="sd">        means of :func:`~sesameeg.mne.prepare_sesame`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">forward</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">noise_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">neigh_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_parts</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">top_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">top_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hyper_q</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">noise_cov</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">max_n_dips</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">neigh_simil</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-                 <span class="n">Fourier_transf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_space</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
+                 <span class="n">n_parts</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                 <span class="n">s_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">s_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">n_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">np_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">noise_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">dip_mom_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">fixed_ori</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">radius</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">neigh_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">prior_locs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">subsample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">hyper_q</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">lam</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+                 <span class="n">max_n_dips</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                 <span class="n">fourier</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_forward</span><span class="p">(</span><span class="n">forward</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Forward must be an instance of MNE&#39;</span>
-                             <span class="s1">&#39; class Forward.&#39;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_evoked</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Data must be an instance of MNE class &#39;</span>
-                             <span class="s1">&#39;Evoked or EvokedArray.&#39;</span><span class="p">)</span>
-
-        <span class="c1"># 1) Choosen by the user</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fourier</span> <span class="o">=</span> <span class="n">Fourier_transf</span>
+        <span class="c1"># 1) Chosen by the user</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fourier</span> <span class="o">=</span> <span class="n">fourier</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_parts</span> <span class="o">=</span> <span class="n">n_parts</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lam</span> <span class="o">=</span> <span class="n">lam</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_n_dips</span> <span class="o">=</span> <span class="n">max_n_dips</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subsample</span> <span class="o">=</span> <span class="n">subsample</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span> <span class="o">=</span> <span class="n">hyper_q</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">,</span> <span class="n">_info_picked</span> <span class="o">=</span> <span class="n">_select_orient_forward</span><span class="p">(</span><span class="n">forward</span><span class="p">,</span>
-                                                            <span class="n">data</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="n">noise_cov</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fixed_ori</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_fwd_ori</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">source_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;source_rr&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixed_ori</span> <span class="o">=</span> <span class="n">fixed_ori</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_space</span> <span class="o">=</span> <span class="n">source_space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stc</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_verts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_space</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lead_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;sol&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lead_field</span> <span class="o">=</span> <span class="n">lead_field</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">ssd</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_space</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_space</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prior_locs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_prior_locs</span><span class="p">(</span><span class="n">prior_locs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_verts</span><span class="p">)</span>
+        <span class="c1"># assert(np.sum(self.prior_locs == 1))</span>
 
-        <span class="k">if</span> <span class="n">radius</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">initialize_radius</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_space</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computing neighbours matrix &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_ori</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">neigh_simil</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;using Euclidean distance...&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">neigh_simil</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;using correlation distance...&#39;</span><span class="p">)</span>
+        <span class="c1"># Kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trans_matrix</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subjects_dir</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_times</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_freqs</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;using combined distance...&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">neigh_simil</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">neigh</span> <span class="o">=</span> <span class="n">compute_neighbours_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_space</span><span class="p">,</span>
-                                                       <span class="bp">self</span><span class="o">.</span><span class="n">distance_matrix</span><span class="p">,</span>
-                                                       <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span>
-                                                       <span class="n">neigh_simil</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">neigh_simil</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">corr_dist_matr</span> <span class="o">=</span> <span class="n">compute_correlation_distance_matix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">)</span>
-                <span class="n">combined_dist_matr</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">neigh_simil</span><span class="p">)</span><span class="o">*</span><span class="n">normalize</span><span class="p">(</span><span class="n">corr_dist_matr</span><span class="p">)</span> <span class="o">+</span> \
-                    <span class="n">neigh_simil</span><span class="o">*</span><span class="n">normalize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_matrix</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">neigh</span> <span class="o">=</span> <span class="n">compute_neighbours_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_space</span><span class="p">,</span>
-                                                                         <span class="n">combined_dist_matr</span><span class="p">,</span>
-                                                                         <span class="mi">30</span><span class="p">,</span>
-                                                                         <span class="n">neigh_simil</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computing neighbours matrix &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">radius</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">initialize_radius</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_space</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span>
-        <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">neigh</span> <span class="o">=</span> <span class="n">compute_neighbours_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_space</span><span class="p">,</span>
                                                    <span class="bp">self</span><span class="o">.</span><span class="n">distance_matrix</span><span class="p">,</span>
                                                    <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">,</span>
                                                    <span class="n">n_simil</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[done]&#39;</span><span class="p">)</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computing neighbours probabilities...&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">neigh_std</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">neigh_std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[done]&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">neigh_std</span> <span class="o">=</span> <span class="n">neigh_std</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">neigh</span> <span class="o">=</span> <span class="n">n_matrix</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_ori</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">neigh_simil</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">neigh_p</span> <span class="o">=</span> <span class="n">compute_neighbours_probability_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neigh</span><span class="p">,</span>
-                                                                     <span class="bp">self</span><span class="o">.</span><span class="n">source_space</span><span class="p">,</span>
-                                                                     <span class="bp">self</span><span class="o">.</span><span class="n">distance_matrix</span><span class="p">,</span>
-                                                                     <span class="bp">self</span><span class="o">.</span><span class="n">neigh_std</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">neigh_simil</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">a_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">combined_dist_matr</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
-                <span class="n">row_list</span><span class="p">,</span> <span class="n">col_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(),</span> <span class="nb">list</span><span class="p">()</span>
-                <span class="k">for</span> <span class="n">_in</span><span class="p">,</span> <span class="n">_n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neigh</span><span class="p">):</span>
-                    <span class="k">for</span> <span class="n">_x</span> <span class="ow">in</span> <span class="n">_n</span><span class="p">[</span><span class="n">_n</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]:</span>
-                        <span class="n">row_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_in</span><span class="p">)</span>
-                        <span class="n">col_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_x</span><span class="p">)</span>
-                <span class="n">a_matrix</span><span class="p">[(</span><span class="n">row_list</span><span class="p">,</span> <span class="n">col_list</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="n">comb_neigh_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">combined_dist_matr</span><span class="p">[</span><span class="n">a_matrix</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">neigh_p</span> <span class="o">=</span> <span class="n">compute_neighbours_probability_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neigh</span><span class="p">,</span>
-                                                                     <span class="bp">self</span><span class="o">.</span><span class="n">source_space</span><span class="p">,</span>
-                                                                     <span class="n">combined_dist_matr</span><span class="p">,</span>
-                                                                     <span class="n">comb_neigh_std</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computing neighbours probabilities...&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">neigh_std</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">neigh_std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">/</span> <span class="mi">2</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span>
-
-        <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">neigh_std</span> <span class="o">=</span> <span class="n">neigh_std</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">neigh_p</span> <span class="o">=</span> <span class="n">compute_neighbours_probability_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neigh</span><span class="p">,</span>
                                                                  <span class="bp">self</span><span class="o">.</span><span class="n">source_space</span><span class="p">,</span>
                                                                  <span class="bp">self</span><span class="o">.</span><span class="n">distance_matrix</span><span class="p">,</span>
                                                                  <span class="bp">self</span><span class="o">.</span><span class="n">neigh_std</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[done]&#39;</span><span class="p">)</span>
-
-        <span class="c1"># Prepare data</span>
-        <span class="k">if</span> <span class="n">is_evoked</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-            <span class="n">_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_evoked_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[done]&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">neigh_p</span> <span class="o">=</span> <span class="n">np_matrix</span>
 
-        <span class="c1"># Perform whitening if a noise covariance is provided</span>
-        <span class="k">if</span> <span class="n">noise_cov</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fourier</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Still to implement whitening in the frequency domain&#39;</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">is_evoked</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-                    <span class="n">_sf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">nave</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">is_epochs</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-                    <span class="n">_sf</span> <span class="o">=</span> <span class="mf">1.0</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span>
+        <span class="c1">#  Data</span>
+        <span class="k">if</span> <span class="n">s_min</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">s_min</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">s_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">s_max</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">subsample</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Subsampling data with step </span><span class="si">{</span><span class="n">subsample</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">r_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">s_min</span><span class="p">:</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">subsample</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">r_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">s_min</span><span class="p">:</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
 
-                <span class="n">whitener</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">compute_whitener</span><span class="p">(</span><span class="n">noise_cov</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">_info_picked</span><span class="p">,</span> <span class="n">pca</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                               <span class="n">picks</span><span class="o">=</span><span class="n">_info_picked</span><span class="p">[</span><span class="s1">&#39;ch_names&#39;</span><span class="p">])</span>
-                <span class="n">_data</span> <span class="o">=</span> <span class="n">_sf</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">whitener</span><span class="p">,</span> <span class="n">_data</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">lead_field</span> <span class="o">=</span> <span class="p">(</span><span class="n">_sf</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">whitener</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lead_field</span><span class="p">))</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data and leadfield have been prewhitened.&#39;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">r_data</span> <span class="o">=</span> <span class="n">_data</span><span class="o">.</span><span class="n">real</span>
-        <span class="k">del</span> <span class="n">_data</span>
-
+        <span class="c1"># Dipole moment std</span>
         <span class="k">if</span> <span class="n">dip_mom_std</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Estimating dipole moment std...&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dip_mom_std</span> <span class="o">=</span> <span class="n">estimate_dip_mom_std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lead_field</span><span class="p">)</span>
@@ -372,6 +374,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sampling hyperprior for dipole moment std.&#39;</span><span class="p">)</span>
 
+        <span class="c1"># Noise std</span>
         <span class="k">if</span> <span class="n">noise_std</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Estimating noise std...&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">noise_std</span> <span class="o">=</span> <span class="n">estimate_noise_std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r_data</span><span class="p">)</span>
@@ -395,7 +398,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_parts</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span> <span class="o">=</span> <span class="n">EmpPdf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_parts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_verts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam</span><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dip_mom_std</span><span class="p">,</span>
-                                <span class="n">fixed_ori</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fixed_ori</span><span class="p">,</span> <span class="n">hyper_q</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+                                <span class="n">prior_locs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prior_locs</span><span class="p">,</span> <span class="n">fixed_ori</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fixed_ori</span><span class="p">,</span>
+                                <span class="n">hyper_q</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">_part</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
@@ -412,6 +416,22 @@
 
             <span class="n">_part</span><span class="o">.</span><span class="n">compute_loglikelihood_unit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lead_field</span><span class="p">,</span>
                                              <span class="n">noise_std</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_std</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_prior_locs</span><span class="p">(</span><span class="n">p_locs</span><span class="p">,</span> <span class="n">n_verts</span><span class="p">):</span>
+        <span class="n">_error</span> <span class="o">=</span> <span class="s1">&#39;Prior source location probabilities should be given as a one dimensional &#39;</span> \
+                 <span class="s1">&#39;array of the same shape as the source space.&#39;</span>
+        <span class="k">if</span> <span class="n">p_locs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pl_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_verts</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pl_array</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">pl_array</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p_locs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sampling user defined prior probability distribution for dipole locations.&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p_locs</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">p_locs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n_verts</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">_error</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">p_locs</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p_locs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">_error</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_topographies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evoked</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">,</span> <span class="n">freqs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fourier</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
@@ -457,9 +477,9 @@
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;top_max value should be a float&#39;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Analyzing data from </span><span class="si">{0}</span><span class="s1"> Hz to </span><span class="si">{1}</span><span class="s1"> Hz&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_min</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">top_max</span><span class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
 
-    <span class="k">def</span> <span class="nf">_prepare_epochs_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_prepare_epochs_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">,</span> <span class="n">epochs_avg</span><span class="p">):</span>
         <span class="n">ep_data</span> <span class="o">=</span> <span class="n">epochs</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
-        <span class="n">evoked</span> <span class="o">=</span> <span class="n">EvokedArray</span><span class="p">(</span><span class="n">ep_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">epochs</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+        <span class="n">evoked</span> <span class="o">=</span> <span class="n">EvokedArray</span><span class="p">(</span><span class="n">ep_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">epochs</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="n">epochs</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fourier</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_get_topographies</span><span class="p">(</span><span class="n">evoked</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">)</span>
             <span class="n">temp_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
@@ -470,7 +490,11 @@
                     <span class="n">temp_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_e</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_min</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">subsample</span><span class="p">])</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">temp_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_e</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_min</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">temp_list</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">epochs_avg</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Averaging </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">temp_list</span><span class="p">)</span><span class="si">}</span><span class="s1"> epochs.&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp_list</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">temp_list</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">fourier</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">tstep</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">evoked</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span>
             <span class="n">evoked_f</span> <span class="o">=</span> <span class="n">evoked</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -483,6 +507,8 @@
 
             <span class="n">temp_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
             <span class="n">temp_list2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">temp_list2_r</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">temp_list2_i</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">ie</span><span class="p">,</span> <span class="n">_e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ep_data</span><span class="p">):</span>
                 <span class="n">_e</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">(</span><span class="n">_e</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
                 <span class="n">_e_f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">_e</span><span class="p">)</span>
@@ -492,10 +518,24 @@
                     <span class="n">temp_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_e_f</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_min</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">subsample</span><span class="p">])</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">temp_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_e_f</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_min</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tl</span> <span class="o">=</span> <span class="n">temp_list</span>
 
-                <span class="k">for</span> <span class="n">_data_temp</span> <span class="ow">in</span> <span class="n">temp_list</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">_data_temp</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
-                        <span class="n">temp_list2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">l</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">l</span><span class="p">)])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">_data_temp</span> <span class="ow">in</span> <span class="n">temp_list</span><span class="p">:</span>
+                <span class="n">temp_list2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">_data_temp</span><span class="p">))</span>
+                <span class="n">temp_list2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">_data_temp</span><span class="p">))</span>
+
+                <span class="n">temp_list2_r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">_data_temp</span><span class="p">))</span>
+                <span class="n">temp_list2_i</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">_data_temp</span><span class="p">))</span>
+
+                <span class="c1">#for _l in _data_temp.T:</span>
+                <span class="c1">#    temp_list2.append(np.vstack([np.real(_l), np.imag(_l)]).T)</span>
+            <span class="k">if</span> <span class="n">epochs_avg</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Averaging </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">temp_list</span><span class="p">)</span><span class="si">}</span><span class="s1"> epochs.&#39;</span><span class="p">)</span>
+                <span class="n">_r_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp_list2_r</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">_i_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp_list2_i</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">_r_mean</span><span class="p">,</span> <span class="n">_i_mean</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">temp_list2</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span>
@@ -526,8 +566,8 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">_data_temp</span> <span class="o">=</span> <span class="n">evoked_f</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_min</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
             <span class="n">temp_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">_data_temp</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
-                <span class="n">temp_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">l</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">l</span><span class="p">)])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">_l</span> <span class="ow">in</span> <span class="n">_data_temp</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
+                <span class="n">temp_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">_l</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">_l</span><span class="p">)])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">temp_list</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span>
@@ -562,7 +602,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_parts</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span> <span class="o">=</span> <span class="n">EmpPdf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_parts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_verts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam</span><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dip_mom_std</span><span class="p">,</span>
-                                <span class="n">fixed_ori</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fixed_ori</span><span class="p">,</span> <span class="n">hyper_q</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
+                                <span class="n">prior_locs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prior_locs</span><span class="p">,</span> <span class="n">fixed_ori</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fixed_ori</span><span class="p">,</span>
+                                <span class="n">hyper_q</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">_part</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
@@ -580,8 +621,10 @@
             <span class="n">_part</span><span class="o">.</span><span class="n">compute_loglikelihood_unit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lead_field</span><span class="p">,</span>
                                              <span class="n">noise_std</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_std</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Sesame.apply_sesame"><a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.apply_sesame">[docs]</a>    <span class="k">def</span> <span class="nf">apply_sesame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimate_all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">estimate_dip_mom</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Apply SESAME on MEEG data and compute point estimates.</span>
+<div class="viewcode-block" id="Sesame.apply_sesame">
+<a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.apply_sesame">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply_sesame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">estimate_all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">estimate_dip_mom</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply SESAME on MEEG data and compute point estimates.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -692,10 +735,19 @@
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Estimated dipole strength variance: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">final_dip_mom_std</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">compute_dip_mom</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">est_locs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[done]&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Sesame.compute_dip_mom"><a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.compute_dip_mom">[docs]</a>    <span class="k">def</span> <span class="nf">compute_dip_mom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">est_locs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute a point estimate for the dipole moments.</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;    Estimated number of sources: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">est_n_dips</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">est_n_dips</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    Estimated source locations:&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">_iloc</span><span class="p">,</span> <span class="n">_loc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">est_locs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;        * source </span><span class="si">{</span><span class="n">_iloc</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source_space</span><span class="p">[</span><span class="n">_loc</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[done in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">exponents</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> iterations]&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Sesame.compute_dip_mom">
+<a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.compute_dip_mom">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_dip_mom</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">est_locs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute a point estimate for the dipole moments.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -711,7 +763,7 @@
             <span class="n">est_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_parts</span><span class="p">)])</span>
             <span class="n">_dip_mom_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">est_sq</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">final_dip_mom_std</span> <span class="o">=</span> <span class="n">_dip_mom_std</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Estimated dipole strength variance: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_dip_mom_std</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    Estimated dipole strength variance: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_dip_mom_std</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_dip_mom_std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dip_mom_std</span>
 
@@ -728,8 +780,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_moms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">kal_mat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_data</span><span class="p">[:,</span> <span class="n">t</span><span class="p">])</span>
                               <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_time</span><span class="p">)])</span></div>
 
-<div class="viewcode-block" id="Sesame.goodness_of_fit"><a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.goodness_of_fit">[docs]</a>    <span class="k">def</span> <span class="nf">goodness_of_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Evaluate the estimated configuration of dipoles. The goodness</span>
+
+<div class="viewcode-block" id="Sesame.goodness_of_fit">
+<a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.goodness_of_fit">[docs]</a>
+    <span class="k">def</span> <span class="nf">goodness_of_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluate the estimated configuration of dipoles. The goodness</span>
 <span class="sd">        of fit (GOF) with the recorded data is defined as</span>
 
 <span class="sd">        .. math:: GOF = \\frac{\\| \\mathbf{y} - \\hat{\\mathbf{y}} \\|}</span>
@@ -758,8 +813,11 @@
                                       <span class="bp">self</span><span class="o">.</span><span class="n">lead_field</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">gof</span></div>
 
-<div class="viewcode-block" id="Sesame.source_dispersion"><a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.source_dispersion">[docs]</a>    <span class="k">def</span> <span class="nf">source_dispersion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute the Source Dispersion measure to quantify the spatial dispersion</span>
+
+<div class="viewcode-block" id="Sesame.source_dispersion">
+<a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.source_dispersion">[docs]</a>
+    <span class="k">def</span> <span class="nf">source_dispersion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the Source Dispersion measure to quantify the spatial dispersion</span>
 <span class="sd">        of the posterior probability map. It is defined as</span>
 
 <span class="sd">         .. math:: SD = \\sqrt{\\frac{\\sum_{j=1}^{N_v} \\big(d_j |S_j|\\big)^2}{\\sum_{j=1}^{N_v}|S_j|^2}}</span>
@@ -782,8 +840,11 @@
         <span class="n">sd</span> <span class="o">=</span> <span class="n">compute_sd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_space</span><span class="p">,</span> <span class="n">pmap_tot</span><span class="p">,</span> <span class="n">est_pos</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">sd</span></div>
 
-<div class="viewcode-block" id="Sesame.compute_stc"><a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.compute_stc">[docs]</a>    <span class="k">def</span> <span class="nf">compute_stc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Compute and export in an .stc file the posterior pdf</span>
+
+<div class="viewcode-block" id="Sesame.compute_stc">
+<a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.compute_stc">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_stc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute and export in an .stc file the posterior pdf</span>
 <span class="sd">            :math:`p(r|\\mathbf{y}, \\hat{n}_D)`, being :math:`\\hat{n}_D`</span>
 <span class="sd">            the estimated number of sources.</span>
 <span class="sd">            For each point :math:`r` in the brain discretization,</span>
@@ -796,23 +857,82 @@
 <span class="sd">                The subject name.</span>
 
 <span class="sd">            Returns</span>
-<span class="sd">            --------</span>
+<span class="sd">            -------</span>
 <span class="sd">            stc : :py:class:`~mne.SourceEstimate` | :py:class:`~mne.VolSourceEstimate`</span>
 <span class="sd">                The source estimate object containing the posterior map of the</span>
 <span class="sd">                dipoles&#39; location.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;surface&#39;</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Surface stc computed.&#39;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">_export_to_stc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;volume&#39;</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Volume stc computed  &#39;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">_export_to_vol_stc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;surface&#39;</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Surface stc computed.&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">_export_to_stc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;volume&#39;</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Volume stc computed  &#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">_export_to_vol_stc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;src can be either surface or volume&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;src can be either surface or volume&#39;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;This method works only within MNE-Python environment. &#39;</span>
+                                 <span class="s1">&#39;Use sesameeg.mne.prepare_sesame to instantiate the inverse operator.&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Sesame.save_h5"><a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.save_h5">[docs]</a>    <span class="k">def</span> <span class="nf">save_h5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fpath</span><span class="p">,</span> <span class="n">sbj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sbj_viz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Sesame.plot_source_amplitudes">
+<a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_source_amplitudes">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_source_amplitudes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the  amplitude of the estimated sources as function of time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plot_amplitudes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Sesame.plot_sources">
+<a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_sources">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">true_sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_open</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the estimated sources. The default behaviour of the method is the following:</span>
+
+<span class="sd">        * if ``Sesame`` has been instantiated through :py:meth:`~mne.prepare_sesame`, it visualizes the posterior map of the dipoles’ location and the estimated sources</span>
+
+<span class="sd">          * on the inflated brain, if ``Sesame.forward`` is of kind ``surface``;</span>
+
+<span class="sd">          * on the MRI, if ``Sesame.forward`` is of kind ``volume``.</span>
+
+<span class="sd">        * if ``Sesame`` has been instantiated through :py:class:`~Sesame`, it visualizes the posterior map of the dipoles’ location and the estimated sources as a :py:class:`~pyvista.PolyData` object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        plot_kwargs : :py:class:`~dict` | None</span>
+<span class="sd">            Additional arguments to :py:func:`~mne.viz.plot_source_estimates` or</span>
+<span class="sd">            :py:func:`~nilearn.plotting.plot_stat_map` (e.g., dict(surface=&#39;white&#39;)).</span>
+<span class="sd">        savepath : :py:class:`~str` | None</span>
+<span class="sd">            File path to write image to. If None, no image is written.</span>
+<span class="sd">        save_kwargs : :py:class:`~dict` | None</span>
+<span class="sd">            Additional arguments to :py:meth:`~pyvista.Plotter.screenshot`</span>
+<span class="sd">            or :py:func:`~matplotlib.pyplot.savefig`.</span>
+<span class="sd">        true_sources : :py:class:`~numpy.ndarray` | None</span>
+<span class="sd">            In simulation settings, indexes of source space points in which true sources are located.</span>
+<span class="sd">        force_open : :py:class:`~bool`</span>
+<span class="sd">            If True, force the image to stay open.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_stc</span><span class="p">()</span>
+            <span class="n">stc_kind</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stc</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="k">if</span> <span class="n">stc_kind</span> <span class="o">==</span> <span class="s1">&#39;SourceEstimate&#39;</span><span class="p">:</span>
+                <span class="n">plot_stc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">true_idxs</span><span class="o">=</span><span class="n">true_sources</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="n">savepath</span><span class="p">,</span>
+                         <span class="n">plot_kwargs</span><span class="o">=</span><span class="n">plot_kwargs</span><span class="p">,</span> <span class="n">save_kwargs</span><span class="o">=</span><span class="n">save_kwargs</span><span class="p">,</span> <span class="n">force_open</span><span class="o">=</span><span class="n">force_open</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">stc_kind</span> <span class="o">==</span> <span class="s1">&#39;VolSourceEstimate&#39;</span><span class="p">:</span>
+                <span class="n">plot_vol_stc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="n">savepath</span><span class="p">,</span> <span class="n">plot_kwargs</span><span class="o">=</span><span class="n">plot_kwargs</span><span class="p">,</span>
+                             <span class="n">save_kwargs</span><span class="o">=</span><span class="n">save_kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plot_cloud_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="n">savepath</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Sesame.save_h5">
+<a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.save_h5">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_h5</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fpath</span><span class="p">,</span> <span class="n">sbj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sbj_viz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">fwd_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cov_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">src_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lf_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Save SESAME result to an HDF5 file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save SESAME result to an HDF5 file.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -844,10 +964,13 @@
                      <span class="n">data_path</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span> <span class="n">fwd_path</span><span class="o">=</span><span class="n">fwd_path</span><span class="p">,</span> <span class="n">src_path</span><span class="o">=</span><span class="n">src_path</span><span class="p">,</span>
                      <span class="n">lf_path</span><span class="o">=</span><span class="n">lf_path</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Sesame.save_pkl"><a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.save_pkl">[docs]</a>    <span class="k">def</span> <span class="nf">save_pkl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fpath</span><span class="p">,</span> <span class="n">sbj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sbj_viz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+
+<div class="viewcode-block" id="Sesame.save_pkl">
+<a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.save_pkl">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_pkl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fpath</span><span class="p">,</span> <span class="n">sbj</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sbj_viz</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">fwd_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cov_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">src_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">lf_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Save SESAME result to an Python pickle file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save SESAME result to a Python pickle file.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -872,7 +995,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">write_pkl</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">sbj</span><span class="o">=</span><span class="n">sbj</span><span class="p">,</span> <span class="n">sbj_viz</span><span class="o">=</span><span class="n">sbj_viz</span><span class="p">,</span> <span class="n">data_path</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span>
                   <span class="n">fwd_path</span><span class="o">=</span><span class="n">fwd_path</span><span class="p">,</span> <span class="n">src_path</span><span class="o">=</span><span class="n">src_path</span><span class="p">,</span> <span class="n">lf_path</span><span class="o">=</span><span class="n">lf_path</span><span class="p">,</span>
-                  <span class="n">save_all</span><span class="o">=</span><span class="n">save_all</span><span class="p">)</span></div></div>
+                  <span class="n">save_all</span><span class="o">=</span><span class="n">save_all</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
     </div>
@@ -886,8 +1011,8 @@
       
     </p>
     <p>
-        &copy; Copyright 2019, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+        &copy; Copyright 2023, SESAMEEG developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6.<br/>
     </p>
   </div>
 </footer>

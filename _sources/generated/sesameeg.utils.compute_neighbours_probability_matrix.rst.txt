@@ -1,4 +1,4 @@
-:mod:`sesameeg.utils`.compute_neighbours_probability_matrix
+﻿:mod:`sesameeg.utils`.compute_neighbours_probability_matrix
 ========================================================================
 
 .. currentmodule:: sesameeg.utils

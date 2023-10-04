@@ -1,0 +1,12 @@
+﻿:mod:`sesameeg.viz`.plot_cloud_sources
+===================================================
+
+.. currentmodule:: sesameeg.viz
+
+.. autofunction:: plot_cloud_sources
+
+.. include:: sesameeg.viz.plot_cloud_sources.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

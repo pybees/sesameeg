@@ -1,4 +1,4 @@
-:mod:`sesameeg`.Particle
+﻿:mod:`sesameeg`.Particle
 ===============================
 
 .. currentmodule:: sesameeg

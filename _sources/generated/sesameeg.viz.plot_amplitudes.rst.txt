@@ -1,0 +1,12 @@
+﻿:mod:`sesameeg.viz`.plot_amplitudes
+================================================
+
+.. currentmodule:: sesameeg.viz
+
+.. autofunction:: plot_amplitudes
+
+.. include:: sesameeg.viz.plot_amplitudes.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

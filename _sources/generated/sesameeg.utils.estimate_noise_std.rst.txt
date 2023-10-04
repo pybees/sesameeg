@@ -1,4 +1,4 @@
-:mod:`sesameeg.utils`.estimate_noise_std
+﻿:mod:`sesameeg.utils`.estimate_noise_std
 =====================================================
 
 .. currentmodule:: sesameeg.utils

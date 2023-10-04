@@ -1,0 +1,12 @@
+﻿:mod:`sesameeg.viz`.plot_stc
+=========================================
+
+.. currentmodule:: sesameeg.viz
+
+.. autofunction:: plot_stc
+
+.. include:: sesameeg.viz.plot_stc.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

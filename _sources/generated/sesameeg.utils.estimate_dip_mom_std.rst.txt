@@ -1,4 +1,4 @@
-:mod:`sesameeg.utils`.estimate_dip_mom_std
+﻿:mod:`sesameeg.utils`.estimate_dip_mom_std
 =======================================================
 
 .. currentmodule:: sesameeg.utils

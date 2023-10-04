@@ -1,24 +1,60 @@
-====================
-Python API Reference
-====================
+=============
+API Reference
+=============
 
 This is the reference for classes (``CamelCase`` names) and functions
 (``underscore_case`` names) of Sesameeg.
 
+
+
+
+Main class
+==========
 .. currentmodule:: sesameeg
-
-
-Main classes
-============
 
 .. autosummary::
    :toctree: generated/
    :template: class.rst
 
-   Sesame
+    Sesame
+
+
+MNE-Python utility functions
+============================
+.. currentmodule:: sesameeg.mne
+
+.. autosummary::
+   :toctree: generated/
+   :template: function.rst
+
+    prepare_sesame
+
+Visualization
+=============
+.. currentmodule:: sesameeg.viz
+
+.. autosummary::
+   :toctree: generated/
+   :template: function.rst
+
+    plot_stc
+    plot_vol_stc
+    plot_cloud_sources
+    plot_amplitudes
+
+Reading SESAME result
+=====================
+.. currentmodule:: sesameeg.io
+
+.. autosummary::
+   :toctree: generated/
+   :template: function.rst
+
+   read_h5
 
 Other classes
 =============
+.. currentmodule:: sesameeg
 
 .. autosummary::
    :toctree: generated/
@@ -41,15 +77,3 @@ Utility functions
    estimate_dip_mom_std
    estimate_noise_std
    initialize_radius
-
-Reading SESAME result
-=====================
-
-.. currentmodule:: sesameeg.io
-
-.. autosummary::
-   :toctree: generated/
-   :template: function.rst
-
-   read_h5
-

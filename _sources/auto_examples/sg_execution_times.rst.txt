@@ -3,11 +3,19 @@
 
 .. _sphx_glr_auto_examples_sg_execution_times:
 
+
 Computation times
 =================
-**08:19.628** total execution time for **auto_examples** files:
+**02:41.916** total execution time for **auto_examples** files:
 
-- **04:04.112**: :ref:`sphx_glr_auto_examples_plot_meg_simulated_sesame_frequency.py` (``plot_meg_simulated_sesame_frequency.py``)
-- **02:05.302**: :ref:`sphx_glr_auto_examples_plot_meg_sample_auditory_fixed_ori.py` (``plot_meg_sample_auditory_fixed_ori.py``)
-- **01:15.005**: :ref:`sphx_glr_auto_examples_plot_meg_auditory_sesame_volume.py` (``plot_meg_auditory_sesame_volume.py``)
-- **00:55.208**: :ref:`sphx_glr_auto_examples_plot_analyse_sample_auditory.py` (``plot_analyse_sample_auditory.py``)
++-------------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_auto_examples_plot_compute_sesame_meg_auditory_fixed_ori_mne.py` (``plot_compute_sesame_meg_auditory_fixed_ori_mne.py``)   | 00:58.102 | 0.0 MB |
++-------------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_auto_examples_plot_compute_sesame_meg_simulated_frequency_mne.py` (``plot_compute_sesame_meg_simulated_frequency_mne.py``) | 00:41.452 | 0.0 MB |
++-------------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_auto_examples_plot_compute_sesame_meg_auditory_volume_mne.py` (``plot_compute_sesame_meg_auditory_volume_mne.py``)         | 00:22.913 | 0.0 MB |
++-------------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_auto_examples_plot_compute_sesame_meg_auditory_prior_mne.py` (``plot_compute_sesame_meg_auditory_prior_mne.py``)           | 00:22.844 | 0.0 MB |
++-------------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_auto_examples_plot_compute_sesame_meg_auditory_mne.py` (``plot_compute_sesame_meg_auditory_mne.py``)                       | 00:16.604 | 0.0 MB |
++-------------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+

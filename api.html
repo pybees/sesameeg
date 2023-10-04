@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <title>Python API Reference &#8212; sesameeg 0.0.1 documentation</title>
-    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>API Reference &#8212; sesameeg 0.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css?v=284a2d1d" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <script src="_static/documentation_options.js?v=e3a6060d"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/copybutton.js?v=26522df0"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="sesameeg.Sesame" href="generated/sesameeg.Sesame.html" />
-    <link rel="prev" title="Compute SESAME inverse solution on simulated data in the frequency domain" href="auto_examples/plot_meg_simulated_sesame_frequency.html" />
+    <link rel="prev" title="Compute SESAME inverse solution on simulated data in the frequency domain" href="auto_examples/plot_compute_sesame_meg_simulated_frequency_mne.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
-<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
 
   </head><body>
 
@@ -39,14 +42,14 @@
         </button>
         <a class="navbar-brand" href="index.html">
           sesameeg</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.0.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
           <ul class="nav navbar-nav">
             
-                <li><a href="auto_examples/index.html">Examples</a></li>
                 <li><a href="#">API</a></li>
+                <li><a href="auto_examples/index.html">Examples</a></li>
                 <li><a href="explanation_algorithm.html">Model</a></li>
                 <li><a href="https://github.com/pybees/sesameeg">GitHub</a></li>
             
@@ -89,57 +92,84 @@
   <div class="row">
     <div class="body col-md-12 content" role="main">
       
-  <div class="section" id="python-api-reference">
-<h1>Python API Reference<a class="headerlink" href="#python-api-reference" title="Permalink to this headline">¶</a></h1>
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">¶</a></h1>
 <p>This is the reference for classes (<code class="docutils literal notranslate"><span class="pre">CamelCase</span></code> names) and functions
 (<code class="docutils literal notranslate"><span class="pre">underscore_case</span></code> names) of Sesameeg.</p>
-<div class="section" id="main-classes">
-<h2>Main classes<a class="headerlink" href="#main-classes" title="Permalink to this headline">¶</a></h2>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+<section id="main-class">
+<h2>Main class<a class="headerlink" href="#main-class" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sesame</span></code></a>(forward, data[, noise_std, radius, …])</p></td>
-<td><p>Sequential Semi-Analytic Monte-Carlo Estimation (SESAME) of sources.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sesame</span></code></a>(source_space, lead_field, data[, ...])</p></td>
+<td><p>Sequential Semi-Analytic Monte-Carlo Estimator (SESAME).</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="other-classes">
-<h2>Other classes<a class="headerlink" href="#other-classes" title="Permalink to this headline">¶</a></h2>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+</section>
+<section id="mne-python-utility-functions">
+<h2>MNE-Python utility functions<a class="headerlink" href="#mne-python-utility-functions" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_sesame</span></code></a>(forward, data[, n_parts, ...])</p></td>
+<td><p>Prepare a SESAME instance for actually computing the inverse.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="visualization">
+<h2>Visualization<a class="headerlink" href="#visualization" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sesameeg.viz.plot_stc.html#sesameeg.viz.plot_stc" title="sesameeg.viz.plot_stc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_stc</span></code></a>(inv_op[, plot_kwargs, savepath, ...])</p></td>
+<td><p>Plot SESAME source estimates using mne.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sesameeg.viz.plot_vol_stc.html#sesameeg.viz.plot_vol_stc" title="sesameeg.viz.plot_vol_stc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_vol_stc</span></code></a>(inv_op[, plot_kwargs, ...])</p></td>
+<td><p>Plot Nutmeg style SESAME volumetric source estimates using nilearn.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sesameeg.viz.plot_cloud_sources.html#sesameeg.viz.plot_cloud_sources" title="sesameeg.viz.plot_cloud_sources"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_cloud_sources</span></code></a>(inv_op[, savepath, true_idxs])</p></td>
+<td><p>Plot point cloud style SESAME source estimates using pyvista.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sesameeg.viz.plot_amplitudes.html#sesameeg.viz.plot_amplitudes" title="sesameeg.viz.plot_amplitudes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_amplitudes</span></code></a>(inv_op[, title])</p></td>
+<td><p>Plot the amplitude of the estimated sources as function of time.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="reading-sesame-result">
+<h2>Reading SESAME result<a class="headerlink" href="#reading-sesame-result" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sesameeg.io.read_h5.html#sesameeg.io.read_h5" title="sesameeg.io.read_h5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_h5</span></code></a>(fpath)</p></td>
+<td><p>Load SESAME result from an HDF5 file.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="other-classes">
+<h2>Other classes<a class="headerlink" href="#other-classes" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/sesameeg.Dipole.html#sesameeg.Dipole" title="sesameeg.Dipole"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dipole</span></code></a>(loc)</p></td>
 <td><p>Single current dipole class for SESAME.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/sesameeg.Particle.html#sesameeg.Particle" title="sesameeg.Particle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Particle</span></code></a>(n_verts, lam[, dip_mom_std, …])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sesameeg.Particle.html#sesameeg.Particle" title="sesameeg.Particle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Particle</span></code></a>(n_verts, lam[, dip_mom_std, ...])</p></td>
 <td><p>Particle class for SESAME, used to store a single particle of an empirical pdf.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/sesameeg.EmpPdf.html#sesameeg.EmpPdf" title="sesameeg.EmpPdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EmpPdf</span></code></a>(n_parts, n_verts, lam[, dip_mom_std, …])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sesameeg.EmpPdf.html#sesameeg.EmpPdf" title="sesameeg.EmpPdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EmpPdf</span></code></a>(n_parts, n_verts, lam[, dip_mom_std, ...])</p></td>
 <td><p>Empirical probability density function (pdf) class for SESAME.</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="utility-functions">
-<h2>Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
+</section>
+<section id="utility-functions">
+<h2>Utility functions<a class="headerlink" href="#utility-functions" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/sesameeg.utils.compute_neighbours_matrix.html#sesameeg.utils.compute_neighbours_matrix" title="sesameeg.utils.compute_neighbours_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_neighbours_matrix</span></code></a>(src, d_matrix, …)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/sesameeg.utils.compute_neighbours_matrix.html#sesameeg.utils.compute_neighbours_matrix" title="sesameeg.utils.compute_neighbours_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_neighbours_matrix</span></code></a>(src, d_matrix, ...)</p></td>
 <td><p>Compute the set of neighbours of each point in the brain discretization.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/sesameeg.utils.compute_neighbours_probability_matrix.html#sesameeg.utils.compute_neighbours_probability_matrix" title="sesameeg.utils.compute_neighbours_probability_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_neighbours_probability_matrix</span></code></a>(…)</p></td>
-<td><p>Compute neighbours’ probability matrix.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/sesameeg.utils.compute_neighbours_probability_matrix.html#sesameeg.utils.compute_neighbours_probability_matrix" title="sesameeg.utils.compute_neighbours_probability_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_neighbours_probability_matrix</span></code></a>(...)</p></td>
+<td><p>Compute neighbours' probability matrix.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/sesameeg.utils.estimate_dip_mom_std.html#sesameeg.utils.estimate_dip_mom_std" title="sesameeg.utils.estimate_dip_mom_std"><code class="xref py py-obj docutils literal notranslate"><span class="pre">estimate_dip_mom_std</span></code></a>(r_data, lf)</p></td>
 <td><p>Estimate the standard deviation of the prior of the dipole moment.</p></td>
@@ -152,22 +182,8 @@
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="reading-sesame-result">
-<h2>Reading SESAME result<a class="headerlink" href="#reading-sesame-result" title="Permalink to this headline">¶</a></h2>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/sesameeg.io.read_h5.html#sesameeg.io.read_h5" title="sesameeg.io.read_h5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_h5</span></code></a>(fpath)</p></td>
-<td><p>Load SESAME result from an HDF5 file.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+</section>
+</section>
 
 
     </div>
@@ -181,8 +197,8 @@
       
     </p>
     <p>
-        &copy; Copyright 2019, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+        &copy; Copyright 2023, SESAMEEG developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6.<br/>
     </p>
   </div>
 </footer>

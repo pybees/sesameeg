@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <title>Quick Start with the mne-project-template &#8212; sesameeg 0.0.1 documentation</title>
-    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Quick Start with the mne-project-template &#8212; sesameeg 0.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css?v=284a2d1d" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <script src="_static/documentation_options.js?v=e3a6060d"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/copybutton.js?v=26522df0"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="User guide: create your own mne project" href="user_guide.html" />
@@ -21,10 +24,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
-<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
 
   </head><body>
 
@@ -39,14 +42,14 @@
         </button>
         <a class="navbar-brand" href="index.html">
           sesameeg</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.0.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.2</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
           <ul class="nav navbar-nav">
             
-                <li><a href="auto_examples/index.html">Examples</a></li>
                 <li><a href="api.html">API</a></li>
+                <li><a href="auto_examples/index.html">Examples</a></li>
                 <li><a href="explanation_algorithm.html">Model</a></li>
                 <li><a href="https://github.com/pybees/sesameeg">GitHub</a></li>
             
@@ -89,21 +92,16 @@
   <div class="row">
     <div class="body col-md-12 content" role="main">
       
-  <div class="section" id="quick-start-with-the-mne-project-template">
-<h1>Quick Start with the mne-project-template<a class="headerlink" href="#quick-start-with-the-mne-project-template" title="Permalink to this headline">¶</a></h1>
+  <section id="quick-start-with-the-mne-project-template">
+<h1>Quick Start with the mne-project-template<a class="headerlink" href="#quick-start-with-the-mne-project-template" title="Link to this heading">¶</a></h1>
 <p>This package serves as a skeleton package aiding at MNE
 compatible packages.</p>
-<div class="section" id="creating-your-own-mne-contribution-package">
-<h2>Creating your own mne contribution package<a class="headerlink" href="#creating-your-own-mne-contribution-package" title="Permalink to this headline">¶</a></h2>
+<section id="creating-your-own-mne-contribution-package">
+<h2>Creating your own mne contribution package<a class="headerlink" href="#creating-your-own-mne-contribution-package" title="Link to this heading">¶</a></h2>
 <p>For illustration purposes we want to create a <code class="docutils literal notranslate"><span class="pre">mne-foo</span></code> project
 named <code class="docutils literal notranslate"><span class="pre">mnefoo</span></code>. Here is a table of the naming of this project and
 the project you will create:</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 36%" />
-<col style="width: 39%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td></td>
 <td><p>tis project</p></td>
@@ -123,8 +121,8 @@ the project you will create:</p>
 </tr>
 </tbody>
 </table>
-<div class="section" id="download-and-setup-your-repository">
-<h3>1. Download and setup your repository<a class="headerlink" href="#download-and-setup-your-repository" title="Permalink to this headline">¶</a></h3>
+<section id="download-and-setup-your-repository">
+<h3>1. Download and setup your repository<a class="headerlink" href="#download-and-setup-your-repository" title="Link to this heading">¶</a></h3>
 <p>To create your package, you need to clone the <code class="docutils literal notranslate"><span class="pre">mne-project-template</span></code> repository
 and rename it to your convenience (i.e:<code class="docutils literal notranslate"><span class="pre">mne-foo</span></code>):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/mne-tools/mne-project-template.git mne-foo
@@ -134,17 +132,17 @@ $ cd mne-foo
 <p>Before to reinitialize your git repository, you need to replace the template
 information with you own. We provide you with a convenient script to speed up
 the process, but you can also do it manually.</p>
-<div class="section" id="bootstrap-your-mne-project-using-a-convenience-script">
-<h4>1.1.1 bootstrap your mne project using a convenience script<a class="headerlink" href="#bootstrap-your-mne-project-using-a-convenience-script" title="Permalink to this headline">¶</a></h4>
+<section id="bootstrap-your-mne-project-using-a-convenience-script">
+<h4>1.1.1 bootstrap your mne project using a convenience script<a class="headerlink" href="#bootstrap-your-mne-project-using-a-convenience-script" title="Link to this heading">¶</a></h4>
 <p>Open your favorite editor and change <code class="docutils literal notranslate"><span class="pre">PKG_NAME</span></code>, <code class="docutils literal notranslate"><span class="pre">PYTHON_NAME</span></code>,
 and <code class="docutils literal notranslate"><span class="pre">GH_NAME</span></code> in <code class="docutils literal notranslate"><span class="pre">mne_project_template_bootstrap.sh</span></code> with your own
 information. Then run the bootsrap script:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ bash  mne_project_template_bootstrap.sh
 </pre></div>
 </div>
-</div>
-<div class="section" id="update-your-project-manually">
-<h4>1.1.2 Update your project manually<a class="headerlink" href="#update-your-project-manually" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="update-your-project-manually">
+<h4>1.1.2 Update your project manually<a class="headerlink" href="#update-your-project-manually" title="Link to this heading">¶</a></h4>
 <p>Replace all occurrences of <code class="docutils literal notranslate"><span class="pre">mnetemplate</span></code> and <code class="docutils literal notranslate"><span class="pre">mne-template</span></code>
 with the name of you own contribution. You can find all the occurrences using
 the following command:</p>
@@ -167,9 +165,9 @@ $ git grep -l &#39;mne-template&#39; | xargs sed -i &#39;&#39; -e &#39;s/mne-tem
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mv mnetemplate mnefoo
 </pre></div>
 </div>
-</div>
-<div class="section" id="remove-history-and-convert-it-into-a-new-project">
-<h4>1.3 Remove history and convert it into a new project<a class="headerlink" href="#remove-history-and-convert-it-into-a-new-project" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="remove-history-and-convert-it-into-a-new-project">
+<h4>1.3 Remove history and convert it into a new project<a class="headerlink" href="#remove-history-and-convert-it-into-a-new-project" title="Link to this heading">¶</a></h4>
 <p>To remove the history of the template package, you need to remove the <cite>.git</cite>
 directory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rm -rf .git
@@ -186,10 +184,10 @@ $ git commit -m &#39;Initial commit&#39;
 $ git push origin master
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="edit-the-documentation">
-<h3>2. Edit the documentation<a class="headerlink" href="#edit-the-documentation" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="edit-the-documentation">
+<h3>2. Edit the documentation<a class="headerlink" href="#edit-the-documentation" title="Link to this heading">¶</a></h3>
 <p>The documentation is created using <a class="reference external" href="http://www.sphinx-doc.org/en/stable/">Sphinx</a>. In addition, the examples are
 created using <code class="docutils literal notranslate"><span class="pre">sphinx-gallery</span></code>. Therefore, to generate locally the
 documentation, you are required to install the following packages:</p>
@@ -213,9 +211,9 @@ illustrates some usage of the package. the example file name should start by
 $ make html
 </pre></div>
 </div>
-</div>
-<div class="section" id="setup-the-continuous-integration">
-<h3>3. Setup the continuous integration<a class="headerlink" href="#setup-the-continuous-integration" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="setup-the-continuous-integration">
+<h3>3. Setup the continuous integration<a class="headerlink" href="#setup-the-continuous-integration" title="Link to this heading">¶</a></h3>
 <p>The project template already contains configuration files of the continuous
 integration system. Basically, the following systems are set:</p>
 <ul class="simple">
@@ -234,10 +232,10 @@ CodeCov for you own repository.</p></li>
 <li><p>PEP8Speaks for automatically checking the PEP8 compliance of your project for
 each Pull Request.</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="publish-your-package">
-<h2>Publish your package<a class="headerlink" href="#publish-your-package" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="publish-your-package">
+<h2>Publish your package<a class="headerlink" href="#publish-your-package" title="Link to this heading">¶</a></h2>
 <p>You can make your package available through <a class="reference external" href="https://packaging.python.org/tutorials/packaging-projects/">PyPi</a> and <a class="reference external" href="https://conda-forge.org/">conda-forge</a>. Refer to
 the associated documentation to be able to upload your packages such that
 it will be installable with <code class="docutils literal notranslate"><span class="pre">pip</span></code> and <code class="docutils literal notranslate"><span class="pre">conda</span></code>. Once published, it will
@@ -246,8 +244,8 @@ be possible to install your package with the following commands:</p>
 $ conda install -c conda-forge mne-foo
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
     </div>
@@ -261,8 +259,8 @@ $ conda install -c conda-forge mne-foo
       
     </p>
     <p>
-        &copy; Copyright 2019, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.<br/>
+        &copy; Copyright 2023, SESAMEEG developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6.<br/>
     </p>
   </div>
 </footer>

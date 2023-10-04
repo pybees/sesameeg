@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sesameeg.viz.viz &#8212; sesameeg 0.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=284a2d1d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/copybutton.js?v=26522df0"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          sesameeg</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.2</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../api.html">API</a></li>
+                <li><a href="../../../auto_examples/index.html">Examples</a></li>
+                <li><a href="../../../explanation_algorithm.html">Model</a></li>
+                <li><a href="https://github.com/pybees/sesameeg">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for sesameeg.viz.viz</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">op</span>
+<span class="kn">import</span> <span class="nn">pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">head_to_mri</span>
+<span class="kn">from</span> <span class="nn">mne.label</span> <span class="kn">import</span> <span class="n">_n_colors</span>
+<span class="kn">from</span> <span class="nn">mne.viz.backends._utils</span> <span class="kn">import</span> <span class="n">_qt_app_exec</span>
+<span class="kn">from</span> <span class="nn">nilearn.plotting</span> <span class="kn">import</span> <span class="n">plot_stat_map</span>
+<span class="kn">from</span> <span class="nn">nilearn.image</span> <span class="kn">import</span> <span class="n">index_img</span>
+<span class="kn">from</span> <span class="nn">pyvistaqt</span> <span class="kn">import</span> <span class="n">BackgroundPlotter</span>
+
+
+<div class="viewcode-block" id="plot_amplitudes">
+<a class="viewcode-back" href="../../../generated/sesameeg.viz.plot_amplitudes.html#sesameeg.viz.plot_amplitudes">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_amplitudes</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot the amplitude of the estimated sources as function of time.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inv_op : Instance of :py:class:`~sesameeg.Sesame`</span>
+<span class="sd">        Instance of `Sesame`.</span>
+<span class="sd">    title : :py:class:`~str` | None</span>
+<span class="sd">        Figure title.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">est_n_dips</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">est_n_dips</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">fixed_ori</span><span class="p">:</span>
+        <span class="n">amplitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">est_dip_moms</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">amplitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">est_dip_moms</span><span class="p">[:,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">i_d</span><span class="p">:</span><span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">i_d</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)],</span>
+                                             <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i_d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">est_n_dips</span><span class="p">)])</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">_n_colors</span><span class="p">(</span><span class="n">est_n_dips</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">amp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">amplitude</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">data_times</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mf">1e3</span> <span class="o">*</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">data_times</span><span class="p">,</span> <span class="mf">1e9</span> <span class="o">*</span> <span class="n">amp</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (ms)&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mf">1e9</span> <span class="o">*</span> <span class="n">amp</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Source amplitude (nAm)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="plot_stc">
+<a class="viewcode-back" href="../../../generated/sesameeg.viz.plot_stc.html#sesameeg.viz.plot_stc">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_stc</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">plot_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">save_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">true_idxs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_open</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot SESAME source estimates using mne.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inv_op : Instance of :py:class:`~sesameeg.Sesame`</span>
+<span class="sd">        Instance of `Sesame`. Source estimates have to be computed through :py:meth:`~sesameeg.Sesame.compute_stc`</span>
+<span class="sd">    plot_kwargs : :py:class:`~dict` | None</span>
+<span class="sd">        Additional arguments to :py:func:`~mne.viz.plot_source_estimates` (e.g., dict(surface=&#39;white&#39;)).</span>
+<span class="sd">    savepath : :py:class:`~str` | None</span>
+<span class="sd">        File path to write image to. If None, no image is written.</span>
+<span class="sd">    save_kwargs : :py:class:`~dict` | None</span>
+<span class="sd">        Additional arguments to :py:meth:`~pyvista.Plotter.screenshot`.</span>
+<span class="sd">    true_idxs : :py:class:`~numpy.ndarray` | None</span>
+<span class="sd">        In simulation settings, indexes of source space points in which true sources are located.</span>
+<span class="sd">    force_open : :py:class:`~bool`</span>
+<span class="sd">        If True, force the image to stay open.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Compute Sesame stc first.&#39;</span><span class="p">)</span>
+    <span class="n">est_n_dips</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">est_n_dips</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">est_locs</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">est_locs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">_n_colors</span><span class="p">(</span><span class="n">est_n_dips</span><span class="p">)</span>
+    <span class="n">brain_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;surface&#39;</span><span class="p">:</span> <span class="s1">&#39;inflated&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;hemi&#39;</span><span class="p">:</span> <span class="s1">&#39;split&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;clim&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;kind&#39;</span><span class="p">:</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;lims&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1e-4</span><span class="p">,</span> <span class="mf">1e-1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]},</span>
+                    <span class="s1">&#39;time_label&#39;</span><span class="p">:</span> <span class="s1">&#39; &#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;subjects_dir&#39;</span><span class="p">:</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">subjects_dir</span><span class="p">,</span>
+                    <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">600</span><span class="p">),</span>
+                    <span class="s1">&#39;show_traces&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">plot_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_valid_keys</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">plot</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">aux_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">_k</span><span class="p">,</span> <span class="n">_v</span> <span class="ow">in</span> <span class="n">plot_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">_k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_valid_keys</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;WARNING! Removing invalid stc.plot keyword : </span><span class="si">{</span><span class="n">_k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">aux_dict</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="o">=</span> <span class="n">_v</span>
+        <span class="n">brain_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">aux_dict</span><span class="p">)</span>
+
+    <span class="n">brain</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span> <span class="o">**</span><span class="n">brain_kwargs</span><span class="p">)</span>
+    <span class="n">nv_lh</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">true_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">t_idx</span><span class="p">,</span> <span class="n">t_loc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">true_idxs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">t_loc</span> <span class="o">&lt;</span> <span class="n">nv_lh</span><span class="p">:</span>
+                <span class="n">brain</span><span class="o">.</span><span class="n">add_foci</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">t_loc</span><span class="p">],</span> <span class="n">coords_as_verts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">hemi</span><span class="o">=</span><span class="s1">&#39;lh&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">brain</span><span class="o">.</span><span class="n">add_foci</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">t_loc</span> <span class="o">-</span> <span class="n">nv_lh</span><span class="p">],</span> <span class="n">coords_as_verts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">hemi</span><span class="o">=</span><span class="s1">&#39;rh&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">loc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">est_locs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">loc</span> <span class="o">&lt;</span> <span class="n">nv_lh</span><span class="p">:</span>
+            <span class="n">brain</span><span class="o">.</span><span class="n">add_foci</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">loc</span><span class="p">],</span> <span class="n">coords_as_verts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">hemi</span><span class="o">=</span><span class="s1">&#39;lh&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">brain</span><span class="o">.</span><span class="n">add_foci</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">loc</span> <span class="o">-</span> <span class="n">nv_lh</span><span class="p">],</span> <span class="n">coords_as_verts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">hemi</span><span class="o">=</span><span class="s1">&#39;rh&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">force_open</span><span class="p">:</span>
+        <span class="n">_qt_app_exec</span><span class="p">(</span><span class="n">brain</span><span class="o">.</span><span class="n">_renderer</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">store</span><span class="p">[</span><span class="s2">&quot;app&quot;</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">savepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">s_kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">savepath</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">save_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_valid_keys</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="o">.</span><span class="n">screenshot</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="n">aux_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">_k</span><span class="p">,</span> <span class="n">_v</span> <span class="ow">in</span> <span class="n">save_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">_k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_valid_keys</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;WARNING! Removing invalid pyvista.Plotter.screenshot keyword : </span><span class="si">{</span><span class="n">_k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">aux_dict</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="o">=</span> <span class="n">_v</span>
+            <span class="n">s_kw</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">aux_dict</span><span class="p">)</span>
+        <span class="n">brain</span><span class="o">.</span><span class="n">plotter</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="o">**</span><span class="n">s_kw</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="plot_vol_stc">
+<a class="viewcode-back" href="../../../generated/sesameeg.viz.plot_vol_stc.html#sesameeg.viz.plot_vol_stc">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_vol_stc</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">plot_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot Nutmeg style SESAME volumetric source estimates using nilearn.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inv_op : Instance of :py:class:`~sesameeg.Sesame`</span>
+<span class="sd">        Instance of `Sesame`.</span>
+<span class="sd">        Source estimates have to be computed through :py:meth:`~sesameeg.Sesame.compute_stc`</span>
+<span class="sd">    plot_kwargs : :py:class:`~dict` | None</span>
+<span class="sd">        Additional arguments to :py:func:`~nilearn.plotting.plot_stat_map` (e.g., dict(colorbar=False)).</span>
+<span class="sd">    savepath : :py:class:`~str` | None</span>
+<span class="sd">        File path to write image to. If None, no image is written.</span>
+<span class="sd">    save_kwargs : :py:class:`~dict` | None</span>
+<span class="sd">        Additional arguments to :py:func:`~matplotlib.pyplot.savefig`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Compute Sesame stc first.&#39;</span><span class="p">)</span>
+
+    <span class="n">peak_vertex</span><span class="p">,</span> <span class="n">peak_time</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">get_peak</span><span class="p">(</span><span class="n">vert_as_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                          <span class="n">time_as_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">peak_pos</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;source_rr&#39;</span><span class="p">][</span><span class="n">peak_vertex</span><span class="p">]</span>
+    <span class="n">peak_mri_pos</span> <span class="o">=</span> <span class="n">head_to_mri</span><span class="p">(</span><span class="n">peak_pos</span><span class="p">,</span> <span class="n">mri_head_t</span><span class="o">=</span><span class="n">inv_op</span><span class="o">.</span><span class="n">trans_matrix</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;ras&#39;</span><span class="p">,</span>
+                               <span class="n">subject</span><span class="o">=</span><span class="n">inv_op</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span> <span class="n">subjects_dir</span><span class="o">=</span><span class="n">inv_op</span><span class="o">.</span><span class="n">subjects_dir</span><span class="p">)</span>
+
+    <span class="n">_time</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">_time</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">_time</span><span class="p">)</span>
+
+    <span class="n">img</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">as_volume</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">],</span> <span class="n">mri_resolution</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">fig_vol</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+    <span class="n">_mri_fpath</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">subjects_dir</span><span class="p">,</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span> <span class="s1">&#39;mri&#39;</span><span class="p">,</span> <span class="s1">&#39;T1.mgz&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">_mri_fpath</span><span class="p">):</span>
+        <span class="n">bg_img</span> <span class="o">=</span> <span class="n">_mri_fpath</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bg_img</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">brain_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bg_img</span><span class="o">=</span><span class="n">bg_img</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">cut_coords</span><span class="o">=</span><span class="n">peak_mri_pos</span><span class="p">,</span> <span class="n">figure</span><span class="o">=</span><span class="n">fig_vol</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">plot_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_valid_keys</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">plot_stat_map</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="n">aux_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">_k</span><span class="p">,</span> <span class="n">_v</span> <span class="ow">in</span> <span class="n">plot_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">_k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_valid_keys</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;WARNING! Removing invalid plot_stat_map keyword : </span><span class="si">{</span><span class="n">_k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">aux_dict</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="o">=</span> <span class="n">_v</span>
+        <span class="n">brain_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">aux_dict</span><span class="p">)</span>
+
+    <span class="n">plot_stat_map</span><span class="p">(</span><span class="n">index_img</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="o">**</span><span class="n">brain_kwargs</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">savepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">s_kw</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">savepath</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">save_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_valid_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dpi&#39;</span><span class="p">,</span> <span class="s1">&#39;format&#39;</span><span class="p">,</span> <span class="s1">&#39;metadata&#39;</span><span class="p">,</span> <span class="s1">&#39;bbox_inches&#39;</span><span class="p">,</span> <span class="s1">&#39;pad_inches&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;facecolor&#39;</span><span class="p">,</span> <span class="s1">&#39;edgecolor&#39;</span><span class="p">,</span> <span class="s1">&#39;backend&#39;</span><span class="p">]</span>
+            <span class="n">aux_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">_k</span><span class="p">,</span> <span class="n">_v</span> <span class="ow">in</span> <span class="n">save_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">_k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_valid_keys</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;WARNING! Removing invalid matplotlib.pyplot.savefig keyword : </span><span class="si">{</span><span class="n">_k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">aux_dict</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="o">=</span> <span class="n">_v</span>
+            <span class="n">s_kw</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">aux_dict</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="o">**</span><span class="n">s_kw</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="plot_cloud_sources">
+<a class="viewcode-back" href="../../../generated/sesameeg.viz.plot_cloud_sources.html#sesameeg.viz.plot_cloud_sources">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_cloud_sources</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">true_idxs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot point cloud style SESAME source estimates using pyvista.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inv_op : Instance of :py:class:`~sesameeg.Sesame`</span>
+<span class="sd">        Instance of `Sesame`. Source estimates have to be computed through :py:meth:`~Sesame.compute_stc`</span>
+<span class="sd">    savepath : :py:class:`~str` | None</span>
+<span class="sd">        File path to write image to. If None, no image is written.</span>
+<span class="sd">    true_idxs : :py:class:`~numpy.ndarray` | None</span>
+<span class="sd">        In simulation settings, indexes of source space points in which true sources are located.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">est_n_dips</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">est_n_dips</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">est_locs</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">est_locs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="n">_n_colors</span><span class="p">(</span><span class="n">est_n_dips</span><span class="p">)</span>
+    <span class="n">cloud</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">source_space</span><span class="p">)</span>
+
+    <span class="n">plotter</span> <span class="o">=</span> <span class="n">BackgroundPlotter</span><span class="p">()</span>
+    <span class="n">plotter</span><span class="o">.</span><span class="n">background_color</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
+    <span class="n">plotter</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">cloud</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">render_points_as_spheres</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">true_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">t_idx</span><span class="p">,</span> <span class="n">t_loc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">true_idxs</span><span class="p">):</span>
+            <span class="n">plotter</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">source_space</span><span class="p">[</span><span class="n">t_loc</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span>
+                             <span class="n">render_points_as_spheres</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">loc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">est_locs</span><span class="p">):</span>
+        <span class="n">plotter</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">source_space</span><span class="p">[</span><span class="n">loc</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">point_size</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span>
+                         <span class="n">render_points_as_spheres</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">savepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plotter</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="n">savepath</span><span class="p">)</span>
+    <span class="n">plotter</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2023, SESAMEEG developers.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
