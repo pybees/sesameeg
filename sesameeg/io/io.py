@@ -34,7 +34,7 @@ def _export_to_vol_stc(inv_op, subject=None):
         vertno = [inv_op.forward['src'][0]['vertno'],
                   inv_op.forward['src'][1]['vertno']]
     elif len(inv_op.forward['src']) == 1:
-        vertno = inv_op.forward['src'][0]['vertno']
+        vertno = [inv_op.forward['src'][0]['vertno']]
     else:
         raise ValueError
     nv_tot = inv_op.forward['nsource']
@@ -43,8 +43,7 @@ def _export_to_vol_stc(inv_op, subject=None):
     for it, bl in enumerate(pmaps):
         if est_n_dips[it] > 0:
             pmap_tot[it] = np.sum(bl, axis=0)
-
-    vol_stc = VolSourceEstimate(data=pmap_tot.T, vertices=vertno, tmin=1,
+    vol_stc = VolSourceEstimate(data=pmap_tot.T, vertices=list(vertno), tmin=1,
                                 tstep=1, subject=subject)
     return vol_stc
 
