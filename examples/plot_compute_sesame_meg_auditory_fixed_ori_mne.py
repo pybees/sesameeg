@@ -1,32 +1,30 @@
 """
-==============================================
-Compute SESAME inverse solution on evoked data
-==============================================
+======================================================================
+Compute SESAME inverse solution on evoked data with source constraints
+======================================================================
 
 In this example we shall apply SESAME on an evoked dataset,
 corresponding to the response to an auditory stimulus. Data are taken from the MNE-Python
 `sample <https://mne.tools/stable/generated/mne.datasets.sample.data_path.html#mne.datasets.sample.data_path>`_
-dataset.
+dataset. We shall constrain dipole moments to be normal to the cortical surface.
 """
 # Authors: Gianvittorio Luria <luria@dima.unige.it>
+#          Annalisa Pascarella <a.pascarella@iac.cnr.it>
 #          Sara Sommariva <sommariva@dima.unige.it>
 #          Alberto Sorrentino <sorrentino@dima.unige.it>
 #
 # License: BSD (3-clause)
 
-# sphinx_gallery_thumbnail_number = 3
+# sphinx_gallery_thumbnail_number = 2
 
 from os import path as op
-import numpy as np
 import matplotlib.pyplot as plt
-from mayavi import mlab
 
 from mne.datasets import sample
-from mne import read_forward_solution, pick_types_forward, read_evokeds
-from mne.label import _n_colors
+from mne import read_evokeds
+from mne import read_forward_solution, convert_forward_solution, pick_types_forward
 
-from sesameeg import Sesame
-
+from sesameeg.mne import prepare_sesame
 
 data_path = sample.data_path()
 subject = 'sample'
@@ -46,12 +44,14 @@ eeg_sensor_type = False
 fwd = read_forward_solution(fname_fwd, exclude='bads')
 fwd = pick_types_forward(fwd, meg=meg_sensor_type,
                          eeg=eeg_sensor_type, ref_meg=False)
+# Impose cortical orientation constraint
+fwd = convert_forward_solution(fwd, surf_ori=True, force_fixed=True, use_cps=True)
+
 
 # Evoked Data
 condition = 'Left Auditory'
 evoked = read_evokeds(fname_evoked, condition=condition, baseline=(None, 0))
-evoked = evoked.pick_types(meg=meg_sensor_type,
-                           eeg=eeg_sensor_type, exclude='bads')
+evoked = evoked.pick('meg', exclude='bads')
 
 ###############################################################################
 # Define the parameters.
@@ -66,7 +66,7 @@ sample_min, sample_max = evoked.time_as_index([time_min, time_max],
 # larger values yield in principle more accurate reconstructions but also entail a
 # higher computational cost. Setting the value to about a hundred seems to represent
 # a good trade–off.
-n_parts = 10
+n_parts = 30
 # If None, noise_std and dip_mom_std will be estimated by SESAME.
 noise_std = None
 dip_mom_std = None
@@ -83,20 +83,18 @@ noise_cov = None
 # Visualize the selected data.
 
 fig = evoked.plot(show=False)
-for ax in fig.get_axes():
+for ax in fig.get_axes()[:2]:
     ax.axvline(time_min, color='r', linewidth=2.0)
     ax.axvline(time_max, color='r', linewidth=2.0)
 plt.show()
 
 ###############################################################################
 # Apply SESAME.
-_sesame = Sesame(fwd, evoked, n_parts=n_parts, noise_std=noise_std,
-                 top_min=time_min, top_max=time_max, dip_mom_std=dip_mom_std,
-                 hyper_q=True, noise_cov=noise_cov, subsample=subsample)
+_sesame = prepare_sesame(fwd, evoked, n_parts=n_parts, noise_std=noise_std,
+                         top_min=time_min, top_max=time_max, dip_mom_std=dip_mom_std,
+                         hyper_q=True, noise_cov=noise_cov, subsample=subsample,
+                         subject=subject, subjects_dir=subjects_dir)
 _sesame.apply_sesame()
-
-print('    Estimated number of sources: {0}'.format(_sesame.est_n_dips[-1]))
-print('    Estimated source locations: {0}'.format(_sesame.est_locs[-1]))
 
 # Compute goodness of fit
 gof = _sesame.goodness_of_fit()
@@ -107,38 +105,13 @@ sd = _sesame.source_dispersion()
 print('    Source Dispersion: {0} mm'.format(round(sd, 2)))
 
 ###############################################################################
-# Visualize the amplitude of the estimated sources as function of time.
-est_n_dips = _sesame.est_n_dips[-1]
-est_locs = _sesame.est_locs[-1]
-
-times = evoked.times[_sesame.s_min:_sesame.s_max+1]
-amplitude = np.array([np.linalg.norm(_sesame.est_dip_moms[:, 3*i_d:3 * (i_d + 1)],
-                                     axis=1) for i_d in range(est_n_dips)])
-colors = _n_colors(est_n_dips)
-plt.figure()
-for idx, amp in enumerate(amplitude):
-    plt.plot(1e3*times, 1e9*amp, color=colors[idx], linewidth=2)
-plt.xlabel('Time (ms)')
-plt.ylabel('Source amplitude (nAm)')
-plt.show()
-
-###############################################################################
 # Visualize the posterior map of the dipoles' location
 # :math:`p(r| \textbf{y}, 2)` and the estimated sources on the inflated brain.
-stc = _sesame.compute_stc(subject)
-clim = dict(kind='value', lims=[1e-4, 1e-1, 1])
-brain = stc.plot(subject, surface='inflated', hemi='split', clim=clim,
-                 time_label=' ', subjects_dir=subjects_dir, size=(1000, 600))
-nv_lh = stc.vertices[0].shape[0]
-for idx, loc in enumerate(est_locs):
-    if loc < nv_lh:
-        brain.add_foci(stc.vertices[0][loc], coords_as_verts=True,
-                       hemi='lh', color=colors[idx], scale_factor=0.3)
-    else:
-        brain.add_foci(stc.vertices[1][loc-nv_lh], coords_as_verts=True,
-                       hemi='rh', color=colors[idx], scale_factor=0.3)
+_sesame.plot_sources()
 
-mlab.show()
+###############################################################################
+# Visualize the amplitude of the estimated sources as function of time.
+_sesame.plot_source_amplitudes()
 
 #######################################################################################
 # Save results.

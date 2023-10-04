@@ -13,7 +13,7 @@ from mne.epochs import Epochs, EpochsArray
 from mne.evoked import Evoked, EvokedArray
 from mne.forward import Forward
 from mne.io.pick import channel_type
-from mne import pick_types_forward
+from mne import pick_types_forward, read_labels_from_annot, add_source_space_distances
 
 
 # def compute_cosine_distance(fwd):
@@ -78,11 +78,31 @@ def compute_correlation_distance_matix(fwd):
     return distance_matrix
 
 
+def compute_cortical_distance_matrix(fwd):
+    src_aux = fwd['src'].copy()
+    src_aux = add_source_space_distances(src_aux, dist_limit=np.inf, n_jobs=-1, verbose=True)
+    print('Creating distance matrix...')
+    # Left hemi
+    lh_ixgrid = np.ix_(src_aux[0]['vertno'], src_aux[0]['vertno'])
+    lh_m = src_aux[0]['dist'][lh_ixgrid].toarray()
+    lh_shape = lh_m.shape[0]
+    # Right hemi
+    rh_ixgrid = np.ix_(src_aux[1]['vertno'], src_aux[1]['vertno'])
+    rh_m = src_aux[1]['dist'][rh_ixgrid].toarray()
+    rh_shape = rh_m.shape[0]
+    # Create matrix
+    distance_matrix = np.ones((fwd['nsource'], fwd['nsource'])) * 999
+    distance_matrix[:lh_shape, :lh_shape] = lh_m
+    distance_matrix[lh_shape:lh_shape + rh_shape, lh_shape:lh_shape + rh_shape] = rh_m
+    print('    [done]')
+    return distance_matrix
+
+
 def compute_neighbours_matrix(src, d_matrix, radius, n_simil):
     """Compute the set of neighbours of each point in the brain discretization.
 
     Parameters
-    -----------
+    ----------
     src :  :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)
         The coordinates of the points in the brain discretization.
     d_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)
@@ -92,7 +112,7 @@ def compute_neighbours_matrix(src, d_matrix, radius, n_simil):
         The maximum distance between two neighbouring points.
 
     Returns
-    --------
+    -------
     n_matrix : :py:class:`~numpy.ndarray` of :py:class:`~int`, shape (n_verts, n_neigh_max)
         The sets of neighbours.
     """
@@ -109,7 +129,7 @@ def _compute_euclidean_neigh_matrix(src, d_matrix, radius):
     """Compute the set of neighbours of each point in the brain discretization.
 
     Parameters
-    -----------
+    ----------
     src :  :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)
         The coordinates of the points in the brain discretization.
     d_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)
@@ -119,7 +139,7 @@ def _compute_euclidean_neigh_matrix(src, d_matrix, radius):
         The maximum distance between two neighbouring points.
 
     Returns
-    --------
+    -------
     n_matrix : :py:class:`~numpy.ndarray` of :py:class:`~int`, shape (n_verts, n_neigh_max)
         The sets of neighbours.
     """
@@ -142,11 +162,11 @@ def _compute_euclidean_neigh_matrix(src, d_matrix, radius):
         if n_neigh[-1] < n_min:
             raise ValueError('Computation of neighbours aborted since '
                              'their minimum number is too small.\n'
-                             'Please choose a higher radius.')
+                             f'Please choose a radius higher than {radius}.')
         elif n_neigh[-1] > n_max:
             raise ValueError('Computation of neighbours aborted since'
                              'their maximum number is too big.\n'
-                             'Please choose a lower radius.')
+                             f'Please choose a radius lower than {radius}.')
         list_neigh.append(aux)
         reached_points = np.append(reached_points,
                                    aux[~np.in1d(aux, reached_points)])
@@ -226,7 +246,7 @@ def compute_neighbours_probability_matrix(n_matrix, src, d_matrix, sigma_neigh):
     """Compute neighbours' probability matrix.
 
     Parameters
-    -----------
+    ----------
     n_matrix : :py:class:`~numpy.ndarray` of :py:class:`~int`, shape (n_verts, n_neigh_max)
         The sets of neighbours.
     src :  :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)
@@ -239,7 +259,7 @@ def compute_neighbours_probability_matrix(n_matrix, src, d_matrix, sigma_neigh):
         the neighbours' probability.
 
     Returns
-    --------
+    -------
     np_matrix : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, n_neigh_max)
         The neighbours' probability.
     """
@@ -266,7 +286,7 @@ def estimate_dip_mom_std(r_data, lf):
         The leadfield matrix. (n_comp = 1, if fixed orientation, 3, if free orientation)
 
     Returns
-    --------
+    -------
     s_q : :py:class:`~float`
         The estimated standard deviation.
     """
@@ -285,7 +305,7 @@ def estimate_noise_std(r_data):
         n_ist is the number of time-points or of frequencies.
 
     Returns
-    --------
+    -------
     s_noise : :py:class:`~float`
         The estimated standard deviation.
     """
@@ -321,12 +341,12 @@ def initialize_radius(src):
     neighbours.
 
     Parameters
-    -----------
+    ----------
     src :  :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, 3)
         The coordinates of the points in the brain discretization.
 
     Returns
-    --------
+    -------
     radius : :py:class:`~float`
         The value of the radius.
     """
@@ -370,6 +390,46 @@ def is_forward(fwd):
 
 def normalize(x):
     return (x - np.min(x)) / (np.max(x) - np.min(x))
+
+
+def prior_loc_from_labels(subject, subjects_dir, fwd, parc, sel_labels, ratio=None):
+    labels = read_labels_from_annot(subject=subject, parc=parc, hemi='both',
+                                    surf_name='inflated', subjects_dir=subjects_dir)
+
+    def get_idx(sel_label):
+        for i, l in enumerate(labels):
+            if l.name == sel_label:
+                return i
+
+    _ssgrid = fwd['source_rr']
+    _src_vertno_lh = fwd['src'][0]['vertno']
+    _src_vertno_rh = fwd['src'][1]['vertno']
+    if ratio is None:
+        prior_loc_arr = np.zeros(_ssgrid.shape[0])
+    else:
+        prior_loc_arr = 1e-6 * np.ones(_ssgrid.shape[0])
+    labels_idx = list(map(lambda x: get_idx(x), sel_labels))
+    for _l_idx in labels_idx:
+        _l = labels[_l_idx]
+        if _l.name.endswith('lh'):
+            vertices0 = _l.get_vertices_used(_src_vertno_lh)
+            vertices1 = [_v for _v in vertices0 if _v in _src_vertno_lh]
+            vertices2 = np.asarray(list(map(lambda x: np.argwhere(_src_vertno_lh == x)[0][0], vertices1)))
+            if ratio is None:
+                prior_loc_arr[vertices2] += 1
+            else:
+                prior_loc_arr[vertices2] *= ratio
+        elif _l.name.endswith('rh'):
+            vertices0 = _l.get_vertices_used(_src_vertno_rh)
+            vertices1 = [_v for _v in vertices0 if _v in _src_vertno_rh]
+            vertices2 = np.asarray(list(map(lambda x: np.argwhere(_src_vertno_rh == x)[0][0], vertices1)))
+            if ratio is None:
+                prior_loc_arr[vertices2 + _src_vertno_lh.shape[0]] += 1
+            else:
+                prior_loc_arr[vertices2 + _src_vertno_lh.shape[0]] *= ratio
+        else:
+            raise ValueError
+    return prior_loc_arr
 
 
 def sample_from_sphere():

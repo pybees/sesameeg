@@ -25,13 +25,11 @@ import os.path as op
 import numpy as np
 from scipy.signal import welch, coherence
 from matplotlib import pyplot as plt
-from mayavi import mlab
 
 import mne
 from mne.datasets import sample
-from mne.label import _n_colors
 
-from sesameeg import Sesame
+from sesameeg.mne import prepare_sesame
 
 
 # We use the MEG and MRI setup from the MNE-Python
@@ -185,6 +183,9 @@ mne.simulation.add_noise(evoked, noise_cov, random_state=rand)
 ###############################################################################
 # Visualize the data
 evoked.plot()
+_t = evoked.times[(2.0 < evoked.times) & (evoked.times < 3.5)]
+evoked.plot_topomap(times=_t[::50], nrows=3)
+plt.show()
 
 ###############################################################################
 # Define the parameters and apply SESAME. We convert the data to the frequency
@@ -196,12 +197,11 @@ dip_mom_std = None
 freq_min = 9.5
 freq_max = 10.5
 
-_sesame = Sesame(fwd, evoked, n_parts=n_parts, noise_std=noise_std,
-                 top_min=freq_min, top_max=freq_max,  dip_mom_std=dip_mom_std,
-                 hyper_q=True, Fourier_transf=True)
+_sesame = prepare_sesame(fwd, evoked, n_parts=n_parts, noise_std=noise_std,
+                         top_min=freq_min, top_max=freq_max, dip_mom_std=dip_mom_std,
+                         hyper_q=True, fourier=True, subject=subject, subjects_dir=subjects_dir)
 
 _sesame.apply_sesame()
-print('    Estimated number of sources: {0}'.format(_sesame.est_n_dips[-1]))
 print('    Estimated source locations: {0}'.format(_sesame.est_locs[-1]))
 print('    True source locations: {0}'.format(true_locs))
 
@@ -216,20 +216,6 @@ print('    Source Dispersion: {0} mm'.format(round(sd, 2)))
 ###############################################################################
 # Visualize the posterior map of the dipoles' location
 # :math:`p(r| \textbf{y}, 2)` and the estimated sources on the inflated brain.
-est_n_dips = _sesame.est_n_dips[-1]
-est_locs = _sesame.est_locs[-1]
-colors = _n_colors(est_n_dips)
-stc = _sesame.compute_stc(subject)
-clim = dict(kind='value', lims=[1e-4, 1e-1, 1])
-brain = stc.plot(subject, surface='inflated', hemi='split', clim=clim,
-                 time_label=' ', subjects_dir=subjects_dir, size=(1000, 600))
-nv_lh = stc.vertices[0].shape[0]
-for idx, loc in enumerate(est_locs):
-    if loc < nv_lh:
-        brain.add_foci(stc.vertices[0][loc], coords_as_verts=True,
-                       hemi='lh', color=colors[idx], scale_factor=0.3)
-    else:
-        brain.add_foci(stc.vertices[1][loc-nv_lh], coords_as_verts=True,
-                       hemi='rh', color=colors[idx], scale_factor=0.3)
+# If window closes unexpectedly, set force_open=True
+_sesame.plot_sources(true_sources=true_locs, force_open=False)
 
-mlab.show()

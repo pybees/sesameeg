@@ -7,10 +7,11 @@ SESAMEEG
 ========
 
 SESAMEEG is a Python3 library providing the Bayesian multi-dipole localization method
-SESAME [1]_ (SEquential Semi-Analytic Montecarlo Estimation) for the automatic estimation of
+SESAME [1]_ (SEquential Semi-Analytic Montecarlo Estimator) for the automatic estimation of
 brain source currents from MEEG data, either in the time domain and in the frequency domain [2]_.
 
-A mathematical description of the algorithm is available in the documentation.
+A mathematical description of the algorithm is available in the
+:doc:`documentation <explanation_algorithm>`.
 
 
 Installation
