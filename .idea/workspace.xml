@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="BUG: piccolo bug in read_h5 (est_dip_moms)">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/mne-project-template.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mne-project-template.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.rst" beforeDir="false" afterPath="$PROJECT_DIR$/README.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/api.rst" beforeDir="false" afterPath="$PROJECT_DIR$/doc/api.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/doc/conf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sesameeg/emp_pdf.py" beforeDir="false" afterPath="$PROJECT_DIR$/sesameeg/emp_pdf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sesameeg/io/io.py" beforeDir="false" afterPath="$PROJECT_DIR$/sesameeg/io/io.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sesameeg/particles.py" beforeDir="false" afterPath="$PROJECT_DIR$/sesameeg/particles.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sesameeg/sesame.py" beforeDir="false" afterPath="$PROJECT_DIR$/sesameeg/sesame.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sesameeg/utils/smc_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/sesameeg/utils/smc_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sesameeg/viz/viz.py" beforeDir="false" afterPath="$PROJECT_DIR$/sesameeg/viz/viz.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,12 +74,12 @@
     </replaceStrings>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -104,6 +117,9 @@
       </list>
     </option>
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectConfigurationFiles">
     <option name="files">
       <list>
@@ -188,12 +204,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/doc/explanation_algorithm.rst" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
-  </component>
-  <component name="RunManager" selected="Python.plot_analyse_sample_auditory">
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;fix__doc&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/gv/Codici/Python_Scripts/sesameeg&quot;
+  }
+}</component>
+  <component name="RunManager" selected="Python.plot_compute_sesame_meg_auditory_fixed_ori_mne">
     <configuration default="true" type="tests" factoryName="Attests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -226,6 +245,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/plot_analyse_sample_auditory.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="plot_compute_sesame_meg_auditory_fixed_ori_mne" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="mne-project-template" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/plot_compute_sesame_meg_auditory_fixed_ori_mne.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -299,12 +339,14 @@
     </configuration>
     <list>
       <item itemvalue="Python.plot_analyse_sample_auditory" />
+      <item itemvalue="Python.plot_compute_sesame_meg_auditory_fixed_ori_mne" />
       <item itemvalue="Python.plot_meg_auditory_sesame_volume" />
       <item itemvalue="Python.plot_meg_sample_auditory_fixed_ori" />
       <item itemvalue="Python.plot_meg_simulated_sesame_frequency" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.plot_compute_sesame_meg_auditory_fixed_ori_mne" />
         <item itemvalue="Python.plot_analyse_sample_auditory" />
         <item itemvalue="Python.plot_meg_sample_auditory_fixed_ori" />
         <item itemvalue="Python.plot_meg_auditory_sesame_volume" />
@@ -563,7 +605,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="cambiato il readme" />

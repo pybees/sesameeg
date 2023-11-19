@@ -344,7 +344,19 @@ sphinx_gallery_conf = {
     'image_scrapers': ('matplotlib', 'pyvista'),
     'doc_module': 'sesameeg',
     'backreferences_dir': os.path.join('generated'),
-    'reference_url': {'sesameeg': None}
+    'reference_url': {'sesameeg': None},
+    'examples_dirs': ['../examples'],
+    'gallery_dirs': ['auto_examples'],
+    'binder': {
+        'org': 'pybees',
+        'repo': 'sesameeg',
+        'binderhub_url': 'https://mybinder.org',
+        'branch': 'master',
+        'dependencies': ['../setup.py', '../requirements.txt'],  # "./binder/requirements.txt"
+        'use_jupyter_lab': True,
+        #'filepath_prefix': './doc/_build/_html'
+        #'notebooks_dir': 'notebooks'
+    }
 }
 
 # Remove matplotlib agg warnings from generated doc when using plt.show
