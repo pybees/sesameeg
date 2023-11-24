@@ -10,15 +10,11 @@ import itertools
 import time
 import numpy as np
 import scipy.spatial.distance as ssd
-from mne.cov import compute_whitener
 from mne.evoked import EvokedArray
-from mne.forward import _select_orient_forward
 from .emp_pdf import EmpPdf
 from .particles import Particle
 from .utils import compute_neighbours_matrix, initialize_radius, \
-    compute_neighbours_probability_matrix, estimate_noise_std, estimate_dip_mom_std, \
-    compute_correlation_distance_matix
-from .utils import is_epochs, is_evoked, is_forward, normalize
+    compute_neighbours_probability_matrix, estimate_noise_std, estimate_dip_mom_std
 from .io import _export_to_stc, _export_to_vol_stc, write_h5, write_pkl
 from .viz import plot_amplitudes, plot_stc, plot_vol_stc, plot_cloud_sources
 from .metrics import compute_goodness_of_fit, compute_sd
