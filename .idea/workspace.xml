@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="* modifica stima dip_mom_std&#10;prova binder">
+    <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="* tolto codice commentato in emp_pdf e tolti inputs non usati in sesame">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sesameeg/viz/viz.py" beforeDir="false" afterPath="$PROJECT_DIR$/sesameeg/viz/viz.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -574,7 +575,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700396877579</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="* tolto codice commentato in emp_pdf e tolti inputs non usati in sesame">
+      <option name="closed" value="true" />
+      <created>1700844606312</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1700844606313</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -612,7 +621,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Sistemato write/read h5 e write pkl &#10;Sistemato sd, mld e gof&#10;Calcolo sd nell'esempio" />
     <MESSAGE value="Volume source space (solo 1 o 2) con esempio left auditory" />
     <MESSAGE value="Sistemato il doc, spostata la funzione compjute gamma" />
     <MESSAGE value="*** Rimosso gamma hig,low e delta min. max dai parametri in EmpPdf.compute_exponent&#10;sistemato il doc" />
@@ -637,7 +645,8 @@
     <MESSAGE value="BUG: piccolo bug in read_h5 (est_dip_moms)" />
     <MESSAGE value="* modifica stima dip_mom_std&#10;* modifica save/read h5 e save pkl&#10;* aggiunto plot di pmap nei puntini" />
     <MESSAGE value="* modifica stima dip_mom_std&#10;prova binder" />
-    <option name="LAST_COMMIT_MESSAGE" value="* modifica stima dip_mom_std&#10;prova binder" />
+    <MESSAGE value="* tolto codice commentato in emp_pdf e tolti inputs non usati in sesame" />
+    <option name="LAST_COMMIT_MESSAGE" value="* tolto codice commentato in emp_pdf e tolti inputs non usati in sesame" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/doc/api.rst">

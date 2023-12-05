@@ -30,6 +30,7 @@ def plot_amplitudes(inv_op, title=None):
                                              axis=1) for i_d in range(est_n_dips)])
     colors = _n_colors(est_n_dips)
     plt.figure(title)
+    plt.clf()
     for idx, amp in enumerate(amplitude):
         if inv_op.data_times is not None:
             plt.plot(1e3 * inv_op.data_times, 1e9 * amp, color=colors[idx], linewidth=2)
