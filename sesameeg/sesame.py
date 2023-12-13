@@ -66,16 +66,6 @@ class Sesame(object):
         applied.
     hyper_q : :py:class:`~bool`
         If True, a hyperprior pdf on the dipole moment std will be used.
-    top_min : :py:class:`~float` | None
-        First topography to be included in the segment of data to be analyzed.
-        It is meant to be expressed either in seconds in the time domain or
-        in Hertz in the frequency domain.
-        If None, it is set to the first topography of the input data.
-    top_max : :py:class:`~float` | None
-        Last topography to be included in the segment of data to be analyzed.
-        It is meant to be expressed either in seconds in the time domain or
-        in Hertz in the frequency domain.
-        If None, it is set to the last topography of the input data.
     lam : :py:class:`~float`
         The parameter of the Poisson prior pdf on the number of dipoles.
     max_n_dips : :py:class:`~int`
