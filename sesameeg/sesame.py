@@ -244,8 +244,16 @@ class Sesame(object):
         if subsample is not None:
             print(f'Subsampling data with step {subsample}')
             self.r_data = data[:, self.s_min:self.s_max + 1:self.subsample]
+            if self.data_times is not None:
+                self.data_times = self.data_times[self.s_min:self.s_max + 1:self.subsample]
+            elif self.data_freqs is not None:
+                self.data_freqs = self.data_freqs[self.s_min:self.s_max + 1:self.subsample]
         else:
             self.r_data = data[:, self.s_min:self.s_max + 1]
+            if self.data_times is not None:
+                self.data_times = self.data_times[self.s_min:self.s_max + 1]
+            elif self.data_freqs is not None:
+                self.data_freqs = self.data_freqs[self.s_min:self.s_max + 1]
 
         # Dipole moment std
         if dip_mom_std is None:

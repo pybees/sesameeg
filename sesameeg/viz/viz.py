@@ -217,11 +217,15 @@ def plot_cloud_sources(inv_op, savepath=None, true_idxs=None):
     colors = _n_colors(est_n_dips)
     cloud = pv.PolyData(inv_op.source_space)
     blob = pv.PolyData(inv_op.source_space[np.nonzero(pmap)[0]])
+    blob['probability'] = pmap[np.nonzero(pmap)[0]]
 
     plotter = BackgroundPlotter()
     plotter.background_color = "white"
     plotter.add_mesh(cloud, color='black', point_size=5.0, render_points_as_spheres=True)
-    plotter.add_mesh(blob, color='red', point_size=10.0, render_points_as_spheres=True)
+    plotter.add_mesh(blob, scalars='probability', point_size=10.0, render_points_as_spheres=True,
+                     cmap='viridis_r', clim=(1e-4, 1),
+                     scalar_bar_args={'title': "Probability", 'color': 'black'}
+                     )
 
     if true_idxs is not None:
         for t_idx, t_loc in enumerate(true_idxs):
