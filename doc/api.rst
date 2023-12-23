@@ -72,6 +72,7 @@ Utility functions
    :toctree: generated/
    :template: function.rst
 
+   prior_loc_from_labels
    compute_neighbours_matrix
    compute_neighbours_probability_matrix
    estimate_dip_mom_std

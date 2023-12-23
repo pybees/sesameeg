@@ -48,8 +48,8 @@ def _export_to_vol_stc(inv_op, subject=None):
     return vol_stc
 
 
-def write_h5(fpath, inv_op, tmin=None, tmax=None, fmin=None,
-             fmax=None, subsample=None, sbj=None, sbj_viz=None,
+def write_h5(fpath, inv_op, smin=None, smax=None, data_times=None,
+             data_freqs=None, subsample=None, sbj=None, sbj_viz=None,
              data_path=None, fwd_path=None, cov_path=None,
              src_path=None, lf_path=None):
     _check_h5_installed()
@@ -75,7 +75,7 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, fmin=None,
         _model_sel.create_dataset(str(i), data=_m)
     _exponents = f.create_dataset('exponents',
                                   data=inv_op.posterior.exponents)
-    if hasattr(inv_op, 'forward'):
+    if hasattr(inv_op, 'forward') and (inv_op.forward is not None):
         _ch_names = f.create_dataset('ch_names',
                                      shape=(len(inv_op.forward['info']['ch_names']),1),
                                      dtype='S10',
@@ -85,20 +85,20 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, fmin=None,
     _sn = f.create_dataset('noise_std', data=inv_op.noise_std)
     _sq = f.create_dataset('dip_mom_std', data=inv_op.dip_mom_std)
     if inv_op.hyper_q:
-        _fin_sq = f.create_dataset('final_dip_mom_std', data=inv_op.final_dip_mom_std)
-        _est_dip_mom_std = f.create_group('est_dip_mom_std')
-        for i, _sq in enumerate(inv_op.est_dip_mom_std):
-            _est_dip_mom_std.create_dataset(str(i), data=_sq)
+        _est_sq = f.create_dataset('est_dip_mom_std', data=np.asarray(inv_op.est_dip_mom_std))
+        _all_dip_mom_std = f.create_group('all_dip_mom_std')
+        for i, _sq in enumerate(inv_op.posterior.all_dip_mom_std):
+            _all_dip_mom_std.create_dataset(str(i), data=_sq)
     _np = f.create_dataset('n_parts', data=inv_op.n_parts)
     _ndm = f.create_dataset('max_n_dips', data=inv_op.max_n_dips)
-    if tmin is not None:
-        _tmin = f.create_dataset('tmin', data=tmin)
-    if tmax is not None:
-        _tmax = f.create_dataset('tmax', data=tmax)
-    if fmin is not None:
-        _fmin = f.create_dataset('fmin', data=fmin)
-    if fmax is not None:
-        _fmax = f.create_dataset('fmax', data=fmax)
+    if smin is not None:
+        _smin = f.create_dataset('smin', data=smin)
+    if smax is not None:
+        _smax = f.create_dataset('smax', data=smax)
+    if data_times is not None:
+        _data_times = f.create_dataset('data_times', data=np.asarray(data_times))
+    if data_freqs is not None:
+        _data_freqs = f.create_dataset('data_freqs', data=np.asarray(data_freqs))
     if subsample is not None:
         _subsample = f.create_dataset('subsample', data=subsample)
     if sbj is not None:
@@ -110,7 +110,7 @@ def write_h5(fpath, inv_op, tmin=None, tmax=None, fmin=None,
     if fwd_path is not None:
         _fwdpath = f.create_dataset('fwd_path', data=fwd_path)
     if cov_path is not None:
-        _covpath = f.create_dataset('cov_path', data=fwd_path)
+        _covpath = f.create_dataset('cov_path', data=cov_path)
     if src_path is not None:
         _srcpath = f.create_dataset('src_path', data=src_path)
     if lf_path is not None:
@@ -126,7 +126,7 @@ def write_pkl(fpath, inv_op, sbj=None, sbj_viz=None, data_path=None,
     _check_pickle_installed()
     import pickle as pkl
 
-    if hasattr(inv_op, 'forward'):
+    if hasattr(inv_op, 'forward') and (inv_op.forward is not None):
         inv_op.ch_names = inv_op.forward['info']['ch_names']
     if sbj is not None:
         inv_op.sbj = sbj
@@ -240,6 +240,16 @@ def read_h5(fpath):
     f = h5.File(fpath, 'r')
     res = dict()
 
+    if 'data_times' in f.keys():
+        res['data_times'] = np.asarray(list(f['data_times'][:]))
+    else:
+        res['data_times'] = 'Not available.'
+
+    if 'data_freqs' in f.keys():
+        res['data_freqs'] = np.asarray(list(f['data_freqs'][:]))
+    else:
+        res['data_freqs'] = 'Not available.'
+
     if 'est_n_dips' in f.keys():
         res['est_n_dips'] = list(f['est_n_dips'][:])
     else:
@@ -257,18 +267,23 @@ def read_h5(fpath):
     else:
         res['ch_names'] = 'Not available.'
 
-    for _k in ['prob_map', 'est_locs', 'model_sel', 'est_dip_mom_std']:
+    for _k in ['prob_map', 'est_locs', 'model_sel', 'all_dip_mom_std']:
         if _k in f.keys():
             res[_k] = list(f[_k][_key][:] for _key in sorted(f[_k].keys(),
                                                              key=lambda x: int(x)))
         else:
             res[_k] = 'Not available.'
 
-    for _k in ['final_dip_mom_std', 'tmin', 'tmax', 'fmin', 'fmax', 'subsample']:
+    for _k in ['smin', 'smax', 'subsample']:
         if _k in f.keys():
             res[_k] = f[_k][()]
         else:
             res[_k] = None
+
+    if 'est_dip_mom_std' in f.keys():
+        res['est_dip_mom_std'] = list(f['est_dip_mom_std'][:])
+    else:
+        res['est_dip_mom_std'] = 'Not available.'
 
     for _k in ['lambda', 'noise_std', 'dip_mom_std', 'max_n_dips',
                'subject', 'subject_viz', 'data_path', 'fwd_path',

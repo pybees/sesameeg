@@ -189,7 +189,7 @@ plt.show()
 
 ###############################################################################
 # Define the parameters and apply SESAME. We convert the data to the frequency
-# domain by setting ``Fourier_transf=True``.
+# domain by setting ``fourier=True``.
 
 n_parts = 100
 noise_std = None

@@ -30,6 +30,7 @@ def plot_amplitudes(inv_op, title=None):
                                              axis=1) for i_d in range(est_n_dips)])
     colors = _n_colors(est_n_dips)
     plt.figure(title)
+    plt.clf()
     for idx, amp in enumerate(amplitude):
         if inv_op.data_times is not None:
             plt.plot(1e3 * inv_op.data_times, 1e9 * amp, color=colors[idx], linewidth=2)
@@ -72,21 +73,28 @@ def plot_stc(inv_op, plot_kwargs=None, savepath=None,
                     'subjects_dir': inv_op.subjects_dir,
                     'size': (1000, 600),
                     'show_traces': False}
+    view_kwargs = dict()
 
     if plot_kwargs is not None:
+        _show_view_keys = ['roll', 'distance', 'row', 'col', 'align', 'azimuth',
+                           'elevation', 'focalpoint']
         _valid_keys = inspect.signature(inv_op.stc.plot).parameters.keys()
         aux_dict = dict()
         for _k, _v in plot_kwargs.items():
-            if _k not in _valid_keys:
-                print(f'WARNING! Removing invalid stc.plot keyword : {_k}')
+            if _k in _show_view_keys:
+                view_kwargs[_k] = _v
             else:
-                aux_dict[_k] = _v
+                if _k not in _valid_keys:
+                    print(f'WARNING! Removing invalid stc.plot keyword : {_k}')
+                else:
+                    aux_dict[_k] = _v
         brain_kwargs.update(aux_dict)
 
     brain = inv_op.stc.plot(inv_op.subject, **brain_kwargs)
     nv_lh = inv_op.stc.vertices[0].shape[0]
 
     if true_idxs is not None:
+        print(true_idxs)
         for t_idx, t_loc in enumerate(true_idxs):
             if t_loc < nv_lh:
                 brain.add_foci(inv_op.stc.vertices[0][t_loc], coords_as_verts=True,
@@ -102,6 +110,10 @@ def plot_stc(inv_op, plot_kwargs=None, savepath=None,
         else:
             brain.add_foci(inv_op.stc.vertices[1][loc - nv_lh], coords_as_verts=True,
                            hemi='rh', color=colors[idx], scale_factor=0.3)
+
+    if len(view_kwargs) > 0:
+        brain.show_view(**view_kwargs)
+
     if force_open:
         _qt_app_exec(brain._renderer.figure.store["app"])
 
@@ -201,12 +213,19 @@ def plot_cloud_sources(inv_op, savepath=None, true_idxs=None):
     """
     est_n_dips = inv_op.est_n_dips[-1]
     est_locs = inv_op.est_locs[-1]
+    pmap = inv_op.pmap[0].sum(axis=0)
     colors = _n_colors(est_n_dips)
     cloud = pv.PolyData(inv_op.source_space)
+    blob = pv.PolyData(inv_op.source_space[np.nonzero(pmap)[0]])
+    blob['probability'] = pmap[np.nonzero(pmap)[0]]
 
     plotter = BackgroundPlotter()
     plotter.background_color = "white"
     plotter.add_mesh(cloud, color='black', point_size=5.0, render_points_as_spheres=True)
+    plotter.add_mesh(blob, scalars='probability', point_size=10.0, render_points_as_spheres=True,
+                     cmap='viridis_r', clim=(1e-4, 1),
+                     scalar_bar_args={'title': "Probability", 'color': 'black'}
+                     )
 
     if true_idxs is not None:
         for t_idx, t_loc in enumerate(true_idxs):
