@@ -393,6 +393,33 @@ def normalize(x):
 
 
 def prior_loc_from_labels(subject, subjects_dir, fwd, parc, sel_labels, ratio=None):
+    """Construct the prior probability of active source locations starting from given FreeSurfer/MNE labels.
+
+    Parameters
+    ----------
+    subject : :py:class:`~str`
+        Subject name in Freesurfer subjects dir. Only when instantiated by means
+        of :func:`~sesameeg.mne.prepare_sesame`.
+    subjects_dir : :py:class:`~str` | None
+        If not None, this directory will be used as the subjects directory instead of the value set using
+        the SUBJECTS_DIR environment variable. Only when instantiated by means
+        of :func:`~sesameeg.mne.prepare_sesame`
+    fwd : :py:class:`~mne.Forward` object
+        The forward solution.
+    parc : :py:class:`~str`
+        The parcellation to use, e.g., ``'aparc'`` or ``'aparc.a2009s'``.
+    sel_labels : :py:class:`~list` of :py:class:`~str`
+        The cortical labels to use.
+    ratio : :py:class:`~float`
+        The ratio of high prior probability cortical areas to low prior probability cortical areas
+        probability value. If None, it is set to 1.
+
+    Returns
+    -------
+    prior_loc_arr : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, )
+        The prior probability of active source locations.
+    """
+
     labels = read_labels_from_annot(subject=subject, parc=parc, hemi='both',
                                     surf_name='inflated', subjects_dir=subjects_dir)
 

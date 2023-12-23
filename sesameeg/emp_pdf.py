@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
-import copy
+
 # Authors: Gianvittorio Luria <luria@dima.unige.it>
 #          Sara Sommariva <sommariva@dima.unige.it>
 #          Alberto Sorrentino <sorrentino@dima.unige.it>
 #
 # License: BSD (3-clause)
 
+import copy
 import itertools
 import numpy as np
-from multiprocessing import Pool
-from functools import partialmethod, partial
 from .particles import Particle
 
 
@@ -65,9 +64,12 @@ class EmpPdf(object):
         self.ESS = np.float32(1. / np.square(np.exp(self.logweights)).sum())
         self.exponents = np.array([0, 0])
         self.model_sel = None
-        self.est_n_dips = None
         self.pmap = None
+        self.est_n_dips = None
         self.est_locs = None
+        self.est_dip_mom_std = None
+        if self.hyper_q:
+            self.all_dip_mom_std = list(np.array([]) for _ in range(n_parts))
         self.verbose = verbose
 
     def __repr__(self):
@@ -114,41 +116,8 @@ class EmpPdf(object):
             _part = _part.explore(n_verts, r_data, lead_field, self.exponents[-1], neigh, neigh_p,
                                   noise_std, lam, max_n_dips)
             self.particles[i_part] = _part
-
-        # OLD
-        # for i_part, _part in enumerate(self.particles):
-        #     if self.hyper_q:
-        #         _part = _part.evol_dip_mom_std(r_data, lead_field, self.exponents[-1], noise_std, lam)
-        #
-        #     _part = _part.evol_n_dips(n_verts, r_data, lead_field, max_n_dips,
-        #                               self.exponents[-1], noise_std, lam)
-        #     for dip_idx in reversed(range(_part.n_dips)):
-        #        _part = _part.evol_single_loc(dip_idx, neigh, neigh_p, r_data, lead_field,
-        #                                      self.exponents[-1], noise_std, lam)
-        #
-        #     self.particles[i_part] = _part
-
-        # PROVA con Partial
-        #
-        # _g = partialmethod(self.sample_single_part, n_verts=n_verts, data=r_data, lf=lead_field,
-        #                    neigh=neigh, neigh_p=neigh_p, nstd=noise_std, lam=lam, max_n_dips=max_n_dips)
-        #
-        # _f = partial(self.sample_single_part, n_verts=n_verts, data=r_data, lf=lead_field,
-        #              neigh=neigh, neigh_p=neigh_p, nstd=noise_std, lam=lam, max_n_dips=max_n_dips)
-        #
-        # with Pool() as pool:
-        #     result = pool.map(_f, self.particles)
-        #
-        # self.particles = copy.deepcopy(np.asarray(result))
-        # del result
-        #
-
-        # PROVA come Giacomo
-        # with Pool() as pool:
-        #     result = np.asarray(pool.map(self.prova,
-        #                                  [(_part, n_verts, r_data, lead_field, neigh, neigh_p, noise_std,
-        #                                   lam, max_n_dips) for _part in self.particles]))
-        #     self.particles = copy.deepcopy(result)
+            if self.hyper_q:
+                self.all_dip_mom_std[i_part] = np.append(self.all_dip_mom_std[i_part], _part.dip_mom_std)
 
     def resample(self):
         """Performs a systematic resampling step of the whole empirical pdf
@@ -173,7 +142,8 @@ class EmpPdf(object):
         new_ind = np.digitize(u_part, w_part)
         new_ind_ord = np.array(sorted(list(new_ind),
                                key=list(new_ind).count, reverse=True))
-        self.particles = self.particles[new_ind_ord]
+        # self.particles = self.particles[new_ind_ord] ## ERRORE!!! 20231027GV
+        self.particles = np.array([copy.deepcopy(self.particles[z]) for z in new_ind_ord])
         self.logweights[:] = np.log(1. / self.logweights.shape[0])
         self.ESS = self.logweights.shape[0]
 
@@ -357,3 +327,10 @@ class EmpPdf(object):
                     self.pmap[dip_idx, loc] += selected_weights[i_p]
 
             self.est_locs = np.argmax(self.pmap, axis=1)
+
+            if self.hyper_q:
+                # Estimate dip mom std
+                est_sq = np.asarray([self.all_dip_mom_std[p][-1] for p in range(self.particles.shape[0])])
+                selected_est_sq = np.delete(est_sq, np.where(nod != self.est_n_dips))
+                _dip_mom_std = np.dot(selected_weights, selected_est_sq)
+                self.est_dip_mom_std = _dip_mom_std

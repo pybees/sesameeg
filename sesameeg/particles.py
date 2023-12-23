@@ -39,7 +39,7 @@ class Particle(object):
         The prior pdf, evaluated in the particle.
     """
 
-    def __init__(self, n_verts, lam, dip_mom_std=None, prior_locs=None, fixed_ori = False,
+    def __init__(self, n_verts, lam, dip_mom_std=None, prior_locs=None, fixed_ori=False,
                  hyper_q=False):
         """Initialization: the initial number of dipoles is Poisson
            distribuited; the initial locations are uniformly distribuited
@@ -338,6 +338,7 @@ class Particle(object):
                         prop_loc,
                         np.argwhere(neigh[prop_loc] ==
                                     prop_part.dipoles[dip_idx].loc)[0][0]]
+
         prop_part.dipoles[dip_idx].loc = prop_loc
         comp_fact_delta_r = prob_opp_move / prob_new_move
 

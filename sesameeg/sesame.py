@@ -10,15 +10,11 @@ import itertools
 import time
 import numpy as np
 import scipy.spatial.distance as ssd
-from mne.cov import compute_whitener
 from mne.evoked import EvokedArray
-from mne.forward import _select_orient_forward
 from .emp_pdf import EmpPdf
 from .particles import Particle
 from .utils import compute_neighbours_matrix, initialize_radius, \
-    compute_neighbours_probability_matrix, estimate_noise_std, estimate_dip_mom_std, \
-    compute_correlation_distance_matix
-from .utils import is_epochs, is_evoked, is_forward, normalize
+    compute_neighbours_probability_matrix, estimate_noise_std, estimate_dip_mom_std
 from .io import _export_to_stc, _export_to_vol_stc, write_h5, write_pkl
 from .viz import plot_amplitudes, plot_stc, plot_vol_stc, plot_cloud_sources
 from .metrics import compute_goodness_of_fit, compute_sd
@@ -70,16 +66,6 @@ class Sesame(object):
         applied.
     hyper_q : :py:class:`~bool`
         If True, a hyperprior pdf on the dipole moment std will be used.
-    top_min : :py:class:`~float` | None
-        First topography to be included in the segment of data to be analyzed.
-        It is meant to be expressed either in seconds in the time domain or
-        in Hertz in the frequency domain.
-        If None, it is set to the first topography of the input data.
-    top_max : :py:class:`~float` | None
-        Last topography to be included in the segment of data to be analyzed.
-        It is meant to be expressed either in seconds in the time domain or
-        in Hertz in the frequency domain.
-        If None, it is set to the last topography of the input data.
     lam : :py:class:`~float`
         The parameter of the Poisson prior pdf on the number of dipoles.
     max_n_dips : :py:class:`~int`
@@ -199,6 +185,8 @@ class Sesame(object):
         self.n_parts = n_parts
         self.lam = lam
         self.max_n_dips = max_n_dips
+        self.s_min = 0 if s_min is None else s_min
+        self.s_max = (data.shape[1] - 1) if s_max is None else s_max
         self.subsample = subsample
         self.verbose = verbose
         self.hyper_q = hyper_q
@@ -253,15 +241,19 @@ class Sesame(object):
             self.neigh_p = np_matrix
 
         #  Data
-        if s_min is None:
-            s_min = 0
-        if s_max is None:
-            s_max = data.shape[1] - 1
         if subsample is not None:
             print(f'Subsampling data with step {subsample}')
-            self.r_data = data[:, s_min:s_max + 1:subsample]
+            self.r_data = data[:, self.s_min:self.s_max + 1:self.subsample]
+            if self.data_times is not None:
+                self.data_times = self.data_times[self.s_min:self.s_max + 1:self.subsample]
+            elif self.data_freqs is not None:
+                self.data_freqs = self.data_freqs[self.s_min:self.s_max + 1:self.subsample]
         else:
-            self.r_data = data[:, s_min:s_max + 1]
+            self.r_data = data[:, self.s_min:self.s_max + 1]
+            if self.data_times is not None:
+                self.data_times = self.data_times[self.s_min:self.s_max + 1]
+            elif self.data_freqs is not None:
+                self.data_freqs = self.data_freqs[self.s_min:self.s_max + 1]
 
         # Dipole moment std
         if dip_mom_std is None:
@@ -292,16 +284,12 @@ class Sesame(object):
                   .format(self.noise_std))
 
         self._resample_it = list()
+        self.model_sel = list()
+        self.pmap = list()
         self.est_n_dips = list()
         self.est_locs = list()
         self.est_dip_moms = None
-        self.est_dip_mom_std = None
-        self.final_dip_mom_std = None
-        self.model_sel = list()
-        self.pmap = list()
-
-        if self.hyper_q:
-            self.est_dip_mom_std = list(np.array([]) for _ in range(self.n_parts))
+        self.est_dip_mom_std = list()
 
         self.posterior = EmpPdf(self.n_parts, self.n_verts, self.lam, dip_mom_std=self.dip_mom_std,
                                 prior_locs=self.prior_locs, fixed_ori=self.fixed_ori,
@@ -548,7 +536,7 @@ class Sesame(object):
             print('[done]')
 
         print('Computing inverse solution. This will take a while...')
-        # --------- INIZIALIZATION ------------
+        # --------------- INITIALIZATION ---------------
         # Samples are drawn from the prior distribution and weigths are set as
         # uniform.
         nd = np.array([_part.n_dips for _part in self.posterior.particles])
@@ -561,10 +549,6 @@ class Sesame(object):
             nd = np.array([_part.n_dips for _part in self.posterior.particles])
 
         # Point estimation for the first iteration
-        if self.hyper_q:
-            for i_p, _part in enumerate(self.posterior.particles):
-                self.est_dip_mom_std[i_p] = np.append(self.est_dip_mom_std[i_p],
-                                              _part.dip_mom_std)
         if estimate_all:
             self.posterior.point_estimate(self.distance_matrix, self.max_n_dips)
 
@@ -572,8 +556,10 @@ class Sesame(object):
             self.model_sel.append(self.posterior.model_sel)
             self.est_locs.append(self.posterior.est_locs)
             self.pmap.append(self.posterior.pmap)
+            if self.hyper_q:
+                self.est_dip_mom_std.append(self.posterior.est_dip_mom_std)
 
-        # ----------- MAIN CICLE --------------
+        # --------------- MAIN CYCLE ---------------
 
         while np.all(self.posterior.exponents <= 1):
             time_start = time.time()
@@ -592,14 +578,10 @@ class Sesame(object):
 
             # STEP 2: Sampling.
             self.posterior.sample(self.n_verts, self.r_data, self.lead_field,
-                            self.neigh, self.neigh_p, self.noise_std,
-                            self.lam, self.max_n_dips)
+                                  self.neigh, self.neigh_p, self.noise_std,
+                                  self.lam, self.max_n_dips)
 
             # STEP 3: Point Estimation
-            if self.hyper_q:
-                for i_p, _part in enumerate(self.posterior.particles):
-                    self.est_dip_mom_std[i_p] = np.append(self.est_dip_mom_std[i_p],
-                                                  _part.dip_mom_std)
             if estimate_all:
                 self.posterior.point_estimate(self.distance_matrix, self.max_n_dips)
 
@@ -607,6 +589,8 @@ class Sesame(object):
                 self.model_sel.append(self.posterior.model_sel)
                 self.est_locs.append(self.posterior.est_locs)
                 self.pmap.append(self.posterior.pmap)
+                if self.hyper_q:
+                    self.est_dip_mom_std.append(self.posterior.est_dip_mom_std)
 
             # STEP 4: compute new exponent and new weights
             self.posterior.compute_exponent(self.noise_std)
@@ -618,28 +602,23 @@ class Sesame(object):
                 print('-------------------------------')
 
         # Point estimation
-        if self.hyper_q:
-            for i_p, _part in enumerate(self.posterior.particles):
-                self.est_dip_mom_std[i_p] = np.append(self.est_dip_mom_std[i_p],
-                                              _part.dip_mom_std)
         self.posterior.point_estimate(self.distance_matrix, self.max_n_dips)
 
         self.est_n_dips.append(self.posterior.est_n_dips)
         self.model_sel.append(self.posterior.model_sel)
         self.est_locs.append(self.posterior.est_locs)
         self.pmap.append(self.posterior.pmap)
+        if self.hyper_q:
+            self.est_dip_mom_std.append(self.posterior.est_dip_mom_std)
+            print('Estimated dipole strength variance: {}'.format(self.est_dip_mom_std[-1]))
+
         if estimate_dip_mom:
             if self.est_n_dips[-1] == 0:
                 self.est_dip_moms = np.array([])
-                if self.hyper_q:
-                    weights = np.exp(self.posterior.logweights)
-                    assert np.abs(np.sum(weights) - 1) < 1e-15
-                    est_sq = np.asarray([self.est_dip_mom_std[p][-1] for p in range(self.n_parts)])
-                    self.final_dip_mom_std = np.dot(weights, est_sq)
-                    print('Estimated dipole strength variance: {}'.format(self.final_dip_mom_std))
             else:
                 self.compute_dip_mom(self.est_locs[-1])
 
+        # Print results
         print(f'    Estimated number of sources: {self.est_n_dips[-1]}')
         if self.est_n_dips[-1] > 0:
             print('    Estimated source locations:')
@@ -659,12 +638,7 @@ class Sesame(object):
         [n_sens, n_time] = np.shape(self.r_data)
 
         if self.hyper_q:
-            weights = np.exp(self.posterior.logweights)
-            assert np.abs(np.sum(weights) - 1) < 1e-15
-            est_sq = np.asarray([self.est_dip_mom_std[p][-1] for p in range(self.n_parts)])
-            _dip_mom_std = np.dot(weights, est_sq)
-            self.final_dip_mom_std = _dip_mom_std
-            print('    Estimated dipole strength variance: {}'.format(_dip_mom_std))
+            _dip_mom_std = self.est_dip_mom_std[-1]
         else:
             _dip_mom_std = self.dip_mom_std
 
@@ -673,13 +647,13 @@ class Sesame(object):
         else:
             ind = np.ravel([[3 * est_locs[idip], 3 * est_locs[idip] + 1,
                              3 * est_locs[idip] + 2] for idip in range(est_num)])
+
         Gc = self.lead_field[:, ind]
         sigma = (_dip_mom_std / self.noise_std)**2 * np.dot(Gc, np.transpose(Gc)) +\
             np.eye(n_sens)
         kal_mat = (_dip_mom_std / self.noise_std)**2 * np.dot(np.transpose(Gc),
                                                         np.linalg.inv(sigma))
-        self.est_dip_moms = np.array([np.dot(kal_mat, self.r_data[:, t])
-                              for t in range(n_time)])
+        self.est_dip_moms = np.array([np.dot(kal_mat, self.r_data[:, t]) for t in range(n_time)])
 
     def goodness_of_fit(self):
         """Evaluate the estimated configuration of dipoles. The goodness
@@ -811,7 +785,7 @@ class Sesame(object):
                 plot_vol_stc(self, savepath=savepath, plot_kwargs=plot_kwargs,
                              save_kwargs=save_kwargs)
         else:
-            plot_cloud_sources(self, savepath=savepath)
+            plot_cloud_sources(self, true_idxs=true_sources, savepath=savepath)
 
     def save_h5(self, fpath, sbj=None, sbj_viz=None, data_path=None,
                 fwd_path=None, cov_path=None, src_path=None, lf_path=None):
@@ -836,16 +810,30 @@ class Sesame(object):
         lf_path : :py:class:`~str` | None
             The path to the leadfield matrix file.
         """
-        if self.fourier is False:
-            write_h5(fpath, self, tmin=self.top_min, tmax=self.top_max,
-                     subsample=self.subsample, sbj=sbj, sbj_viz=sbj_viz,
-                     data_path=data_path, fwd_path=fwd_path, src_path=src_path,
-                     lf_path=lf_path)
-        else:
-            write_h5(fpath, self, fmin=self.top_min, fmax=self.top_max,
-                     subsample=self.subsample, sbj=sbj, sbj_viz=sbj_viz,
-                     data_path=data_path, fwd_path=fwd_path, src_path=src_path,
-                     lf_path=lf_path)
+
+        h5_kwargs = dict(smin=self.s_min, smax=self.s_max, subsample=self.subsample,
+                         sbj=sbj, sbj_viz=sbj_viz, data_path=data_path, fwd_path=fwd_path,
+                         src_path=src_path, lf_path=lf_path)
+
+        if self.data_times is not None:
+            h5_kwargs.update(data_times=self.data_times)
+
+        if self.data_freqs is not None:
+            h5_kwargs.update(data_freqs=self.data_freqs)
+
+        write_h5(fpath, self, **h5_kwargs)
+
+
+        # if self.fourier is False:
+        #     write_h5(fpath, self, tmin=self.top_min, tmax=self.top_max,
+        #              subsample=self.subsample, sbj=sbj, sbj_viz=sbj_viz,
+        #              data_path=data_path, fwd_path=fwd_path, src_path=src_path,
+        #              lf_path=lf_path)
+        # else:
+        #     write_h5(fpath, self, fmin=self.top_min, fmax=self.top_max,
+        #              subsample=self.subsample, sbj=sbj, sbj_viz=sbj_viz,
+        #              data_path=data_path, fwd_path=fwd_path, src_path=src_path,
+        #              lf_path=lf_path)
 
     def save_pkl(self, fpath, sbj=None, sbj_viz=None, data_path=None,
                  fwd_path=None, cov_path=None, src_path=None,
