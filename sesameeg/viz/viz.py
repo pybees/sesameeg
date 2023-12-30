@@ -11,6 +11,58 @@ from nilearn.image import index_img
 from pyvistaqt import BackgroundPlotter
 
 
+def plot_n_sources(inv_op, kind='bar', title=None):
+    """
+    Plot the probability of number of sources.
+
+    Parameters
+    ----------
+    inv_op : Instance of :py:class:`~sesameeg.Sesame`
+        Instance of `Sesame`.
+    kind : :py:class:`~str`
+        The kind of plot to draw. Options are: “bar”, “pie”.
+    title : :py:class:`~str` | None
+        Figure title.
+    """
+    _model_sel = inv_op.model_sel[-1]
+    _labels = np.array(
+        ['no sources', 'one source', 'two sources', 'three sources', 'four sources', 'five sources',
+         'six sources', 'seven sources', 'eight sources', 'nine sources', 'ten sources'])
+    _colors = np.asarray(plt.colormaps['tab10'].resampled(inv_op.max_n_dips).colors)
+    if kind == 'bar':
+        fig = plt.figure(title, figsize=(10, 5))
+
+        n_src = np.arange(inv_op.max_n_dips + 1)
+        bar_labels = n_src
+
+        plt.bar(list(n_src), _model_sel, label=bar_labels, color=_colors)
+
+        plt.ylim((0, 1))
+        plt.xticks(np.arange(0, inv_op.max_n_dips + 1, 1))
+        plt.yticks(np.arange(0, 1.1, 0.1))
+        plt.grid(axis='y')
+        fig.axes[0].set_axisbelow(True)
+
+        plt.xlabel('Number of sources')
+        plt.ylabel('Probability')
+        plt.title('Number of sources probability')
+
+        plt.show()
+    elif kind == 'pie':
+        _ms = _model_sel[np.nonzero(_model_sel)]
+        _lbl = _labels[np.nonzero(_model_sel)]
+        _clr = _colors[np.nonzero(_model_sel)]
+        _explode = [0 for i in _ms]
+        _explode[np.argmax(_ms)] += 0.1
+
+        fig = plt.figure(title)
+        plt.pie(_ms, labels=_lbl, colors=_clr, autopct='%1.1f%%', explode=_explode, shadow=True)
+        plt.title('Number of sources probability')
+        plt.show()
+    else:
+        raise ValueError("Parameter 'kind' may be set either to 'bar' or to 'pie'.")
+
+
 def plot_amplitudes(inv_op, title=None):
     """
     Plot the amplitude of the estimated sources as function of time.

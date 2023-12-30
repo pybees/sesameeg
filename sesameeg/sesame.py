@@ -16,7 +16,7 @@ from .particles import Particle
 from .utils import compute_neighbours_matrix, initialize_radius, \
     compute_neighbours_probability_matrix, estimate_noise_std, estimate_dip_mom_std
 from .io import _export_to_stc, _export_to_vol_stc, write_h5, write_pkl
-from .viz import plot_amplitudes, plot_stc, plot_vol_stc, plot_cloud_sources
+from .viz import plot_n_sources, plot_amplitudes, plot_stc, plot_vol_stc, plot_cloud_sources
 from .metrics import compute_goodness_of_fit, compute_sd
 
 
@@ -740,6 +740,17 @@ class Sesame(object):
         else:
             raise AttributeError('This method works only within MNE-Python environment. '
                                  'Use sesameeg.mne.prepare_sesame to instantiate the inverse operator.')
+
+    def plot_source_number(self, kind='bar'):
+        """
+        Plot the probability of number of sources.
+
+        Parameters
+        ----------
+        kind : :py:class:`~str`
+            The kind of plot to draw. Options are: “bar”, “pie”.
+        """
+        plot_n_sources(self, kind=kind, title=self.subject)
 
     def plot_source_amplitudes(self):
         """
