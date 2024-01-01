@@ -263,7 +263,7 @@ class EmpPdf(object):
             self.logweights = log_weights_aux
             self.ESS = np.float32(1. / np.square(weights_aux).sum())
 
-    def point_estimate(self, D, max_n_dips):
+    def point_estimate(self, D, max_n_dips, n_sources=None):
         """Computes a point estimate for the number of active dipoles and
         their locations from the posterior pdf.
 
@@ -274,24 +274,34 @@ class EmpPdf(object):
             brain discretization.
         max_n_dips : :py:class:`~int`
             The maximum number of dipoles allowed in a particle.
+        n_sources: :py:class:`~int` | None
+            If not None, manually set the number of sources of the dipole configuration.
         """
 
         if self.verbose:
             print('Computing estimates...')
         weights = np.exp(self.logweights)
 
-        # Step1: Number of Dipoles
-        #    1a) Compute model_selection
-        self.model_sel = np.zeros(max_n_dips+1)
+        if n_sources is None:
+            # Step1: Number of Dipoles
+            #    1a) Compute model_selection
+            self.model_sel = np.zeros(max_n_dips+1)
 
-        for i_p, _part in enumerate(self.particles):
-            if _part.n_dips <= max_n_dips:
-                self.model_sel[_part.n_dips] += weights[i_p]
+            for i_p, _part in enumerate(self.particles):
+                if _part.n_dips <= max_n_dips:
+                    self.model_sel[_part.n_dips] += weights[i_p]
+                else:
+                    raise ValueError('Particle {} has too many dipoles!'.format(i_p))
+
+            #     1b) Compute point estimation
+            self.est_n_dips = np.argmax(self.model_sel)
+        else:
+            if self.model_sel[n_sources] > 0:
+                print('Computing point estimates for user defined source configuration.')
+                self.est_n_dips = n_sources
             else:
-                raise ValueError('Particle {} has too many dipoles!'.format(i_p))
-
-        #     1b) Compute point estimation
-        self.est_n_dips = np.argmax(self.model_sel)
+                print('The selected configuration has zero probability! Nothing to plot.')
+                return
 
         # Step2: Positions of the dipoles
         if self.est_n_dips == 0:
@@ -334,3 +344,75 @@ class EmpPdf(object):
                 selected_est_sq = np.delete(est_sq, np.where(nod != self.est_n_dips))
                 _dip_mom_std = np.dot(selected_weights, selected_est_sq)
                 self.est_dip_mom_std = _dip_mom_std
+
+    # def point_estimate(self, D, max_n_dips):
+    #     """Computes a point estimate for the number of active dipoles and
+    #     their locations from the posterior pdf.
+    #
+    #     Parameters
+    #     ----------
+    #     D : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)
+    #         The Euclidean distance between the points in the
+    #         brain discretization.
+    #     max_n_dips : :py:class:`~int`
+    #         The maximum number of dipoles allowed in a particle.
+    #     """
+    #
+    #     if self.verbose:
+    #         print('Computing estimates...')
+    #     weights = np.exp(self.logweights)
+    #
+    #     # Step1: Number of Dipoles
+    #     #    1a) Compute model_selection
+    #     self.model_sel = np.zeros(max_n_dips+1)
+    #
+    #     for i_p, _part in enumerate(self.particles):
+    #         if _part.n_dips <= max_n_dips:
+    #             self.model_sel[_part.n_dips] += weights[i_p]
+    #         else:
+    #             raise ValueError('Particle {} has too many dipoles!'.format(i_p))
+    #
+    #     #     1b) Compute point estimation
+    #     self.est_n_dips = np.argmax(self.model_sel)
+    #
+    #     # Step2: Positions of the dipoles
+    #     if self.est_n_dips == 0:
+    #         self.est_locs = np.array([])
+    #         self.pmap = np.array([])
+    #     else:
+    #         nod = np.array([_part.n_dips for _part in self.particles])
+    #         selected_particles = np.delete(self.particles,
+    #                                        np.where(nod != self.est_n_dips))
+    #         selected_weights = np.delete(weights,
+    #                                      np.where(nod != self.est_n_dips))
+    #         ind_bestpar = np.argmax(selected_weights)
+    #         bestpart_locs = np.array([_dip.loc for _dip in
+    #                                   selected_particles[ind_bestpar].dipoles])
+    #         order_dip = np.empty([selected_particles.shape[0],
+    #                               self.est_n_dips], dtype='int')
+    #
+    #         all_perms_index = np.asarray(list(itertools.permutations(
+    #                                           range(self.est_n_dips))))
+    #
+    #         for i_p, _part in enumerate(selected_particles):
+    #             part_locs = np.array([_dip.loc for _dip in _part.dipoles])
+    #             OSPA = np.mean(D[part_locs[all_perms_index], bestpart_locs],
+    #                            axis=1)
+    #             bestperm = np.argmin(OSPA)
+    #             order_dip[i_p] = all_perms_index[bestperm]
+    #
+    #         self.pmap = np.zeros([self.est_n_dips, D.shape[0]])
+    #
+    #         for dip_idx in range(self.est_n_dips):
+    #             for i_p, _part in enumerate(selected_particles):
+    #                 loc = _part.dipoles[order_dip[i_p, dip_idx]].loc
+    #                 self.pmap[dip_idx, loc] += selected_weights[i_p]
+    #
+    #         self.est_locs = np.argmax(self.pmap, axis=1)
+    #
+    #         if self.hyper_q:
+    #             # Estimate dip mom std
+    #             est_sq = np.asarray([self.all_dip_mom_std[p][-1] for p in range(self.particles.shape[0])])
+    #             selected_est_sq = np.delete(est_sq, np.where(nod != self.est_n_dips))
+    #             _dip_mom_std = np.dot(selected_weights, selected_est_sq)
+    #             self.est_dip_mom_std = _dip_mom_std
