@@ -45,7 +45,7 @@ def plot_n_sources(inv_op, kind='bar', title=None):
 
         plt.xlabel('Number of sources')
         plt.ylabel('Probability')
-        plt.title('Number of sources probability')
+        plt.title('Marginal probability for the number of sources')
 
         plt.show()
     elif kind == 'pie':
@@ -57,7 +57,7 @@ def plot_n_sources(inv_op, kind='bar', title=None):
 
         fig = plt.figure(title)
         plt.pie(_ms, labels=_lbl, colors=_clr, autopct='%1.1f%%', explode=_explode, shadow=True)
-        plt.title('Number of sources probability')
+        plt.title('Marginal probability for the number of sources')
         plt.show()
     else:
         raise ValueError("Parameter 'kind' may be set either to 'bar' or to 'pie'.")
