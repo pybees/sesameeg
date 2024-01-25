@@ -339,6 +339,7 @@ pyvista.set_plot_theme('document')
 pyvista.global_theme.window_size = np.array([1024, 768]) * 2
 
 # sphinx-gallery configuration
+from sphinx_gallery.sorting import FileNameSortKey
 sphinx_gallery_conf = {
     'plot_gallery': 'True',  # Avoid annoying Unicode/bool default warning
     'image_scrapers': ('matplotlib', 'pyvista'),
@@ -346,6 +347,7 @@ sphinx_gallery_conf = {
     'backreferences_dir': os.path.join('generated'),
     'reference_url': {'sesameeg': None},
     'examples_dirs': ['../examples'],
+    'within_subsection_order': FileNameSortKey,
     'gallery_dirs': ['auto_examples'],
     'binder': {
         'org': 'pybees',

@@ -8,6 +8,7 @@
 
 import itertools
 import time
+import copy
 import numpy as np
 import scipy.spatial.distance as ssd
 from mne.evoked import EvokedArray
@@ -16,7 +17,7 @@ from .particles import Particle
 from .utils import compute_neighbours_matrix, initialize_radius, \
     compute_neighbours_probability_matrix, estimate_noise_std, estimate_dip_mom_std
 from .io import _export_to_stc, _export_to_vol_stc, write_h5, write_pkl
-from .viz import plot_amplitudes, plot_stc, plot_vol_stc, plot_cloud_sources
+from .viz import plot_n_sources, plot_amplitudes, plot_stc, plot_vol_stc, plot_cloud_sources
 from .metrics import compute_goodness_of_fit, compute_sd
 
 
@@ -741,13 +742,45 @@ class Sesame(object):
             raise AttributeError('This method works only within MNE-Python environment. '
                                  'Use sesameeg.mne.prepare_sesame to instantiate the inverse operator.')
 
-    def plot_source_amplitudes(self):
+    def plot_source_number(self, kind='bar'):
+        """
+        Plot the probability of number of sources.
+
+        Parameters
+        ----------
+        kind : :py:class:`~str`
+            The kind of plot to draw. Options are: “bar”, “pie”.
+        """
+        plot_n_sources(self, kind=kind, title=self.subject)
+
+    def plot_source_amplitudes(self, n_sources=None):
         """
         Plot the  amplitude of the estimated sources as function of time.
-        """
-        plot_amplitudes(self, title=self.subject)
 
-    def plot_sources(self, plot_kwargs=None, savepath=None, save_kwargs=None,
+        Parameters
+        ----------
+        n_sources: :py:class:`~int` | None
+            Set the number of sources of the alternative configuration to plot.
+            If None, plot the configuration with the estimated number of sources.
+        """
+        if n_sources is None:
+            inv_op = self
+        else:
+            inv_op = copy.deepcopy(self)
+            if inv_op.model_sel[-1][n_sources] > 0:
+                inv_op.posterior.point_estimate(inv_op.distance_matrix, inv_op.max_n_dips,
+                                                n_sources=n_sources)
+                inv_op.est_n_dips = [n_sources]
+                inv_op.est_locs = [inv_op.posterior.est_locs]
+                inv_op.pmap = [inv_op.posterior.pmap]
+                inv_op.compute_dip_mom(inv_op.est_locs[-1])
+            else:
+                print('The selected configuration has zero probability! Nothing to plot.')
+                return
+
+        plot_amplitudes(inv_op, title=inv_op.subject)
+
+    def plot_sources(self, n_sources=None, plot_kwargs=None, savepath=None, save_kwargs=None,
                      true_sources=None, force_open=False):
         """
         Plot the estimated sources. The default behaviour of the method is the following:
@@ -762,6 +795,9 @@ class Sesame(object):
 
         Parameters
         ----------
+        n_sources: :py:class:`~int` | None
+            Set the number of sources of the alternative configuration to plot.
+            If None, plot the configuration with the estimated number of sources.
         plot_kwargs : :py:class:`~dict` | None
             Additional arguments to :py:func:`~mne.viz.plot_source_estimates` or
             :py:func:`~nilearn.plotting.plot_stat_map` (e.g., dict(surface='white')).
@@ -775,17 +811,44 @@ class Sesame(object):
         force_open : :py:class:`~bool`
             If True, force the image to stay open.
         """
-        if self.forward is not None:
-            self.stc = self.compute_stc()
-            stc_kind = type(self.stc).__name__
+        if n_sources is None:
+            inv_op = self
+        else:
+            inv_op = copy.deepcopy(self)
+            if inv_op.model_sel[-1][n_sources] > 0:
+
+                inv_op.posterior.point_estimate(inv_op.distance_matrix, inv_op.max_n_dips,
+                                                n_sources=n_sources)
+                # Normalize pmap
+                _sum_aux = inv_op.posterior.pmap.sum() / n_sources
+                inv_op.posterior.pmap /= _sum_aux
+                # Set estimate values
+                inv_op.est_n_dips = [n_sources]
+                inv_op.est_locs = [inv_op.posterior.est_locs]
+                inv_op.pmap = [inv_op.posterior.pmap]
+
+                # Print results
+                print(f'    Selected number of sources: {inv_op.est_n_dips[-1]}')
+                print('    Estimated source locations:')
+                for _iloc, _loc in enumerate(inv_op.est_locs[-1]):
+                    print(f'        * source {_iloc + 1}: {inv_op.source_space[_loc]}')
+            else:
+                print('The selected configuration has zero probability! Nothing to plot.')
+                return
+
+        if inv_op.forward is not None:
+            inv_op.stc = inv_op.compute_stc()
+            stc_kind = type(inv_op.stc).__name__
             if stc_kind == 'SourceEstimate':
-                plot_stc(self, true_idxs=true_sources, savepath=savepath,
+                plot_stc(inv_op, true_idxs=true_sources, savepath=savepath,
                          plot_kwargs=plot_kwargs, save_kwargs=save_kwargs, force_open=force_open)
             elif stc_kind == 'VolSourceEstimate':
-                plot_vol_stc(self, savepath=savepath, plot_kwargs=plot_kwargs,
+                plot_vol_stc(inv_op, savepath=savepath, plot_kwargs=plot_kwargs,
                              save_kwargs=save_kwargs)
         else:
-            plot_cloud_sources(self, true_idxs=true_sources, savepath=savepath)
+            plot_cloud_sources(inv_op, true_idxs=true_sources, savepath=savepath)
+
+        del inv_op
 
     def save_h5(self, fpath, sbj=None, sbj_viz=None, data_path=None,
                 fwd_path=None, cov_path=None, src_path=None, lf_path=None):
