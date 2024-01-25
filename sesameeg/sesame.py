@@ -756,6 +756,12 @@ class Sesame(object):
     def plot_source_amplitudes(self, n_sources=None):
         """
         Plot the  amplitude of the estimated sources as function of time.
+
+        Parameters
+        ----------
+        n_sources: :py:class:`~int` | None
+            Set the number of sources of the alternative configuration to plot.
+            If None, plot the configuration with the estimated number of sources.
         """
         if n_sources is None:
             inv_op = self
