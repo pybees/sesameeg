@@ -37,6 +37,7 @@ Visualization
    :toctree: generated/
    :template: function.rst
 
+    plot_n_sources
     plot_stc
     plot_vol_stc
     plot_cloud_sources

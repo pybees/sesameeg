@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="Added plt.clf in plot_amplitudes">
+    <list default="true" id="0d63c92f-1ae7-478c-b016-75574a46dad7" name="Default Changelist" comment="bachetto nel plt stc">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sesameeg/sesame.py" beforeDir="false" afterPath="$PROJECT_DIR$/sesameeg/sesame.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,13 +195,17 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python.plot_01_compute_sesame_meg_auditory_mne.executor&quot;: &quot;Run&quot;,
+    &quot;Python.plot_07_compute_sesame_esi.executor&quot;: &quot;Run&quot;,
+    &quot;Python.plot_compute_sesame_esi.executor&quot;: &quot;Run&quot;,
+    &quot;Python.plot_compute_sesame_meg_simulated_frequency_mne.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;fix__doc&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/gv/Codici/Python_Scripts/sesameeg&quot;
   }
 }</component>
-  <component name="RunManager" selected="Python.plot_compute_sesame_meg_auditory_fixed_ori_mne">
+  <component name="RunManager" selected="Python.plot_01_compute_sesame_meg_auditory_mne">
     <configuration default="true" type="tests" factoryName="Attests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -221,6 +224,94 @@
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
       <method />
+    </configuration>
+    <configuration name="plot_01_compute_sesame_meg_auditory_mne" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="mne-project-template" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/plot_01_compute_sesame_meg_auditory_mne.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="plot_03_compute_sesame_meg_auditory_fixed_ori_mne" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="mne-project-template" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/plot_03_compute_sesame_meg_auditory_fixed_ori_mne.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="plot_06_compute_sesame_meg_simulated_frequency_mne" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="mne-project-template" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/plot_06_compute_sesame_meg_simulated_frequency_mne.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="plot_07_compute_sesame_esi" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="mne-project-template" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/plot_07_compute_sesame_esi.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <configuration name="plot_analyse_sample_auditory" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="mne-project-template" />
@@ -244,115 +335,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="plot_compute_sesame_meg_auditory_fixed_ori_mne" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="mne-project-template" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/plot_compute_sesame_meg_auditory_fixed_ori_mne.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="plot_meg_auditory_sesame_volume" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="mne-project-template" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/plot_meg_auditory_sesame_volume.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="plot_meg_sample_auditory_fixed_ori" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="mne-project-template" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/plot_meg_sample_auditory_fixed_ori.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="plot_meg_simulated_sesame_frequency" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="mne-project-template" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/plot_meg_simulated_sesame_frequency.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <list>
+      <item itemvalue="Python.plot_01_compute_sesame_meg_auditory_mne" />
+      <item itemvalue="Python.plot_03_compute_sesame_meg_auditory_fixed_ori_mne" />
+      <item itemvalue="Python.plot_06_compute_sesame_meg_simulated_frequency_mne" />
+      <item itemvalue="Python.plot_07_compute_sesame_esi" />
       <item itemvalue="Python.plot_analyse_sample_auditory" />
-      <item itemvalue="Python.plot_compute_sesame_meg_auditory_fixed_ori_mne" />
-      <item itemvalue="Python.plot_meg_auditory_sesame_volume" />
-      <item itemvalue="Python.plot_meg_sample_auditory_fixed_ori" />
-      <item itemvalue="Python.plot_meg_simulated_sesame_frequency" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.plot_compute_sesame_meg_auditory_fixed_ori_mne" />
+        <item itemvalue="Python.plot_01_compute_sesame_meg_auditory_mne" />
+        <item itemvalue="Python.plot_07_compute_sesame_esi" />
+        <item itemvalue="Python.plot_06_compute_sesame_meg_simulated_frequency_mne" />
+        <item itemvalue="Python.plot_03_compute_sesame_meg_auditory_fixed_ori_mne" />
         <item itemvalue="Python.plot_analyse_sample_auditory" />
-        <item itemvalue="Python.plot_meg_sample_auditory_fixed_ori" />
-        <item itemvalue="Python.plot_meg_auditory_sesame_volume" />
-        <item itemvalue="Python.plot_meg_simulated_sesame_frequency" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-67fca87a943a-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.11799.259" />
+        <option value="bundled-python-sdk-50da183f06c8-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.13135.95" />
       </set>
     </attachedChunks>
   </component>
@@ -603,7 +606,71 @@
       <option name="project" value="LOCAL" />
       <updated>1701791030773</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="corrected documentation">
+      <option name="closed" value="true" />
+      <created>1702474729020</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1702474729020</updated>
+    </task>
+    <task id="LOCAL-00035" summary="blob colors in plot_point_cloud;&#10;crop data_times/freqs in init">
+      <option name="closed" value="true" />
+      <created>1702653475313</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1702653475313</updated>
+    </task>
+    <task id="LOCAL-00036" summary="correzione commento in esempio frequenza">
+      <option name="closed" value="true" />
+      <created>1702986845912</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1702986845912</updated>
+    </task>
+    <task id="LOCAL-00037" summary="plot number of sources">
+      <option name="closed" value="true" />
+      <created>1703951260979</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1703951260979</updated>
+    </task>
+    <task id="LOCAL-00038" summary="plot alternative configuration">
+      <option name="closed" value="true" />
+      <created>1704133413789</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1704133413789</updated>
+    </task>
+    <task id="LOCAL-00039" summary="alternative configuration example; set example order">
+      <option name="closed" value="true" />
+      <created>1704473936535</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1704473936535</updated>
+    </task>
+    <task id="LOCAL-00040" summary="bachetti nel doc">
+      <option name="closed" value="true" />
+      <created>1706195485406</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1706195485406</updated>
+    </task>
+    <task id="LOCAL-00041" summary="bachetto nel plt stc">
+      <option name="closed" value="true" />
+      <created>1706199131668</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1706199131668</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -641,14 +708,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Sistemato il doc, spostata la funzione compjute gamma" />
-    <MESSAGE value="*** Rimosso gamma hig,low e delta min. max dai parametri in EmpPdf.compute_exponent&#10;sistemato il doc" />
-    <MESSAGE value="iniziato a sistemare mathematical model" />
-    <MESSAGE value="continuato a sistemare mathematical model&#10;cambiati leggermente gli esempi" />
-    <MESSAGE value="sistemato  mathematical model (manca la parte su hyperprior)&#10;aggiunto save_all in save_pkl&#10;" />
-    <MESSAGE value="aggiunto esempio in frequenza" />
-    <MESSAGE value="Introdotto parametro Fourier_transf per effettuare passaggio a dominio frequenza.&#10;Cambiato metodo di input topografie. Ora top_min e top_max sono in secondi o in Hertz.&#10; Modificato I/O di conseguenza&#10; Modificati gli esempi di conseguenza." />
-    <MESSAGE value="Sistemati &quot;Check by Sara&quot; punti 1 e 2" />
     <MESSAGE value="* Sesame ora legge dati epocati&#10;* BUG: sistemato calcolo di final_s_q  (i.e. media pesata della stima di s_q)  in caso di hyperprior quando non vengono stimati dipoli&#10;* Sistemate questioni 3,6,8,9,10 sollevate da Sara nel google doc" />
     <MESSAGE value="* DEPRECATION: sostituito np.random.random_integers(0, self.n_dips-1)  con np.random.randint(0, self.n_dips)  in particles.py:245&#10;&#10;* corretto commento errato su ultima figura in esempio volume" />
     <MESSAGE value="* cambio nomi variabili e metodi &#10;* aggiunto cov_path in I/O" />
@@ -666,7 +725,15 @@
     <MESSAGE value="* modifica stima dip_mom_std&#10;prova binder" />
     <MESSAGE value="* tolto codice commentato in emp_pdf e tolti inputs non usati in sesame" />
     <MESSAGE value="Added plt.clf in plot_amplitudes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added plt.clf in plot_amplitudes" />
+    <MESSAGE value="corrected documentation" />
+    <MESSAGE value="blob colors in plot_point_cloud;&#10;crop data_times/freqs in init" />
+    <MESSAGE value="correzione commento in esempio frequenza" />
+    <MESSAGE value="plot number of sources" />
+    <MESSAGE value="plot alternative configuration" />
+    <MESSAGE value="alternative configuration example; set example order" />
+    <MESSAGE value="bachetti nel doc" />
+    <MESSAGE value="bachetto nel plt stc" />
+    <option name="LAST_COMMIT_MESSAGE" value="bachetto nel plt stc" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/doc/api.rst">

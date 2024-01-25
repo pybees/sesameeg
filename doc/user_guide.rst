@@ -16,3 +16,4 @@ This is an example on how to import :meth:`mnetemplate.foo`::
 Once imported, you can call it::
 
     >>> print(foo())
+
