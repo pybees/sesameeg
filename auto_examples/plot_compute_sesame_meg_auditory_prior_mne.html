@@ -18,8 +18,6 @@
     <script src="../_static/js/copybutton.js?v=26522df0"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Compute SESAME inverse solution on evoked data in volume source space" href="plot_compute_sesame_meg_auditory_volume_mne.html" />
-    <link rel="prev" title="Compute SESAME inverse solution on evoked data with source constraints" href="plot_compute_sesame_meg_auditory_fixed_ori_mne.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -95,7 +93,7 @@
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-plot-compute-sesame-meg-auditory-prior-mne-py"><span class="std std-ref">Go to the end</span></a>
-to download the full example code</p>
+to download the full example code or to run this example in your browser via Binder</p>
 </div>
 <section class="sphx-glr-example-title" id="compute-sesame-inverse-solution-on-evoked-data-with-given-source-location-prior">
 <span id="sphx-glr-auto-examples-plot-compute-sesame-meg-auditory-prior-mne-py"></span><h1>Compute SESAME inverse solution on evoked data with given source location prior<a class="headerlink" href="#compute-sesame-inverse-solution-on-evoked-data-with-given-source-location-prior" title="Link to this heading">¶</a></h1>
@@ -117,7 +115,7 @@ dataset.</p>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">mne.datasets</span> <span class="kn">import</span> <span class="n">sample</span>
 <span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <a href="https://mne.tools/stable/generated/mne.read_forward_solution.html#mne.read_forward_solution" title="mne.read_forward_solution" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">read_forward_solution</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.pick_types_forward.html#mne.pick_types_forward" title="mne.pick_types_forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">pick_types_forward</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.read_evokeds.html#mne.read_evokeds" title="mne.read_evokeds" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">read_evokeds</span></a>
-<span class="kn">from</span> <span class="nn">sesameeg.utils</span> <span class="kn">import</span> <span class="n">prior_loc_from_labels</span>
+<span class="kn">from</span> <span class="nn">sesameeg.utils</span> <span class="kn">import</span> <a href="../generated/sesameeg.utils.prior_loc_from_labels.html#sesameeg.utils.prior_loc_from_labels" title="sesameeg.utils.prior_loc_from_labels" class="sphx-glr-backref-module-sesameeg-utils sphx-glr-backref-type-py-function"><span class="n">prior_loc_from_labels</span></a>
 <span class="kn">from</span> <span class="nn">sesameeg.mne</span> <span class="kn">import</span> <a href="../generated/sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame" class="sphx-glr-backref-module-sesameeg-mne sphx-glr-backref-type-py-function"><span class="n">prepare_sesame</span></a>
 
 
@@ -208,7 +206,7 @@ Removing projector &lt;Projection | Average EEG reference, active : True, n_chan
 </pre></div>
 </div>
 <p>A priori select some ROIs</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prior_rois</span></a> <span class="o">=</span> <span class="n">prior_loc_from_labels</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">subject</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">subjects_dir</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="mne.Forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fwd</span></a><span class="p">,</span> <span class="s1">&#39;aparc&#39;</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">prior_rois</span></a> <span class="o">=</span> <a href="../generated/sesameeg.utils.prior_loc_from_labels.html#sesameeg.utils.prior_loc_from_labels" title="sesameeg.utils.prior_loc_from_labels" class="sphx-glr-backref-module-sesameeg-utils sphx-glr-backref-type-py-function"><span class="n">prior_loc_from_labels</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">subject</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">subjects_dir</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="mne.Forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fwd</span></a><span class="p">,</span> <span class="s1">&#39;aparc&#39;</span><span class="p">,</span>
                                    <span class="p">[</span><span class="s1">&#39;middletemporal-lh&#39;</span><span class="p">,</span> <span class="s1">&#39;middletemporal-rh&#39;</span><span class="p">,</span>
                                     <span class="s1">&#39;superiortemporal-lh&#39;</span><span class="p">,</span> <span class="s1">&#39;superiortemporal-rh&#39;</span><span class="p">])</span>
 </pre></div>
@@ -255,14 +253,14 @@ Sampling hyperprior for dipole moment std.
 Estimating noise std...[done]
  Estimated noise std: 3.9983e-12
 Computing inverse solution. This will take a while...
-    Estimated dipole strength variance: 3.1238631691286244e-08
+Estimated dipole strength variance: 3.0464189766905766e-08
     Estimated number of sources: 2
     Estimated source locations:
-        * source 1: [0.04589902 0.00942308 0.06544629]
-        * source 2: [-0.05817005  0.00491732  0.05770831]
-[done in 107 iterations]
-    Goodness of fit with the recorded data: 69.95%
-    Source Dispersion: 0.0 mm
+        * source 1: [-0.05817005  0.00491732  0.05770831]
+        * source 2: [0.04589902 0.00942308 0.06544629]
+[done in 43 iterations]
+    Goodness of fit with the recorded data: 69.92%
+    Source Dispersion: 0.47 mm
 </pre></div>
 </div>
 <p>Visualize the posterior map of the dipoles’ location
@@ -285,8 +283,11 @@ Computing inverse solution. This will take a while...
 <span class="c1"># _sesame.save_pkl(save_fname, sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 22.844 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 9.838 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-compute-sesame-meg-auditory-prior-mne-py">
+<div class="binder-badge docutils container">
+<a class="reference external image-reference" href="https://mybinder.org/v2/gh/pybees/sesameeg/master?urlpath=lab/tree/notebooks/auto_examples/plot_compute_sesame_meg_auditory_prior_mne.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>
+</div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/a38f40e11aed2ca503df3574436a6315/plot_compute_sesame_meg_auditory_prior_mne.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_compute_sesame_meg_auditory_prior_mne.py</span></code></a></p>
 </div>

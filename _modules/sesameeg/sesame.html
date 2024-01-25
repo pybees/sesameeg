@@ -100,19 +100,16 @@
 
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.spatial.distance</span> <span class="k">as</span> <span class="nn">ssd</span>
-<span class="kn">from</span> <span class="nn">mne.cov</span> <span class="kn">import</span> <span class="n">compute_whitener</span>
 <span class="kn">from</span> <span class="nn">mne.evoked</span> <span class="kn">import</span> <span class="n">EvokedArray</span>
-<span class="kn">from</span> <span class="nn">mne.forward</span> <span class="kn">import</span> <span class="n">_select_orient_forward</span>
 <span class="kn">from</span> <span class="nn">.emp_pdf</span> <span class="kn">import</span> <span class="n">EmpPdf</span>
 <span class="kn">from</span> <span class="nn">.particles</span> <span class="kn">import</span> <span class="n">Particle</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">compute_neighbours_matrix</span><span class="p">,</span> <span class="n">initialize_radius</span><span class="p">,</span> \
-    <span class="n">compute_neighbours_probability_matrix</span><span class="p">,</span> <span class="n">estimate_noise_std</span><span class="p">,</span> <span class="n">estimate_dip_mom_std</span><span class="p">,</span> \
-    <span class="n">compute_correlation_distance_matix</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">is_epochs</span><span class="p">,</span> <span class="n">is_evoked</span><span class="p">,</span> <span class="n">is_forward</span><span class="p">,</span> <span class="n">normalize</span>
+    <span class="n">compute_neighbours_probability_matrix</span><span class="p">,</span> <span class="n">estimate_noise_std</span><span class="p">,</span> <span class="n">estimate_dip_mom_std</span>
 <span class="kn">from</span> <span class="nn">.io</span> <span class="kn">import</span> <span class="n">_export_to_stc</span><span class="p">,</span> <span class="n">_export_to_vol_stc</span><span class="p">,</span> <span class="n">write_h5</span><span class="p">,</span> <span class="n">write_pkl</span>
-<span class="kn">from</span> <span class="nn">.viz</span> <span class="kn">import</span> <span class="n">plot_amplitudes</span><span class="p">,</span> <span class="n">plot_stc</span><span class="p">,</span> <span class="n">plot_vol_stc</span><span class="p">,</span> <span class="n">plot_cloud_sources</span>
+<span class="kn">from</span> <span class="nn">.viz</span> <span class="kn">import</span> <span class="n">plot_n_sources</span><span class="p">,</span> <span class="n">plot_amplitudes</span><span class="p">,</span> <span class="n">plot_stc</span><span class="p">,</span> <span class="n">plot_vol_stc</span><span class="p">,</span> <span class="n">plot_cloud_sources</span>
 <span class="kn">from</span> <span class="nn">.metrics</span> <span class="kn">import</span> <span class="n">compute_goodness_of_fit</span><span class="p">,</span> <span class="n">compute_sd</span>
 
 
@@ -164,16 +161,6 @@
 <span class="sd">        applied.</span>
 <span class="sd">    hyper_q : :py:class:`~bool`</span>
 <span class="sd">        If True, a hyperprior pdf on the dipole moment std will be used.</span>
-<span class="sd">    top_min : :py:class:`~float` | None</span>
-<span class="sd">        First topography to be included in the segment of data to be analyzed.</span>
-<span class="sd">        It is meant to be expressed either in seconds in the time domain or</span>
-<span class="sd">        in Hertz in the frequency domain.</span>
-<span class="sd">        If None, it is set to the first topography of the input data.</span>
-<span class="sd">    top_max : :py:class:`~float` | None</span>
-<span class="sd">        Last topography to be included in the segment of data to be analyzed.</span>
-<span class="sd">        It is meant to be expressed either in seconds in the time domain or</span>
-<span class="sd">        in Hertz in the frequency domain.</span>
-<span class="sd">        If None, it is set to the last topography of the input data.</span>
 <span class="sd">    lam : :py:class:`~float`</span>
 <span class="sd">        The parameter of the Poisson prior pdf on the number of dipoles.</span>
 <span class="sd">    max_n_dips : :py:class:`~int`</span>
@@ -293,6 +280,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">n_parts</span> <span class="o">=</span> <span class="n">n_parts</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lam</span> <span class="o">=</span> <span class="n">lam</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_n_dips</span> <span class="o">=</span> <span class="n">max_n_dips</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s_min</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">s_min</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">s_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s_max</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">s_max</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">s_max</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">subsample</span> <span class="o">=</span> <span class="n">subsample</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span> <span class="o">=</span> <span class="n">hyper_q</span>
@@ -347,15 +336,19 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">neigh_p</span> <span class="o">=</span> <span class="n">np_matrix</span>
 
         <span class="c1">#  Data</span>
-        <span class="k">if</span> <span class="n">s_min</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">s_min</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="n">s_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">s_max</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="n">subsample</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Subsampling data with step </span><span class="si">{</span><span class="n">subsample</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">r_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">s_min</span><span class="p">:</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">subsample</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">r_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_min</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">subsample</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_times</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data_times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_times</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">s_min</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">subsample</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_freqs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data_freqs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_freqs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">s_min</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">subsample</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">r_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">s_min</span><span class="p">:</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">r_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">s_min</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_times</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data_times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_times</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">s_min</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_freqs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data_freqs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_freqs</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">s_min</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
 
         <span class="c1"># Dipole moment std</span>
         <span class="k">if</span> <span class="n">dip_mom_std</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -386,16 +379,12 @@
                   <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_std</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_resample_it</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_sel</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pmap</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">est_n_dips</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">est_locs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_moms</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">final_dip_mom_std</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model_sel</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pmap</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_parts</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span> <span class="o">=</span> <span class="n">EmpPdf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_parts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_verts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam</span><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dip_mom_std</span><span class="p">,</span>
                                 <span class="n">prior_locs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">prior_locs</span><span class="p">,</span> <span class="n">fixed_ori</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fixed_ori</span><span class="p">,</span>
@@ -644,7 +633,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[done]&#39;</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computing inverse solution. This will take a while...&#39;</span><span class="p">)</span>
-        <span class="c1"># --------- INIZIALIZATION ------------</span>
+        <span class="c1"># --------------- INITIALIZATION ---------------</span>
         <span class="c1"># Samples are drawn from the prior distribution and weigths are set as</span>
         <span class="c1"># uniform.</span>
         <span class="n">nd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">_part</span><span class="o">.</span><span class="n">n_dips</span> <span class="k">for</span> <span class="n">_part</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">particles</span><span class="p">])</span>
@@ -657,10 +646,6 @@
             <span class="n">nd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">_part</span><span class="o">.</span><span class="n">n_dips</span> <span class="k">for</span> <span class="n">_part</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">particles</span><span class="p">])</span>
 
         <span class="c1"># Point estimation for the first iteration</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">i_p</span><span class="p">,</span> <span class="n">_part</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">particles</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">[</span><span class="n">i_p</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">[</span><span class="n">i_p</span><span class="p">],</span>
-                                              <span class="n">_part</span><span class="o">.</span><span class="n">dip_mom_std</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">estimate_all</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">point_estimate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_matrix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_n_dips</span><span class="p">)</span>
 
@@ -668,8 +653,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">model_sel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">model_sel</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">est_locs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">est_locs</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pmap</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">pmap</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">)</span>
 
-        <span class="c1"># ----------- MAIN CICLE --------------</span>
+        <span class="c1"># --------------- MAIN CYCLE ---------------</span>
 
         <span class="k">while</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">exponents</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">time_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -688,14 +675,10 @@
 
             <span class="c1"># STEP 2: Sampling.</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_verts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lead_field</span><span class="p">,</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">neigh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">neigh_p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_std</span><span class="p">,</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">lam</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_n_dips</span><span class="p">)</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">neigh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">neigh_p</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_std</span><span class="p">,</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">lam</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_n_dips</span><span class="p">)</span>
 
             <span class="c1"># STEP 3: Point Estimation</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">i_p</span><span class="p">,</span> <span class="n">_part</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">particles</span><span class="p">):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">[</span><span class="n">i_p</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">[</span><span class="n">i_p</span><span class="p">],</span>
-                                                  <span class="n">_part</span><span class="o">.</span><span class="n">dip_mom_std</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">estimate_all</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">point_estimate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_matrix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_n_dips</span><span class="p">)</span>
 
@@ -703,6 +686,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">model_sel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">model_sel</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">est_locs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">est_locs</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pmap</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">pmap</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">)</span>
 
             <span class="c1"># STEP 4: compute new exponent and new weights</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">compute_exponent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_std</span><span class="p">)</span>
@@ -714,28 +699,23 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-------------------------------&#39;</span><span class="p">)</span>
 
         <span class="c1"># Point estimation</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">i_p</span><span class="p">,</span> <span class="n">_part</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">particles</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">[</span><span class="n">i_p</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">[</span><span class="n">i_p</span><span class="p">],</span>
-                                              <span class="n">_part</span><span class="o">.</span><span class="n">dip_mom_std</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">point_estimate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distance_matrix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_n_dips</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">est_n_dips</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">est_n_dips</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_sel</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">model_sel</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">est_locs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">est_locs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pmap</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">pmap</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Estimated dipole strength variance: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
         <span class="k">if</span> <span class="n">estimate_dip_mom</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">est_n_dips</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_moms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
-                    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">logweights</span><span class="p">)</span>
-                    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-15</span>
-                    <span class="n">est_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_parts</span><span class="p">)])</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">final_dip_mom_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">est_sq</span><span class="p">)</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Estimated dipole strength variance: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">final_dip_mom_std</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">compute_dip_mom</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">est_locs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
+        <span class="c1"># Print results</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;    Estimated number of sources: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">est_n_dips</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">est_n_dips</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    Estimated source locations:&#39;</span><span class="p">)</span>
@@ -758,12 +738,7 @@
         <span class="p">[</span><span class="n">n_sens</span><span class="p">,</span> <span class="n">n_time</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r_data</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
-            <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">logweights</span><span class="p">)</span>
-            <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-15</span>
-            <span class="n">est_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_parts</span><span class="p">)])</span>
-            <span class="n">_dip_mom_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">est_sq</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">final_dip_mom_std</span> <span class="o">=</span> <span class="n">_dip_mom_std</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    Estimated dipole strength variance: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_dip_mom_std</span><span class="p">))</span>
+            <span class="n">_dip_mom_std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_dip_mom_std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dip_mom_std</span>
 
@@ -772,13 +747,13 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">([[</span><span class="mi">3</span> <span class="o">*</span> <span class="n">est_locs</span><span class="p">[</span><span class="n">idip</span><span class="p">],</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">est_locs</span><span class="p">[</span><span class="n">idip</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
                              <span class="mi">3</span> <span class="o">*</span> <span class="n">est_locs</span><span class="p">[</span><span class="n">idip</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">idip</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">est_num</span><span class="p">)])</span>
+
         <span class="n">Gc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lead_field</span><span class="p">[:,</span> <span class="n">ind</span><span class="p">]</span>
         <span class="n">sigma</span> <span class="o">=</span> <span class="p">(</span><span class="n">_dip_mom_std</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_std</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Gc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Gc</span><span class="p">))</span> <span class="o">+</span>\
             <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n_sens</span><span class="p">)</span>
         <span class="n">kal_mat</span> <span class="o">=</span> <span class="p">(</span><span class="n">_dip_mom_std</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_std</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">Gc</span><span class="p">),</span>
                                                         <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">sigma</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_moms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">kal_mat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_data</span><span class="p">[:,</span> <span class="n">t</span><span class="p">])</span>
-                              <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_time</span><span class="p">)])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_moms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">kal_mat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_data</span><span class="p">[:,</span> <span class="n">t</span><span class="p">])</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_time</span><span class="p">)])</span></div>
 
 
 <div class="viewcode-block" id="Sesame.goodness_of_fit">
@@ -876,18 +851,53 @@
                                  <span class="s1">&#39;Use sesameeg.mne.prepare_sesame to instantiate the inverse operator.&#39;</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="Sesame.plot_source_number">
+<a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_source_number">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_source_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot the probability of number of sources.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kind : :py:class:`~str`</span>
+<span class="sd">            The kind of plot to draw. Options are: “bar”, “pie”.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plot_n_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="Sesame.plot_source_amplitudes">
 <a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_source_amplitudes">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_source_amplitudes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">plot_source_amplitudes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_sources</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the  amplitude of the estimated sources as function of time.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n_sources: :py:class:`~int` | None</span>
+<span class="sd">            Set the number of sources of the alternative configuration to plot.</span>
+<span class="sd">            If None, plot the configuration with the estimated number of sources.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">plot_amplitudes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">n_sources</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">inv_op</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inv_op</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">model_sel</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">n_sources</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">inv_op</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">point_estimate</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">distance_matrix</span><span class="p">,</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">max_n_dips</span><span class="p">,</span>
+                                                <span class="n">n_sources</span><span class="o">=</span><span class="n">n_sources</span><span class="p">)</span>
+                <span class="n">inv_op</span><span class="o">.</span><span class="n">est_n_dips</span> <span class="o">=</span> <span class="p">[</span><span class="n">n_sources</span><span class="p">]</span>
+                <span class="n">inv_op</span><span class="o">.</span><span class="n">est_locs</span> <span class="o">=</span> <span class="p">[</span><span class="n">inv_op</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">est_locs</span><span class="p">]</span>
+                <span class="n">inv_op</span><span class="o">.</span><span class="n">pmap</span> <span class="o">=</span> <span class="p">[</span><span class="n">inv_op</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">pmap</span><span class="p">]</span>
+                <span class="n">inv_op</span><span class="o">.</span><span class="n">compute_dip_mom</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">est_locs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The selected configuration has zero probability! Nothing to plot.&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="n">plot_amplitudes</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">inv_op</span><span class="o">.</span><span class="n">subject</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Sesame.plot_sources">
 <a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_sources">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">plot_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">true_sources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_open</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the estimated sources. The default behaviour of the method is the following:</span>
@@ -902,6 +912,9 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        n_sources: :py:class:`~int` | None</span>
+<span class="sd">            Set the number of sources of the alternative configuration to plot.</span>
+<span class="sd">            If None, plot the configuration with the estimated number of sources.</span>
 <span class="sd">        plot_kwargs : :py:class:`~dict` | None</span>
 <span class="sd">            Additional arguments to :py:func:`~mne.viz.plot_source_estimates` or</span>
 <span class="sd">            :py:func:`~nilearn.plotting.plot_stat_map` (e.g., dict(surface=&#39;white&#39;)).</span>
@@ -915,17 +928,44 @@
 <span class="sd">        force_open : :py:class:`~bool`</span>
 <span class="sd">            If True, force the image to stay open.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">stc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_stc</span><span class="p">()</span>
-            <span class="n">stc_kind</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stc</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">if</span> <span class="n">n_sources</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">inv_op</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inv_op</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">model_sel</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">n_sources</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+                <span class="n">inv_op</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">point_estimate</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">distance_matrix</span><span class="p">,</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">max_n_dips</span><span class="p">,</span>
+                                                <span class="n">n_sources</span><span class="o">=</span><span class="n">n_sources</span><span class="p">)</span>
+                <span class="c1"># Normalize pmap</span>
+                <span class="n">_sum_aux</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">pmap</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">n_sources</span>
+                <span class="n">inv_op</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">pmap</span> <span class="o">/=</span> <span class="n">_sum_aux</span>
+                <span class="c1"># Set estimate values</span>
+                <span class="n">inv_op</span><span class="o">.</span><span class="n">est_n_dips</span> <span class="o">=</span> <span class="p">[</span><span class="n">n_sources</span><span class="p">]</span>
+                <span class="n">inv_op</span><span class="o">.</span><span class="n">est_locs</span> <span class="o">=</span> <span class="p">[</span><span class="n">inv_op</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">est_locs</span><span class="p">]</span>
+                <span class="n">inv_op</span><span class="o">.</span><span class="n">pmap</span> <span class="o">=</span> <span class="p">[</span><span class="n">inv_op</span><span class="o">.</span><span class="n">posterior</span><span class="o">.</span><span class="n">pmap</span><span class="p">]</span>
+
+                <span class="c1"># Print results</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;    Selected number of sources: </span><span class="si">{</span><span class="n">inv_op</span><span class="o">.</span><span class="n">est_n_dips</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    Estimated source locations:&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">_iloc</span><span class="p">,</span> <span class="n">_loc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">est_locs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;        * source </span><span class="si">{</span><span class="n">_iloc</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">inv_op</span><span class="o">.</span><span class="n">source_space</span><span class="p">[</span><span class="n">_loc</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The selected configuration has zero probability! Nothing to plot.&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">forward</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">compute_stc</span><span class="p">()</span>
+            <span class="n">stc_kind</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
             <span class="k">if</span> <span class="n">stc_kind</span> <span class="o">==</span> <span class="s1">&#39;SourceEstimate&#39;</span><span class="p">:</span>
-                <span class="n">plot_stc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">true_idxs</span><span class="o">=</span><span class="n">true_sources</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="n">savepath</span><span class="p">,</span>
+                <span class="n">plot_stc</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">true_idxs</span><span class="o">=</span><span class="n">true_sources</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="n">savepath</span><span class="p">,</span>
                          <span class="n">plot_kwargs</span><span class="o">=</span><span class="n">plot_kwargs</span><span class="p">,</span> <span class="n">save_kwargs</span><span class="o">=</span><span class="n">save_kwargs</span><span class="p">,</span> <span class="n">force_open</span><span class="o">=</span><span class="n">force_open</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">stc_kind</span> <span class="o">==</span> <span class="s1">&#39;VolSourceEstimate&#39;</span><span class="p">:</span>
-                <span class="n">plot_vol_stc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="n">savepath</span><span class="p">,</span> <span class="n">plot_kwargs</span><span class="o">=</span><span class="n">plot_kwargs</span><span class="p">,</span>
+                <span class="n">plot_vol_stc</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="n">savepath</span><span class="p">,</span> <span class="n">plot_kwargs</span><span class="o">=</span><span class="n">plot_kwargs</span><span class="p">,</span>
                              <span class="n">save_kwargs</span><span class="o">=</span><span class="n">save_kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">plot_cloud_sources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="n">savepath</span><span class="p">)</span></div>
+            <span class="n">plot_cloud_sources</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">true_idxs</span><span class="o">=</span><span class="n">true_sources</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="n">savepath</span><span class="p">)</span>
+
+        <span class="k">del</span> <span class="n">inv_op</span></div>
 
 
 <div class="viewcode-block" id="Sesame.save_h5">
@@ -953,17 +993,31 @@
 <span class="sd">        lf_path : :py:class:`~str` | None</span>
 <span class="sd">            The path to the leadfield matrix file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fourier</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="n">write_h5</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">top_min</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">top_max</span><span class="p">,</span>
-                     <span class="n">subsample</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">subsample</span><span class="p">,</span> <span class="n">sbj</span><span class="o">=</span><span class="n">sbj</span><span class="p">,</span> <span class="n">sbj_viz</span><span class="o">=</span><span class="n">sbj_viz</span><span class="p">,</span>
-                     <span class="n">data_path</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span> <span class="n">fwd_path</span><span class="o">=</span><span class="n">fwd_path</span><span class="p">,</span> <span class="n">src_path</span><span class="o">=</span><span class="n">src_path</span><span class="p">,</span>
-                     <span class="n">lf_path</span><span class="o">=</span><span class="n">lf_path</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">write_h5</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="n">fmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">top_min</span><span class="p">,</span> <span class="n">fmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">top_max</span><span class="p">,</span>
-                     <span class="n">subsample</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">subsample</span><span class="p">,</span> <span class="n">sbj</span><span class="o">=</span><span class="n">sbj</span><span class="p">,</span> <span class="n">sbj_viz</span><span class="o">=</span><span class="n">sbj_viz</span><span class="p">,</span>
-                     <span class="n">data_path</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span> <span class="n">fwd_path</span><span class="o">=</span><span class="n">fwd_path</span><span class="p">,</span> <span class="n">src_path</span><span class="o">=</span><span class="n">src_path</span><span class="p">,</span>
-                     <span class="n">lf_path</span><span class="o">=</span><span class="n">lf_path</span><span class="p">)</span></div>
 
+        <span class="n">h5_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">smin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">s_min</span><span class="p">,</span> <span class="n">smax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">s_max</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">subsample</span><span class="p">,</span>
+                         <span class="n">sbj</span><span class="o">=</span><span class="n">sbj</span><span class="p">,</span> <span class="n">sbj_viz</span><span class="o">=</span><span class="n">sbj_viz</span><span class="p">,</span> <span class="n">data_path</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span> <span class="n">fwd_path</span><span class="o">=</span><span class="n">fwd_path</span><span class="p">,</span>
+                         <span class="n">src_path</span><span class="o">=</span><span class="n">src_path</span><span class="p">,</span> <span class="n">lf_path</span><span class="o">=</span><span class="n">lf_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_times</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">h5_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data_times</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_times</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_freqs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">h5_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">data_freqs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_freqs</span><span class="p">)</span>
+
+        <span class="n">write_h5</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">h5_kwargs</span><span class="p">)</span></div>
+
+
+
+        <span class="c1"># if self.fourier is False:</span>
+        <span class="c1">#     write_h5(fpath, self, tmin=self.top_min, tmax=self.top_max,</span>
+        <span class="c1">#              subsample=self.subsample, sbj=sbj, sbj_viz=sbj_viz,</span>
+        <span class="c1">#              data_path=data_path, fwd_path=fwd_path, src_path=src_path,</span>
+        <span class="c1">#              lf_path=lf_path)</span>
+        <span class="c1"># else:</span>
+        <span class="c1">#     write_h5(fpath, self, fmin=self.top_min, fmax=self.top_max,</span>
+        <span class="c1">#              subsample=self.subsample, sbj=sbj, sbj_viz=sbj_viz,</span>
+        <span class="c1">#              data_path=data_path, fwd_path=fwd_path, src_path=src_path,</span>
+        <span class="c1">#              lf_path=lf_path)</span>
 
 <div class="viewcode-block" id="Sesame.save_pkl">
 <a class="viewcode-back" href="../../generated/sesameeg.Sesame.html#sesameeg.Sesame.save_pkl">[docs]</a>

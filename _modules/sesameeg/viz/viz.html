@@ -103,6 +103,61 @@
 <span class="kn">from</span> <span class="nn">pyvistaqt</span> <span class="kn">import</span> <span class="n">BackgroundPlotter</span>
 
 
+<div class="viewcode-block" id="plot_n_sources">
+<a class="viewcode-back" href="../../../generated/sesameeg.viz.plot_n_sources.html#sesameeg.viz.plot_n_sources">[docs]</a>
+<span class="k">def</span> <span class="nf">plot_n_sources</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot the probability of number of sources.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inv_op : Instance of :py:class:`~sesameeg.Sesame`</span>
+<span class="sd">        Instance of `Sesame`.</span>
+<span class="sd">    kind : :py:class:`~str`</span>
+<span class="sd">        The kind of plot to draw. Options are: “bar”, “pie”.</span>
+<span class="sd">    title : :py:class:`~str` | None</span>
+<span class="sd">        Figure title.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_model_sel</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">model_sel</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span><span class="s1">&#39;no sources&#39;</span><span class="p">,</span> <span class="s1">&#39;one source&#39;</span><span class="p">,</span> <span class="s1">&#39;two sources&#39;</span><span class="p">,</span> <span class="s1">&#39;three sources&#39;</span><span class="p">,</span> <span class="s1">&#39;four sources&#39;</span><span class="p">,</span> <span class="s1">&#39;five sources&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;six sources&#39;</span><span class="p">,</span> <span class="s1">&#39;seven sources&#39;</span><span class="p">,</span> <span class="s1">&#39;eight sources&#39;</span><span class="p">,</span> <span class="s1">&#39;nine sources&#39;</span><span class="p">,</span> <span class="s1">&#39;ten sources&#39;</span><span class="p">])</span>
+    <span class="n">_colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">colormaps</span><span class="p">[</span><span class="s1">&#39;tab10&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">resampled</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">max_n_dips</span><span class="p">)</span><span class="o">.</span><span class="n">colors</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;bar&#39;</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+        <span class="n">n_src</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">max_n_dips</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">bar_labels</span> <span class="o">=</span> <span class="n">n_src</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">n_src</span><span class="p">),</span> <span class="n">_model_sel</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">bar_labels</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">_colors</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">max_n_dips</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_axisbelow</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Number of sources&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Probability&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Marginal probability for the number of sources&#39;</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;pie&#39;</span><span class="p">:</span>
+        <span class="n">_ms</span> <span class="o">=</span> <span class="n">_model_sel</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">_model_sel</span><span class="p">)]</span>
+        <span class="n">_lbl</span> <span class="o">=</span> <span class="n">_labels</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">_model_sel</span><span class="p">)]</span>
+        <span class="n">_clr</span> <span class="o">=</span> <span class="n">_colors</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">_model_sel</span><span class="p">)]</span>
+        <span class="n">_explode</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">_ms</span><span class="p">]</span>
+        <span class="n">_explode</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">_ms</span><span class="p">)]</span> <span class="o">+=</span> <span class="mf">0.1</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">_ms</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">_lbl</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">_clr</span><span class="p">,</span> <span class="n">autopct</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%1.1f%%</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">explode</span><span class="o">=</span><span class="n">_explode</span><span class="p">,</span> <span class="n">shadow</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Marginal probability for the number of sources&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Parameter &#39;kind&#39; may be set either to &#39;bar&#39; or to &#39;pie&#39;.&quot;</span><span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="plot_amplitudes">
 <a class="viewcode-back" href="../../../generated/sesameeg.viz.plot_amplitudes.html#sesameeg.viz.plot_amplitudes">[docs]</a>
 <span class="k">def</span> <span class="nf">plot_amplitudes</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -124,6 +179,7 @@
                                              <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i_d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">est_n_dips</span><span class="p">)])</span>
     <span class="n">colors</span> <span class="o">=</span> <span class="n">_n_colors</span><span class="p">(</span><span class="n">est_n_dips</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">amp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">amplitude</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">data_times</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mf">1e3</span> <span class="o">*</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">data_times</span><span class="p">,</span> <span class="mf">1e9</span> <span class="o">*</span> <span class="n">amp</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -169,21 +225,29 @@
                     <span class="s1">&#39;subjects_dir&#39;</span><span class="p">:</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">subjects_dir</span><span class="p">,</span>
                     <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">600</span><span class="p">),</span>
                     <span class="s1">&#39;show_traces&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+    <span class="n">view_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">plot_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_show_view_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;roll&#39;</span><span class="p">,</span> <span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="s1">&#39;row&#39;</span><span class="p">,</span> <span class="s1">&#39;col&#39;</span><span class="p">,</span> <span class="s1">&#39;align&#39;</span><span class="p">,</span> <span class="s1">&#39;azimuth&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;elevation&#39;</span><span class="p">,</span> <span class="s1">&#39;focalpoint&#39;</span><span class="p">]</span>
         <span class="n">_valid_keys</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">plot</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="n">aux_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">_k</span><span class="p">,</span> <span class="n">_v</span> <span class="ow">in</span> <span class="n">plot_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">_k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_valid_keys</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;WARNING! Removing invalid stc.plot keyword : </span><span class="si">{</span><span class="n">_k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">_k</span> <span class="ow">in</span> <span class="n">_show_view_keys</span><span class="p">:</span>
+                <span class="n">view_kwargs</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="o">=</span> <span class="n">_v</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">aux_dict</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="o">=</span> <span class="n">_v</span>
+                <span class="k">if</span> <span class="n">_k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_valid_keys</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;WARNING! Removing invalid stc.plot keyword : </span><span class="si">{</span><span class="n">_k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">aux_dict</span><span class="p">[</span><span class="n">_k</span><span class="p">]</span> <span class="o">=</span> <span class="n">_v</span>
         <span class="n">brain_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">aux_dict</span><span class="p">)</span>
 
-    <span class="n">brain</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span> <span class="o">**</span><span class="n">brain_kwargs</span><span class="p">)</span>
+    <span class="n">brain</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span> <span class="o">**</span><span class="n">brain_kwargs</span><span class="p">,</span>
+                            <span class="n">brain_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
     <span class="n">nv_lh</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">true_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">true_idxs</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">t_idx</span><span class="p">,</span> <span class="n">t_loc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">true_idxs</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">t_loc</span> <span class="o">&lt;</span> <span class="n">nv_lh</span><span class="p">:</span>
                 <span class="n">brain</span><span class="o">.</span><span class="n">add_foci</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">t_loc</span><span class="p">],</span> <span class="n">coords_as_verts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -199,6 +263,12 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">brain</span><span class="o">.</span><span class="n">add_foci</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">loc</span> <span class="o">-</span> <span class="n">nv_lh</span><span class="p">],</span> <span class="n">coords_as_verts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                            <span class="n">hemi</span><span class="o">=</span><span class="s1">&#39;rh&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">scale_factor</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">view_kwargs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">brain</span><span class="o">.</span><span class="n">show_view</span><span class="p">(</span><span class="o">**</span><span class="n">view_kwargs</span><span class="p">)</span>
+
+    <span class="n">brain</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
     <span class="k">if</span> <span class="n">force_open</span><span class="p">:</span>
         <span class="n">_qt_app_exec</span><span class="p">(</span><span class="n">brain</span><span class="o">.</span><span class="n">_renderer</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">store</span><span class="p">[</span><span class="s2">&quot;app&quot;</span><span class="p">])</span>
 
@@ -304,12 +374,19 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">est_n_dips</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">est_n_dips</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">est_locs</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">est_locs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">pmap</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">pmap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">colors</span> <span class="o">=</span> <span class="n">_n_colors</span><span class="p">(</span><span class="n">est_n_dips</span><span class="p">)</span>
     <span class="n">cloud</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">source_space</span><span class="p">)</span>
+    <span class="n">blob</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">source_space</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">pmap</span><span class="p">)[</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="n">blob</span><span class="p">[</span><span class="s1">&#39;probability&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pmap</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">pmap</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
 
     <span class="n">plotter</span> <span class="o">=</span> <span class="n">BackgroundPlotter</span><span class="p">()</span>
     <span class="n">plotter</span><span class="o">.</span><span class="n">background_color</span> <span class="o">=</span> <span class="s2">&quot;white&quot;</span>
     <span class="n">plotter</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">cloud</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">render_points_as_spheres</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plotter</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">blob</span><span class="p">,</span> <span class="n">scalars</span><span class="o">=</span><span class="s1">&#39;probability&#39;</span><span class="p">,</span> <span class="n">point_size</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">render_points_as_spheres</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis_r&#39;</span><span class="p">,</span> <span class="n">clim</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                     <span class="n">scalar_bar_args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s2">&quot;Probability&quot;</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;black&#39;</span><span class="p">}</span>
+                     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">true_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">t_idx</span><span class="p">,</span> <span class="n">t_loc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">true_idxs</span><span class="p">):</span>

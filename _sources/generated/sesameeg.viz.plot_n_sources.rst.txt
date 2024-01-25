@@ -1,0 +1,12 @@
+﻿:mod:`sesameeg.viz`.plot_n_sources
+===============================================
+
+.. currentmodule:: sesameeg.viz
+
+.. autofunction:: plot_n_sources
+
+.. include:: sesameeg.viz.plot_n_sources.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

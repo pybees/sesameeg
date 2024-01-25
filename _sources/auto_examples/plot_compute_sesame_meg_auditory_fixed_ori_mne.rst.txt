@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_plot_compute_sesame_meg_auditory_fixed_ori_mne.py>`
-        to download the full example code
+        to download the full example code or to run this example in your browser via Binder
 
 .. rst-class:: sphx-glr-example-title
 
@@ -238,10 +238,10 @@ Apply SESAME.
     Forward model with fixed source orientation.
     Computing neighbours matrix using combined distance...
      Computing correlation distance matrix...
-      Using grad sensors for computation...
-        203 out of 305 channels remain after picking
       Using mag sensors for computation...
         102 out of 305 channels remain after picking
+      Using grad sensors for computation...
+        203 out of 305 channels remain after picking
      [done]
     [done]
     Computing neighbours probabilities...[done]
@@ -252,14 +252,14 @@ Apply SESAME.
     Estimating noise std...[done]
      Estimated noise std: 3.9983e-12
     Computing inverse solution. This will take a while...
-        Estimated dipole strength variance: 4.718042893537405e-08
+    Estimated dipole strength variance: 4.439358669106037e-08
         Estimated number of sources: 2
         Estimated source locations:
             * source 1: [-0.05526788  0.01125377  0.0604109 ]
-            * source 2: [0.04459836 0.00447068 0.06177859]
-    [done in 102 iterations]
-        Goodness of fit with the recorded data: 60.01%
-        Source Dispersion: 0.58 mm
+            * source 2: [0.04589902 0.00942308 0.06544629]
+    [done in 97 iterations]
+        Goodness of fit with the recorded data: 61.519999999999996%
+        Source Dispersion: 0.01 mm
 
 
 
@@ -339,7 +339,7 @@ Save results.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 58.102 seconds)
+   **Total running time of the script:** (0 minutes 47.054 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_compute_sesame_meg_auditory_fixed_ori_mne.py:
@@ -348,6 +348,13 @@ Save results.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+
+    .. container:: binder-badge
+
+      .. image:: images/binder_badge_logo.svg
+        :target: https://mybinder.org/v2/gh/pybees/sesameeg/master?urlpath=lab/tree/notebooks/auto_examples/plot_compute_sesame_meg_auditory_fixed_ori_mne.ipynb
+        :alt: Launch binder
+        :width: 150 px
 
 
 

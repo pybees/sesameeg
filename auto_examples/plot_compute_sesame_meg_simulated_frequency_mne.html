@@ -18,8 +18,6 @@
     <script src="../_static/js/copybutton.js?v=26522df0"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="API Reference" href="../api.html" />
-    <link rel="prev" title="Compute SESAME inverse solution on evoked data in volume source space" href="plot_compute_sesame_meg_auditory_volume_mne.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -95,7 +93,7 @@
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-plot-compute-sesame-meg-simulated-frequency-mne-py"><span class="std std-ref">Go to the end</span></a>
-to download the full example code</p>
+to download the full example code or to run this example in your browser via Binder</p>
 </div>
 <section class="sphx-glr-example-title" id="compute-sesame-inverse-solution-on-simulated-data-in-the-frequency-domain">
 <span id="sphx-glr-auto-examples-plot-compute-sesame-meg-simulated-frequency-mne-py"></span><h1>Compute SESAME inverse solution on simulated data in the frequency domain<a class="headerlink" href="#compute-sesame-inverse-solution-on-simulated-data-in-the-frequency-domain" title="Link to this heading">¶</a></h1>
@@ -287,7 +285,7 @@ over time, but stays close to 10 Hz.</p>
 </pre></div>
 </div>
 <img src="../_images/sphx_glr_plot_compute_sesame_meg_simulated_frequency_mne_001.png" srcset="../_images/sphx_glr_plot_compute_sesame_meg_simulated_frequency_mne_001.png" alt="Signal 1, Signal 2, Power spectrum of signal 1, Coherence between the timeseries" class = "sphx-glr-single-img"/><p>Now we put the signals at two locations on the cortex. To do so, we construct
-a <a class="reference external" href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="(in MNE v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">mne.SourceEstimate</span></code></a> object to store them in.</p>
+a <a class="reference external" href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="(in MNE v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">mne.SourceEstimate</span></code></a> object to store them in.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># The locations on the cortex where the signal will originate from are</span>
 <span class="c1"># indicated as source space grid points indices.</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vertices</span></a> <span class="o">=</span> <span class="p">[[</span><span class="mi">146374</span><span class="p">],</span> <span class="p">[</span><span class="mi">33830</span><span class="p">]]</span>
@@ -310,7 +308,7 @@ by empty room noise.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>    Average patch normals will be employed in the rotation to the local surface coordinates....
     Converting to surface-based source orientations...
     [done]
-/home/pasca/Tools/python/packages/sesameeg/examples/plot_compute_sesame_meg_simulated_frequency_mne.py:180: RuntimeWarning: The maximum current magnitude is 122.3 nAm, which is very large. Are you trying to apply the forward model to noise-normalized (dSPM, sLORETA, or eLORETA) values? The result will only be correct if currents (in units of Am) are used.
+/home/pasca/Tools/python/packages/sesameeg/examples/plot_compute_sesame_meg_simulated_frequency_mne.py:180: RuntimeWarning: The maximum current magnitude is 125.0 nAm, which is very large. Are you trying to apply the forward model to noise-normalized (dSPM, sLORETA, or eLORETA) values? The result will only be correct if currents (in units of Am) are used.
   evoked = mne.apply_forward(fwd, stc_signal, info)
 Projecting source estimate to sensor space...
 [done]
@@ -361,7 +359,7 @@ Adding noise to 203/203 channels (203 channels in cov)
 <li><img src="../_images/sphx_glr_plot_compute_sesame_meg_simulated_frequency_mne_003.png" srcset="../_images/sphx_glr_plot_compute_sesame_meg_simulated_frequency_mne_003.png" alt="2.001 s, 2.085 s, 2.168 s, 2.251 s, 2.334 s, 2.418 s, 2.501 s, fT/cm, 2.584 s, 2.667 s, 2.751 s, 2.834 s, 2.917 s, 3.000 s, 3.084 s, 3.167 s, 3.250 s, 3.333 s, 3.416 s, 3.500 s" class = "sphx-glr-multi-img"/></li>
 </ul>
 <p>Define the parameters and apply SESAME. We convert the data to the frequency
-domain by setting <code class="docutils literal notranslate"><span class="pre">Fourier_transf=True</span></code>.</p>
+domain by setting <code class="docutils literal notranslate"><span class="pre">fourier=True</span></code>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_parts</span></a> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">noise_std</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">dip_mom_std</span> <span class="o">=</span> <span class="kc">None</span>
@@ -393,25 +391,21 @@ Computing neighbours probabilities...[done]
 Data have been converted to the frequency domain.
 Analyzing data from 9.6002 Hz to 10.4003 Hz
 Estimating dipole moment std...[done]
- Estimated dipole moment std: 2.2088e-05
+ Estimated dipole moment std: 2.2134e-05
 Sampling hyperprior for dipole moment std.
 Estimating noise std...[done]
- Estimated noise std: 2.7313e-09
+ Estimated noise std: 2.7369e-09
 Computing inverse solution. This will take a while...
-/home/pasca/Tools/python/packages/sesameeg/sesameeg/particles.py:174: RuntimeWarning: invalid value encountered in log
-  self.loglikelihood_unit = - (n_ist * noise_std**2) * np.log(det_sigma)
-/home/pasca/mambaforge/envs/mne_15/lib/python3.11/site-packages/numpy/linalg/linalg.py:2139: RuntimeWarning: overflow encountered in det
-  r = _umath_linalg.det(a, signature=signature)
-    Estimated dipole strength variance: 9.564429701334175e-06
+Estimated dipole strength variance: 9.490162457446906e-06
     Estimated number of sources: 2
     Estimated source locations:
         * source 1: [0.02482721 0.00881952 0.12250079]
         * source 2: [-0.02869374  0.09196391  0.06121906]
-[done in 111 iterations]
+[done in 97 iterations]
     Estimated source locations: [4367 3499]
     True source locations: [3554, 4367]
-    Goodness of fit with the recorded data: 90.19%
-    Source Dispersion: 1.61 mm
+    Goodness of fit with the recorded data: 90.14%
+    Source Dispersion: 2.09 mm
 </pre></div>
 </div>
 <p>Visualize the posterior map of the dipoles’ location
@@ -421,10 +415,14 @@ If window closes unexpectedly, set force_open=True</p>
 </pre></div>
 </div>
 <img src="../_images/sphx_glr_plot_compute_sesame_meg_simulated_frequency_mne_004.png" srcset="../_images/sphx_glr_plot_compute_sesame_meg_simulated_frequency_mne_004.png" alt="plot compute sesame meg simulated frequency mne" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Surface stc computed.
+[3554, 4367]
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 41.452 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 31.698 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-compute-sesame-meg-simulated-frequency-mne-py">
+<div class="binder-badge docutils container">
+<a class="reference external image-reference" href="https://mybinder.org/v2/gh/pybees/sesameeg/master?urlpath=lab/tree/notebooks/auto_examples/plot_compute_sesame_meg_simulated_frequency_mne.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>
+</div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/2f5d86111f7b80531258b81903cc5931/plot_compute_sesame_meg_simulated_frequency_mne.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_compute_sesame_meg_simulated_frequency_mne.py</span></code></a></p>
 </div>

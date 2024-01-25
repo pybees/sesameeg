@@ -142,16 +142,6 @@ applied.</p>
 </dd>
 <dt><strong>hyper_q</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True, a hyperprior pdf on the dipole moment std will be used.</p>
 </dd>
-<dt><strong>top_min</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>First topography to be included in the segment of data to be analyzed.
-It is meant to be expressed either in seconds in the time domain or
-in Hertz in the frequency domain.
-If None, it is set to the first topography of the input data.</p>
-</dd>
-<dt><strong>top_max</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> | None</span></dt><dd><p>Last topography to be included in the segment of data to be analyzed.
-It is meant to be expressed either in seconds in the time domain or
-in Hertz in the frequency domain.
-If None, it is set to the last topography of the input data.</p>
-</dd>
 <dt><strong>lam</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The parameter of the Poisson prior pdf on the number of dipoles.</p>
 </dd>
 <dt><strong>max_n_dips</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></dt><dd><p>The maximum number of dipoles allowed in a particle.</p>
@@ -232,7 +222,7 @@ and when <code class="docutils literal notranslate"><span class="pre">fourier=Fa
 <dt><strong>data_freqs</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></span></dt><dd><p>Frequency vector in Hertz. Only when instantiated by means of <a class="reference internal" href="sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare_sesame()</span></code></a>
 and when <code class="docutils literal notranslate"><span class="pre">fourier=True</span></code></p>
 </dd>
-<dt><strong>forward</strong><span class="classifier">instance of <a class="reference external" href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="(in MNE v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Forward</span></code></a></span></dt><dd><p>The forward solution. Only when instantiated by means of <a class="reference internal" href="sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare_sesame()</span></code></a></p>
+<dt><strong>forward</strong><span class="classifier">instance of <a class="reference external" href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="(in MNE v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Forward</span></code></a></span></dt><dd><p>The forward solution. Only when instantiated by means of <a class="reference internal" href="sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare_sesame()</span></code></a></p>
 </dd>
 <dt><strong>subject</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Subject name in Freesurfer subjects dir. Only when instantiated by means
 of <a class="reference internal" href="sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare_sesame()</span></code></a>.</p>
@@ -299,7 +289,7 @@ source being located in <img class="math" src="../_images/math/79a3d439d28652c54
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
-<dt><strong>stc</strong><span class="classifier"><a class="reference external" href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="(in MNE v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SourceEstimate</span></code></a> | <a class="reference external" href="https://mne.tools/stable/generated/mne.VolSourceEstimate.html#mne.VolSourceEstimate" title="(in MNE v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">VolSourceEstimate</span></code></a></span></dt><dd><p>The source estimate object containing the posterior map of the
+<dt><strong>stc</strong><span class="classifier"><a class="reference external" href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="(in MNE v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SourceEstimate</span></code></a> | <a class="reference external" href="https://mne.tools/stable/generated/mne.VolSourceEstimate.html#mne.VolSourceEstimate" title="(in MNE v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">VolSourceEstimate</span></code></a></span></dt><dd><p>The source estimate object containing the posterior map of the
 dipoles’ location.</p>
 </dd>
 </dl>
@@ -331,13 +321,36 @@ is the Frobenius norm.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sesameeg.Sesame.plot_source_amplitudes">
-<span class="sig-name descname"><span class="pre">plot_source_amplitudes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/sesame.html#Sesame.plot_source_amplitudes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sesameeg.Sesame.plot_source_amplitudes" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">plot_source_amplitudes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_sources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/sesame.html#Sesame.plot_source_amplitudes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sesameeg.Sesame.plot_source_amplitudes" title="Link to this definition">¶</a></dt>
 <dd><p>Plot the  amplitude of the estimated sources as function of time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_sources: :py:class:`~int` | None</strong></dt><dd><p>Set the number of sources of the alternative configuration to plot.
+If None, plot the configuration with the estimated number of sources.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sesameeg.Sesame.plot_source_number">
+<span class="sig-name descname"><span class="pre">plot_source_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bar'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/sesame.html#Sesame.plot_source_number"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sesameeg.Sesame.plot_source_number" title="Link to this definition">¶</a></dt>
+<dd><p>Plot the probability of number of sources.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>kind</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The kind of plot to draw. Options are: “bar”, “pie”.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sesameeg.Sesame.plot_sources">
-<span class="sig-name descname"><span class="pre">plot_sources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savepath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_sources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_open</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/sesame.html#Sesame.plot_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sesameeg.Sesame.plot_sources" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">plot_sources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_sources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savepath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">true_sources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_open</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sesameeg/sesame.html#Sesame.plot_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sesameeg.Sesame.plot_sources" title="Link to this definition">¶</a></dt>
 <dd><p>Plot the estimated sources. The default behaviour of the method is the following:</p>
 <ul class="simple">
 <li><p>if <code class="docutils literal notranslate"><span class="pre">Sesame</span></code> has been instantiated through <a class="reference internal" href="sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prepare_sesame()</span></code></a>, it visualizes the posterior map of the dipoles’ location and the estimated sources</p>
@@ -346,18 +359,21 @@ is the Frobenius norm.</p>
 <li><p>on the MRI, if <code class="docutils literal notranslate"><span class="pre">Sesame.forward</span></code> is of kind <code class="docutils literal notranslate"><span class="pre">volume</span></code>.</p></li>
 </ul>
 </li>
-<li><p>if <code class="docutils literal notranslate"><span class="pre">Sesame</span></code> has been instantiated through <a class="reference internal" href="#sesameeg.Sesame" title="sesameeg.Sesame"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sesame</span></code></a>, it visualizes the posterior map of the dipoles’ location and the estimated sources as a <a class="reference external" href="https://docs.pyvista.org/version/stable/api/core/_autosummary/pyvista.PolyData.html#pyvista.PolyData" title="(in PyVista v0.42.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolyData</span></code></a> object.</p></li>
+<li><p>if <code class="docutils literal notranslate"><span class="pre">Sesame</span></code> has been instantiated through <a class="reference internal" href="#sesameeg.Sesame" title="sesameeg.Sesame"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sesame</span></code></a>, it visualizes the posterior map of the dipoles’ location and the estimated sources as a <a class="reference external" href="https://docs.pyvista.org/version/stable/api/core/_autosummary/pyvista.PolyData.html#pyvista.PolyData" title="(in PyVista v0.43.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolyData</span></code></a> object.</p></li>
 </ul>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>plot_kwargs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> | None</span></dt><dd><p>Additional arguments to <a class="reference external" href="https://mne.tools/stable/generated/mne.viz.plot_source_estimates.html#mne.viz.plot_source_estimates" title="(in MNE v1.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_source_estimates()</span></code></a> or
+<dt><strong>n_sources: :py:class:`~int` | None</strong></dt><dd><p>Set the number of sources of the alternative configuration to plot.
+If None, plot the configuration with the estimated number of sources.</p>
+</dd>
+<dt><strong>plot_kwargs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> | None</span></dt><dd><p>Additional arguments to <a class="reference external" href="https://mne.tools/stable/generated/mne.viz.plot_source_estimates.html#mne.viz.plot_source_estimates" title="(in MNE v1.6)"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_source_estimates()</span></code></a> or
 <a class="reference external" href="https://nilearn.github.io/stable/modules/generated/nilearn.plotting.plot_stat_map.html#nilearn.plotting.plot_stat_map" title="(in Nilearn)"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_stat_map()</span></code></a> (e.g., dict(surface=’white’)).</p>
 </dd>
 <dt><strong>savepath</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>File path to write image to. If None, no image is written.</p>
 </dd>
-<dt><strong>save_kwargs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> | None</span></dt><dd><p>Additional arguments to <a class="reference external" href="https://docs.pyvista.org/version/stable/api/plotting/_autosummary/pyvista.Plotter.screenshot.html#pyvista.Plotter.screenshot" title="(in PyVista v0.42.1)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">screenshot()</span></code></a>
-or <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html#matplotlib.pyplot.savefig" title="(in Matplotlib v3.8.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">savefig()</span></code></a>.</p>
+<dt><strong>save_kwargs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> | None</span></dt><dd><p>Additional arguments to <a class="reference external" href="https://docs.pyvista.org/version/stable/api/plotting/_autosummary/pyvista.Plotter.screenshot.html#pyvista.Plotter.screenshot" title="(in PyVista v0.43.1)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">screenshot()</span></code></a>
+or <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html#matplotlib.pyplot.savefig" title="(in Matplotlib v3.8.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">savefig()</span></code></a>.</p>
 </dd>
 <dt><strong>true_sources</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> | None</span></dt><dd><p>In simulation settings, indexes of source space points in which true sources are located.</p>
 </dd>
@@ -452,21 +468,27 @@ the <img class="math" src="../_images/math/e3fc28292267f066fee7718c64f4bbfece521
 
 <section id="examples-using-sesameeg-sesame">
 <h2>Examples using <code class="docutils literal notranslate"><span class="pre">sesameeg.Sesame</span></code><a class="headerlink" href="#examples-using-sesameeg-sesame" title="Link to this heading">¶</a></h2>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an..."><img alt="" src="../_images/sphx_glr_plot_compute_sesame_meg_auditory_mne_thumb.png" />
-<p><a class="reference internal" href="../auto_examples/plot_compute_sesame_meg_auditory_mne.html#sphx-glr-auto-examples-plot-compute-sesame-meg-auditory-mne-py"><span class="std std-ref">Compute SESAME inverse solution on evoked data</span></a></p>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an..."><img alt="" src="../_images/sphx_glr_plot_01_compute_sesame_meg_auditory_mne_thumb.png" />
+<p><a class="reference internal" href="../auto_examples/plot_01_compute_sesame_meg_auditory_mne.html#sphx-glr-auto-examples-plot-01-compute-sesame-meg-auditory-mne-py"><span class="std std-ref">Compute SESAME inverse solution on evoked data</span></a></p>
   <div class="sphx-glr-thumbnail-title">Compute SESAME inverse solution on evoked data</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an..."><img alt="" src="../_images/sphx_glr_plot_compute_sesame_meg_auditory_fixed_ori_mne_thumb.png" />
-<p><a class="reference internal" href="../auto_examples/plot_compute_sesame_meg_auditory_fixed_ori_mne.html#sphx-glr-auto-examples-plot-compute-sesame-meg-auditory-fixed-ori-mne-py"><span class="std std-ref">Compute SESAME inverse solution on evoked data with source constraints</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Compute SESAME inverse solution on evoked data with source constraints</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an..."><img alt="" src="../_images/sphx_glr_plot_compute_sesame_meg_auditory_prior_mne_thumb.png" />
-<p><a class="reference internal" href="../auto_examples/plot_compute_sesame_meg_auditory_prior_mne.html#sphx-glr-auto-examples-plot-compute-sesame-meg-auditory-prior-mne-py"><span class="std std-ref">Compute SESAME inverse solution on evoked data with given source location prior</span></a></p>
-  <div class="sphx-glr-thumbnail-title">Compute SESAME inverse solution on evoked data with given source location prior</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="In this example we shall compute SESAME inverse solution on evoked data in a volume source spac..."><img alt="" src="../_images/sphx_glr_plot_compute_sesame_meg_auditory_volume_mne_thumb.png" />
-<p><a class="reference internal" href="../auto_examples/plot_compute_sesame_meg_auditory_volume_mne.html#sphx-glr-auto-examples-plot-compute-sesame-meg-auditory-volume-mne-py"><span class="std std-ref">Compute SESAME inverse solution on evoked data in volume source space</span></a></p>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In this example we shall compute SESAME inverse solution on evoked data in a volume source spac..."><img alt="" src="../_images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_thumb.png" />
+<p><a class="reference internal" href="../auto_examples/plot_02_compute_sesame_meg_auditory_volume_mne.html#sphx-glr-auto-examples-plot-02-compute-sesame-meg-auditory-volume-mne-py"><span class="std std-ref">Compute SESAME inverse solution on evoked data in volume source space</span></a></p>
   <div class="sphx-glr-thumbnail-title">Compute SESAME inverse solution on evoked data in volume source space</div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="In the present example we shall devise a synthetic scenario in which two dipolar sources are ac..."><img alt="" src="../_images/sphx_glr_plot_compute_sesame_meg_simulated_frequency_mne_thumb.png" />
-<p><a class="reference internal" href="../auto_examples/plot_compute_sesame_meg_simulated_frequency_mne.html#sphx-glr-auto-examples-plot-compute-sesame-meg-simulated-frequency-mne-py"><span class="std std-ref">Compute SESAME inverse solution on simulated data in the frequency domain</span></a></p>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an..."><img alt="" src="../_images/sphx_glr_plot_03_compute_sesame_meg_auditory_fixed_ori_mne_thumb.png" />
+<p><a class="reference internal" href="../auto_examples/plot_03_compute_sesame_meg_auditory_fixed_ori_mne.html#sphx-glr-auto-examples-plot-03-compute-sesame-meg-auditory-fixed-ori-mne-py"><span class="std std-ref">Compute SESAME inverse solution on evoked data with source constraints</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Compute SESAME inverse solution on evoked data with source constraints</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an..."><img alt="" src="../_images/sphx_glr_plot_04_compute_sesame_meg_auditory_prior_mne_thumb.png" />
+<p><a class="reference internal" href="../auto_examples/plot_04_compute_sesame_meg_auditory_prior_mne.html#sphx-glr-auto-examples-plot-04-compute-sesame-meg-auditory-prior-mne-py"><span class="std std-ref">Compute SESAME inverse solution on evoked data with given source location prior</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Compute SESAME inverse solution on evoked data with given source location prior</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In this example we shall show that SESAME is able to provide alternative solutions with non-neg..."><img alt="" src="../_images/sphx_glr_plot_05_explore_alternative_sesame_meg_thumb.png" />
+<p><a class="reference internal" href="../auto_examples/plot_05_explore_alternative_sesame_meg.html#sphx-glr-auto-examples-plot-05-explore-alternative-sesame-meg-py"><span class="std std-ref">Explore SESAME alternative inverse solutions on evoked data</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Explore SESAME alternative inverse solutions on evoked data</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In the present example we shall devise a synthetic scenario in which two dipolar sources are ac..."><img alt="" src="../_images/sphx_glr_plot_06_compute_sesame_meg_simulated_frequency_mne_thumb.png" />
+<p><a class="reference internal" href="../auto_examples/plot_06_compute_sesame_meg_simulated_frequency_mne.html#sphx-glr-auto-examples-plot-06-compute-sesame-meg-simulated-frequency-mne-py"><span class="std std-ref">Compute SESAME inverse solution on simulated data in the frequency domain</span></a></p>
   <div class="sphx-glr-thumbnail-title">Compute SESAME inverse solution on simulated data in the frequency domain</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In the present example we shall show how to perform a source modeling analysis using SESAME as ..."><img alt="" src="../_images/sphx_glr_plot_07_compute_sesame_esi_thumb.png" />
+<p><a class="reference internal" href="../auto_examples/plot_07_compute_sesame_esi.html#sphx-glr-auto-examples-plot-07-compute-sesame-esi-py"><span class="std std-ref">Compute SESAME inverse solution on high-density EEG data</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Compute SESAME inverse solution on high-density EEG data</div>
 </div></div><div style='clear:both'></div></section>
 </section>
 

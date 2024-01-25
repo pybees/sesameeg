@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_plot_compute_sesame_meg_auditory_prior_mne.py>`
-        to download the full example code
+        to download the full example code or to run this example in your browser via Binder
 
 .. rst-class:: sphx-glr-example-title
 
@@ -267,14 +267,14 @@ Apply SESAME.
     Estimating noise std...[done]
      Estimated noise std: 3.9983e-12
     Computing inverse solution. This will take a while...
-        Estimated dipole strength variance: 3.1238631691286244e-08
+    Estimated dipole strength variance: 3.0464189766905766e-08
         Estimated number of sources: 2
         Estimated source locations:
-            * source 1: [0.04589902 0.00942308 0.06544629]
-            * source 2: [-0.05817005  0.00491732  0.05770831]
-    [done in 107 iterations]
-        Goodness of fit with the recorded data: 69.95%
-        Source Dispersion: 0.0 mm
+            * source 1: [-0.05817005  0.00491732  0.05770831]
+            * source 2: [0.04589902 0.00942308 0.06544629]
+    [done in 43 iterations]
+        Goodness of fit with the recorded data: 69.92%
+        Source Dispersion: 0.47 mm
 
 
 
@@ -354,7 +354,7 @@ Save results.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 22.844 seconds)
+   **Total running time of the script:** (0 minutes 9.838 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_compute_sesame_meg_auditory_prior_mne.py:
@@ -363,6 +363,13 @@ Save results.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+
+    .. container:: binder-badge
+
+      .. image:: images/binder_badge_logo.svg
+        :target: https://mybinder.org/v2/gh/pybees/sesameeg/master?urlpath=lab/tree/notebooks/auto_examples/plot_compute_sesame_meg_auditory_prior_mne.ipynb
+        :alt: Launch binder
+        :width: 150 px
 
 
 

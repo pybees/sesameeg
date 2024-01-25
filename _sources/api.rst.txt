@@ -37,6 +37,7 @@ Visualization
    :toctree: generated/
    :template: function.rst
 
+    plot_n_sources
     plot_stc
     plot_vol_stc
     plot_cloud_sources
@@ -72,6 +73,7 @@ Utility functions
    :toctree: generated/
    :template: function.rst
 
+   prior_loc_from_labels
    compute_neighbours_matrix
    compute_neighbours_probability_matrix
    estimate_dip_mom_std

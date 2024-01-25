@@ -1,0 +1,12 @@
+﻿:mod:`sesameeg.utils`.prior_loc_from_labels
+========================================================
+
+.. currentmodule:: sesameeg.utils
+
+.. autofunction:: prior_loc_from_labels
+
+.. include:: sesameeg.utils.prior_loc_from_labels.examples
+
+.. raw:: html
+
+    <div style='clear:both'></div>

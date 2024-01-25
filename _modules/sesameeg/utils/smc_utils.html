@@ -499,7 +499,36 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 
 
+<div class="viewcode-block" id="prior_loc_from_labels">
+<a class="viewcode-back" href="../../../generated/sesameeg.utils.prior_loc_from_labels.html#sesameeg.utils.prior_loc_from_labels">[docs]</a>
 <span class="k">def</span> <span class="nf">prior_loc_from_labels</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">subjects_dir</span><span class="p">,</span> <span class="n">fwd</span><span class="p">,</span> <span class="n">parc</span><span class="p">,</span> <span class="n">sel_labels</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Construct the prior probability of active source locations starting from given FreeSurfer/MNE labels.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    subject : :py:class:`~str`</span>
+<span class="sd">        Subject name in Freesurfer subjects dir. Only when instantiated by means</span>
+<span class="sd">        of :func:`~sesameeg.mne.prepare_sesame`.</span>
+<span class="sd">    subjects_dir : :py:class:`~str` | None</span>
+<span class="sd">        If not None, this directory will be used as the subjects directory instead of the value set using</span>
+<span class="sd">        the SUBJECTS_DIR environment variable. Only when instantiated by means</span>
+<span class="sd">        of :func:`~sesameeg.mne.prepare_sesame`</span>
+<span class="sd">    fwd : :py:class:`~mne.Forward` object</span>
+<span class="sd">        The forward solution.</span>
+<span class="sd">    parc : :py:class:`~str`</span>
+<span class="sd">        The parcellation to use, e.g., ``&#39;aparc&#39;`` or ``&#39;aparc.a2009s&#39;``.</span>
+<span class="sd">    sel_labels : :py:class:`~list` of :py:class:`~str`</span>
+<span class="sd">        The cortical labels to use.</span>
+<span class="sd">    ratio : :py:class:`~float`</span>
+<span class="sd">        The ratio of high prior probability cortical areas to low prior probability cortical areas</span>
+<span class="sd">        probability value. If None, it is set to 1.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    prior_loc_arr : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts, )</span>
+<span class="sd">        The prior probability of active source locations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">labels</span> <span class="o">=</span> <span class="n">read_labels_from_annot</span><span class="p">(</span><span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">,</span> <span class="n">parc</span><span class="o">=</span><span class="n">parc</span><span class="p">,</span> <span class="n">hemi</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span>
                                     <span class="n">surf_name</span><span class="o">=</span><span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="n">subjects_dir</span><span class="o">=</span><span class="n">subjects_dir</span><span class="p">)</span>
 
@@ -536,7 +565,8 @@
                 <span class="n">prior_loc_arr</span><span class="p">[</span><span class="n">vertices2</span> <span class="o">+</span> <span class="n">_src_vertno_lh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">*=</span> <span class="n">ratio</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span>
-    <span class="k">return</span> <span class="n">prior_loc_arr</span>
+    <span class="k">return</span> <span class="n">prior_loc_arr</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">sample_from_sphere</span><span class="p">():</span>

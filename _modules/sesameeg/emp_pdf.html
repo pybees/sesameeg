@@ -91,17 +91,16 @@
       
   <h1>Source code for sesameeg.emp_pdf</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">copy</span>
+
 <span class="c1"># Authors: Gianvittorio Luria &lt;luria@dima.unige.it&gt;</span>
 <span class="c1">#          Sara Sommariva &lt;sommariva@dima.unige.it&gt;</span>
 <span class="c1">#          Alberto Sorrentino &lt;sorrentino@dima.unige.it&gt;</span>
 <span class="c1">#</span>
 <span class="c1"># License: BSD (3-clause)</span>
 
+<span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partialmethod</span><span class="p">,</span> <span class="n">partial</span>
 <span class="kn">from</span> <span class="nn">.particles</span> <span class="kn">import</span> <span class="n">Particle</span>
 
 
@@ -159,9 +158,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ESS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logweights</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exponents</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_sel</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">est_n_dips</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pmap</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">est_n_dips</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">est_locs</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_dip_mom_std</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_parts</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -209,43 +211,10 @@
         <span class="k">for</span> <span class="n">i_part</span><span class="p">,</span> <span class="n">_part</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">):</span>
             <span class="n">_part</span> <span class="o">=</span> <span class="n">_part</span><span class="o">.</span><span class="n">explore</span><span class="p">(</span><span class="n">n_verts</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">exponents</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">neigh</span><span class="p">,</span> <span class="n">neigh_p</span><span class="p">,</span>
                                   <span class="n">noise_std</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">max_n_dips</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i_part</span><span class="p">]</span> <span class="o">=</span> <span class="n">_part</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">i_part</span><span class="p">]</span> <span class="o">=</span> <span class="n">_part</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">all_dip_mom_std</span><span class="p">[</span><span class="n">i_part</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_dip_mom_std</span><span class="p">[</span><span class="n">i_part</span><span class="p">],</span> <span class="n">_part</span><span class="o">.</span><span class="n">dip_mom_std</span><span class="p">)</span></div>
 
-
-        <span class="c1"># OLD</span>
-        <span class="c1"># for i_part, _part in enumerate(self.particles):</span>
-        <span class="c1">#     if self.hyper_q:</span>
-        <span class="c1">#         _part = _part.evol_dip_mom_std(r_data, lead_field, self.exponents[-1], noise_std, lam)</span>
-        <span class="c1">#</span>
-        <span class="c1">#     _part = _part.evol_n_dips(n_verts, r_data, lead_field, max_n_dips,</span>
-        <span class="c1">#                               self.exponents[-1], noise_std, lam)</span>
-        <span class="c1">#     for dip_idx in reversed(range(_part.n_dips)):</span>
-        <span class="c1">#        _part = _part.evol_single_loc(dip_idx, neigh, neigh_p, r_data, lead_field,</span>
-        <span class="c1">#                                      self.exponents[-1], noise_std, lam)</span>
-        <span class="c1">#</span>
-        <span class="c1">#     self.particles[i_part] = _part</span>
-
-        <span class="c1"># PROVA con Partial</span>
-        <span class="c1">#</span>
-        <span class="c1"># _g = partialmethod(self.sample_single_part, n_verts=n_verts, data=r_data, lf=lead_field,</span>
-        <span class="c1">#                    neigh=neigh, neigh_p=neigh_p, nstd=noise_std, lam=lam, max_n_dips=max_n_dips)</span>
-        <span class="c1">#</span>
-        <span class="c1"># _f = partial(self.sample_single_part, n_verts=n_verts, data=r_data, lf=lead_field,</span>
-        <span class="c1">#              neigh=neigh, neigh_p=neigh_p, nstd=noise_std, lam=lam, max_n_dips=max_n_dips)</span>
-        <span class="c1">#</span>
-        <span class="c1"># with Pool() as pool:</span>
-        <span class="c1">#     result = pool.map(_f, self.particles)</span>
-        <span class="c1">#</span>
-        <span class="c1"># self.particles = copy.deepcopy(np.asarray(result))</span>
-        <span class="c1"># del result</span>
-        <span class="c1">#</span>
-
-        <span class="c1"># PROVA come Giacomo</span>
-        <span class="c1"># with Pool() as pool:</span>
-        <span class="c1">#     result = np.asarray(pool.map(self.prova,</span>
-        <span class="c1">#                                  [(_part, n_verts, r_data, lead_field, neigh, neigh_p, noise_std,</span>
-        <span class="c1">#                                   lam, max_n_dips) for _part in self.particles]))</span>
-        <span class="c1">#     self.particles = copy.deepcopy(result)</span>
 
 <div class="viewcode-block" id="EmpPdf.resample">
 <a class="viewcode-back" href="../../generated/sesameeg.EmpPdf.html#sesameeg.EmpPdf.resample">[docs]</a>
@@ -272,7 +241,8 @@
         <span class="n">new_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">digitize</span><span class="p">(</span><span class="n">u_part</span><span class="p">,</span> <span class="n">w_part</span><span class="p">)</span>
         <span class="n">new_ind_ord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">new_ind</span><span class="p">),</span>
                                <span class="n">key</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">new_ind</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">new_ind_ord</span><span class="p">]</span>
+        <span class="c1"># self.particles = self.particles[new_ind_ord] ## ERRORE!!! 20231027GV</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">particles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="n">z</span><span class="p">])</span> <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">new_ind_ord</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logweights</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">logweights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ESS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logweights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
@@ -398,7 +368,7 @@
 
 <div class="viewcode-block" id="EmpPdf.point_estimate">
 <a class="viewcode-back" href="../../generated/sesameeg.EmpPdf.html#sesameeg.EmpPdf.point_estimate">[docs]</a>
-    <span class="k">def</span> <span class="nf">point_estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">max_n_dips</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">point_estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">max_n_dips</span><span class="p">,</span> <span class="n">n_sources</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes a point estimate for the number of active dipoles and</span>
 <span class="sd">        their locations from the posterior pdf.</span>
 
@@ -409,24 +379,34 @@
 <span class="sd">            brain discretization.</span>
 <span class="sd">        max_n_dips : :py:class:`~int`</span>
 <span class="sd">            The maximum number of dipoles allowed in a particle.</span>
+<span class="sd">        n_sources: :py:class:`~int` | None</span>
+<span class="sd">            If not None, manually set the number of sources of the dipole configuration.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computing estimates...&#39;</span><span class="p">)</span>
         <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logweights</span><span class="p">)</span>
 
-        <span class="c1"># Step1: Number of Dipoles</span>
-        <span class="c1">#    1a) Compute model_selection</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model_sel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">max_n_dips</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_sources</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Step1: Number of Dipoles</span>
+            <span class="c1">#    1a) Compute model_selection</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_sel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">max_n_dips</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">i_p</span><span class="p">,</span> <span class="n">_part</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">_part</span><span class="o">.</span><span class="n">n_dips</span> <span class="o">&lt;=</span> <span class="n">max_n_dips</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">model_sel</span><span class="p">[</span><span class="n">_part</span><span class="o">.</span><span class="n">n_dips</span><span class="p">]</span> <span class="o">+=</span> <span class="n">weights</span><span class="p">[</span><span class="n">i_p</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i_p</span><span class="p">,</span> <span class="n">_part</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">_part</span><span class="o">.</span><span class="n">n_dips</span> <span class="o">&lt;=</span> <span class="n">max_n_dips</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">model_sel</span><span class="p">[</span><span class="n">_part</span><span class="o">.</span><span class="n">n_dips</span><span class="p">]</span> <span class="o">+=</span> <span class="n">weights</span><span class="p">[</span><span class="n">i_p</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Particle </span><span class="si">{}</span><span class="s1"> has too many dipoles!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i_p</span><span class="p">))</span>
+
+            <span class="c1">#     1b) Compute point estimation</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">est_n_dips</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_sel</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_sel</span><span class="p">[</span><span class="n">n_sources</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computing point estimates for user defined source configuration.&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">est_n_dips</span> <span class="o">=</span> <span class="n">n_sources</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Particle </span><span class="si">{}</span><span class="s1"> has too many dipoles!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i_p</span><span class="p">))</span>
-
-        <span class="c1">#     1b) Compute point estimation</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">est_n_dips</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_sel</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The selected configuration has zero probability! Nothing to plot.&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
 
         <span class="c1"># Step2: Positions of the dipoles</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">est_n_dips</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -461,9 +441,88 @@
                     <span class="n">loc</span> <span class="o">=</span> <span class="n">_part</span><span class="o">.</span><span class="n">dipoles</span><span class="p">[</span><span class="n">order_dip</span><span class="p">[</span><span class="n">i_p</span><span class="p">,</span> <span class="n">dip_idx</span><span class="p">]]</span><span class="o">.</span><span class="n">loc</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">pmap</span><span class="p">[</span><span class="n">dip_idx</span><span class="p">,</span> <span class="n">loc</span><span class="p">]</span> <span class="o">+=</span> <span class="n">selected_weights</span><span class="p">[</span><span class="n">i_p</span><span class="p">]</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">est_locs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pmap</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">est_locs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pmap</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
+                <span class="c1"># Estimate dip mom std</span>
+                <span class="n">est_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">all_dip_mom_std</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+                <span class="n">selected_est_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">est_sq</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nod</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">est_n_dips</span><span class="p">))</span>
+                <span class="n">_dip_mom_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">selected_weights</span><span class="p">,</span> <span class="n">selected_est_sq</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">est_dip_mom_std</span> <span class="o">=</span> <span class="n">_dip_mom_std</span></div>
 </div>
 
+
+    <span class="c1"># def point_estimate(self, D, max_n_dips):</span>
+    <span class="c1">#     &quot;&quot;&quot;Computes a point estimate for the number of active dipoles and</span>
+    <span class="c1">#     their locations from the posterior pdf.</span>
+    <span class="c1">#</span>
+    <span class="c1">#     Parameters</span>
+    <span class="c1">#     ----------</span>
+    <span class="c1">#     D : :py:class:`~numpy.ndarray` of :py:class:`~float`, shape (n_verts x n_verts)</span>
+    <span class="c1">#         The Euclidean distance between the points in the</span>
+    <span class="c1">#         brain discretization.</span>
+    <span class="c1">#     max_n_dips : :py:class:`~int`</span>
+    <span class="c1">#         The maximum number of dipoles allowed in a particle.</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#</span>
+    <span class="c1">#     if self.verbose:</span>
+    <span class="c1">#         print(&#39;Computing estimates...&#39;)</span>
+    <span class="c1">#     weights = np.exp(self.logweights)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     # Step1: Number of Dipoles</span>
+    <span class="c1">#     #    1a) Compute model_selection</span>
+    <span class="c1">#     self.model_sel = np.zeros(max_n_dips+1)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     for i_p, _part in enumerate(self.particles):</span>
+    <span class="c1">#         if _part.n_dips &lt;= max_n_dips:</span>
+    <span class="c1">#             self.model_sel[_part.n_dips] += weights[i_p]</span>
+    <span class="c1">#         else:</span>
+    <span class="c1">#             raise ValueError(&#39;Particle {} has too many dipoles!&#39;.format(i_p))</span>
+    <span class="c1">#</span>
+    <span class="c1">#     #     1b) Compute point estimation</span>
+    <span class="c1">#     self.est_n_dips = np.argmax(self.model_sel)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     # Step2: Positions of the dipoles</span>
+    <span class="c1">#     if self.est_n_dips == 0:</span>
+    <span class="c1">#         self.est_locs = np.array([])</span>
+    <span class="c1">#         self.pmap = np.array([])</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         nod = np.array([_part.n_dips for _part in self.particles])</span>
+    <span class="c1">#         selected_particles = np.delete(self.particles,</span>
+    <span class="c1">#                                        np.where(nod != self.est_n_dips))</span>
+    <span class="c1">#         selected_weights = np.delete(weights,</span>
+    <span class="c1">#                                      np.where(nod != self.est_n_dips))</span>
+    <span class="c1">#         ind_bestpar = np.argmax(selected_weights)</span>
+    <span class="c1">#         bestpart_locs = np.array([_dip.loc for _dip in</span>
+    <span class="c1">#                                   selected_particles[ind_bestpar].dipoles])</span>
+    <span class="c1">#         order_dip = np.empty([selected_particles.shape[0],</span>
+    <span class="c1">#                               self.est_n_dips], dtype=&#39;int&#39;)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         all_perms_index = np.asarray(list(itertools.permutations(</span>
+    <span class="c1">#                                           range(self.est_n_dips))))</span>
+    <span class="c1">#</span>
+    <span class="c1">#         for i_p, _part in enumerate(selected_particles):</span>
+    <span class="c1">#             part_locs = np.array([_dip.loc for _dip in _part.dipoles])</span>
+    <span class="c1">#             OSPA = np.mean(D[part_locs[all_perms_index], bestpart_locs],</span>
+    <span class="c1">#                            axis=1)</span>
+    <span class="c1">#             bestperm = np.argmin(OSPA)</span>
+    <span class="c1">#             order_dip[i_p] = all_perms_index[bestperm]</span>
+    <span class="c1">#</span>
+    <span class="c1">#         self.pmap = np.zeros([self.est_n_dips, D.shape[0]])</span>
+    <span class="c1">#</span>
+    <span class="c1">#         for dip_idx in range(self.est_n_dips):</span>
+    <span class="c1">#             for i_p, _part in enumerate(selected_particles):</span>
+    <span class="c1">#                 loc = _part.dipoles[order_dip[i_p, dip_idx]].loc</span>
+    <span class="c1">#                 self.pmap[dip_idx, loc] += selected_weights[i_p]</span>
+    <span class="c1">#</span>
+    <span class="c1">#         self.est_locs = np.argmax(self.pmap, axis=1)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         if self.hyper_q:</span>
+    <span class="c1">#             # Estimate dip mom std</span>
+    <span class="c1">#             est_sq = np.asarray([self.all_dip_mom_std[p][-1] for p in range(self.particles.shape[0])])</span>
+    <span class="c1">#             selected_est_sq = np.delete(est_sq, np.where(nod != self.est_n_dips))</span>
+    <span class="c1">#             _dip_mom_std = np.dot(selected_weights, selected_est_sq)</span>
+    <span class="c1">#             self.est_dip_mom_std = _dip_mom_std</span>
 </pre></div>
 
     </div>
