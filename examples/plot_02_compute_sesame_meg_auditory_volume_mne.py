@@ -113,7 +113,7 @@ print('    Goodness of fit with the recorded data: {0}%'.format(round(gof, 4) * 
 ###############################################################################
 # Visualize the posterior map of the dipoles' location
 # :math:`p(r| \textbf{y}, 2)` as an overlay onto the MRI.
-_sesame.plot_sources()
+_sesame.plot_sources(plot_kwargs={'distance': 650})
 
 ###############################################################################
 # Visualize amplitude of the estimated sources as function of time.

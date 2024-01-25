@@ -142,7 +142,8 @@ def plot_stc(inv_op, plot_kwargs=None, savepath=None,
                     aux_dict[_k] = _v
         brain_kwargs.update(aux_dict)
 
-    brain = inv_op.stc.plot(inv_op.subject, **brain_kwargs)
+    brain = inv_op.stc.plot(inv_op.subject, **brain_kwargs,
+                            brain_kwargs=dict(show=False))
     nv_lh = inv_op.stc.vertices[0].shape[0]
 
     if true_idxs is not None:
@@ -165,6 +166,8 @@ def plot_stc(inv_op, plot_kwargs=None, savepath=None,
 
     if len(view_kwargs) > 0:
         brain.show_view(**view_kwargs)
+
+    brain.show()
 
     if force_open:
         _qt_app_exec(brain._renderer.figure.store["app"])

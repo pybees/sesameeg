@@ -217,5 +217,5 @@ print('    Source Dispersion: {0} mm'.format(round(sd, 2)))
 # Visualize the posterior map of the dipoles' location
 # :math:`p(r| \textbf{y}, 2)` and the estimated sources on the inflated brain.
 # If window closes unexpectedly, set force_open=True
-_sesame.plot_sources(true_sources=true_locs, force_open=False)
+_sesame.plot_sources(true_sources=true_locs, force_open=False, plot_kwargs={'distance': 650})
 

@@ -107,7 +107,7 @@ print('    Source Dispersion: {0} mm'.format(round(sd, 2)))
 ###############################################################################
 # Visualize the posterior map of the dipoles' location
 # :math:`p(r| \textbf{y}, 2)` and the estimated sources on the inflated brain.
-_sesame.plot_sources()
+_sesame.plot_sources(plot_kwargs={'distance': 650})
 
 ###############################################################################
 # Visualize the amplitude of the estimated sources as function of time.
