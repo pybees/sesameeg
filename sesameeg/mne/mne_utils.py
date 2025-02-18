@@ -3,8 +3,9 @@ import scipy.spatial.distance as ssd
 from mne.cov import compute_whitener
 from mne.epochs import Epochs, EpochsArray
 from mne.evoked import Evoked, EvokedArray
-from mne.forward import Forward, _select_orient_forward
-from mne.io.pick import channel_type
+from mne.forward import Forward
+from mne.forward.forward import _select_orient_forward
+from mne import channel_type
 from mne import pick_types_forward, add_source_space_distances
 from ..utils import normalize, initialize_radius, compute_neighbours_matrix, compute_neighbours_probability_matrix
 from ..sesame import Sesame
@@ -86,6 +87,7 @@ def _prepare_epochs_data(epochs, top_min, top_max, epochs_avg=False, subsample=N
     if fourier is False:
         s_min, s_max, top_min, top_max = _get_topographies(evoked, top_min, top_max, fourier=fourier)
         _times = evoked.times[s_min:s_max + 1]
+        _sfreq = evoked.info['sfreq']
         temp_list = list()
         for ie, _e in enumerate(ep_data):
             if subsample is not None:
@@ -98,8 +100,9 @@ def _prepare_epochs_data(epochs, top_min, top_max, epochs_avg=False, subsample=N
             print(f'Averaging {len(temp_list)} epochs.')
             return np.mean(np.array(temp_list), axis=0), _times
         else:
-            return np.hstack(temp_list), _times
+            return np.hstack(temp_list), _times, _sfreq
     elif fourier is True:
+        _sfreq = evoked.info['sfreq']
         tstep = 1 / evoked.info['sfreq']
         evoked_f = evoked.copy()
         evoked_f.data *= np.hamming(evoked.data.shape[1])
@@ -136,9 +139,9 @@ def _prepare_epochs_data(epochs, top_min, top_max, epochs_avg=False, subsample=N
             print(f'Averaging {len(temp_list)} epochs.')
             _r_mean = np.mean(np.array(temp_list2_r), axis=0)
             _i_mean = np.mean(np.array(temp_list2_i), axis=0)
-            return np.hstack([_r_mean, _i_mean]), _freqs
+            return np.hstack([_r_mean, _i_mean]), _freqs, _sfreq
         else:
-            return np.hstack(temp_list2), _freqs
+            return np.hstack(temp_list2), _freqs, _sfreq
     else:
         raise ValueError
 
@@ -147,14 +150,16 @@ def _prepare_evoked_data(evoked, top_min, top_max, subsample=None, fourier=False
     if fourier is False:
         s_min, s_max, top_min, top_max = _get_topographies(evoked, top_min, top_max, fourier=fourier)
         _times = evoked.times[s_min:s_max + 1]
+        _sfreq = evoked.info['sfreq']
 
         if subsample is not None:
             print(f'Subsampling data with step {subsample}')
             _data = evoked.data[:, s_min:s_max + 1:subsample]
         else:
             _data = evoked.data[:, s_min:s_max + 1]
-        return _data, _times
+        return _data, _times, _sfreq
     elif fourier is True:
+        _sfreq = evoked.info['sfreq']
         tstep = 1 / evoked.info['sfreq']
         evoked_f = evoked.copy()
         evoked_f.data *= np.hamming(evoked.data.shape[1])
@@ -173,7 +178,7 @@ def _prepare_evoked_data(evoked, top_min, top_max, subsample=None, fourier=False
         temp_list = list()
         for _l in _data_temp.T:
             temp_list.append(np.vstack([np.real(_l), np.imag(_l)]).T)
-        return np.hstack(temp_list), _freqs
+        return np.hstack(temp_list), _freqs, _sfreq
     else:
         raise ValueError
 
@@ -422,9 +427,9 @@ def prepare_sesame(forward, data, n_parts=100, top_min=None, top_max=None, subsa
 
     # Prepare data
     if _is_evoked(data):
-        _data, _times = _prepare_evoked_data(data, top_min, top_max, subsample=subsample, fourier=fourier)
+        _data, _times, _sfreq = _prepare_evoked_data(data, top_min, top_max, subsample=subsample, fourier=fourier)
     elif _is_epochs(data):
-        _data, _times = _prepare_epochs_data(data, top_min, top_max, epochs_avg=epochs_avg, subsample=subsample,
+        _data, _times, _sfreq = _prepare_epochs_data(data, top_min, top_max, epochs_avg=epochs_avg, subsample=subsample,
                                      fourier=fourier)
     else:
         raise ValueError
@@ -456,13 +461,13 @@ def prepare_sesame(forward, data, n_parts=100, top_min=None, top_max=None, subsa
                          fixed_ori=fixed_ori, radius=radius, neigh_std=neigh_std, prior_locs=prior_locs,
                          subsample=subsample, hyper_q=hyper_q, lam=lam, max_n_dips=max_n_dips,
                          fourier=fourier, verbose=verbose, forward=forward, subject=subject,
-                         subjects_dir=subjects_dir, data_times=_times, trans_matrix=trans_matrix)
+                         subjects_dir=subjects_dir, data_times=_times, data_sfreq=_sfreq, trans_matrix=trans_matrix)
     else:
         _sesame = Sesame(source_space, lead_field, data_matrix, n_parts=n_parts, n_matrix=n_matrix,
                          np_matrix=np_matrix, noise_std=noise_std, dip_mom_std=dip_mom_std,
                          fixed_ori=fixed_ori, radius=radius, neigh_std=neigh_std, prior_locs=prior_locs,
                          subsample=subsample, hyper_q=hyper_q, lam=lam, max_n_dips=max_n_dips,
                          fourier=fourier, verbose=verbose, forward=forward, subject=subject,
-                         subjects_dir=subjects_dir, data_freqs=_times, trans_matrix=trans_matrix)
+                         subjects_dir=subjects_dir, data_freqs=_times, data_sfreq=_sfreq, trans_matrix=trans_matrix)
 
     return _sesame
