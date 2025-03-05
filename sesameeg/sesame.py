@@ -6,6 +6,8 @@
 #
 # License: BSD (3-clause)
 
+import os
+os.environ['SCIPY_ARRAY_API'] = '1'
 import itertools
 import time
 import copy
@@ -207,6 +209,7 @@ class Sesame(object):
         self.subjects_dir = None
         self.data_times = None
         self.data_freqs = None
+        self.data_sfreq = None
         for k, v in kwargs.items():
             if k in self.__dict__:
                 setattr(self, k, v)

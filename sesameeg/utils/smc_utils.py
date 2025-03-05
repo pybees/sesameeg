@@ -12,7 +12,7 @@ import scipy.spatial.distance as ssd
 from mne.epochs import Epochs, EpochsArray
 from mne.evoked import Evoked, EvokedArray
 from mne.forward import Forward
-from mne.io.pick import channel_type
+from mne import channel_type
 from mne import pick_types_forward, read_labels_from_annot, add_source_space_distances
 
 
