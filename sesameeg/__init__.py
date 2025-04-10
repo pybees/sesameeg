@@ -6,4 +6,4 @@ from .particles import Particle
 
 __all__ = ['Sesame']
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'

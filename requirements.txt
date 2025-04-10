@@ -1,6 +1,6 @@
 numpy
 scipy
-mne
+mne>=1.8
 h5py
 nilearn
 pyvista
