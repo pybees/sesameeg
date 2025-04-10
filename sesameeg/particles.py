@@ -8,6 +8,7 @@
 
 import copy
 import numpy as np
+import scipy.special as ss
 from .dipoles import Dipole
 from .utils import gamma_pdf, woodbury
 
@@ -192,7 +193,7 @@ class Particle(object):
             The prior pdf evaluated in the present particle.
         """
 
-        self.prior = 1/np.math.factorial(self.n_dips) * np.exp(-lam) *\
+        self.prior = 1/ss.factorial(self.n_dips) * np.exp(-lam) *\
             (lam**self.n_dips)
 
         _where = np.zeros(self.prior_locs.shape[0])
