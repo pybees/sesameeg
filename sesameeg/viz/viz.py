@@ -147,7 +147,7 @@ def plot_stc(inv_op, plot_kwargs=None, savepath=None,
     nv_lh = inv_op.stc.vertices[0].shape[0]
 
     if true_idxs is not None:
-        print(true_idxs)
+        # print(true_idxs)
         for t_idx, t_loc in enumerate(true_idxs):
             if t_loc < nv_lh:
                 brain.add_foci(inv_op.stc.vertices[0][t_loc], coords_as_verts=True,
