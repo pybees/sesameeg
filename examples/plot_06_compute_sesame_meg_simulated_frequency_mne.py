@@ -57,7 +57,7 @@ noise_cov = mne.read_cov(erm_cov_fname)
 ###############################################################################
 # In this example, to save computation time, we shall only simulate gradiometer
 # data. You can try simulating other types of sensors as well.
-picks = mne.pick_types(info, meg='grad', stim=True, exclude='bads')
+picks = mne.pick_types(info, meg='grad', stim=False, exclude='bads')
 mne.pick_info(info, picks, copy=False)
 fwd = mne.pick_channels_forward(fwd, include=info['ch_names'])
 noise_cov = mne.pick_channels_cov(noise_cov, include=info['ch_names'])
