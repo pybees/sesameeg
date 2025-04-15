@@ -4,15 +4,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sesameeg.utils.smc_utils &#8212; sesameeg 0.0.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <title>sesameeg.utils.smc_utils &#8212; sesameeg 0.0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=284a2d1d" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/documentation_options.js?v=47de8214"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/copybutton.js?v=26522df0"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -39,7 +39,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html">
           sesameeg</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.0.2</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -87,7 +87,18 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <h1>Source code for sesameeg.utils.smc_utils</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
@@ -98,14 +109,14 @@
 <span class="c1">#</span>
 <span class="c1"># License: BSD (3-clause)</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.special</span> <span class="k">as</span> <span class="nn">sps</span>
-<span class="kn">import</span> <span class="nn">scipy.spatial.distance</span> <span class="k">as</span> <span class="nn">ssd</span>
-<span class="kn">from</span> <span class="nn">mne.epochs</span> <span class="kn">import</span> <span class="n">Epochs</span><span class="p">,</span> <span class="n">EpochsArray</span>
-<span class="kn">from</span> <span class="nn">mne.evoked</span> <span class="kn">import</span> <span class="n">Evoked</span><span class="p">,</span> <span class="n">EvokedArray</span>
-<span class="kn">from</span> <span class="nn">mne.forward</span> <span class="kn">import</span> <span class="n">Forward</span>
-<span class="kn">from</span> <span class="nn">mne.io.pick</span> <span class="kn">import</span> <span class="n">channel_type</span>
-<span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">pick_types_forward</span><span class="p">,</span> <span class="n">read_labels_from_annot</span><span class="p">,</span> <span class="n">add_source_space_distances</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.special</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sps</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.spatial.distance</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ssd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne.epochs</span><span class="w"> </span><span class="kn">import</span> <span class="n">Epochs</span><span class="p">,</span> <span class="n">EpochsArray</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne.evoked</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evoked</span><span class="p">,</span> <span class="n">EvokedArray</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne.forward</span><span class="w"> </span><span class="kn">import</span> <span class="n">Forward</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne</span><span class="w"> </span><span class="kn">import</span> <span class="n">channel_type</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne</span><span class="w"> </span><span class="kn">import</span> <span class="n">pick_types_forward</span><span class="p">,</span> <span class="n">read_labels_from_annot</span><span class="p">,</span> <span class="n">add_source_space_distances</span>
 
 
 <span class="c1"># def compute_cosine_distance(fwd):</span>
@@ -145,7 +156,7 @@
 <span class="c1">#     return cosine_distance</span>
 
 
-<span class="k">def</span> <span class="nf">compute_correlation_distance_matix</span><span class="p">(</span><span class="n">fwd</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_correlation_distance_matix</span><span class="p">(</span><span class="n">fwd</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; Computing correlation distance matrix...&#39;</span><span class="p">)</span>
     <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;sol&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;sol&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
     <span class="n">n_ch_tot</span> <span class="o">=</span> <span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;nchan&#39;</span><span class="p">]</span>
@@ -170,7 +181,7 @@
     <span class="k">return</span> <span class="n">distance_matrix</span>
 
 
-<span class="k">def</span> <span class="nf">compute_cortical_distance_matrix</span><span class="p">(</span><span class="n">fwd</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_cortical_distance_matrix</span><span class="p">(</span><span class="n">fwd</span><span class="p">):</span>
     <span class="n">src_aux</span> <span class="o">=</span> <span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">src_aux</span> <span class="o">=</span> <span class="n">add_source_space_distances</span><span class="p">(</span><span class="n">src_aux</span><span class="p">,</span> <span class="n">dist_limit</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Creating distance matrix...&#39;</span><span class="p">)</span>
@@ -192,7 +203,7 @@
 
 <div class="viewcode-block" id="compute_neighbours_matrix">
 <a class="viewcode-back" href="../../../generated/sesameeg.utils.compute_neighbours_matrix.html#sesameeg.utils.compute_neighbours_matrix">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_neighbours_matrix</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">n_simil</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_neighbours_matrix</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">n_simil</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the set of neighbours of each point in the brain discretization.</span>
 
 <span class="sd">    Parameters</span>
@@ -220,7 +231,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_compute_euclidean_neigh_matrix</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_compute_euclidean_neigh_matrix</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the set of neighbours of each point in the brain discretization.</span>
 
 <span class="sd">    Parameters</span>
@@ -303,7 +314,7 @@
                            <span class="s2">&quot;computation of neighbours.&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_compute_correlation_neigh_matrix</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">n_neigh_init</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_compute_correlation_neigh_matrix</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">n_neigh_init</span><span class="p">):</span>
     <span class="n">n_vert</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># For each vertex find the set of k-nearest neighbours</span>
@@ -339,7 +350,7 @@
 
 <div class="viewcode-block" id="compute_neighbours_probability_matrix">
 <a class="viewcode-back" href="../../../generated/sesameeg.utils.compute_neighbours_probability_matrix.html#sesameeg.utils.compute_neighbours_probability_matrix">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_neighbours_probability_matrix</span><span class="p">(</span><span class="n">n_matrix</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">sigma_neigh</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_neighbours_probability_matrix</span><span class="p">(</span><span class="n">n_matrix</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">d_matrix</span><span class="p">,</span> <span class="n">sigma_neigh</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute neighbours&#39; probability matrix.</span>
 
 <span class="sd">    Parameters</span>
@@ -374,7 +385,7 @@
 
 <div class="viewcode-block" id="estimate_dip_mom_std">
 <a class="viewcode-back" href="../../../generated/sesameeg.utils.estimate_dip_mom_std.html#sesameeg.utils.estimate_dip_mom_std">[docs]</a>
-<span class="k">def</span> <span class="nf">estimate_dip_mom_std</span><span class="p">(</span><span class="n">r_data</span><span class="p">,</span> <span class="n">lf</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">estimate_dip_mom_std</span><span class="p">(</span><span class="n">r_data</span><span class="p">,</span> <span class="n">lf</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate the standard deviation of the prior of the dipole moment.</span>
 
 <span class="sd">    Parameters</span>
@@ -398,7 +409,7 @@
 
 <div class="viewcode-block" id="estimate_noise_std">
 <a class="viewcode-back" href="../../../generated/sesameeg.utils.estimate_noise_std.html#sesameeg.utils.estimate_noise_std">[docs]</a>
-<span class="k">def</span> <span class="nf">estimate_noise_std</span><span class="p">(</span><span class="n">r_data</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">estimate_noise_std</span><span class="p">(</span><span class="n">r_data</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate the standard deviation of noise distribution.</span>
 
 <span class="sd">    Parameters</span>
@@ -418,7 +429,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">gamma_pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gamma_pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluates the Gamma pdf on a single point.</span>
 
 <span class="sd">    Parameters</span>
@@ -441,7 +452,7 @@
 
 <div class="viewcode-block" id="initialize_radius">
 <a class="viewcode-back" href="../../../generated/sesameeg.utils.initialize_radius.html#sesameeg.utils.initialize_radius">[docs]</a>
-<span class="k">def</span> <span class="nf">initialize_radius</span><span class="p">(</span><span class="n">src</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">initialize_radius</span><span class="p">(</span><span class="n">src</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Guess the units of the points in the brain discretization and</span>
 <span class="sd">    set to 1 cm the value of the radius for computing the sets of</span>
 <span class="sd">    neighbours.</span>
@@ -474,34 +485,34 @@
 
 
 
-<span class="k">def</span> <span class="nf">is_epochs</span><span class="p">(</span><span class="n">epch</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_epochs</span><span class="p">(</span><span class="n">epch</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">epch</span><span class="p">,</span> <span class="p">(</span><span class="n">Epochs</span><span class="p">,</span> <span class="n">EpochsArray</span><span class="p">)):</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
 
 
-<span class="k">def</span> <span class="nf">is_evoked</span><span class="p">(</span><span class="n">evk</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_evoked</span><span class="p">(</span><span class="n">evk</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">evk</span><span class="p">,</span> <span class="p">(</span><span class="n">Evoked</span><span class="p">,</span> <span class="n">EvokedArray</span><span class="p">)):</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
 
 
-<span class="k">def</span> <span class="nf">is_forward</span><span class="p">(</span><span class="n">fwd</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_forward</span><span class="p">(</span><span class="n">fwd</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fwd</span><span class="p">,</span> <span class="n">Forward</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
 
 
-<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">normalize</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 
 
 <div class="viewcode-block" id="prior_loc_from_labels">
 <a class="viewcode-back" href="../../../generated/sesameeg.utils.prior_loc_from_labels.html#sesameeg.utils.prior_loc_from_labels">[docs]</a>
-<span class="k">def</span> <span class="nf">prior_loc_from_labels</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">subjects_dir</span><span class="p">,</span> <span class="n">fwd</span><span class="p">,</span> <span class="n">parc</span><span class="p">,</span> <span class="n">sel_labels</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">prior_loc_from_labels</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">subjects_dir</span><span class="p">,</span> <span class="n">fwd</span><span class="p">,</span> <span class="n">parc</span><span class="p">,</span> <span class="n">sel_labels</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Construct the prior probability of active source locations starting from given FreeSurfer/MNE labels.</span>
 
 <span class="sd">    Parameters</span>
@@ -532,7 +543,7 @@
     <span class="n">labels</span> <span class="o">=</span> <span class="n">read_labels_from_annot</span><span class="p">(</span><span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">,</span> <span class="n">parc</span><span class="o">=</span><span class="n">parc</span><span class="p">,</span> <span class="n">hemi</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span>
                                     <span class="n">surf_name</span><span class="o">=</span><span class="s1">&#39;inflated&#39;</span><span class="p">,</span> <span class="n">subjects_dir</span><span class="o">=</span><span class="n">subjects_dir</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_idx</span><span class="p">(</span><span class="n">sel_label</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_idx</span><span class="p">(</span><span class="n">sel_label</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">sel_label</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">i</span>
@@ -569,7 +580,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">sample_from_sphere</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sample_from_sphere</span><span class="p">():</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">v</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
@@ -586,7 +597,7 @@
     <span class="k">return</span> <span class="n">out</span>
 
 
-<span class="k">def</span> <span class="nf">woodbury</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">woodbury</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">V</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
     <span class="n">A_inv_diag</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
     <span class="n">B_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">V</span> <span class="o">*</span> <span class="n">A_inv_diag</span><span class="p">)</span> <span class="o">@</span> <span class="n">U</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">A_inv_diag</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">A_inv_diag</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">U</span> <span class="o">@</span> <span class="n">B_inv</span> <span class="o">@</span> <span class="n">V</span> <span class="o">*</span> <span class="n">A_inv_diag</span><span class="p">)</span>
@@ -604,7 +615,7 @@
     </p>
     <p>
         &copy; Copyright 2023, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.4.7.<br/>
     </p>
   </div>
 </footer>

@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_plot_06_compute_sesame_meg_simulated_frequency_mne.py>`
-        to download the full example code or to run this example in your browser via Binder
+        to download the full example code. or to run this example in your browser via Binder
 
 .. rst-class:: sphx-glr-example-title
 
@@ -38,7 +38,7 @@ References
 
 .. GENERATED FROM PYTHON SOURCE LINES 20-50
 
-.. code-block:: default
+.. code-block:: Python
 
     # Author: Gianvittorio Luria <luria@dima.unige.it>
     #
@@ -84,7 +84,7 @@ The forward solution also defines the employed brain discretization.
 
 .. GENERATED FROM PYTHON SOURCE LINES 53-57
 
-.. code-block:: default
+.. code-block:: Python
 
     info = mne.io.read_info(raw_fname)
     fwd = mne.read_forward_solution(fwd_fname)
@@ -114,9 +114,9 @@ The forward solution also defines the employed brain discretization.
         Distance information added...
         [done]
         2 source spaces read
-        Desired named matrix (kind = 3523) not available
+        Desired named matrix (kind = 3523 (FIFF_MNE_FORWARD_SOLUTION_GRAD)) not available
         Read MEG forward solution (7498 sources, 306 channels, free orientations)
-        Desired named matrix (kind = 3523) not available
+        Desired named matrix (kind = 3523 (FIFF_MNE_FORWARD_SOLUTION_GRAD)) not available
         Read EEG forward solution (7498 sources, 60 channels, free orientations)
         Forward solutions combined: MEG, EEG
         Source spaces transformed to the forward solution coordinate frame
@@ -136,9 +136,9 @@ data. You can try simulating other types of sensors as well.
 
 .. GENERATED FROM PYTHON SOURCE LINES 60-65
 
-.. code-block:: default
+.. code-block:: Python
 
-    picks = mne.pick_types(info, meg='grad', stim=True, exclude='bads')
+    picks = mne.pick_types(info, meg='grad', stim=False, exclude='bads')
     mne.pick_info(info, picks, copy=False)
     fwd = mne.pick_channels_forward(fwd, include=info['ch_names'])
     noise_cov = mne.pick_channels_cov(noise_cov, include=info['ch_names'])
@@ -167,7 +167,7 @@ over time, but stays close to 10 Hz.
 
 .. GENERATED FROM PYTHON SOURCE LINES 72-124
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -234,7 +234,7 @@ We now simulate two timeseries and plot some basic information about them.
 
 .. GENERATED FROM PYTHON SOURCE LINES 126-160
 
-.. code-block:: default
+.. code-block:: Python
 
     sfreq = info['sfreq']
     n_sample = int(round(5. * sfreq))
@@ -289,7 +289,7 @@ a :py:class:`mne.SourceEstimate` object to store them in.
 
 .. GENERATED FROM PYTHON SOURCE LINES 163-176
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # The locations on the cortex where the signal will originate from are
@@ -319,7 +319,7 @@ by empty room noise.
 
 .. GENERATED FROM PYTHON SOURCE LINES 180-183
 
-.. code-block:: default
+.. code-block:: Python
 
     evoked = mne.apply_forward(fwd, stc_signal, info)
     mne.simulation.add_noise(evoked, noise_cov, random_state=rand)
@@ -335,7 +335,7 @@ by empty room noise.
         Average patch normals will be employed in the rotation to the local surface coordinates....
         Converting to surface-based source orientations...
         [done]
-    /home/pasca/Tools/python/packages/sesameeg/examples/plot_06_compute_sesame_meg_simulated_frequency_mne.py:180: RuntimeWarning: The maximum current magnitude is 121.2 nAm, which is very large. Are you trying to apply the forward model to noise-normalized (dSPM, sLORETA, or eLORETA) values? The result will only be correct if currents (in units of Am) are used.
+    /home/pasca/Tools/python/packages/sesameeg/examples/plot_06_compute_sesame_meg_simulated_frequency_mne.py:180: RuntimeWarning: The maximum current magnitude is 118.3 nAm, which is very large. Are you trying to apply the forward model to noise-normalized (dSPM, sLORETA, or eLORETA) values? The result will only be correct if currents (in units of Am) are used.
       evoked = mne.apply_forward(fwd, stc_signal, info)
     Projecting source estimate to sensor space...
     [done]
@@ -345,34 +345,347 @@ by empty room noise.
 .. raw:: html
 
     <div class="output_subarea output_html rendered_html output_result">
-    <table class="table table-hover">
-        <tr>
-            <th>Condition</th>
-            <td></td>
-        </tr>
-        <tr>
-            <th>Data kind</th>
-            <td>average</td>
-        </tr>
-        <tr>
-            <th>Timepoints</th>
-            <td>3003 samples</td>
-        </tr>
-            <th>Channels</th>
-            <td>203 channels</td>
-        </tr>
-        <tr>
-            <th>Number of averaged epochs</th>
-            <td>1</td>
-        </tr>
-        <tr>
-            <th>Time range (secs)</th>
-            <td>0.0 – 4.998210249179003</td>
-        </tr>
-        <tr>
-            <th>Baseline (secs)</th>
-            <td>off</td>
-        </tr>
+    <script type="text/javascript">
+        const toggleVisibility = (className) => {
+
+      const elements = document.querySelectorAll(`.${className}`)
+
+      elements.forEach(element => {
+        if (element.classList.contains('repr-section-header')) {
+          // Don't collapse the section header row.
+           return
+        }
+        if (element.classList.contains('repr-element-collapsed')) {
+          // Force a reflow to ensure the display change takes effect before removing the class
+          element.classList.remove('repr-element-collapsed')
+          element.offsetHeight // This forces the browser to recalculate layout
+          element.classList.remove('repr-element-faded')
+        } else {
+          // Start transition to hide the element
+          element.classList.add('repr-element-faded')
+          element.addEventListener('transitionend', handler = (e) => {
+            if (e.propertyName === 'opacity' && getComputedStyle(element).opacity === '0.2') {
+              element.classList.add('repr-element-collapsed')
+              element.removeEventListener('transitionend', handler)
+            }
+          });
+        }
+      });
+
+      // Take care of button (adjust caret)
+      const button = document.querySelectorAll(`.repr-section-header.${className} > th.repr-section-toggle-col > button`)[0]
+      button.classList.toggle('collapsed')
+
+      // Take care of the tooltip of the section header row
+      const sectionHeaderRow = document.querySelectorAll(`tr.repr-section-header.${className}`)[0]
+      sectionHeaderRow.classList.toggle('collapsed')
+      sectionHeaderRow.title = sectionHeaderRow.title === 'Hide section' ? 'Show section' : 'Hide section'
+    }
+    </script>
+
+    <style type="text/css">
+        table.repr.table.table-hover.table-striped.table-sm.table-responsive.small {
+      /* Don't make rows wider than they need to be. */
+      display: inline;
+    }
+
+    table > tbody > tr.repr-element > td {
+      /* Apply a tighter layout to the table cells. */
+      padding-top: 0.1rem;
+      padding-bottom: 0.1rem;
+      padding-right: 1rem;
+    }
+
+    table > tbody > tr > td.repr-section-toggle-col {
+      /* Remove background and border of the first cell in every row
+         (this row is only used for the collapse / uncollapse caret)
+
+         TODO: Need to find a good solution for VS Code that works in both
+               light and dark mode. */
+      border-color: transparent;
+      --bs-table-accent-bg: transparent;
+    }
+
+    tr.repr-section-header {
+      /* Remove stripes from section header rows */
+      background-color: transparent;
+      border-color: transparent;
+      --bs-table-striped-bg: transparent;
+      cursor: pointer;
+    }
+
+    tr.repr-section-header > th {
+      text-align: left !important;
+      vertical-align: middle;
+    }
+
+    .repr-element, tr.repr-element > td {
+      opacity: 1;
+      text-align: left !important;
+    }
+
+    .repr-element-faded {
+      transition: 0.3s ease;
+      opacity: 0.2;
+    }
+
+    .repr-element-collapsed {
+      display: none;
+    }
+
+    /* Collapse / uncollapse button and the caret it contains. */
+    .repr-section-toggle-col button {
+      cursor: pointer;
+      width: 1rem;
+      background-color: transparent;
+      border-color: transparent;
+    }
+
+    span.collapse-uncollapse-caret {
+      width: 1rem;
+      height: 1rem;
+      display: block;
+      background-repeat: no-repeat;
+      background-position: left;
+      background-size: contain;
+    }
+
+    /* The collapse / uncollapse carets were copied from the free Font Awesome collection and adjusted. */
+
+    /* Default to black carets for light mode */
+    .repr-section-toggle-col > button.collapsed > span.collapse-uncollapse-caret {
+      background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="black" d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"/></svg>');
+    }
+
+    .repr-section-toggle-col
+      > button:not(.collapsed)
+      > span.collapse-uncollapse-caret {
+      background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="black" d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/></svg>');
+    }
+
+    /* Use white carets for dark mode */
+    @media (prefers-color-scheme: dark) {
+      .repr-section-toggle-col > button.collapsed > span.collapse-uncollapse-caret {
+        background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="white" d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"/></svg>');
+      }
+
+      .repr-section-toggle-col
+        > button:not(.collapsed)
+        > span.collapse-uncollapse-caret {
+        background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="white" d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/></svg>');
+      }
+    }
+
+    .channel-names-btn {
+      padding: 0;
+      border: none;
+      background: none;
+      text-decoration: underline;
+      text-decoration-style: dashed;
+      cursor: pointer;
+      color: #0d6efd;
+    }
+
+    .channel-names-btn:hover {
+      color: #0a58ca;
+    }
+    </style>
+
+
+
+    <table class="repr table table-hover table-striped table-sm table-responsive small">
+    
+
+
+
+
+
+
+
+    <tr class="repr-section-header general-624129e7-6ad0-44e1-b050-8b871d957ecd"  title="Hide section" 
+        onclick="toggleVisibility('general-624129e7-6ad0-44e1-b050-8b871d957ecd')">
+        <th class="repr-section-toggle-col">
+            <button>
+            
+                <span class="collapse-uncollapse-caret"></span>
+            </button>
+        </th>
+        <th colspan="2">
+            <strong>General</strong>
+        </th>
+    </tr>
+
+    <tr class="repr-element general-624129e7-6ad0-44e1-b050-8b871d957ecd ">
+        <td class="repr-section-toggle-col"></td>
+        <td>MNE object type</td>
+        <td>EvokedArray</td>
+    </tr>
+    <tr class="repr-element general-624129e7-6ad0-44e1-b050-8b871d957ecd ">
+        <td class="repr-section-toggle-col"></td>
+        <td>Measurement date</td>
+    
+        <td>2025-04-15 at 13:55:49 UTC</td>
+    
+    </tr>
+    <tr class="repr-element general-624129e7-6ad0-44e1-b050-8b871d957ecd ">
+        <td class="repr-section-toggle-col"></td>
+        <td>Participant</td>
+    
+        <td>Unknown</td>
+    
+    </tr>
+    <tr class="repr-element general-624129e7-6ad0-44e1-b050-8b871d957ecd ">
+        <td class="repr-section-toggle-col"></td>
+        <td>Experimenter</td>
+    
+        <td>MEG</td>
+    
+    </tr>
+    
+
+
+
+
+
+
+
+    <tr class="repr-section-header acquisition-064791c1-b853-4804-90f9-8bdd3098d91e" 
+        title="Hide section"  onclick="toggleVisibility('acquisition-064791c1-b853-4804-90f9-8bdd3098d91e')">
+        <th class="repr-section-toggle-col">
+            <button>
+            
+                <span class="collapse-uncollapse-caret"></span>
+            </button>
+        </th>
+        <th colspan="2">
+            <strong>Acquisition</strong>
+        </th>
+    </tr>
+
+
+    <tr class="repr-element acquisition-064791c1-b853-4804-90f9-8bdd3098d91e ">
+        <td class="repr-section-toggle-col"></td>
+        <td>Aggregation</td>
+    
+        <td>average of 1 epochs</td>
+    
+    </tr>
+
+
+    <tr class="repr-element acquisition-064791c1-b853-4804-90f9-8bdd3098d91e ">
+        <td class="repr-section-toggle-col"></td>
+        <td>Condition</td>
+        <td></td>
+    </tr>
+
+
+
+
+    <tr class="repr-element acquisition-064791c1-b853-4804-90f9-8bdd3098d91e ">
+        <td class="repr-section-toggle-col"></td>
+        <td>Time range</td>
+        <td>0.000 – 4.998 s</td>
+    </tr>
+
+
+    <tr class="repr-element acquisition-064791c1-b853-4804-90f9-8bdd3098d91e ">
+        <td class="repr-section-toggle-col"></td>
+        <td>Baseline</td>
+        <td>off</td>
+    </tr>
+
+
+    <tr class="repr-element acquisition-064791c1-b853-4804-90f9-8bdd3098d91e ">
+        <td class="repr-section-toggle-col"></td>
+        <td>Sampling frequency</td>
+        <td>600.61 Hz</td>
+    </tr>
+
+
+    <tr class="repr-element acquisition-064791c1-b853-4804-90f9-8bdd3098d91e ">
+        <td class="repr-section-toggle-col"></td>
+        <td>Time points</td>
+        <td>3,003</td>
+    </tr>
+
+
+    
+
+
+
+
+
+
+
+    <tr class="repr-section-header channels-d5026abf-430d-4363-b1f3-295d7a589212"  title="Hide section" 
+        onclick="toggleVisibility('channels-d5026abf-430d-4363-b1f3-295d7a589212')">
+        <th class="repr-section-toggle-col">
+            <button>
+            
+                <span class="collapse-uncollapse-caret"></span>
+            </button>
+        </th>
+        <th colspan="2">
+            <strong>Channels</strong>
+        </th>
+    </tr>
+
+
+    <tr class="repr-element channels-d5026abf-430d-4363-b1f3-295d7a589212 ">
+        <td class="repr-section-toggle-col"></td>
+        <td>Gradiometers</td>
+        <td>
+            <button class="channel-names-btn" onclick="alert('Good Gradiometers:\n\nMEG&nbsp;0113, MEG&nbsp;0112, MEG&nbsp;0122, MEG&nbsp;0123, MEG&nbsp;0132, MEG&nbsp;0133, MEG&nbsp;0143, MEG&nbsp;0142, MEG&nbsp;0213, MEG&nbsp;0212, MEG&nbsp;0222, MEG&nbsp;0223, MEG&nbsp;0232, MEG&nbsp;0233, MEG&nbsp;0243, MEG&nbsp;0242, MEG&nbsp;0313, MEG&nbsp;0312, MEG&nbsp;0322, MEG&nbsp;0323, MEG&nbsp;0333, MEG&nbsp;0332, MEG&nbsp;0343, MEG&nbsp;0342, MEG&nbsp;0413, MEG&nbsp;0412, MEG&nbsp;0422, MEG&nbsp;0423, MEG&nbsp;0432, MEG&nbsp;0433, MEG&nbsp;0443, MEG&nbsp;0442, MEG&nbsp;0513, MEG&nbsp;0512, MEG&nbsp;0523, MEG&nbsp;0522, MEG&nbsp;0532, MEG&nbsp;0533, MEG&nbsp;0542, MEG&nbsp;0543, MEG&nbsp;0613, MEG&nbsp;0612, MEG&nbsp;0622, MEG&nbsp;0623, MEG&nbsp;0633, MEG&nbsp;0632, MEG&nbsp;0642, MEG&nbsp;0643, MEG&nbsp;0713, MEG&nbsp;0712, MEG&nbsp;0723, MEG&nbsp;0722, MEG&nbsp;0733, MEG&nbsp;0732, MEG&nbsp;0743, MEG&nbsp;0742, MEG&nbsp;0813, MEG&nbsp;0812, MEG&nbsp;0822, MEG&nbsp;0823, MEG&nbsp;0913, MEG&nbsp;0912, MEG&nbsp;0923, MEG&nbsp;0922, MEG&nbsp;0932, MEG&nbsp;0933, MEG&nbsp;0942, MEG&nbsp;0943, MEG&nbsp;1013, MEG&nbsp;1012, MEG&nbsp;1023, MEG&nbsp;1022, MEG&nbsp;1032, MEG&nbsp;1033, MEG&nbsp;1043, MEG&nbsp;1042, MEG&nbsp;1112, MEG&nbsp;1113, MEG&nbsp;1123, MEG&nbsp;1122, MEG&nbsp;1133, MEG&nbsp;1132, MEG&nbsp;1142, MEG&nbsp;1143, MEG&nbsp;1213, MEG&nbsp;1212, MEG&nbsp;1223, MEG&nbsp;1222, MEG&nbsp;1232, MEG&nbsp;1233, MEG&nbsp;1243, MEG&nbsp;1242, MEG&nbsp;1312, MEG&nbsp;1313, MEG&nbsp;1323, MEG&nbsp;1322, MEG&nbsp;1333, MEG&nbsp;1332, MEG&nbsp;1342, MEG&nbsp;1343, MEG&nbsp;1412, MEG&nbsp;1413, MEG&nbsp;1423, MEG&nbsp;1422, MEG&nbsp;1433, MEG&nbsp;1432, MEG&nbsp;1442, MEG&nbsp;1443, MEG&nbsp;1512, MEG&nbsp;1513, MEG&nbsp;1522, MEG&nbsp;1523, MEG&nbsp;1533, MEG&nbsp;1532, MEG&nbsp;1543, MEG&nbsp;1542, MEG&nbsp;1613, MEG&nbsp;1612, MEG&nbsp;1622, MEG&nbsp;1623, MEG&nbsp;1632, MEG&nbsp;1633, MEG&nbsp;1643, MEG&nbsp;1642, MEG&nbsp;1713, MEG&nbsp;1712, MEG&nbsp;1722, MEG&nbsp;1723, MEG&nbsp;1732, MEG&nbsp;1733, MEG&nbsp;1743, MEG&nbsp;1742, MEG&nbsp;1813, MEG&nbsp;1812, MEG&nbsp;1822, MEG&nbsp;1823, MEG&nbsp;1832, MEG&nbsp;1833, MEG&nbsp;1843, MEG&nbsp;1842, MEG&nbsp;1912, MEG&nbsp;1913, MEG&nbsp;1923, MEG&nbsp;1922, MEG&nbsp;1932, MEG&nbsp;1933, MEG&nbsp;1943, MEG&nbsp;1942, MEG&nbsp;2013, MEG&nbsp;2012, MEG&nbsp;2023, MEG&nbsp;2022, MEG&nbsp;2032, MEG&nbsp;2033, MEG&nbsp;2042, MEG&nbsp;2043, MEG&nbsp;2113, MEG&nbsp;2112, MEG&nbsp;2122, MEG&nbsp;2123, MEG&nbsp;2133, MEG&nbsp;2132, MEG&nbsp;2143, MEG&nbsp;2142, MEG&nbsp;2212, MEG&nbsp;2213, MEG&nbsp;2223, MEG&nbsp;2222, MEG&nbsp;2233, MEG&nbsp;2232, MEG&nbsp;2242, MEG&nbsp;2243, MEG&nbsp;2312, MEG&nbsp;2313, MEG&nbsp;2323, MEG&nbsp;2322, MEG&nbsp;2332, MEG&nbsp;2333, MEG&nbsp;2343, MEG&nbsp;2342, MEG&nbsp;2412, MEG&nbsp;2413, MEG&nbsp;2423, MEG&nbsp;2422, MEG&nbsp;2433, MEG&nbsp;2432, MEG&nbsp;2442, MEG&nbsp;2512, MEG&nbsp;2513, MEG&nbsp;2522, MEG&nbsp;2523, MEG&nbsp;2533, MEG&nbsp;2532, MEG&nbsp;2543, MEG&nbsp;2542, MEG&nbsp;2612, MEG&nbsp;2613, MEG&nbsp;2623, MEG&nbsp;2622, MEG&nbsp;2633, MEG&nbsp;2632, MEG&nbsp;2642, MEG&nbsp;2643')" title="(Click to open in popup)&#13;&#13;MEG&nbsp;0113, MEG&nbsp;0112, MEG&nbsp;0122, MEG&nbsp;0123, MEG&nbsp;0132, MEG&nbsp;0133, MEG&nbsp;0143, MEG&nbsp;0142, MEG&nbsp;0213, MEG&nbsp;0212, MEG&nbsp;0222, MEG&nbsp;0223, MEG&nbsp;0232, MEG&nbsp;0233, MEG&nbsp;0243, MEG&nbsp;0242, MEG&nbsp;0313, MEG&nbsp;0312, MEG&nbsp;0322, MEG&nbsp;0323, MEG&nbsp;0333, MEG&nbsp;0332, MEG&nbsp;0343, MEG&nbsp;0342, MEG&nbsp;0413, MEG&nbsp;0412, MEG&nbsp;0422, MEG&nbsp;0423, MEG&nbsp;0432, MEG&nbsp;0433, MEG&nbsp;0443, MEG&nbsp;0442, MEG&nbsp;0513, MEG&nbsp;0512, MEG&nbsp;0523, MEG&nbsp;0522, MEG&nbsp;0532, MEG&nbsp;0533, MEG&nbsp;0542, MEG&nbsp;0543, MEG&nbsp;0613, MEG&nbsp;0612, MEG&nbsp;0622, MEG&nbsp;0623, MEG&nbsp;0633, MEG&nbsp;0632, MEG&nbsp;0642, MEG&nbsp;0643, MEG&nbsp;0713, MEG&nbsp;0712, MEG&nbsp;0723, MEG&nbsp;0722, MEG&nbsp;0733, MEG&nbsp;0732, MEG&nbsp;0743, MEG&nbsp;0742, MEG&nbsp;0813, MEG&nbsp;0812, MEG&nbsp;0822, MEG&nbsp;0823, MEG&nbsp;0913, MEG&nbsp;0912, MEG&nbsp;0923, MEG&nbsp;0922, MEG&nbsp;0932, MEG&nbsp;0933, MEG&nbsp;0942, MEG&nbsp;0943, MEG&nbsp;1013, MEG&nbsp;1012, MEG&nbsp;1023, MEG&nbsp;1022, MEG&nbsp;1032, MEG&nbsp;1033, MEG&nbsp;1043, MEG&nbsp;1042, MEG&nbsp;1112, MEG&nbsp;1113, MEG&nbsp;1123, MEG&nbsp;1122, MEG&nbsp;1133, MEG&nbsp;1132, MEG&nbsp;1142, MEG&nbsp;1143, MEG&nbsp;1213, MEG&nbsp;1212, MEG&nbsp;1223, MEG&nbsp;1222, MEG&nbsp;1232, MEG&nbsp;1233, MEG&nbsp;1243, MEG&nbsp;1242, MEG&nbsp;1312, MEG&nbsp;1313, MEG&nbsp;1323, MEG&nbsp;1322, MEG&nbsp;1333, MEG&nbsp;1332, MEG&nbsp;1342, MEG&nbsp;1343, MEG&nbsp;1412, MEG&nbsp;1413, MEG&nbsp;1423, MEG&nbsp;1422, MEG&nbsp;1433, MEG&nbsp;1432, MEG&nbsp;1442, MEG&nbsp;1443, MEG&nbsp;1512, MEG&nbsp;1513, MEG&nbsp;1522, MEG&nbsp;1523, MEG&nbsp;1533, MEG&nbsp;1532, MEG&nbsp;1543, MEG&nbsp;1542, MEG&nbsp;1613, MEG&nbsp;1612, MEG&nbsp;1622, MEG&nbsp;1623, MEG&nbsp;1632, MEG&nbsp;1633, MEG&nbsp;1643, MEG&nbsp;1642, MEG&nbsp;1713, MEG&nbsp;1712, MEG&nbsp;1722, MEG&nbsp;1723, MEG&nbsp;1732, MEG&nbsp;1733, MEG&nbsp;1743, MEG&nbsp;1742, MEG&nbsp;1813, MEG&nbsp;1812, MEG&nbsp;1822, MEG&nbsp;1823, MEG&nbsp;1832, MEG&nbsp;1833, MEG&nbsp;1843, MEG&nbsp;1842, MEG&nbsp;1912, MEG&nbsp;1913, MEG&nbsp;1923, MEG&nbsp;1922, MEG&nbsp;1932, MEG&nbsp;1933, MEG&nbsp;1943, MEG&nbsp;1942, MEG&nbsp;2013, MEG&nbsp;2012, MEG&nbsp;2023, MEG&nbsp;2022, MEG&nbsp;2032, MEG&nbsp;2033, MEG&nbsp;2042, MEG&nbsp;2043, MEG&nbsp;2113, MEG&nbsp;2112, MEG&nbsp;2122, MEG&nbsp;2123, MEG&nbsp;2133, MEG&nbsp;2132, MEG&nbsp;2143, MEG&nbsp;2142, MEG&nbsp;2212, MEG&nbsp;2213, MEG&nbsp;2223, MEG&nbsp;2222, MEG&nbsp;2233, MEG&nbsp;2232, MEG&nbsp;2242, MEG&nbsp;2243, MEG&nbsp;2312, MEG&nbsp;2313, MEG&nbsp;2323, MEG&nbsp;2322, MEG&nbsp;2332, MEG&nbsp;2333, MEG&nbsp;2343, MEG&nbsp;2342, MEG&nbsp;2412, MEG&nbsp;2413, MEG&nbsp;2423, MEG&nbsp;2422, MEG&nbsp;2433, MEG&nbsp;2432, MEG&nbsp;2442, MEG&nbsp;2512, MEG&nbsp;2513, MEG&nbsp;2522, MEG&nbsp;2523, MEG&nbsp;2533, MEG&nbsp;2532, MEG&nbsp;2543, MEG&nbsp;2542, MEG&nbsp;2612, MEG&nbsp;2613, MEG&nbsp;2623, MEG&nbsp;2622, MEG&nbsp;2633, MEG&nbsp;2632, MEG&nbsp;2642, MEG&nbsp;2643">
+                203
+            </button>
+
+        
+        </td>
+    </tr>
+
+
+    <tr class="repr-element channels-d5026abf-430d-4363-b1f3-295d7a589212 ">
+        <td class="repr-section-toggle-col"></td>
+        <td>Head & sensor digitization</td>
+    
+        <td>146 points</td>
+    
+    </tr>
+    
+
+
+
+
+
+
+
+    <tr class="repr-section-header filters-42168336-c0fe-44f5-b2c1-630b81046a61"  title="Hide section" 
+        onclick="toggleVisibility('filters-42168336-c0fe-44f5-b2c1-630b81046a61')">
+        <th class="repr-section-toggle-col">
+            <button>
+            
+                <span class="collapse-uncollapse-caret"></span>
+            </button>
+        </th>
+        <th colspan="2">
+            <strong>Filters</strong>
+        </th>
+    </tr>
+
+    <tr class="repr-element filters-42168336-c0fe-44f5-b2c1-630b81046a61 ">
+        <td class="repr-section-toggle-col"></td>
+        <td>Highpass</td>
+        <td>0.00 Hz</td>
+    </tr>
+
+
+    <tr class="repr-element filters-42168336-c0fe-44f5-b2c1-630b81046a61 ">
+        <td class="repr-section-toggle-col"></td>
+        <td>Lowpass</td>
+        <td>300.31 Hz</td>
+    </tr>
+
+
     </table>
     </div>
     <br />
@@ -384,7 +697,7 @@ Visualize the data
 
 .. GENERATED FROM PYTHON SOURCE LINES 185-190
 
-.. code-block:: default
+.. code-block:: Python
 
     evoked.plot()
     _t = evoked.times[(2.0 < evoked.times) & (evoked.times < 3.5)]
@@ -407,7 +720,7 @@ Visualize the data
     *
 
       .. image-sg:: /auto_examples/images/sphx_glr_plot_06_compute_sesame_meg_simulated_frequency_mne_003.png
-         :alt: 2.001 s, 2.085 s, 2.168 s, 2.251 s, 2.334 s, 2.418 s, 2.501 s, fT/cm, 2.584 s, 2.667 s, 2.751 s, 2.834 s, 2.917 s, 3.000 s, 3.084 s, 3.167 s, 3.250 s, 3.333 s, 3.416 s, 3.500 s
+         :alt: 2.001 s, 2.085 s, 2.168 s, 2.251 s, 2.334 s, 2.418 s, 2.501 s, 2.584 s, 2.667 s, 2.751 s, 2.834 s, 2.917 s, 3.000 s, 3.084 s, 3.167 s, 3.250 s, 3.333 s, 3.416 s, 3.500 s, fT/cm
          :srcset: /auto_examples/images/sphx_glr_plot_06_compute_sesame_meg_simulated_frequency_mne_003.png
          :class: sphx-glr-multi-img
 
@@ -422,7 +735,7 @@ domain by setting ``fourier=True``.
 
 .. GENERATED FROM PYTHON SOURCE LINES 193-216
 
-.. code-block:: default
+.. code-block:: Python
 
 
     n_parts = 100
@@ -463,25 +776,23 @@ domain by setting ``fourier=True``.
     Data have been converted to the frequency domain.
     Analyzing data from 9.6002 Hz to 10.4003 Hz
     Estimating dipole moment std...[done]
-     Estimated dipole moment std: 2.1725e-05
+     Estimated dipole moment std: 2.1883e-05
     Sampling hyperprior for dipole moment std.
     Estimating noise std...[done]
-     Estimated noise std: 2.6864e-09
+     Estimated noise std: 2.7059e-09
     Computing inverse solution. This will take a while...
-    /home/pasca/Tools/python/packages/sesameeg/sesameeg/particles.py:174: RuntimeWarning: invalid value encountered in log
+    /home/pasca/Tools/python/packages/sesameeg/sesameeg/particles.py:175: RuntimeWarning: invalid value encountered in log
       self.loglikelihood_unit = - (n_ist * noise_std**2) * np.log(det_sigma)
-    /home/pasca/mambaforge/envs/mne_15/lib/python3.11/site-packages/numpy/linalg/linalg.py:2139: RuntimeWarning: overflow encountered in det
-      r = _umath_linalg.det(a, signature=signature)
-    Estimated dipole strength variance: 9.466076567752923e-06
+    Estimated dipole strength variance: 9.916784086727255e-06
         Estimated number of sources: 2
         Estimated source locations:
             * source 1: [0.02482721 0.00881952 0.12250079]
             * source 2: [-0.0283287   0.09554572  0.05893362]
-    [done in 88 iterations]
+    [done in 96 iterations]
         Estimated source locations: [4367 3554]
         True source locations: [3554, 4367]
-        Goodness of fit with the recorded data: 92.44%
-        Source Dispersion: 1.37 mm
+        Goodness of fit with the recorded data: 92.73%
+        Source Dispersion: 1.33 mm
 
 
 
@@ -494,7 +805,7 @@ If window closes unexpectedly, set force_open=True
 
 .. GENERATED FROM PYTHON SOURCE LINES 220-222
 
-.. code-block:: default
+.. code-block:: Python
 
     _sesame.plot_sources(true_sources=true_locs, force_open=False, plot_kwargs={'distance': 650})
 
@@ -512,7 +823,7 @@ If window closes unexpectedly, set force_open=True
  .. code-block:: none
 
     Surface stc computed.
-    [3554, 4367]
+    Using pyvistaqt 3d backend.
 
 
 
@@ -520,7 +831,7 @@ If window closes unexpectedly, set force_open=True
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 31.468 seconds)
+   **Total running time of the script:** (0 minutes 28.064 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_06_compute_sesame_meg_simulated_frequency_mne.py:
@@ -529,7 +840,6 @@ If window closes unexpectedly, set force_open=True
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
-
     .. container:: binder-badge
 
       .. image:: images/binder_badge_logo.svg
@@ -537,15 +847,17 @@ If window closes unexpectedly, set force_open=True
         :alt: Launch binder
         :width: 150 px
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
+      :download:`Download Jupyter notebook: plot_06_compute_sesame_meg_simulated_frequency_mne.ipynb <plot_06_compute_sesame_meg_simulated_frequency_mne.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_06_compute_sesame_meg_simulated_frequency_mne.py <plot_06_compute_sesame_meg_simulated_frequency_mne.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: plot_06_compute_sesame_meg_simulated_frequency_mne.ipynb <plot_06_compute_sesame_meg_simulated_frequency_mne.ipynb>`
+      :download:`Download zipped: plot_06_compute_sesame_meg_simulated_frequency_mne.zip <plot_06_compute_sesame_meg_simulated_frequency_mne.zip>`
 
 
 .. only:: html

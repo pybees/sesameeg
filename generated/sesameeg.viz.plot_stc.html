@@ -5,15 +5,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sesameeg.viz.plot_stc &#8212; sesameeg 0.0.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <title>sesameeg.viz.plot_stc &#8212; sesameeg 0.0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=284a2d1d" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../_static/documentation_options.js?v=e3a6060d"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=47de8214"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/copybutton.js?v=26522df0"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -42,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html">
           sesameeg</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.0.2</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -90,7 +90,32 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sesameeg.viz</span></code>.plot_stc</a><ul>
+<li><a class="reference internal" href="#sesameeg.viz.plot_stc"><code class="docutils literal notranslate"><span class="pre">plot_stc()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  <li>
+    <a href="sesameeg.viz.plot_n_sources.html" title="Previous Chapter: sesameeg.viz.plot_n_sources"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; sesameeg.viz....</span>
+    </a>
+  </li>
+  <li>
+    <a href="sesameeg.viz.plot_vol_stc.html" title="Next Chapter: sesameeg.viz.plot_vol_stc"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">sesameeg.viz.... &raquo;</span>
+    </a>
+  </li>
+<form action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <section id="sesameeg-viz-plot-stc">
 <h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">sesameeg.viz</span></code>.plot_stc<a class="headerlink" href="#sesameeg-viz-plot-stc" title="Link to this heading">¶</a></h1>
@@ -103,15 +128,15 @@
 <dd class="field-odd"><dl>
 <dt><strong>inv_op</strong><span class="classifier">Instance of <a class="reference internal" href="sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sesame</span></code></a></span></dt><dd><p>Instance of <cite>Sesame</cite>. Source estimates have to be computed through <a class="reference internal" href="sesameeg.Sesame.html#sesameeg.Sesame.compute_stc" title="sesameeg.Sesame.compute_stc"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_stc()</span></code></a></p>
 </dd>
-<dt><strong>plot_kwargs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> | None</span></dt><dd><p>Additional arguments to <a class="reference external" href="https://mne.tools/stable/generated/mne.viz.plot_source_estimates.html#mne.viz.plot_source_estimates" title="(in MNE v1.6)"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_source_estimates()</span></code></a> (e.g., dict(surface=’white’)).</p>
+<dt><strong>plot_kwargs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> | None</span></dt><dd><p>Additional arguments to <a class="reference external" href="https://mne.tools/stable/generated/mne.viz.plot_source_estimates.html#mne.viz.plot_source_estimates" title="(in MNE v1.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_source_estimates()</span></code></a> (e.g., dict(surface=’white’)).</p>
 </dd>
-<dt><strong>savepath</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>File path to write image to. If None, no image is written.</p>
+<dt><strong>savepath</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>File path to write image to. If None, no image is written.</p>
 </dd>
-<dt><strong>save_kwargs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> | None</span></dt><dd><p>Additional arguments to <a class="reference external" href="https://docs.pyvista.org/version/stable/api/plotting/_autosummary/pyvista.Plotter.screenshot.html#pyvista.Plotter.screenshot" title="(in PyVista v0.43.1)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">screenshot()</span></code></a>.</p>
+<dt><strong>save_kwargs</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> | None</span></dt><dd><p>Additional arguments to <a class="reference external" href="https://docs.pyvista.org/api/plotting/_autosummary/pyvista.Plotter.screenshot.html#pyvista.Plotter.screenshot" title="(in PyVista v0.44.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">screenshot()</span></code></a>.</p>
 </dd>
-<dt><strong>true_idxs</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> | None</span></dt><dd><p>In simulation settings, indexes of source space points in which true sources are located.</p>
+<dt><strong>true_idxs</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> | None</span></dt><dd><p>In simulation settings, indexes of source space points in which true sources are located.</p>
 </dd>
-<dt><strong>force_open</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True, force the image to stay open.</p>
+<dt><strong>force_open</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></dt><dd><p>If True, force the image to stay open.</p>
 </dd>
 </dl>
 </dd>
@@ -133,7 +158,7 @@
     </p>
     <p>
         &copy; Copyright 2023, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.4.7.<br/>
     </p>
   </div>
 </footer>

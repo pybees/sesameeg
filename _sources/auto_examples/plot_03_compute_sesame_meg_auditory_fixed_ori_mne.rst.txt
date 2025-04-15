@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_plot_03_compute_sesame_meg_auditory_fixed_ori_mne.py>`
-        to download the full example code or to run this example in your browser via Binder
+        to download the full example code. or to run this example in your browser via Binder
 
 .. rst-class:: sphx-glr-example-title
 
@@ -29,7 +29,7 @@ dataset. We shall constrain dipole moments to be normal to the cortical surface.
 
 .. GENERATED FROM PYTHON SOURCE LINES 11-36
 
-.. code-block:: default
+.. code-block:: Python
 
     # Authors: Gianvittorio Luria <luria@dima.unige.it>
     #          Annalisa Pascarella <a.pascarella@iac.cnr.it>
@@ -71,7 +71,7 @@ The forward solution also defines the employed brain discretization.
 
 .. GENERATED FROM PYTHON SOURCE LINES 40-56
 
-.. code-block:: default
+.. code-block:: Python
 
     meg_sensor_type = True  # All MEG sensors will be included
     eeg_sensor_type = False
@@ -109,9 +109,9 @@ The forward solution also defines the employed brain discretization.
         Distance information added...
         [done]
         2 source spaces read
-        Desired named matrix (kind = 3523) not available
+        Desired named matrix (kind = 3523 (FIFF_MNE_FORWARD_SOLUTION_GRAD)) not available
         Read MEG forward solution (7498 sources, 306 channels, free orientations)
-        Desired named matrix (kind = 3523) not available
+        Desired named matrix (kind = 3523 (FIFF_MNE_FORWARD_SOLUTION_GRAD)) not available
         Read EEG forward solution (7498 sources, 60 channels, free orientations)
         Forward solutions combined: MEG, EEG
         Source spaces transformed to the forward solution coordinate frame
@@ -132,7 +132,6 @@ The forward solution also defines the employed brain discretization.
             nave = 55 - aspect type = 100
     Projections have already been applied. Setting proj attribute to True.
     Applying baseline correction (mode: mean)
-    Removing projector <Projection | Average EEG reference, active : True, n_channels : 60>
 
 
 
@@ -143,7 +142,7 @@ Define the parameters.
 
 .. GENERATED FROM PYTHON SOURCE LINES 58-82
 
-.. code-block:: default
+.. code-block:: Python
 
     time_min, time_max = 0.045, 0.135  # Select N100m
     subsample = None
@@ -182,7 +181,7 @@ Visualize the selected data.
 
 .. GENERATED FROM PYTHON SOURCE LINES 84-91
 
-.. code-block:: default
+.. code-block:: Python
 
 
     fig = evoked.plot(show=False)
@@ -209,7 +208,7 @@ Apply SESAME.
 
 .. GENERATED FROM PYTHON SOURCE LINES 93-107
 
-.. code-block:: default
+.. code-block:: Python
 
     _sesame = prepare_sesame(fwd, evoked, n_parts=n_parts, noise_std=noise_std,
                              top_min=time_min, top_max=time_max, dip_mom_std=dip_mom_std,
@@ -252,15 +251,15 @@ Apply SESAME.
     Estimating noise std...[done]
      Estimated noise std: 3.9983e-12
     Computing inverse solution. This will take a while...
-    Estimated dipole strength variance: 4.963869064542019e-08
+    Estimated dipole strength variance: 4.907829665453985e-08
         Estimated number of sources: 3
         Estimated source locations:
             * source 1: [-0.05400166 -0.00015956  0.05831272]
             * source 2: [-0.00616284  0.03850401  0.04948525]
             * source 3: [0.04589902 0.00942308 0.06544629]
-    [done in 121 iterations]
-        Goodness of fit with the recorded data: 64.99000000000001%
-        Source Dispersion: 0.33 mm
+    [done in 90 iterations]
+        Goodness of fit with the recorded data: 64.98%
+        Source Dispersion: 1.92 mm
 
 
 
@@ -272,7 +271,7 @@ Visualize the posterior map of the dipoles' location
 
 .. GENERATED FROM PYTHON SOURCE LINES 110-112
 
-.. code-block:: default
+.. code-block:: Python
 
     _sesame.plot_sources(plot_kwargs={'distance': 650})
 
@@ -300,7 +299,7 @@ Visualize the amplitude of the estimated sources as function of time.
 
 .. GENERATED FROM PYTHON SOURCE LINES 114-116
 
-.. code-block:: default
+.. code-block:: Python
 
     _sesame.plot_source_amplitudes()
 
@@ -322,7 +321,7 @@ Save results.
 
 .. GENERATED FROM PYTHON SOURCE LINES 118-124
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # You can save SESAME result in an HDF5 file with:
@@ -340,7 +339,7 @@ Save results.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (1 minutes 3.348 seconds)
+   **Total running time of the script:** (0 minutes 54.925 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_03_compute_sesame_meg_auditory_fixed_ori_mne.py:
@@ -349,7 +348,6 @@ Save results.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
-
     .. container:: binder-badge
 
       .. image:: images/binder_badge_logo.svg
@@ -357,15 +355,17 @@ Save results.
         :alt: Launch binder
         :width: 150 px
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
+      :download:`Download Jupyter notebook: plot_03_compute_sesame_meg_auditory_fixed_ori_mne.ipynb <plot_03_compute_sesame_meg_auditory_fixed_ori_mne.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_03_compute_sesame_meg_auditory_fixed_ori_mne.py <plot_03_compute_sesame_meg_auditory_fixed_ori_mne.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: plot_03_compute_sesame_meg_auditory_fixed_ori_mne.ipynb <plot_03_compute_sesame_meg_auditory_fixed_ori_mne.ipynb>`
+      :download:`Download zipped: plot_03_compute_sesame_meg_auditory_fixed_ori_mne.zip <plot_03_compute_sesame_meg_auditory_fixed_ori_mne.zip>`
 
 
 .. only:: html

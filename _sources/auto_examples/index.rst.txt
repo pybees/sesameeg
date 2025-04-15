@@ -13,10 +13,11 @@ Introductory examples.
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an auditory stimulus. Data are taken from the MNE-Python sample dataset.">
 
 .. only:: html
 
@@ -33,7 +34,7 @@ Introductory examples.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example we shall compute SESAME inverse solution on evoked data in a volume source spac...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example we shall compute SESAME inverse solution on evoked data in a volume source space. Data are taken from the MNE-Python sample dataset and correspond to the response to an auditory stimulus.">
 
 .. only:: html
 
@@ -50,7 +51,7 @@ Introductory examples.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an auditory stimulus. Data are taken from the MNE-Python sample dataset. We shall constrain dipole moments to be normal to the cortical surface.">
 
 .. only:: html
 
@@ -67,7 +68,7 @@ Introductory examples.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an auditory stimulus and we manually select a priori source location probability to reside in a subset of ROIs in a given brain parcellization. Data are taken from the MNE-Python sample dataset.">
 
 .. only:: html
 
@@ -84,7 +85,7 @@ Introductory examples.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example we shall show that SESAME is able to provide alternative solutions with non-neg...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example we shall show that SESAME is able to provide alternative solutions with non-negligible probabilities and how the user can easily explore all of them.">
 
 .. only:: html
 
@@ -101,7 +102,7 @@ Introductory examples.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In the present example we shall devise a synthetic scenario in which two dipolar sources are ac...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In the present example we shall devise a synthetic scenario in which two dipolar sources are active in the cortex. The source time courses are 10 Hz sinusoids, each modulated by a Gaussian. Simulated MEG recordings are then corrupted by empty room noise.">
 
 .. only:: html
 
@@ -118,7 +119,7 @@ Introductory examples.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In the present example we shall show how to perform a source modeling analysis using SESAME as ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In the present example we shall show how to perform a source modeling analysis using SESAME as a standalone software.">
 
 .. only:: html
 
@@ -132,6 +133,8 @@ Introductory examples.
       <div class="sphx-glr-thumbnail-title">Compute SESAME inverse solution on high-density EEG data</div>
     </div>
 
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 

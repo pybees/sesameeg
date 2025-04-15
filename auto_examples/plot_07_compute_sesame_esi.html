@@ -5,15 +5,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Compute SESAME inverse solution on high-density EEG data &#8212; sesameeg 0.0.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <title>Compute SESAME inverse solution on high-density EEG data &#8212; sesameeg 0.0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=284a2d1d" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../_static/documentation_options.js?v=e3a6060d"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=47de8214"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/copybutton.js?v=26522df0"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -42,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html">
           sesameeg</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.0.2</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -90,12 +90,37 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#">Compute SESAME inverse solution on high-density EEG data</a><ul>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+  <li>
+    <a href="plot_06_compute_sesame_meg_simulated_frequency_mne.html" title="Previous Chapter: Compute SESAME inverse solution on simulated data in the frequency domain"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Compute SESAM...</span>
+    </a>
+  </li>
+  <li>
+    <a href="../api.html" title="Next Chapter: API Reference"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">API Reference &raquo;</span>
+    </a>
+  </li>
+<form action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-plot-07-compute-sesame-esi-py"><span class="std std-ref">Go to the end</span></a>
-to download the full example code or to run this example in your browser via Binder</p>
+to download the full example code. or to run this example in your browser via Binder</p>
 </div>
 <section class="sphx-glr-example-title" id="compute-sesame-inverse-solution-on-high-density-eeg-data">
 <span id="sphx-glr-auto-examples-plot-07-compute-sesame-esi-py"></span><h1>Compute SESAME inverse solution on high-density EEG data<a class="headerlink" href="#compute-sesame-inverse-solution-on-high-density-eeg-data" title="Link to this heading">¶</a></h1>
@@ -120,21 +145,21 @@ for source localization methods</a>. Sci Data, 7 (2020)</p>
 sources</a>. NeuroImage, 277 (2023)</p>
 </aside>
 </aside>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Author: Gianvittorio Luria &lt;luria@dima.unige.it&gt;</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Author: Gianvittorio Luria &lt;luria@dima.unige.it&gt;</span>
 <span class="c1">#</span>
 <span class="c1"># License: BSD (3-clause)</span>
 
 <span class="c1"># sphinx_gallery_thumbnail_number = 2</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.io</span> <span class="k">as</span> <span class="nn">sio</span>
-<span class="kn">import</span> <span class="nn">scipy.spatial.distance</span> <span class="k">as</span> <span class="nn">ssd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">sesameeg</span> <span class="kn">import</span> <a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-class"><span class="n">Sesame</span></a>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.io</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.spatial.distance</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ssd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sesameeg</span><span class="w"> </span><span class="kn">import</span> <a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-class"><span class="n">Sesame</span></a>
 </pre></div>
 </div>
 <p>Import the MATLAB data structure and extract the single quantities.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_mat</span></a> <span class="o">=</span> <span class="n">sio</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s1">&#39;data/sub-01_run-07_data.mat&#39;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_mat</span></a> <span class="o">=</span> <span class="n">sio</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s1">&#39;data/sub-01_run-07_data.mat&#39;</span><span class="p">)</span>
 
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_space</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_mat</span></a><span class="p">[</span><span class="s1">&#39;src_coo&#39;</span><span class="p">]</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">good_chs</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_mat</span></a><span class="p">[</span><span class="s1">&#39;good_chs&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
@@ -146,7 +171,7 @@ sources</a>. NeuroImage, 277 (2023)</p>
 </pre></div>
 </div>
 <p>Define the parameters.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sample_min</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sample_max</span></a> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">24</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sample_min</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sample_max</span></a> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">24</span>
 <span class="n">subsample</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="c1"># To accelerate the run time of this example, we use a small number of</span>
@@ -162,7 +187,7 @@ sources</a>. NeuroImage, 277 (2023)</p>
 </pre></div>
 </div>
 <p>Visualize the selected data.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_times</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span><span class="o">.</span><span class="n">T</span></a><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;EEG data&#39;</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axvspan.html#matplotlib.pyplot.axvspan" title="matplotlib.pyplot.axvspan" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">axvspan</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_times</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sample_min</span></a><span class="p">],</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_times</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sample_max</span></a><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Analyzed data&#39;</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlabel.html#matplotlib.pyplot.xlabel" title="matplotlib.pyplot.xlabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span></a><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
@@ -171,7 +196,7 @@ sources</a>. NeuroImage, 277 (2023)</p>
 </pre></div>
 </div>
 <img src="../_images/sphx_glr_plot_07_compute_sesame_esi_001.png" srcset="../_images/sphx_glr_plot_07_compute_sesame_esi_001.png" alt="EEG Data (234 channels)" class = "sphx-glr-single-img"/><p>Apply SESAME.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">_sesame</span></a> <span class="o">=</span> <a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-class"><span class="n">Sesame</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_space</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">lead_field</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_parts</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_parts</span></a><span class="p">,</span> <span class="n">noise_std</span><span class="o">=</span><span class="n">noise_std</span><span class="p">,</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">_sesame</span></a> <span class="o">=</span> <a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-class"><span class="n">Sesame</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_space</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">lead_field</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_parts</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_parts</span></a><span class="p">,</span> <span class="n">noise_std</span><span class="o">=</span><span class="n">noise_std</span><span class="p">,</span>
                  <span class="n">s_max</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sample_max</span></a><span class="p">,</span> <span class="n">s_min</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sample_min</span></a><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="n">dip_mom_std</span><span class="p">,</span>
                  <span class="n">hyper_q</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="n">subsample</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_times</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_times</span></a><span class="p">)</span>
 
@@ -198,45 +223,47 @@ Sampling hyperprior for dipole moment std.
 Estimating noise std...[done]
  Estimated noise std: 2.8010e-04
 Computing inverse solution. This will take a while...
-/home/pasca/Tools/python/packages/sesameeg/sesameeg/particles.py:174: RuntimeWarning: invalid value encountered in log
-  self.loglikelihood_unit = - (n_ist * noise_std**2) * np.log(det_sigma)
-Estimated dipole strength variance: 2.20030636474554e-06
+Estimated dipole strength variance: 2.210125298272916e-06
     Estimated number of sources: 1
     Estimated source locations:
         * source 1: [ 0.03371428 -0.00413685  0.03588749]
-[done in 64 iterations]
+[done in 76 iterations]
     Goodness of fit with the recorded data: 78.89%
-    Source Dispersion: 3.18 mm
+    Source Dispersion: 2.57 mm
     Distance to true source: 4.07 mm
 </pre></div>
 </div>
 <p>Visualize the posterior map of the dipoles’ location
 <img class="math" src="../_images/math/80c0f146b8c13abbdb5ff40566e1089f7ea5f116.png" alt="p(r| \textbf{y}, 2)"/> and the estimated sources on the inflated brain.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_sources" title="sesameeg.Sesame.plot_sources" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-method"><span class="n">_sesame</span><span class="o">.</span><span class="n">plot_sources</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_sources</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_sources</span></a><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_sources" title="sesameeg.Sesame.plot_sources" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-method"><span class="n">_sesame</span><span class="o">.</span><span class="n">plot_sources</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_sources</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_sources</span></a><span class="p">)</span>
 </pre></div>
 </div>
 <img src="../_images/sphx_glr_plot_07_compute_sesame_esi_002.png" srcset="../_images/sphx_glr_plot_07_compute_sesame_esi_002.png" alt="plot 07 compute sesame esi" class = "sphx-glr-single-img"/><p>Visualize the amplitude of the estimated sources as function of time.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_source_amplitudes" title="sesameeg.Sesame.plot_source_amplitudes" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-method"><span class="n">_sesame</span><span class="o">.</span><span class="n">plot_source_amplitudes</span></a><span class="p">()</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_source_amplitudes" title="sesameeg.Sesame.plot_source_amplitudes" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-method"><span class="n">_sesame</span><span class="o">.</span><span class="n">plot_source_amplitudes</span></a><span class="p">()</span>
 </pre></div>
 </div>
 <img src="../_images/sphx_glr_plot_07_compute_sesame_esi_003.png" srcset="../_images/sphx_glr_plot_07_compute_sesame_esi_003.png" alt="plot 07 compute sesame esi" class = "sphx-glr-single-img"/><p>Save results.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># You can save SESAME result in an HDF5 file with:</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># You can save SESAME result in an HDF5 file with:</span>
 <span class="c1"># _sesame.save_h5(save_fname, sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)</span>
 
 <span class="c1"># You can save SESAME result in a Pickle file with:</span>
 <span class="c1"># _sesame.save_pkl(save_fname, sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.737 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 5.294 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-07-compute-sesame-esi-py">
 <div class="binder-badge docutils container">
-<a class="reference external image-reference" href="https://mybinder.org/v2/gh/pybees/sesameeg/master?urlpath=lab/tree/notebooks/auto_examples/plot_07_compute_sesame_esi.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>
+<a class="reference external image-reference" href="https://mybinder.org/v2/gh/pybees/sesameeg/master?urlpath=lab/tree/notebooks/auto_examples/plot_07_compute_sesame_esi.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" style="width: 150px;" />
+</a>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/b04bc23da2d1e9755817db0733bead7c/plot_07_compute_sesame_esi.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_07_compute_sesame_esi.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/09a76cf63d34e1938f01a99e1ed92097/plot_07_compute_sesame_esi.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_07_compute_sesame_esi.py</span></code></a></p>
 </div>
-<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/b04bc23da2d1e9755817db0733bead7c/plot_07_compute_sesame_esi.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_07_compute_sesame_esi.ipynb</span></code></a></p>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/442c57bee1264c67252f60e2a7df3c16/plot_07_compute_sesame_esi.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_07_compute_sesame_esi.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -256,7 +283,7 @@ Estimated dipole strength variance: 2.20030636474554e-06
     </p>
     <p>
         &copy; Copyright 2023, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.4.7.<br/>
     </p>
   </div>
 </footer>

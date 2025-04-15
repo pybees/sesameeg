@@ -6,20 +6,50 @@
 
 Computation times
 =================
-**02:48.511** total execution time for **auto_examples** files:
+**00:28.064** total execution time for 7 files **from auto_examples**:
 
-+-------------------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_plot_03_compute_sesame_meg_auditory_fixed_ori_mne.py` (``plot_03_compute_sesame_meg_auditory_fixed_ori_mne.py``)   | 01:03.348 | 0.0 MB |
-+-------------------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_plot_06_compute_sesame_meg_simulated_frequency_mne.py` (``plot_06_compute_sesame_meg_simulated_frequency_mne.py``) | 00:31.468 | 0.0 MB |
-+-------------------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_plot_05_explore_alternative_sesame_meg.py` (``plot_05_explore_alternative_sesame_meg.py``)                         | 00:27.059 | 0.0 MB |
-+-------------------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_plot_02_compute_sesame_meg_auditory_volume_mne.py` (``plot_02_compute_sesame_meg_auditory_volume_mne.py``)         | 00:17.485 | 0.0 MB |
-+-------------------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_plot_01_compute_sesame_meg_auditory_mne.py` (``plot_01_compute_sesame_meg_auditory_mne.py``)                       | 00:14.981 | 0.0 MB |
-+-------------------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_plot_04_compute_sesame_meg_auditory_prior_mne.py` (``plot_04_compute_sesame_meg_auditory_prior_mne.py``)           | 00:09.434 | 0.0 MB |
-+-------------------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_plot_07_compute_sesame_esi.py` (``plot_07_compute_sesame_esi.py``)                                                 | 00:04.737 | 0.0 MB |
-+-------------------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
+.. container::
+
+  .. raw:: html
+
+    <style scoped>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript" class="init">
+    $(document).ready( function () {
+        $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
+    } );
+    </script>
+
+  .. list-table::
+   :header-rows: 1
+   :class: table table-striped sg-datatable
+
+   * - Example
+     - Time
+     - Mem (MB)
+   * - :ref:`sphx_glr_auto_examples_plot_06_compute_sesame_meg_simulated_frequency_mne.py` (``plot_06_compute_sesame_meg_simulated_frequency_mne.py``)
+     - 00:28.064
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_01_compute_sesame_meg_auditory_mne.py` (``plot_01_compute_sesame_meg_auditory_mne.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_02_compute_sesame_meg_auditory_volume_mne.py` (``plot_02_compute_sesame_meg_auditory_volume_mne.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_03_compute_sesame_meg_auditory_fixed_ori_mne.py` (``plot_03_compute_sesame_meg_auditory_fixed_ori_mne.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_04_compute_sesame_meg_auditory_prior_mne.py` (``plot_04_compute_sesame_meg_auditory_prior_mne.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_05_explore_alternative_sesame_meg.py` (``plot_05_explore_alternative_sesame_meg.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plot_07_compute_sesame_esi.py` (``plot_07_compute_sesame_esi.py``)
+     - 00:00.000
+     - 0.0

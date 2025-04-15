@@ -5,15 +5,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Compute SESAME inverse solution on evoked data in volume source space &#8212; sesameeg 0.0.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <title>Compute SESAME inverse solution on evoked data in volume source space &#8212; sesameeg 0.0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=284a2d1d" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../_static/documentation_options.js?v=e3a6060d"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=47de8214"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/copybutton.js?v=26522df0"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -42,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html">
           sesameeg</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.0.2</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -90,12 +90,34 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#">Compute SESAME inverse solution on evoked data in volume source space</a></li>
+</ul>
+
+  <li>
+    <a href="plot_01_compute_sesame_meg_auditory_mne.html" title="Previous Chapter: Compute SESAME inverse solution on evoked data"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Compute SESAM...</span>
+    </a>
+  </li>
+  <li>
+    <a href="plot_03_compute_sesame_meg_auditory_fixed_ori_mne.html" title="Next Chapter: Compute SESAME inverse solution on evoked data with source constraints"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Compute SESAM... &raquo;</span>
+    </a>
+  </li>
+<form action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-plot-02-compute-sesame-meg-auditory-volume-mne-py"><span class="std std-ref">Go to the end</span></a>
-to download the full example code or to run this example in your browser via Binder</p>
+to download the full example code. or to run this example in your browser via Binder</p>
 </div>
 <section class="sphx-glr-example-title" id="compute-sesame-inverse-solution-on-evoked-data-in-volume-source-space">
 <span id="sphx-glr-auto-examples-plot-02-compute-sesame-meg-auditory-volume-mne-py"></span><h1>Compute SESAME inverse solution on evoked data in volume source space<a class="headerlink" href="#compute-sesame-inverse-solution-on-evoked-data-in-volume-source-space" title="Link to this heading">¶</a></h1>
@@ -103,7 +125,7 @@ to download the full example code or to run this example in your browser via Bin
 a volume source space. Data are taken from the MNE-Python
 <a class="reference external" href="https://mne.tools/stable/generated/mne.datasets.sample.data_path.html#mne.datasets.sample.data_path">sample</a>
 dataset and correspond to the response to an auditory stimulus.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Gianvittorio Luria &lt;luria@dima.unige.it&gt;</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Gianvittorio Luria &lt;luria@dima.unige.it&gt;</span>
 <span class="c1">#          Sara Sommariva &lt;sommariva@dima.unige.it&gt;</span>
 <span class="c1">#          Alberto Sorrentino &lt;sorrentino@dima.unige.it&gt;</span>
 <span class="c1">#</span>
@@ -111,17 +133,17 @@ dataset and correspond to the response to an auditory stimulus.</p>
 
 <span class="c1"># sphinx_gallery_thumbnail_number = 3</span>
 
-<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span> <span class="k">as</span> <span class="n">op</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">nilearn.plotting</span> <span class="kn">import</span> <span class="n">plot_stat_map</span>
-<span class="kn">from</span> <span class="nn">nilearn.image</span> <span class="kn">import</span> <span class="n">index_img</span>
-<span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <a href="https://mne.tools/stable/generated/mne.read_forward_solution.html#mne.read_forward_solution" title="mne.read_forward_solution" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">read_forward_solution</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.pick_types_forward.html#mne.pick_types_forward" title="mne.pick_types_forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">pick_types_forward</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.read_evokeds.html#mne.read_evokeds" title="mne.read_evokeds" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">read_evokeds</span></a><span class="p">,</span> \
+<span class="kn">from</span><span class="w"> </span><span class="nn">os</span><span class="w"> </span><span class="kn">import</span> <span class="n">path</span> <span class="k">as</span> <span class="n">op</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nilearn.plotting</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_stat_map</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nilearn.image</span><span class="w"> </span><span class="kn">import</span> <span class="n">index_img</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne</span><span class="w"> </span><span class="kn">import</span> <a href="https://mne.tools/stable/generated/mne.read_forward_solution.html#mne.read_forward_solution" title="mne.read_forward_solution" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">read_forward_solution</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.pick_types_forward.html#mne.pick_types_forward" title="mne.pick_types_forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">pick_types_forward</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.read_evokeds.html#mne.read_evokeds" title="mne.read_evokeds" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">read_evokeds</span></a><span class="p">,</span> \
     <a href="https://mne.tools/stable/generated/mne.read_trans.html#mne.read_trans" title="mne.read_trans" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">read_trans</span></a><span class="p">,</span> <span class="n">head_to_mri</span>
-<span class="kn">from</span> <span class="nn">mne.datasets</span> <span class="kn">import</span> <span class="n">sample</span>
-<span class="kn">from</span> <span class="nn">mne.label</span> <span class="kn">import</span> <span class="n">_n_colors</span>
-<span class="kn">from</span> <span class="nn">sesameeg.mne</span> <span class="kn">import</span> <a href="../generated/sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame" class="sphx-glr-backref-module-sesameeg-mne sphx-glr-backref-type-py-function"><span class="n">prepare_sesame</span></a>
-<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">sample</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne.label</span><span class="w"> </span><span class="kn">import</span> <span class="n">_n_colors</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sesameeg.mne</span><span class="w"> </span><span class="kn">import</span> <a href="../generated/sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame" class="sphx-glr-backref-module-sesameeg-mne sphx-glr-backref-type-py-function"><span class="n">prepare_sesame</span></a>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
 
 <a href="https://docs.python.org/3/library/pathlib.html#pathlib.PosixPath" title="pathlib.PosixPath" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_path</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.datasets.sample.data_path.html#mne.datasets.sample.data_path" title="mne.datasets.sample.data_path" class="sphx-glr-backref-module-mne-datasets-sample sphx-glr-backref-type-py-function"><span class="n">sample</span><span class="o">.</span><span class="n">data_path</span></a><span class="p">()</span>
@@ -139,7 +161,7 @@ dataset and correspond to the response to an auditory stimulus.</p>
 <img class="math" src="../_images/math/b8b6985282be18d41b1b21f0830c4a63cacc77f4.png" alt="\textbf{G}"/> and the evoked data <img class="math" src="../_images/math/fde5efa0fb98b8c4c4ab88e7f30334942ce8c539.png" alt="\textbf{y}"/>.
 The forward solution also defines the employed brain discretization which, in this example,
 comprises the whole brain volume.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Transformation matrix</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Transformation matrix</span>
 <a href="https://mne.tools/stable/generated/mne.transforms.Transform.html#mne.transforms.Transform" title="mne.transforms.Transform" class="sphx-glr-backref-module-mne-transforms sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">trans</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.read_trans.html#mne.read_trans" title="mne.read_trans" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">read_trans</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fname_trans</span></a><span class="p">)</span>
 
 <span class="c1"># Choose sensor type</span>
@@ -160,7 +182,7 @@ comprises the whole brain volume.</p>
     Reading a source space...
     [done]
     1 source spaces read
-    Desired named matrix (kind = 3523) not available
+    Desired named matrix (kind = 3523 (FIFF_MNE_FORWARD_SOLUTION_GRAD)) not available
     Read MEG forward solution (3757 sources, 306 channels, free orientations)
     Source spaces transformed to the forward solution coordinate frame
     305 out of 306 channels remain after picking
@@ -177,11 +199,10 @@ Reading /home/pasca/mne_data/MNE-sample-data/MEG/sample/sample_audvis-ave.fif ..
         nave = 55 - aspect type = 100
 Projections have already been applied. Setting proj attribute to True.
 Applying baseline correction (mode: mean)
-Removing projector &lt;Projection | Average EEG reference, active : True, n_channels : 60&gt;
 </pre></div>
 </div>
 <p>Define the parameters.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_min</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_max</span></a> <span class="o">=</span> <span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.135</span>  <span class="c1"># Select N100m</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_min</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_max</span></a> <span class="o">=</span> <span class="mf">0.045</span><span class="p">,</span> <span class="mf">0.135</span>  <span class="c1"># Select N100m</span>
 <span class="n">subsample</span> <span class="o">=</span> <span class="kc">None</span>
 <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="numpy.int64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">sample_min</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="numpy.int64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">sample_max</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.Evoked.html#mne.Evoked.time_as_index" title="mne.Evoked.time_as_index" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-method"><span class="n">evoked</span><span class="o">.</span><span class="n">time_as_index</span></a><span class="p">([</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_min</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_max</span></a><span class="p">],</span> <span class="n">use_rounding</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -205,31 +226,23 @@ Removing projector &lt;Projection | Average EEG reference, active : True, n_chan
 </pre></div>
 </div>
 <p>Visualize the selected data.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">lst</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.Evoked.html#mne.Evoked.plot_joint" title="mne.Evoked.plot_joint" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-method"><span class="n">evoked</span><span class="o">.</span><span class="n">plot_joint</span></a><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="k">for</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">lst</span></a><span class="p">:</span>
-    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.get_axes" title="matplotlib.figure.Figure.get_axes" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">get_axes</span></a><span class="p">()</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">lst</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.Evoked.html#mne.Evoked.plot_joint" title="mne.Evoked.plot_joint" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-method"><span class="n">evoked</span><span class="o">.</span><span class="n">plot_joint</span></a><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">for</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">lst</span></a><span class="p">:</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.get_axes.html#matplotlib.figure.Figure.get_axes" title="matplotlib.figure.Figure.get_axes" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">get_axes</span></a><span class="p">()</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_min</span></a><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_max</span></a><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
 <ul class="sphx-glr-horizontal">
-<li><img src="../_images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_001.png" srcset="../_images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_001.png" alt="0.090 s, 0.162 s, 0.251 s" class = "sphx-glr-multi-img"/></li>
-<li><img src="../_images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_002.png" srcset="../_images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_002.png" alt="0.090 s, 0.166 s, 0.246 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_001.png" srcset="../_images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_001.png" alt="Gradiometers (203 channels), 0.090 s, 0.162 s, 0.251 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_002.png" srcset="../_images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_002.png" alt="Magnetometers (102 channels), 0.090 s, 0.166 s, 0.246 s" class = "sphx-glr-multi-img"/></li>
 </ul>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Projections have already been applied. Setting proj attribute to True.
-NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
-NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
-Removing projector &lt;Projection | PCA-v1, active : True, n_channels : 102&gt;
-Removing projector &lt;Projection | PCA-v2, active : True, n_channels : 102&gt;
-Removing projector &lt;Projection | PCA-v3, active : True, n_channels : 102&gt;
-NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
-NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
-NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
 </pre></div>
 </div>
 <p>Apply SESAME.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">_sesame</span></a> <span class="o">=</span> <a href="../generated/sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame" class="sphx-glr-backref-module-sesameeg-mne sphx-glr-backref-type-py-function"><span class="n">prepare_sesame</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="mne.Forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fwd</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.Evoked.html#mne.Evoked" title="mne.Evoked" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">evoked</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_parts</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_parts</span></a><span class="p">,</span> <span class="n">noise_std</span><span class="o">=</span><span class="n">noise_std</span><span class="p">,</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame" title="sesameeg.Sesame" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">_sesame</span></a> <span class="o">=</span> <a href="../generated/sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame" class="sphx-glr-backref-module-sesameeg-mne sphx-glr-backref-type-py-function"><span class="n">prepare_sesame</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="mne.Forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fwd</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.Evoked.html#mne.Evoked" title="mne.Evoked" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">evoked</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_parts</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_parts</span></a><span class="p">,</span> <span class="n">noise_std</span><span class="o">=</span><span class="n">noise_std</span><span class="p">,</span>
                          <span class="n">top_min</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_min</span></a><span class="p">,</span> <span class="n">top_max</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_max</span></a><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="n">dip_mom_std</span><span class="p">,</span>
                          <span class="n">hyper_q</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">noise_cov</span><span class="o">=</span><span class="n">noise_cov</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="n">subsample</span><span class="p">,</span>
                          <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">subject</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">subject</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">subjects_dir</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">subjects_dir</span></a><span class="p">,</span> <span class="n">trans_matrix</span><span class="o">=</span><a href="https://mne.tools/stable/generated/mne.transforms.Transform.html#mne.transforms.Transform" title="mne.transforms.Transform" class="sphx-glr-backref-module-mne-transforms sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">trans</span></a><span class="p">)</span>
@@ -255,19 +268,19 @@ Sampling hyperprior for dipole moment std.
 Estimating noise std...[done]
  Estimated noise std: 3.9983e-12
 Computing inverse solution. This will take a while...
-Estimated dipole strength variance: 2.534585786174006e-08
+Estimated dipole strength variance: 2.6413825716435953e-08
     Estimated number of sources: 2
     Estimated source locations:
-        * source 1: [0.05158217 0.00683185 0.06580936]
-        * source 2: [-0.06009     0.00132211  0.0562192 ]
-[done in 65 iterations]
-    Total computation time: 10.41 seconds.
-    Goodness of fit with the recorded data: 68.65%
+        * source 1: [-0.06009     0.00132211  0.0562192 ]
+        * source 2: [0.05158217 0.00683185 0.06580936]
+[done in 97 iterations]
+    Total computation time: 12.31 seconds.
+    Goodness of fit with the recorded data: 68.69%
 </pre></div>
 </div>
 <p>Visualize the posterior map of the dipoles’ location
 <img class="math" src="../_images/math/80c0f146b8c13abbdb5ff40566e1089f7ea5f116.png" alt="p(r| \textbf{y}, 2)"/> as an overlay onto the MRI.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_sources" title="sesameeg.Sesame.plot_sources" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-method"><span class="n">_sesame</span><span class="o">.</span><span class="n">plot_sources</span></a><span class="p">(</span><span class="n">plot_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;distance&#39;</span><span class="p">:</span> <span class="mi">650</span><span class="p">})</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_sources" title="sesameeg.Sesame.plot_sources" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-method"><span class="n">_sesame</span><span class="o">.</span><span class="n">plot_sources</span></a><span class="p">(</span><span class="n">plot_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;distance&#39;</span><span class="p">:</span> <span class="mi">650</span><span class="p">})</span>
 </pre></div>
 </div>
 <img src="../_images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_003.png" srcset="../_images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_003.png" alt="plot 02 compute sesame meg auditory volume mne" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Volume stc computed
@@ -275,27 +288,31 @@ WARNING! Removing invalid plot_stat_map keyword : distance
 </pre></div>
 </div>
 <p>Visualize amplitude of the estimated sources as function of time.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_source_amplitudes" title="sesameeg.Sesame.plot_source_amplitudes" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-method"><span class="n">_sesame</span><span class="o">.</span><span class="n">plot_source_amplitudes</span></a><span class="p">()</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_source_amplitudes" title="sesameeg.Sesame.plot_source_amplitudes" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-method"><span class="n">_sesame</span><span class="o">.</span><span class="n">plot_source_amplitudes</span></a><span class="p">()</span>
 </pre></div>
 </div>
 <img src="../_images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_004.png" srcset="../_images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_004.png" alt="plot 02 compute sesame meg auditory volume mne" class = "sphx-glr-single-img"/><p>Save results.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># You can save SESAME result in an HDF5 file with:</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># You can save SESAME result in an HDF5 file with:</span>
 <span class="c1"># _sesame.save_h5(save_fname, sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)</span>
 
 <span class="c1"># You can save SESAME result in a Pickle file with:</span>
 <span class="c1"># _sesame.save_pkl(save_fname, sbj=subject, data_path=fname_evoked, fwd_path=fname_fwd)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 17.485 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 19.629 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-02-compute-sesame-meg-auditory-volume-mne-py">
 <div class="binder-badge docutils container">
-<a class="reference external image-reference" href="https://mybinder.org/v2/gh/pybees/sesameeg/master?urlpath=lab/tree/notebooks/auto_examples/plot_02_compute_sesame_meg_auditory_volume_mne.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>
+<a class="reference external image-reference" href="https://mybinder.org/v2/gh/pybees/sesameeg/master?urlpath=lab/tree/notebooks/auto_examples/plot_02_compute_sesame_meg_auditory_volume_mne.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" style="width: 150px;" />
+</a>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/3eb4b4982940f94cb34c68ed850565e1/plot_02_compute_sesame_meg_auditory_volume_mne.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_02_compute_sesame_meg_auditory_volume_mne.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/7f6db87da5b18a0478317a5154e6c9ea/plot_02_compute_sesame_meg_auditory_volume_mne.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_02_compute_sesame_meg_auditory_volume_mne.py</span></code></a></p>
 </div>
-<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/3eb4b4982940f94cb34c68ed850565e1/plot_02_compute_sesame_meg_auditory_volume_mne.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_02_compute_sesame_meg_auditory_volume_mne.ipynb</span></code></a></p>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/8868849406319524f0796dda9ac485bf/plot_02_compute_sesame_meg_auditory_volume_mne.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_02_compute_sesame_meg_auditory_volume_mne.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -314,7 +331,7 @@ WARNING! Removing invalid plot_stat_map keyword : distance
     </p>
     <p>
         &copy; Copyright 2023, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.4.7.<br/>
     </p>
   </div>
 </footer>

@@ -5,15 +5,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>sesameeg.utils.prior_loc_from_labels &#8212; sesameeg 0.0.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <title>sesameeg.utils.prior_loc_from_labels &#8212; sesameeg 0.0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=284a2d1d" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../_static/documentation_options.js?v=e3a6060d"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=47de8214"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/copybutton.js?v=26522df0"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -42,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html">
           sesameeg</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.0.2</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -90,7 +90,33 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sesameeg.utils</span></code>.prior_loc_from_labels</a><ul>
+<li><a class="reference internal" href="#sesameeg.utils.prior_loc_from_labels"><code class="docutils literal notranslate"><span class="pre">prior_loc_from_labels()</span></code></a></li>
+<li><a class="reference internal" href="#examples-using-sesameeg-utils-prior-loc-from-labels">Examples using <code class="docutils literal notranslate"><span class="pre">sesameeg.utils.prior_loc_from_labels</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  <li>
+    <a href="sesameeg.EmpPdf.html" title="Previous Chapter: sesameeg.EmpPdf"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; sesameeg.EmpPdf</span>
+    </a>
+  </li>
+  <li>
+    <a href="sesameeg.utils.compute_neighbours_matrix.html" title="Next Chapter: sesameeg.utils.compute_neighbours_matrix"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">sesameeg.util... &raquo;</span>
+    </a>
+  </li>
+<form action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <section id="sesameeg-utils-prior-loc-from-labels">
 <h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">sesameeg.utils</span></code>.prior_loc_from_labels<a class="headerlink" href="#sesameeg-utils-prior-loc-from-labels" title="Link to this heading">¶</a></h1>
@@ -101,27 +127,27 @@
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>subject</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Subject name in Freesurfer subjects dir. Only when instantiated by means
+<dt><strong>subject</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>Subject name in Freesurfer subjects dir. Only when instantiated by means
 of <a class="reference internal" href="sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare_sesame()</span></code></a>.</p>
 </dd>
-<dt><strong>subjects_dir</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>If not None, this directory will be used as the subjects directory instead of the value set using
+<dt><strong>subjects_dir</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | None</span></dt><dd><p>If not None, this directory will be used as the subjects directory instead of the value set using
 the SUBJECTS_DIR environment variable. Only when instantiated by means
 of <a class="reference internal" href="sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame"><code class="xref py py-func docutils literal notranslate"><span class="pre">prepare_sesame()</span></code></a></p>
 </dd>
-<dt><strong>fwd</strong><span class="classifier"><a class="reference external" href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="(in MNE v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Forward</span></code></a> object</span></dt><dd><p>The forward solution.</p>
+<dt><strong>fwd</strong><span class="classifier"><a class="reference external" href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="(in MNE v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Forward</span></code></a> object</span></dt><dd><p>The forward solution.</p>
 </dd>
-<dt><strong>parc</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The parcellation to use, e.g., <code class="docutils literal notranslate"><span class="pre">'aparc'</span></code> or <code class="docutils literal notranslate"><span class="pre">'aparc.a2009s'</span></code>.</p>
+<dt><strong>parc</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The parcellation to use, e.g., <code class="docutils literal notranslate"><span class="pre">'aparc'</span></code> or <code class="docutils literal notranslate"><span class="pre">'aparc.a2009s'</span></code>.</p>
 </dd>
-<dt><strong>sel_labels</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The cortical labels to use.</p>
+<dt><strong>sel_labels</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></dt><dd><p>The cortical labels to use.</p>
 </dd>
-<dt><strong>ratio</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The ratio of high prior probability cortical areas to low prior probability cortical areas
+<dt><strong>ratio</strong><span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></dt><dd><p>The ratio of high prior probability cortical areas to low prior probability cortical areas
 probability value. If None, it is set to 1.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
-<dt><strong>prior_loc_arr</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_verts, )</span></dt><dd><p>The prior probability of active source locations.</p>
+<dt><strong>prior_loc_arr</strong><span class="classifier"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, shape (n_verts, )</span></dt><dd><p>The prior probability of active source locations.</p>
 </dd>
 </dl>
 </dd>
@@ -130,7 +156,7 @@ probability value. If None, it is set to 1.</p>
 
 <section id="examples-using-sesameeg-utils-prior-loc-from-labels">
 <h2>Examples using <code class="docutils literal notranslate"><span class="pre">sesameeg.utils.prior_loc_from_labels</span></code><a class="headerlink" href="#examples-using-sesameeg-utils-prior-loc-from-labels" title="Link to this heading">¶</a></h2>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an..."><img alt="" src="../_images/sphx_glr_plot_04_compute_sesame_meg_auditory_prior_mne_thumb.png" />
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="In this example we shall apply SESAME on an evoked dataset, corresponding to the response to an auditory stimulus and we manually select a priori source location probability to reside in a subset of ROIs in a given brain parcellization. Data are taken from the MNE-Python sample dataset."><img alt="" src="../_images/sphx_glr_plot_04_compute_sesame_meg_auditory_prior_mne_thumb.png" />
 <p><a class="reference internal" href="../auto_examples/plot_04_compute_sesame_meg_auditory_prior_mne.html#sphx-glr-auto-examples-plot-04-compute-sesame-meg-auditory-prior-mne-py"><span class="std std-ref">Compute SESAME inverse solution on evoked data with given source location prior</span></a></p>
   <div class="sphx-glr-thumbnail-title">Compute SESAME inverse solution on evoked data with given source location prior</div>
 </div></div><div style='clear:both'></div></section>
@@ -149,7 +175,7 @@ probability value. If None, it is set to 1.</p>
     </p>
     <p>
         &copy; Copyright 2023, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.4.7.<br/>
     </p>
   </div>
 </footer>

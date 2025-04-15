@@ -5,15 +5,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Compute SESAME inverse solution on simulated data in the frequency domain &#8212; sesameeg 0.0.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <title>Compute SESAME inverse solution on simulated data in the frequency domain &#8212; sesameeg 0.0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=284a2d1d" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../_static/documentation_options.js?v=e3a6060d"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=47de8214"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/copybutton.js?v=26522df0"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -42,7 +42,7 @@
         </button>
         <a class="navbar-brand" href="../index.html">
           sesameeg</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.0.2</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -90,12 +90,38 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
+<li><a class="reference internal" href="#">Compute SESAME inverse solution on simulated data in the frequency domain</a><ul>
+<li><a class="reference internal" href="#references">References</a></li>
+<li><a class="reference internal" href="#data-simulation">Data simulation</a></li>
+</ul>
+</li>
+</ul>
+
+  <li>
+    <a href="plot_05_explore_alternative_sesame_meg.html" title="Previous Chapter: Explore SESAME alternative inverse solutions on evoked data"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Explore SESAM...</span>
+    </a>
+  </li>
+  <li>
+    <a href="plot_07_compute_sesame_esi.html" title="Next Chapter: Compute SESAME inverse solution on high-density EEG data"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Compute SESAM... &raquo;</span>
+    </a>
+  </li>
+<form action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-plot-06-compute-sesame-meg-simulated-frequency-mne-py"><span class="std std-ref">Go to the end</span></a>
-to download the full example code or to run this example in your browser via Binder</p>
+to download the full example code. or to run this example in your browser via Binder</p>
 </div>
 <section class="sphx-glr-example-title" id="compute-sesame-inverse-solution-on-simulated-data-in-the-frequency-domain">
 <span id="sphx-glr-auto-examples-plot-06-compute-sesame-meg-simulated-frequency-mne-py"></span><h1>Compute SESAME inverse solution on simulated data in the frequency domain<a class="headerlink" href="#compute-sesame-inverse-solution-on-simulated-data-in-the-frequency-domain" title="Link to this heading">¶</a></h1>
@@ -115,19 +141,19 @@ domain</a>. J. Neurosci.
 Meth., 312 (2019) 27–36</p>
 </aside>
 </aside>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Author: Gianvittorio Luria &lt;luria@dima.unige.it&gt;</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Author: Gianvittorio Luria &lt;luria@dima.unige.it&gt;</span>
 <span class="c1">#</span>
 <span class="c1"># License: BSD (3-clause)</span>
 
-<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">op</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">welch</span><span class="p">,</span> <span class="n">coherence</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os.path</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">op</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">welch</span><span class="p">,</span> <span class="n">coherence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
-<span class="kn">import</span> <span class="nn">mne</span>
-<span class="kn">from</span> <span class="nn">mne.datasets</span> <span class="kn">import</span> <span class="n">sample</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mne</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">sample</span>
 
-<span class="kn">from</span> <span class="nn">sesameeg.mne</span> <span class="kn">import</span> <a href="../generated/sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame" class="sphx-glr-backref-module-sesameeg-mne sphx-glr-backref-type-py-function"><span class="n">prepare_sesame</span></a>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sesameeg.mne</span><span class="w"> </span><span class="kn">import</span> <a href="../generated/sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame" title="sesameeg.mne.prepare_sesame" class="sphx-glr-backref-module-sesameeg-mne sphx-glr-backref-type-py-function"><span class="n">prepare_sesame</span></a>
 
 
 <span class="c1"># We use the MEG and MRI setup from the MNE-Python</span>
@@ -148,7 +174,7 @@ Meth., 312 (2019) 27–36</p>
 </div>
 <p>Load the info, the forward solution and the noise covariance
 The forward solution also defines the employed brain discretization.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="mne.Info" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">info</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.io.read_info.html#mne.io.read_info" title="mne.io.read_info" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_info</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">raw_fname</span></a><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="mne._fiff.meas_info.Info" class="sphx-glr-backref-module-mne-_fiff-meas_info sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">info</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.io.read_info.html#mne.io.read_info" title="mne.io.read_info" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_info</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">raw_fname</span></a><span class="p">)</span>
 <a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="mne.Forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fwd</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.read_forward_solution.html#mne.read_forward_solution" title="mne.read_forward_solution" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">read_forward_solution</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fwd_fname</span></a><span class="p">)</span>
 <a href="https://mne.tools/stable/generated/mne.Covariance.html#mne.Covariance" title="mne.Covariance" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">noise_cov</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.read_cov.html#mne.read_cov" title="mne.read_cov" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">read_cov</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">erm_cov_fname</span></a><span class="p">)</span>
 </pre></div>
@@ -169,9 +195,9 @@ Reading forward solution from /home/pasca/mne_data/MNE-sample-data/MEG/sample/sa
     Distance information added...
     [done]
     2 source spaces read
-    Desired named matrix (kind = 3523) not available
+    Desired named matrix (kind = 3523 (FIFF_MNE_FORWARD_SOLUTION_GRAD)) not available
     Read MEG forward solution (7498 sources, 306 channels, free orientations)
-    Desired named matrix (kind = 3523) not available
+    Desired named matrix (kind = 3523 (FIFF_MNE_FORWARD_SOLUTION_GRAD)) not available
     Read EEG forward solution (7498 sources, 60 channels, free orientations)
     Forward solutions combined: MEG, EEG
     Source spaces transformed to the forward solution coordinate frame
@@ -184,10 +210,10 @@ Reading forward solution from /home/pasca/mne_data/MNE-sample-data/MEG/sample/sa
 </div>
 <p>In this example, to save computation time, we shall only simulate gradiometer
 data. You can try simulating other types of sensors as well.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">picks</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.pick_types.html#mne.pick_types" title="mne.pick_types" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">pick_types</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="mne.Info" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">info</span></a><span class="p">,</span> <span class="n">meg</span><span class="o">=</span><span class="s1">&#39;grad&#39;</span><span class="p">,</span> <span class="n">stim</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="s1">&#39;bads&#39;</span><span class="p">)</span>
-<a href="https://mne.tools/stable/generated/mne.pick_info.html#mne.pick_info" title="mne.pick_info" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">pick_info</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="mne.Info" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">info</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">picks</span></a><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="mne.Forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fwd</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.pick_channels_forward.html#mne.pick_channels_forward" title="mne.pick_channels_forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">pick_channels_forward</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="mne.Forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fwd</span></a><span class="p">,</span> <span class="n">include</span><span class="o">=</span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="mne.Info" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">info</span></a><span class="p">[</span><span class="s1">&#39;ch_names&#39;</span><span class="p">])</span>
-<a href="https://mne.tools/stable/generated/mne.Covariance.html#mne.Covariance" title="mne.Covariance" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">noise_cov</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.pick_channels_cov.html#mne.pick_channels_cov" title="mne.pick_channels_cov" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">pick_channels_cov</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Covariance.html#mne.Covariance" title="mne.Covariance" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">noise_cov</span></a><span class="p">,</span> <span class="n">include</span><span class="o">=</span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="mne.Info" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">info</span></a><span class="p">[</span><span class="s1">&#39;ch_names&#39;</span><span class="p">])</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">picks</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.pick_types.html#mne.pick_types" title="mne.pick_types" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">pick_types</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="mne._fiff.meas_info.Info" class="sphx-glr-backref-module-mne-_fiff-meas_info sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">info</span></a><span class="p">,</span> <span class="n">meg</span><span class="o">=</span><span class="s1">&#39;grad&#39;</span><span class="p">,</span> <span class="n">stim</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="s1">&#39;bads&#39;</span><span class="p">)</span>
+<a href="https://mne.tools/stable/generated/mne.pick_info.html#mne.pick_info" title="mne.pick_info" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">pick_info</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="mne._fiff.meas_info.Info" class="sphx-glr-backref-module-mne-_fiff-meas_info sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">info</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">picks</span></a><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="mne.Forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fwd</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.pick_channels_forward.html#mne.pick_channels_forward" title="mne.pick_channels_forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">pick_channels_forward</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="mne.Forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fwd</span></a><span class="p">,</span> <span class="n">include</span><span class="o">=</span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="mne._fiff.meas_info.Info" class="sphx-glr-backref-module-mne-_fiff-meas_info sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">info</span></a><span class="p">[</span><span class="s1">&#39;ch_names&#39;</span><span class="p">])</span>
+<a href="https://mne.tools/stable/generated/mne.Covariance.html#mne.Covariance" title="mne.Covariance" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">noise_cov</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.pick_channels_cov.html#mne.pick_channels_cov" title="mne.pick_channels_cov" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">pick_channels_cov</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Covariance.html#mne.Covariance" title="mne.Covariance" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">noise_cov</span></a><span class="p">,</span> <span class="n">include</span><span class="o">=</span><a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="mne._fiff.meas_info.Info" class="sphx-glr-backref-module-mne-_fiff-meas_info sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">info</span></a><span class="p">[</span><span class="s1">&#39;ch_names&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>203 out of 366 channels remain after picking
@@ -199,7 +225,7 @@ data. You can try simulating other types of sensors as well.</p>
 <p>The following function generates a timeseries that contains an oscillator,
 modulated by a Gaussian. The frequency of the oscillator fluctuates a little
 over time, but stays close to 10 Hz.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gen_signal</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">times</span></a><span class="p">,</span> <span class="n">base_freq</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="numpy.random.RandomState" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">rand</span></a><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_rand</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">std_rand</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">g_sigma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">g_mu_shift</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">gen_signal</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">times</span></a><span class="p">,</span> <span class="n">base_freq</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="numpy.random.RandomState" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">rand</span></a><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_rand</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">std_rand</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">g_sigma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">g_mu_shift</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an oscillating signal with a Gaussian envelope.</span>
 
 <span class="sd">    Parameters</span>
@@ -251,14 +277,14 @@ over time, but stays close to 10 Hz.</p>
 </pre></div>
 </div>
 <p>We now simulate two timeseries and plot some basic information about them.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sfreq</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="mne.Info" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">info</span></a><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sfreq</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="mne._fiff.meas_info.Info" class="sphx-glr-backref-module-mne-_fiff-meas_info sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">info</span></a><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span>
 <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_sample</span></a> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="mf">5.</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sfreq</span></a><span class="p">))</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">times</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_sample</span></a><span class="p">)</span> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sfreq</span></a>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">signal1</span></a> <span class="o">=</span> <span class="n">gen_signal</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">times</span></a><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="n">g_sigma</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">g_mu_shift</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">signal2</span></a> <span class="o">=</span> <span class="n">gen_signal</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">times</span></a><span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="n">g_sigma</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">g_mu_shift</span><span class="o">=</span><span class="mf">.5</span><span class="p">)</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">q</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.vstack.html#numpy.vstack" title="numpy.vstack" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">vstack</span></a><span class="p">((</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">signal1</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">signal2</span></a><span class="p">))</span>
 
-<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 
 <span class="c1"># Plot the timeseries</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -283,12 +309,12 @@ over time, but stays close to 10 Hz.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html#matplotlib.axes.Axes.plot" title="matplotlib.axes.Axes.plot" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">f</span></a><span class="p">[:</span><span class="mi">50</span><span class="p">],</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">coh</span></a><span class="p">[:</span><span class="mi">50</span><span class="p">],</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set.html#matplotlib.axes.Axes.set" title="matplotlib.axes.Axes.set" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">set</span></a><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">f</span></a><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">49</span><span class="p">]],</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Coherence&#39;</span><span class="p">,</span>
        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Coherence between the timeseries&#39;</span><span class="p">)</span>
-<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.tight_layout" title="matplotlib.figure.Figure.tight_layout" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.tight_layout.html#matplotlib.figure.Figure.tight_layout" title="matplotlib.figure.Figure.tight_layout" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 </pre></div>
 </div>
 <img src="../_images/sphx_glr_plot_06_compute_sesame_meg_simulated_frequency_mne_001.png" srcset="../_images/sphx_glr_plot_06_compute_sesame_meg_simulated_frequency_mne_001.png" alt="Signal 1, Signal 2, Power spectrum of signal 1, Coherence between the timeseries" class = "sphx-glr-single-img"/><p>Now we put the signals at two locations on the cortex. To do so, we construct
-a <a class="reference external" href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="(in MNE v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">mne.SourceEstimate</span></code></a> object to store them in.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># The locations on the cortex where the signal will originate from are</span>
+a <a class="reference external" href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="(in MNE v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">mne.SourceEstimate</span></code></a> object to store them in.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The locations on the cortex where the signal will originate from are</span>
 <span class="c1"># indicated as source space grid points indices.</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vertices</span></a> <span class="o">=</span> <span class="p">[[</span><span class="mi">146374</span><span class="p">],</span> <span class="p">[</span><span class="mi">33830</span><span class="p">]]</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vertno</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.hstack.html#numpy.hstack" title="numpy.hstack" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">hstack</span></a><span class="p">([</span><a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="mne.Forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fwd</span></a><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;vertno&#39;</span><span class="p">],</span> <a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="mne.Forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fwd</span></a><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;vertno&#39;</span><span class="p">]])</span>
@@ -303,14 +329,14 @@ a <a class="reference external" href="https://mne.tools/stable/generated/mne.Sou
 <p>Now we run the signal through the forward model to obtain simulated sensor
 data. We then corrupt the resulting simulated gradiometer recordings
 by empty room noise.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray" title="mne.EvokedArray" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">evoked</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.apply_forward.html#mne.apply_forward" title="mne.apply_forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">apply_forward</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="mne.Forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fwd</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="mne.SourceEstimate" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">stc_signal</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="mne.Info" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">info</span></a><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray" title="mne.EvokedArray" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">evoked</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.apply_forward.html#mne.apply_forward" title="mne.apply_forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">apply_forward</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.Forward.html#mne.Forward" title="mne.Forward" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fwd</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.SourceEstimate.html#mne.SourceEstimate" title="mne.SourceEstimate" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">stc_signal</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.Info.html#mne.Info" title="mne._fiff.meas_info.Info" class="sphx-glr-backref-module-mne-_fiff-meas_info sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">info</span></a><span class="p">)</span>
 <a href="https://mne.tools/stable/generated/mne.simulation.add_noise.html#mne.simulation.add_noise" title="mne.simulation.add_noise" class="sphx-glr-backref-module-mne-simulation sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">simulation</span><span class="o">.</span><span class="n">add_noise</span></a><span class="p">(</span><a href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray" title="mne.EvokedArray" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">evoked</span></a><span class="p">,</span> <a href="https://mne.tools/stable/generated/mne.Covariance.html#mne.Covariance" title="mne.Covariance" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">noise_cov</span></a><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="numpy.random.RandomState" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">rand</span></a><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>    Average patch normals will be employed in the rotation to the local surface coordinates....
     Converting to surface-based source orientations...
     [done]
-/home/pasca/Tools/python/packages/sesameeg/examples/plot_06_compute_sesame_meg_simulated_frequency_mne.py:180: RuntimeWarning: The maximum current magnitude is 121.2 nAm, which is very large. Are you trying to apply the forward model to noise-normalized (dSPM, sLORETA, or eLORETA) values? The result will only be correct if currents (in units of Am) are used.
+/home/pasca/Tools/python/packages/sesameeg/examples/plot_06_compute_sesame_meg_simulated_frequency_mne.py:180: RuntimeWarning: The maximum current magnitude is 118.3 nAm, which is very large. Are you trying to apply the forward model to noise-normalized (dSPM, sLORETA, or eLORETA) values? The result will only be correct if currents (in units of Am) are used.
   evoked = mne.apply_forward(fwd, stc_signal, info)
 Projecting source estimate to sensor space...
 [done]
@@ -318,39 +344,352 @@ Adding noise to 203/203 channels (203 channels in cov)
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
-<table class="table table-hover">
-    <tr>
-        <th>Condition</th>
-        <td></td>
-    </tr>
-    <tr>
-        <th>Data kind</th>
-        <td>average</td>
-    </tr>
-    <tr>
-        <th>Timepoints</th>
-        <td>3003 samples</td>
-    </tr>
-        <th>Channels</th>
-        <td>203 channels</td>
-    </tr>
-    <tr>
-        <th>Number of averaged epochs</th>
-        <td>1</td>
-    </tr>
-    <tr>
-        <th>Time range (secs)</th>
-        <td>0.0 – 4.998210249179003</td>
-    </tr>
-    <tr>
-        <th>Baseline (secs)</th>
-        <td>off</td>
-    </tr>
+<script type="text/javascript">
+    const toggleVisibility = (className) => {
+
+  const elements = document.querySelectorAll(`.${className}`)
+
+  elements.forEach(element => {
+    if (element.classList.contains('repr-section-header')) {
+      // Don't collapse the section header row.
+       return
+    }
+    if (element.classList.contains('repr-element-collapsed')) {
+      // Force a reflow to ensure the display change takes effect before removing the class
+      element.classList.remove('repr-element-collapsed')
+      element.offsetHeight // This forces the browser to recalculate layout
+      element.classList.remove('repr-element-faded')
+    } else {
+      // Start transition to hide the element
+      element.classList.add('repr-element-faded')
+      element.addEventListener('transitionend', handler = (e) => {
+        if (e.propertyName === 'opacity' && getComputedStyle(element).opacity === '0.2') {
+          element.classList.add('repr-element-collapsed')
+          element.removeEventListener('transitionend', handler)
+        }
+      });
+    }
+  });
+
+  // Take care of button (adjust caret)
+  const button = document.querySelectorAll(`.repr-section-header.${className} > th.repr-section-toggle-col > button`)[0]
+  button.classList.toggle('collapsed')
+
+  // Take care of the tooltip of the section header row
+  const sectionHeaderRow = document.querySelectorAll(`tr.repr-section-header.${className}`)[0]
+  sectionHeaderRow.classList.toggle('collapsed')
+  sectionHeaderRow.title = sectionHeaderRow.title === 'Hide section' ? 'Show section' : 'Hide section'
+}
+</script>
+
+<style type="text/css">
+    table.repr.table.table-hover.table-striped.table-sm.table-responsive.small {
+  /* Don't make rows wider than they need to be. */
+  display: inline;
+}
+
+table > tbody > tr.repr-element > td {
+  /* Apply a tighter layout to the table cells. */
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+  padding-right: 1rem;
+}
+
+table > tbody > tr > td.repr-section-toggle-col {
+  /* Remove background and border of the first cell in every row
+     (this row is only used for the collapse / uncollapse caret)
+
+     TODO: Need to find a good solution for VS Code that works in both
+           light and dark mode. */
+  border-color: transparent;
+  --bs-table-accent-bg: transparent;
+}
+
+tr.repr-section-header {
+  /* Remove stripes from section header rows */
+  background-color: transparent;
+  border-color: transparent;
+  --bs-table-striped-bg: transparent;
+  cursor: pointer;
+}
+
+tr.repr-section-header > th {
+  text-align: left !important;
+  vertical-align: middle;
+}
+
+.repr-element, tr.repr-element > td {
+  opacity: 1;
+  text-align: left !important;
+}
+
+.repr-element-faded {
+  transition: 0.3s ease;
+  opacity: 0.2;
+}
+
+.repr-element-collapsed {
+  display: none;
+}
+
+/* Collapse / uncollapse button and the caret it contains. */
+.repr-section-toggle-col button {
+  cursor: pointer;
+  width: 1rem;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+span.collapse-uncollapse-caret {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+  background-repeat: no-repeat;
+  background-position: left;
+  background-size: contain;
+}
+
+/* The collapse / uncollapse carets were copied from the free Font Awesome collection and adjusted. */
+
+/* Default to black carets for light mode */
+.repr-section-toggle-col > button.collapsed > span.collapse-uncollapse-caret {
+  background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="black" d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"/></svg>');
+}
+
+.repr-section-toggle-col
+  > button:not(.collapsed)
+  > span.collapse-uncollapse-caret {
+  background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="black" d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/></svg>');
+}
+
+/* Use white carets for dark mode */
+@media (prefers-color-scheme: dark) {
+  .repr-section-toggle-col > button.collapsed > span.collapse-uncollapse-caret {
+    background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="white" d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"/></svg>');
+  }
+
+  .repr-section-toggle-col
+    > button:not(.collapsed)
+    > span.collapse-uncollapse-caret {
+    background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="white" d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"/></svg>');
+  }
+}
+
+.channel-names-btn {
+  padding: 0;
+  border: none;
+  background: none;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  cursor: pointer;
+  color: #0d6efd;
+}
+
+.channel-names-btn:hover {
+  color: #0a58ca;
+}
+</style>
+
+
+
+<table class="repr table table-hover table-striped table-sm table-responsive small">
+
+
+
+
+
+
+
+
+<tr class="repr-section-header general-624129e7-6ad0-44e1-b050-8b871d957ecd"  title="Hide section"
+    onclick="toggleVisibility('general-624129e7-6ad0-44e1-b050-8b871d957ecd')">
+    <th class="repr-section-toggle-col">
+        <button>
+
+            <span class="collapse-uncollapse-caret"></span>
+        </button>
+    </th>
+    <th colspan="2">
+        <strong>General</strong>
+    </th>
+</tr>
+
+<tr class="repr-element general-624129e7-6ad0-44e1-b050-8b871d957ecd ">
+    <td class="repr-section-toggle-col"></td>
+    <td>MNE object type</td>
+    <td>EvokedArray</td>
+</tr>
+<tr class="repr-element general-624129e7-6ad0-44e1-b050-8b871d957ecd ">
+    <td class="repr-section-toggle-col"></td>
+    <td>Measurement date</td>
+
+    <td>2025-04-15 at 13:55:49 UTC</td>
+
+</tr>
+<tr class="repr-element general-624129e7-6ad0-44e1-b050-8b871d957ecd ">
+    <td class="repr-section-toggle-col"></td>
+    <td>Participant</td>
+
+    <td>Unknown</td>
+
+</tr>
+<tr class="repr-element general-624129e7-6ad0-44e1-b050-8b871d957ecd ">
+    <td class="repr-section-toggle-col"></td>
+    <td>Experimenter</td>
+
+    <td>MEG</td>
+
+</tr>
+
+
+
+
+
+
+
+
+<tr class="repr-section-header acquisition-064791c1-b853-4804-90f9-8bdd3098d91e"
+    title="Hide section"  onclick="toggleVisibility('acquisition-064791c1-b853-4804-90f9-8bdd3098d91e')">
+    <th class="repr-section-toggle-col">
+        <button>
+
+            <span class="collapse-uncollapse-caret"></span>
+        </button>
+    </th>
+    <th colspan="2">
+        <strong>Acquisition</strong>
+    </th>
+</tr>
+
+
+<tr class="repr-element acquisition-064791c1-b853-4804-90f9-8bdd3098d91e ">
+    <td class="repr-section-toggle-col"></td>
+    <td>Aggregation</td>
+
+    <td>average of 1 epochs</td>
+
+</tr>
+
+
+<tr class="repr-element acquisition-064791c1-b853-4804-90f9-8bdd3098d91e ">
+    <td class="repr-section-toggle-col"></td>
+    <td>Condition</td>
+    <td></td>
+</tr>
+
+
+
+
+<tr class="repr-element acquisition-064791c1-b853-4804-90f9-8bdd3098d91e ">
+    <td class="repr-section-toggle-col"></td>
+    <td>Time range</td>
+    <td>0.000 – 4.998 s</td>
+</tr>
+
+
+<tr class="repr-element acquisition-064791c1-b853-4804-90f9-8bdd3098d91e ">
+    <td class="repr-section-toggle-col"></td>
+    <td>Baseline</td>
+    <td>off</td>
+</tr>
+
+
+<tr class="repr-element acquisition-064791c1-b853-4804-90f9-8bdd3098d91e ">
+    <td class="repr-section-toggle-col"></td>
+    <td>Sampling frequency</td>
+    <td>600.61 Hz</td>
+</tr>
+
+
+<tr class="repr-element acquisition-064791c1-b853-4804-90f9-8bdd3098d91e ">
+    <td class="repr-section-toggle-col"></td>
+    <td>Time points</td>
+    <td>3,003</td>
+</tr>
+
+
+
+
+
+
+
+
+
+
+<tr class="repr-section-header channels-d5026abf-430d-4363-b1f3-295d7a589212"  title="Hide section"
+    onclick="toggleVisibility('channels-d5026abf-430d-4363-b1f3-295d7a589212')">
+    <th class="repr-section-toggle-col">
+        <button>
+
+            <span class="collapse-uncollapse-caret"></span>
+        </button>
+    </th>
+    <th colspan="2">
+        <strong>Channels</strong>
+    </th>
+</tr>
+
+
+<tr class="repr-element channels-d5026abf-430d-4363-b1f3-295d7a589212 ">
+    <td class="repr-section-toggle-col"></td>
+    <td>Gradiometers</td>
+    <td>
+        <button class="channel-names-btn" onclick="alert('Good Gradiometers:\n\nMEG&nbsp;0113, MEG&nbsp;0112, MEG&nbsp;0122, MEG&nbsp;0123, MEG&nbsp;0132, MEG&nbsp;0133, MEG&nbsp;0143, MEG&nbsp;0142, MEG&nbsp;0213, MEG&nbsp;0212, MEG&nbsp;0222, MEG&nbsp;0223, MEG&nbsp;0232, MEG&nbsp;0233, MEG&nbsp;0243, MEG&nbsp;0242, MEG&nbsp;0313, MEG&nbsp;0312, MEG&nbsp;0322, MEG&nbsp;0323, MEG&nbsp;0333, MEG&nbsp;0332, MEG&nbsp;0343, MEG&nbsp;0342, MEG&nbsp;0413, MEG&nbsp;0412, MEG&nbsp;0422, MEG&nbsp;0423, MEG&nbsp;0432, MEG&nbsp;0433, MEG&nbsp;0443, MEG&nbsp;0442, MEG&nbsp;0513, MEG&nbsp;0512, MEG&nbsp;0523, MEG&nbsp;0522, MEG&nbsp;0532, MEG&nbsp;0533, MEG&nbsp;0542, MEG&nbsp;0543, MEG&nbsp;0613, MEG&nbsp;0612, MEG&nbsp;0622, MEG&nbsp;0623, MEG&nbsp;0633, MEG&nbsp;0632, MEG&nbsp;0642, MEG&nbsp;0643, MEG&nbsp;0713, MEG&nbsp;0712, MEG&nbsp;0723, MEG&nbsp;0722, MEG&nbsp;0733, MEG&nbsp;0732, MEG&nbsp;0743, MEG&nbsp;0742, MEG&nbsp;0813, MEG&nbsp;0812, MEG&nbsp;0822, MEG&nbsp;0823, MEG&nbsp;0913, MEG&nbsp;0912, MEG&nbsp;0923, MEG&nbsp;0922, MEG&nbsp;0932, MEG&nbsp;0933, MEG&nbsp;0942, MEG&nbsp;0943, MEG&nbsp;1013, MEG&nbsp;1012, MEG&nbsp;1023, MEG&nbsp;1022, MEG&nbsp;1032, MEG&nbsp;1033, MEG&nbsp;1043, MEG&nbsp;1042, MEG&nbsp;1112, MEG&nbsp;1113, MEG&nbsp;1123, MEG&nbsp;1122, MEG&nbsp;1133, MEG&nbsp;1132, MEG&nbsp;1142, MEG&nbsp;1143, MEG&nbsp;1213, MEG&nbsp;1212, MEG&nbsp;1223, MEG&nbsp;1222, MEG&nbsp;1232, MEG&nbsp;1233, MEG&nbsp;1243, MEG&nbsp;1242, MEG&nbsp;1312, MEG&nbsp;1313, MEG&nbsp;1323, MEG&nbsp;1322, MEG&nbsp;1333, MEG&nbsp;1332, MEG&nbsp;1342, MEG&nbsp;1343, MEG&nbsp;1412, MEG&nbsp;1413, MEG&nbsp;1423, MEG&nbsp;1422, MEG&nbsp;1433, MEG&nbsp;1432, MEG&nbsp;1442, MEG&nbsp;1443, MEG&nbsp;1512, MEG&nbsp;1513, MEG&nbsp;1522, MEG&nbsp;1523, MEG&nbsp;1533, MEG&nbsp;1532, MEG&nbsp;1543, MEG&nbsp;1542, MEG&nbsp;1613, MEG&nbsp;1612, MEG&nbsp;1622, MEG&nbsp;1623, MEG&nbsp;1632, MEG&nbsp;1633, MEG&nbsp;1643, MEG&nbsp;1642, MEG&nbsp;1713, MEG&nbsp;1712, MEG&nbsp;1722, MEG&nbsp;1723, MEG&nbsp;1732, MEG&nbsp;1733, MEG&nbsp;1743, MEG&nbsp;1742, MEG&nbsp;1813, MEG&nbsp;1812, MEG&nbsp;1822, MEG&nbsp;1823, MEG&nbsp;1832, MEG&nbsp;1833, MEG&nbsp;1843, MEG&nbsp;1842, MEG&nbsp;1912, MEG&nbsp;1913, MEG&nbsp;1923, MEG&nbsp;1922, MEG&nbsp;1932, MEG&nbsp;1933, MEG&nbsp;1943, MEG&nbsp;1942, MEG&nbsp;2013, MEG&nbsp;2012, MEG&nbsp;2023, MEG&nbsp;2022, MEG&nbsp;2032, MEG&nbsp;2033, MEG&nbsp;2042, MEG&nbsp;2043, MEG&nbsp;2113, MEG&nbsp;2112, MEG&nbsp;2122, MEG&nbsp;2123, MEG&nbsp;2133, MEG&nbsp;2132, MEG&nbsp;2143, MEG&nbsp;2142, MEG&nbsp;2212, MEG&nbsp;2213, MEG&nbsp;2223, MEG&nbsp;2222, MEG&nbsp;2233, MEG&nbsp;2232, MEG&nbsp;2242, MEG&nbsp;2243, MEG&nbsp;2312, MEG&nbsp;2313, MEG&nbsp;2323, MEG&nbsp;2322, MEG&nbsp;2332, MEG&nbsp;2333, MEG&nbsp;2343, MEG&nbsp;2342, MEG&nbsp;2412, MEG&nbsp;2413, MEG&nbsp;2423, MEG&nbsp;2422, MEG&nbsp;2433, MEG&nbsp;2432, MEG&nbsp;2442, MEG&nbsp;2512, MEG&nbsp;2513, MEG&nbsp;2522, MEG&nbsp;2523, MEG&nbsp;2533, MEG&nbsp;2532, MEG&nbsp;2543, MEG&nbsp;2542, MEG&nbsp;2612, MEG&nbsp;2613, MEG&nbsp;2623, MEG&nbsp;2622, MEG&nbsp;2633, MEG&nbsp;2632, MEG&nbsp;2642, MEG&nbsp;2643')" title="(Click to open in popup)&#13;&#13;MEG&nbsp;0113, MEG&nbsp;0112, MEG&nbsp;0122, MEG&nbsp;0123, MEG&nbsp;0132, MEG&nbsp;0133, MEG&nbsp;0143, MEG&nbsp;0142, MEG&nbsp;0213, MEG&nbsp;0212, MEG&nbsp;0222, MEG&nbsp;0223, MEG&nbsp;0232, MEG&nbsp;0233, MEG&nbsp;0243, MEG&nbsp;0242, MEG&nbsp;0313, MEG&nbsp;0312, MEG&nbsp;0322, MEG&nbsp;0323, MEG&nbsp;0333, MEG&nbsp;0332, MEG&nbsp;0343, MEG&nbsp;0342, MEG&nbsp;0413, MEG&nbsp;0412, MEG&nbsp;0422, MEG&nbsp;0423, MEG&nbsp;0432, MEG&nbsp;0433, MEG&nbsp;0443, MEG&nbsp;0442, MEG&nbsp;0513, MEG&nbsp;0512, MEG&nbsp;0523, MEG&nbsp;0522, MEG&nbsp;0532, MEG&nbsp;0533, MEG&nbsp;0542, MEG&nbsp;0543, MEG&nbsp;0613, MEG&nbsp;0612, MEG&nbsp;0622, MEG&nbsp;0623, MEG&nbsp;0633, MEG&nbsp;0632, MEG&nbsp;0642, MEG&nbsp;0643, MEG&nbsp;0713, MEG&nbsp;0712, MEG&nbsp;0723, MEG&nbsp;0722, MEG&nbsp;0733, MEG&nbsp;0732, MEG&nbsp;0743, MEG&nbsp;0742, MEG&nbsp;0813, MEG&nbsp;0812, MEG&nbsp;0822, MEG&nbsp;0823, MEG&nbsp;0913, MEG&nbsp;0912, MEG&nbsp;0923, MEG&nbsp;0922, MEG&nbsp;0932, MEG&nbsp;0933, MEG&nbsp;0942, MEG&nbsp;0943, MEG&nbsp;1013, MEG&nbsp;1012, MEG&nbsp;1023, MEG&nbsp;1022, MEG&nbsp;1032, MEG&nbsp;1033, MEG&nbsp;1043, MEG&nbsp;1042, MEG&nbsp;1112, MEG&nbsp;1113, MEG&nbsp;1123, MEG&nbsp;1122, MEG&nbsp;1133, MEG&nbsp;1132, MEG&nbsp;1142, MEG&nbsp;1143, MEG&nbsp;1213, MEG&nbsp;1212, MEG&nbsp;1223, MEG&nbsp;1222, MEG&nbsp;1232, MEG&nbsp;1233, MEG&nbsp;1243, MEG&nbsp;1242, MEG&nbsp;1312, MEG&nbsp;1313, MEG&nbsp;1323, MEG&nbsp;1322, MEG&nbsp;1333, MEG&nbsp;1332, MEG&nbsp;1342, MEG&nbsp;1343, MEG&nbsp;1412, MEG&nbsp;1413, MEG&nbsp;1423, MEG&nbsp;1422, MEG&nbsp;1433, MEG&nbsp;1432, MEG&nbsp;1442, MEG&nbsp;1443, MEG&nbsp;1512, MEG&nbsp;1513, MEG&nbsp;1522, MEG&nbsp;1523, MEG&nbsp;1533, MEG&nbsp;1532, MEG&nbsp;1543, MEG&nbsp;1542, MEG&nbsp;1613, MEG&nbsp;1612, MEG&nbsp;1622, MEG&nbsp;1623, MEG&nbsp;1632, MEG&nbsp;1633, MEG&nbsp;1643, MEG&nbsp;1642, MEG&nbsp;1713, MEG&nbsp;1712, MEG&nbsp;1722, MEG&nbsp;1723, MEG&nbsp;1732, MEG&nbsp;1733, MEG&nbsp;1743, MEG&nbsp;1742, MEG&nbsp;1813, MEG&nbsp;1812, MEG&nbsp;1822, MEG&nbsp;1823, MEG&nbsp;1832, MEG&nbsp;1833, MEG&nbsp;1843, MEG&nbsp;1842, MEG&nbsp;1912, MEG&nbsp;1913, MEG&nbsp;1923, MEG&nbsp;1922, MEG&nbsp;1932, MEG&nbsp;1933, MEG&nbsp;1943, MEG&nbsp;1942, MEG&nbsp;2013, MEG&nbsp;2012, MEG&nbsp;2023, MEG&nbsp;2022, MEG&nbsp;2032, MEG&nbsp;2033, MEG&nbsp;2042, MEG&nbsp;2043, MEG&nbsp;2113, MEG&nbsp;2112, MEG&nbsp;2122, MEG&nbsp;2123, MEG&nbsp;2133, MEG&nbsp;2132, MEG&nbsp;2143, MEG&nbsp;2142, MEG&nbsp;2212, MEG&nbsp;2213, MEG&nbsp;2223, MEG&nbsp;2222, MEG&nbsp;2233, MEG&nbsp;2232, MEG&nbsp;2242, MEG&nbsp;2243, MEG&nbsp;2312, MEG&nbsp;2313, MEG&nbsp;2323, MEG&nbsp;2322, MEG&nbsp;2332, MEG&nbsp;2333, MEG&nbsp;2343, MEG&nbsp;2342, MEG&nbsp;2412, MEG&nbsp;2413, MEG&nbsp;2423, MEG&nbsp;2422, MEG&nbsp;2433, MEG&nbsp;2432, MEG&nbsp;2442, MEG&nbsp;2512, MEG&nbsp;2513, MEG&nbsp;2522, MEG&nbsp;2523, MEG&nbsp;2533, MEG&nbsp;2532, MEG&nbsp;2543, MEG&nbsp;2542, MEG&nbsp;2612, MEG&nbsp;2613, MEG&nbsp;2623, MEG&nbsp;2622, MEG&nbsp;2633, MEG&nbsp;2632, MEG&nbsp;2642, MEG&nbsp;2643">
+            203
+        </button>
+
+
+    </td>
+</tr>
+
+
+<tr class="repr-element channels-d5026abf-430d-4363-b1f3-295d7a589212 ">
+    <td class="repr-section-toggle-col"></td>
+    <td>Head & sensor digitization</td>
+
+    <td>146 points</td>
+
+</tr>
+
+
+
+
+
+
+
+
+<tr class="repr-section-header filters-42168336-c0fe-44f5-b2c1-630b81046a61"  title="Hide section"
+    onclick="toggleVisibility('filters-42168336-c0fe-44f5-b2c1-630b81046a61')">
+    <th class="repr-section-toggle-col">
+        <button>
+
+            <span class="collapse-uncollapse-caret"></span>
+        </button>
+    </th>
+    <th colspan="2">
+        <strong>Filters</strong>
+    </th>
+</tr>
+
+<tr class="repr-element filters-42168336-c0fe-44f5-b2c1-630b81046a61 ">
+    <td class="repr-section-toggle-col"></td>
+    <td>Highpass</td>
+    <td>0.00 Hz</td>
+</tr>
+
+
+<tr class="repr-element filters-42168336-c0fe-44f5-b2c1-630b81046a61 ">
+    <td class="repr-section-toggle-col"></td>
+    <td>Lowpass</td>
+    <td>300.31 Hz</td>
+</tr>
+
+
 </table>
 </div>
 <br />
 <br /><p>Visualize the data</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.plot" title="mne.EvokedArray.plot" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-method"><span class="n">evoked</span><span class="o">.</span><span class="n">plot</span></a><span class="p">()</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.plot" title="mne.EvokedArray.plot" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-method"><span class="n">evoked</span><span class="o">.</span><span class="n">plot</span></a><span class="p">()</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">_t</span></a> <span class="o">=</span> <a href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.times" title="mne.EvokedArray.times" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-property"><span class="n">evoked</span><span class="o">.</span><span class="n">times</span></a><span class="p">[(</span><span class="mf">2.0</span> <span class="o">&lt;</span> <a href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.times" title="mne.EvokedArray.times" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-property"><span class="n">evoked</span><span class="o">.</span><span class="n">times</span></a><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><a href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.times" title="mne.EvokedArray.times" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-property"><span class="n">evoked</span><span class="o">.</span><span class="n">times</span></a> <span class="o">&lt;</span> <span class="mf">3.5</span><span class="p">)]</span>
 <a href="https://mne.tools/stable/generated/mne.EvokedArray.html#mne.EvokedArray.plot_topomap" title="mne.EvokedArray.plot_topomap" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-method"><span class="n">evoked</span><span class="o">.</span><span class="n">plot_topomap</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">times</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">_t</span></a><span class="p">[::</span><span class="mi">50</span><span class="p">],</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
@@ -358,11 +697,11 @@ Adding noise to 203/203 channels (203 channels in cov)
 </div>
 <ul class="sphx-glr-horizontal">
 <li><img src="../_images/sphx_glr_plot_06_compute_sesame_meg_simulated_frequency_mne_002.png" srcset="../_images/sphx_glr_plot_06_compute_sesame_meg_simulated_frequency_mne_002.png" alt="Gradiometers (203 channels)" class = "sphx-glr-multi-img"/></li>
-<li><img src="../_images/sphx_glr_plot_06_compute_sesame_meg_simulated_frequency_mne_003.png" srcset="../_images/sphx_glr_plot_06_compute_sesame_meg_simulated_frequency_mne_003.png" alt="2.001 s, 2.085 s, 2.168 s, 2.251 s, 2.334 s, 2.418 s, 2.501 s, fT/cm, 2.584 s, 2.667 s, 2.751 s, 2.834 s, 2.917 s, 3.000 s, 3.084 s, 3.167 s, 3.250 s, 3.333 s, 3.416 s, 3.500 s" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_plot_06_compute_sesame_meg_simulated_frequency_mne_003.png" srcset="../_images/sphx_glr_plot_06_compute_sesame_meg_simulated_frequency_mne_003.png" alt="2.001 s, 2.085 s, 2.168 s, 2.251 s, 2.334 s, 2.418 s, 2.501 s, 2.584 s, 2.667 s, 2.751 s, 2.834 s, 2.917 s, 3.000 s, 3.084 s, 3.167 s, 3.250 s, 3.333 s, 3.416 s, 3.500 s, fT/cm" class = "sphx-glr-multi-img"/></li>
 </ul>
 <p>Define the parameters and apply SESAME. We convert the data to the frequency
 domain by setting <code class="docutils literal notranslate"><span class="pre">fourier=True</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_parts</span></a> <span class="o">=</span> <span class="mi">100</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_parts</span></a> <span class="o">=</span> <span class="mi">100</span>
 <span class="n">noise_std</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">dip_mom_std</span> <span class="o">=</span> <span class="kc">None</span>
 <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">freq_min</span></a> <span class="o">=</span> <span class="mf">9.5</span>
@@ -393,47 +732,49 @@ Computing neighbours probabilities...[done]
 Data have been converted to the frequency domain.
 Analyzing data from 9.6002 Hz to 10.4003 Hz
 Estimating dipole moment std...[done]
- Estimated dipole moment std: 2.1725e-05
+ Estimated dipole moment std: 2.1883e-05
 Sampling hyperprior for dipole moment std.
 Estimating noise std...[done]
- Estimated noise std: 2.6864e-09
+ Estimated noise std: 2.7059e-09
 Computing inverse solution. This will take a while...
-/home/pasca/Tools/python/packages/sesameeg/sesameeg/particles.py:174: RuntimeWarning: invalid value encountered in log
+/home/pasca/Tools/python/packages/sesameeg/sesameeg/particles.py:175: RuntimeWarning: invalid value encountered in log
   self.loglikelihood_unit = - (n_ist * noise_std**2) * np.log(det_sigma)
-/home/pasca/mambaforge/envs/mne_15/lib/python3.11/site-packages/numpy/linalg/linalg.py:2139: RuntimeWarning: overflow encountered in det
-  r = _umath_linalg.det(a, signature=signature)
-Estimated dipole strength variance: 9.466076567752923e-06
+Estimated dipole strength variance: 9.916784086727255e-06
     Estimated number of sources: 2
     Estimated source locations:
         * source 1: [0.02482721 0.00881952 0.12250079]
         * source 2: [-0.0283287   0.09554572  0.05893362]
-[done in 88 iterations]
+[done in 96 iterations]
     Estimated source locations: [4367 3554]
     True source locations: [3554, 4367]
-    Goodness of fit with the recorded data: 92.44%
-    Source Dispersion: 1.37 mm
+    Goodness of fit with the recorded data: 92.73%
+    Source Dispersion: 1.33 mm
 </pre></div>
 </div>
 <p>Visualize the posterior map of the dipoles’ location
 <img class="math" src="../_images/math/80c0f146b8c13abbdb5ff40566e1089f7ea5f116.png" alt="p(r| \textbf{y}, 2)"/> and the estimated sources on the inflated brain.
 If window closes unexpectedly, set force_open=True</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_sources" title="sesameeg.Sesame.plot_sources" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-method"><span class="n">_sesame</span><span class="o">.</span><span class="n">plot_sources</span></a><span class="p">(</span><span class="n">true_sources</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_locs</span></a><span class="p">,</span> <span class="n">force_open</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;distance&#39;</span><span class="p">:</span> <span class="mi">650</span><span class="p">})</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="../generated/sesameeg.Sesame.html#sesameeg.Sesame.plot_sources" title="sesameeg.Sesame.plot_sources" class="sphx-glr-backref-module-sesameeg sphx-glr-backref-type-py-method"><span class="n">_sesame</span><span class="o">.</span><span class="n">plot_sources</span></a><span class="p">(</span><span class="n">true_sources</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">true_locs</span></a><span class="p">,</span> <span class="n">force_open</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;distance&#39;</span><span class="p">:</span> <span class="mi">650</span><span class="p">})</span>
 </pre></div>
 </div>
 <img src="../_images/sphx_glr_plot_06_compute_sesame_meg_simulated_frequency_mne_004.png" srcset="../_images/sphx_glr_plot_06_compute_sesame_meg_simulated_frequency_mne_004.png" alt="plot 06 compute sesame meg simulated frequency mne" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Surface stc computed.
-[3554, 4367]
+Using pyvistaqt 3d backend.
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 31.468 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 28.064 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-06-compute-sesame-meg-simulated-frequency-mne-py">
 <div class="binder-badge docutils container">
-<a class="reference external image-reference" href="https://mybinder.org/v2/gh/pybees/sesameeg/master?urlpath=lab/tree/notebooks/auto_examples/plot_06_compute_sesame_meg_simulated_frequency_mne.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>
+<a class="reference external image-reference" href="https://mybinder.org/v2/gh/pybees/sesameeg/master?urlpath=lab/tree/notebooks/auto_examples/plot_06_compute_sesame_meg_simulated_frequency_mne.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" style="width: 150px;" />
+</a>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/2126b19926344080c57715fb38cb83c0/plot_06_compute_sesame_meg_simulated_frequency_mne.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_06_compute_sesame_meg_simulated_frequency_mne.ipynb</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/62f3fb59035bd308d9b36b22e0f49aa7/plot_06_compute_sesame_meg_simulated_frequency_mne.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_06_compute_sesame_meg_simulated_frequency_mne.py</span></code></a></p>
 </div>
-<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/2126b19926344080c57715fb38cb83c0/plot_06_compute_sesame_meg_simulated_frequency_mne.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_06_compute_sesame_meg_simulated_frequency_mne.ipynb</span></code></a></p>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/d631cfdf7f56d87c7a62caa77caf40ca/plot_06_compute_sesame_meg_simulated_frequency_mne.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_06_compute_sesame_meg_simulated_frequency_mne.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -453,7 +794,7 @@ If window closes unexpectedly, set force_open=True</p>
     </p>
     <p>
         &copy; Copyright 2023, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.4.7.<br/>
     </p>
   </div>
 </footer>

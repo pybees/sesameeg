@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_plot_02_compute_sesame_meg_auditory_volume_mne.py>`
-        to download the full example code or to run this example in your browser via Binder
+        to download the full example code. or to run this example in your browser via Binder
 
 .. rst-class:: sphx-glr-example-title
 
@@ -29,7 +29,7 @@ dataset and correspond to the response to an auditory stimulus.
 
 .. GENERATED FROM PYTHON SOURCE LINES 11-42
 
-.. code-block:: default
+.. code-block:: Python
 
     # Authors: Gianvittorio Luria <luria@dima.unige.it>
     #          Sara Sommariva <sommariva@dima.unige.it>
@@ -78,7 +78,7 @@ comprises the whole brain volume.
 
 .. GENERATED FROM PYTHON SOURCE LINES 47-64
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Transformation matrix
@@ -109,7 +109,7 @@ comprises the whole brain volume.
         Reading a source space...
         [done]
         1 source spaces read
-        Desired named matrix (kind = 3523) not available
+        Desired named matrix (kind = 3523 (FIFF_MNE_FORWARD_SOLUTION_GRAD)) not available
         Read MEG forward solution (3757 sources, 306 channels, free orientations)
         Source spaces transformed to the forward solution coordinate frame
         305 out of 306 channels remain after picking
@@ -126,7 +126,6 @@ comprises the whole brain volume.
             nave = 55 - aspect type = 100
     Projections have already been applied. Setting proj attribute to True.
     Applying baseline correction (mode: mean)
-    Removing projector <Projection | Average EEG reference, active : True, n_channels : 60>
 
 
 
@@ -137,7 +136,7 @@ Define the parameters.
 
 .. GENERATED FROM PYTHON SOURCE LINES 66-88
 
-.. code-block:: default
+.. code-block:: Python
 
     time_min, time_max = 0.045, 0.135  # Select N100m
     subsample = None
@@ -174,7 +173,7 @@ Visualize the selected data.
 
 .. GENERATED FROM PYTHON SOURCE LINES 90-98
 
-.. code-block:: default
+.. code-block:: Python
 
 
     lst = evoked.plot_joint(show=False)
@@ -193,14 +192,14 @@ Visualize the selected data.
     *
 
       .. image-sg:: /auto_examples/images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_001.png
-         :alt: 0.090 s, 0.162 s, 0.251 s
+         :alt: Gradiometers (203 channels), 0.090 s, 0.162 s, 0.251 s
          :srcset: /auto_examples/images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_001.png
          :class: sphx-glr-multi-img
 
     *
 
       .. image-sg:: /auto_examples/images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_002.png
-         :alt: 0.090 s, 0.166 s, 0.246 s
+         :alt: Magnetometers (102 channels), 0.090 s, 0.166 s, 0.246 s
          :srcset: /auto_examples/images/sphx_glr_plot_02_compute_sesame_meg_auditory_volume_mne_002.png
          :class: sphx-glr-multi-img
 
@@ -210,14 +209,6 @@ Visualize the selected data.
  .. code-block:: none
 
     Projections have already been applied. Setting proj attribute to True.
-    NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
-    NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
-    Removing projector <Projection | PCA-v1, active : True, n_channels : 102>
-    Removing projector <Projection | PCA-v2, active : True, n_channels : 102>
-    Removing projector <Projection | PCA-v3, active : True, n_channels : 102>
-    NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
-    NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
-    NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
 
 
 
@@ -228,7 +219,7 @@ Apply SESAME.
 
 .. GENERATED FROM PYTHON SOURCE LINES 100-113
 
-.. code-block:: default
+.. code-block:: Python
 
     _sesame = prepare_sesame(fwd, evoked, n_parts=n_parts, noise_std=noise_std,
                              top_min=time_min, top_max=time_max, dip_mom_std=dip_mom_std,
@@ -263,14 +254,14 @@ Apply SESAME.
     Estimating noise std...[done]
      Estimated noise std: 3.9983e-12
     Computing inverse solution. This will take a while...
-    Estimated dipole strength variance: 2.534585786174006e-08
+    Estimated dipole strength variance: 2.6413825716435953e-08
         Estimated number of sources: 2
         Estimated source locations:
-            * source 1: [0.05158217 0.00683185 0.06580936]
-            * source 2: [-0.06009     0.00132211  0.0562192 ]
-    [done in 65 iterations]
-        Total computation time: 10.41 seconds.
-        Goodness of fit with the recorded data: 68.65%
+            * source 1: [-0.06009     0.00132211  0.0562192 ]
+            * source 2: [0.05158217 0.00683185 0.06580936]
+    [done in 97 iterations]
+        Total computation time: 12.31 seconds.
+        Goodness of fit with the recorded data: 68.69%
 
 
 
@@ -282,7 +273,7 @@ Visualize the posterior map of the dipoles' location
 
 .. GENERATED FROM PYTHON SOURCE LINES 116-118
 
-.. code-block:: default
+.. code-block:: Python
 
     _sesame.plot_sources(plot_kwargs={'distance': 650})
 
@@ -311,7 +302,7 @@ Visualize amplitude of the estimated sources as function of time.
 
 .. GENERATED FROM PYTHON SOURCE LINES 120-122
 
-.. code-block:: default
+.. code-block:: Python
 
     _sesame.plot_source_amplitudes()
 
@@ -333,7 +324,7 @@ Save results.
 
 .. GENERATED FROM PYTHON SOURCE LINES 124-130
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # You can save SESAME result in an HDF5 file with:
@@ -351,7 +342,7 @@ Save results.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 17.485 seconds)
+   **Total running time of the script:** (0 minutes 19.629 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_02_compute_sesame_meg_auditory_volume_mne.py:
@@ -360,7 +351,6 @@ Save results.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
-
     .. container:: binder-badge
 
       .. image:: images/binder_badge_logo.svg
@@ -368,15 +358,17 @@ Save results.
         :alt: Launch binder
         :width: 150 px
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
+      :download:`Download Jupyter notebook: plot_02_compute_sesame_meg_auditory_volume_mne.ipynb <plot_02_compute_sesame_meg_auditory_volume_mne.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_02_compute_sesame_meg_auditory_volume_mne.py <plot_02_compute_sesame_meg_auditory_volume_mne.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: plot_02_compute_sesame_meg_auditory_volume_mne.ipynb <plot_02_compute_sesame_meg_auditory_volume_mne.ipynb>`
+      :download:`Download zipped: plot_02_compute_sesame_meg_auditory_volume_mne.zip <plot_02_compute_sesame_meg_auditory_volume_mne.zip>`
 
 
 .. only:: html

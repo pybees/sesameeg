@@ -4,15 +4,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sesameeg.particles &#8212; sesameeg 0.0.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <title>sesameeg.particles &#8212; sesameeg 0.0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=284a2d1d" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../../_static/documentation_options.js?v=e3a6060d"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/documentation_options.js?v=47de8214"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/copybutton.js?v=26522df0"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -39,7 +39,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html">
           sesameeg</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.0.2</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -87,7 +87,18 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <h1>Source code for sesameeg.particles</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
@@ -98,15 +109,16 @@
 <span class="c1">#</span>
 <span class="c1"># License: BSD (3-clause)</span>
 
-<span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">.dipoles</span> <span class="kn">import</span> <span class="n">Dipole</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">gamma_pdf</span><span class="p">,</span> <span class="n">woodbury</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.special</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ss</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.dipoles</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dipole</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">gamma_pdf</span><span class="p">,</span> <span class="n">woodbury</span>
 
 
 <div class="viewcode-block" id="Particle">
 <a class="viewcode-back" href="../../generated/sesameeg.Particle.html#sesameeg.Particle">[docs]</a>
-<span class="k">class</span> <span class="nc">Particle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Particle</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Particle class for SESAME, used to store a single particle</span>
 <span class="sd">    of an empirical pdf.</span>
 
@@ -133,7 +145,7 @@
 <span class="sd">        The prior pdf, evaluated in the particle.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_verts</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prior_locs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fixed_ori</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_verts</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prior_locs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fixed_ori</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">hyper_q</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialization: the initial number of dipoles is Poisson</span>
 <span class="sd">           distribuited; the initial locations are uniformly distribuited</span>
@@ -156,7 +168,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">add_dipole</span><span class="p">(</span><span class="n">n_verts</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">poisson</span><span class="p">(</span><span class="n">lam</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">compute_prior</span><span class="p">(</span><span class="n">lam</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;n_dips : </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dips</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i_dip</span><span class="p">,</span> <span class="n">dip</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dipoles</span><span class="p">):</span>
             <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;, dipole </span><span class="si">{0}</span><span class="s1"> : </span><span class="si">{1}</span><span class="s1">&#39;</span> <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i_dip</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">dip</span><span class="p">)</span>
@@ -165,7 +177,7 @@
 
 <div class="viewcode-block" id="Particle.add_dipole">
 <a class="viewcode-back" href="../../generated/sesameeg.Particle.html#sesameeg.Particle.add_dipole">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_dipole</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_verts</span><span class="p">,</span> <span class="n">num_dip</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_dipole</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_verts</span><span class="p">,</span> <span class="n">num_dip</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add new dipole(s) to the particle.</span>
 
 <span class="sd">        Parameters</span>
@@ -190,7 +202,7 @@
 
 <div class="viewcode-block" id="Particle.remove_dipole">
 <a class="viewcode-back" href="../../generated/sesameeg.Particle.html#sesameeg.Particle.remove_dipole">[docs]</a>
-    <span class="k">def</span> <span class="nf">remove_dipole</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diprip</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_dipole</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diprip</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove a dipole from the particle.</span>
 
 <span class="sd">        Parameters</span>
@@ -206,7 +218,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No dipoles to remove.&#39;</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_check_sigma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">noise_std</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_sigma</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">noise_std</span><span class="p">):</span>
         <span class="p">[</span><span class="n">n_sens</span><span class="p">,</span> <span class="n">n_ist</span><span class="p">]</span> <span class="o">=</span> <span class="n">r_data</span><span class="o">.</span><span class="n">shape</span>
 
         <span class="c1"># Step 1: compute variance of the likelihood.</span>
@@ -231,7 +243,7 @@
 
 <div class="viewcode-block" id="Particle.compute_loglikelihood_unit">
 <a class="viewcode-back" href="../../generated/sesameeg.Particle.html#sesameeg.Particle.compute_loglikelihood_unit">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_loglikelihood_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">noise_std</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_loglikelihood_unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">noise_std</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluates the logarithm of the marginal likelihood in the present particle.</span>
 
 <span class="sd">        Parameters</span>
@@ -282,7 +294,7 @@
 
 <div class="viewcode-block" id="Particle.compute_prior">
 <a class="viewcode-back" href="../../generated/sesameeg.Particle.html#sesameeg.Particle.compute_prior">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_prior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_prior</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lam</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Evaluate the prior pdf in the present particle.</span>
 
 <span class="sd">        Parameters</span>
@@ -297,7 +309,7 @@
 <span class="sd">            The prior pdf evaluated in the present particle.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">prior</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dips</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">lam</span><span class="p">)</span> <span class="o">*</span>\
+        <span class="bp">self</span><span class="o">.</span><span class="n">prior</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">ss</span><span class="o">.</span><span class="n">factorial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dips</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">lam</span><span class="p">)</span> <span class="o">*</span>\
             <span class="p">(</span><span class="n">lam</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dips</span><span class="p">)</span>
 
         <span class="n">_where</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prior_locs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -314,7 +326,7 @@
 
 <div class="viewcode-block" id="Particle.evol_n_dips">
 <a class="viewcode-back" href="../../generated/sesameeg.Particle.html#sesameeg.Particle.evol_n_dips">[docs]</a>
-    <span class="k">def</span> <span class="nf">evol_n_dips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_verts</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">max_n_dips</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evol_n_dips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_verts</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">max_n_dips</span><span class="p">,</span>
                     <span class="n">lklh_exp</span><span class="p">,</span> <span class="n">noise_std</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">q_birth</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">q_death</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="mi">20</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform a Reversible Jump Markov Chain Monte Carlo step in order</span>
 <span class="sd">           to explore the &quot;number of sources&quot; component of the state space.</span>
@@ -391,7 +403,7 @@
 
 <div class="viewcode-block" id="Particle.evol_single_loc">
 <a class="viewcode-back" href="../../generated/sesameeg.Particle.html#sesameeg.Particle.evol_single_loc">[docs]</a>
-    <span class="k">def</span> <span class="nf">evol_single_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dip_idx</span><span class="p">,</span> <span class="n">neigh</span><span class="p">,</span> <span class="n">neigh_p</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evol_single_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dip_idx</span><span class="p">,</span> <span class="n">neigh</span><span class="p">,</span> <span class="n">neigh_p</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span>
                  <span class="n">lklh_exp</span><span class="p">,</span> <span class="n">noise_std</span><span class="p">,</span> <span class="n">lam</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform a Markov Chain Monte Carlo step in order to explore the</span>
 <span class="sd">           dipole location component of the state space. The dipole is</span>
@@ -473,13 +485,13 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
-    <span class="k">def</span> <span class="nf">evol_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neigh</span><span class="p">,</span> <span class="n">neigh_p</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">lklh_exp</span><span class="p">,</span> <span class="n">noise_std</span><span class="p">,</span> <span class="n">lam</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evol_loc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neigh</span><span class="p">,</span> <span class="n">neigh_p</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">lklh_exp</span><span class="p">,</span> <span class="n">noise_std</span><span class="p">,</span> <span class="n">lam</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">dip_idx</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dips</span><span class="p">)):</span>
             <span class="bp">self</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evol_single_loc</span><span class="p">(</span><span class="n">dip_idx</span><span class="p">,</span> <span class="n">neigh</span><span class="p">,</span> <span class="n">neigh_p</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span>
                                    <span class="n">lklh_exp</span><span class="p">,</span> <span class="n">noise_std</span><span class="p">,</span> <span class="n">lam</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">evol_dip_mom_std</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">lklh_exp</span><span class="p">,</span> <span class="n">noise_std</span><span class="p">,</span> <span class="n">lam</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evol_dip_mom_std</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">lklh_exp</span><span class="p">,</span> <span class="n">noise_std</span><span class="p">,</span> <span class="n">lam</span><span class="p">):</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;dip_mom_std&#39;</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span>
@@ -509,7 +521,7 @@
 
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">explore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_verts</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">lklh_exp</span><span class="p">,</span> <span class="n">neigh</span><span class="p">,</span> <span class="n">neigh_p</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">explore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_verts</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">lklh_exp</span><span class="p">,</span> <span class="n">neigh</span><span class="p">,</span> <span class="n">neigh_p</span><span class="p">,</span>
                 <span class="n">noise_std</span><span class="p">,</span> <span class="n">lam</span><span class="p">,</span> <span class="n">max_n_dips</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hyper_q</span><span class="p">:</span>
             <span class="bp">self</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evol_dip_mom_std</span><span class="p">(</span><span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">lklh_exp</span><span class="p">,</span> <span class="n">noise_std</span><span class="p">,</span> <span class="n">lam</span><span class="p">)</span>
@@ -519,7 +531,7 @@
         <span class="bp">self</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evol_loc</span><span class="p">(</span><span class="n">neigh</span><span class="p">,</span> <span class="n">neigh_p</span><span class="p">,</span> <span class="n">r_data</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">lklh_exp</span><span class="p">,</span> <span class="n">noise_std</span><span class="p">,</span> <span class="n">lam</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">sample_prior_locs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_dip</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sample_prior_locs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_dip</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="n">nz_pla</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prior_locs</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">pl_arr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prior_locs</span><span class="p">[</span><span class="n">nz_pla</span><span class="p">]</span>
         <span class="n">outer_part</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">pl_arr</span><span class="p">)</span>
@@ -541,7 +553,7 @@
     </p>
     <p>
         &copy; Copyright 2023, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.4.7.<br/>
     </p>
   </div>
 </footer>

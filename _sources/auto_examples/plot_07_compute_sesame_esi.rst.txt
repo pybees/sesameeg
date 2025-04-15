@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_plot_07_compute_sesame_esi.py>`
-        to download the full example code or to run this example in your browser via Binder
+        to download the full example code. or to run this example in your browser via Binder
 
 .. rst-class:: sphx-glr-example-title
 
@@ -41,7 +41,7 @@ References
 
 .. GENERATED FROM PYTHON SOURCE LINES 23-36
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Author: Gianvittorio Luria <luria@dima.unige.it>
@@ -69,7 +69,7 @@ Import the MATLAB data structure and extract the single quantities.
 
 .. GENERATED FROM PYTHON SOURCE LINES 38-49
 
-.. code-block:: default
+.. code-block:: Python
 
 
     data_mat = sio.loadmat('data/sub-01_run-07_data.mat')
@@ -95,7 +95,7 @@ Define the parameters.
 
 .. GENERATED FROM PYTHON SOURCE LINES 51-65
 
-.. code-block:: default
+.. code-block:: Python
 
     sample_min, sample_max = 12, 24
     subsample = None
@@ -124,7 +124,7 @@ Visualize the selected data.
 
 .. GENERATED FROM PYTHON SOURCE LINES 67-74
 
-.. code-block:: default
+.. code-block:: Python
 
     plt.figure(figsize=(25,8))
     plt.plot(data_times, data.T, label='EEG data')
@@ -151,7 +151,7 @@ Apply SESAME.
 
 .. GENERATED FROM PYTHON SOURCE LINES 76-94
 
-.. code-block:: default
+.. code-block:: Python
 
     _sesame = Sesame(source_space, lead_field, data, n_parts=n_parts, noise_std=noise_std,
                      s_max=sample_max, s_min=sample_min, dip_mom_std=dip_mom_std,
@@ -187,15 +187,13 @@ Apply SESAME.
     Estimating noise std...[done]
      Estimated noise std: 2.8010e-04
     Computing inverse solution. This will take a while...
-    /home/pasca/Tools/python/packages/sesameeg/sesameeg/particles.py:174: RuntimeWarning: invalid value encountered in log
-      self.loglikelihood_unit = - (n_ist * noise_std**2) * np.log(det_sigma)
-    Estimated dipole strength variance: 2.20030636474554e-06
+    Estimated dipole strength variance: 2.210125298272916e-06
         Estimated number of sources: 1
         Estimated source locations:
             * source 1: [ 0.03371428 -0.00413685  0.03588749]
-    [done in 64 iterations]
+    [done in 76 iterations]
         Goodness of fit with the recorded data: 78.89%
-        Source Dispersion: 3.18 mm
+        Source Dispersion: 2.57 mm
         Distance to true source: 4.07 mm
 
 
@@ -208,7 +206,7 @@ Visualize the posterior map of the dipoles' location
 
 .. GENERATED FROM PYTHON SOURCE LINES 97-99
 
-.. code-block:: default
+.. code-block:: Python
 
     _sesame.plot_sources(true_sources=true_sources)
 
@@ -230,7 +228,7 @@ Visualize the amplitude of the estimated sources as function of time.
 
 .. GENERATED FROM PYTHON SOURCE LINES 101-104
 
-.. code-block:: default
+.. code-block:: Python
 
     _sesame.plot_source_amplitudes()
 
@@ -253,7 +251,7 @@ Save results.
 
 .. GENERATED FROM PYTHON SOURCE LINES 106-112
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # You can save SESAME result in an HDF5 file with:
@@ -271,7 +269,7 @@ Save results.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 4.737 seconds)
+   **Total running time of the script:** (0 minutes 5.294 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_07_compute_sesame_esi.py:
@@ -280,7 +278,6 @@ Save results.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
-
     .. container:: binder-badge
 
       .. image:: images/binder_badge_logo.svg
@@ -288,15 +285,17 @@ Save results.
         :alt: Launch binder
         :width: 150 px
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
+      :download:`Download Jupyter notebook: plot_07_compute_sesame_esi.ipynb <plot_07_compute_sesame_esi.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_07_compute_sesame_esi.py <plot_07_compute_sesame_esi.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: plot_07_compute_sesame_esi.ipynb <plot_07_compute_sesame_esi.ipynb>`
+      :download:`Download zipped: plot_07_compute_sesame_esi.zip <plot_07_compute_sesame_esi.zip>`
 
 
 .. only:: html

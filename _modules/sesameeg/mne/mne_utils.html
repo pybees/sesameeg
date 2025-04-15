@@ -4,15 +4,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sesameeg.mne.mne_utils &#8212; sesameeg 0.0.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <title>sesameeg.mne.mne_utils &#8212; sesameeg 0.0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=284a2d1d" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/documentation_options.js?v=47de8214"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/copybutton.js?v=26522df0"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -39,7 +39,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html">
           sesameeg</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.0.2</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -87,43 +87,55 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <h1>Source code for sesameeg.mne.mne_utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.spatial.distance</span> <span class="k">as</span> <span class="nn">ssd</span>
-<span class="kn">from</span> <span class="nn">mne.cov</span> <span class="kn">import</span> <span class="n">compute_whitener</span>
-<span class="kn">from</span> <span class="nn">mne.epochs</span> <span class="kn">import</span> <span class="n">Epochs</span><span class="p">,</span> <span class="n">EpochsArray</span>
-<span class="kn">from</span> <span class="nn">mne.evoked</span> <span class="kn">import</span> <span class="n">Evoked</span><span class="p">,</span> <span class="n">EvokedArray</span>
-<span class="kn">from</span> <span class="nn">mne.forward</span> <span class="kn">import</span> <span class="n">Forward</span><span class="p">,</span> <span class="n">_select_orient_forward</span>
-<span class="kn">from</span> <span class="nn">mne.io.pick</span> <span class="kn">import</span> <span class="n">channel_type</span>
-<span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">pick_types_forward</span><span class="p">,</span> <span class="n">add_source_space_distances</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">normalize</span><span class="p">,</span> <span class="n">initialize_radius</span><span class="p">,</span> <span class="n">compute_neighbours_matrix</span><span class="p">,</span> <span class="n">compute_neighbours_probability_matrix</span>
-<span class="kn">from</span> <span class="nn">..sesame</span> <span class="kn">import</span> <span class="n">Sesame</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.spatial.distance</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ssd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne.cov</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_whitener</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne.epochs</span><span class="w"> </span><span class="kn">import</span> <span class="n">Epochs</span><span class="p">,</span> <span class="n">EpochsArray</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne.evoked</span><span class="w"> </span><span class="kn">import</span> <span class="n">Evoked</span><span class="p">,</span> <span class="n">EvokedArray</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne.forward</span><span class="w"> </span><span class="kn">import</span> <span class="n">Forward</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne.forward.forward</span><span class="w"> </span><span class="kn">import</span> <span class="n">_select_orient_forward</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne</span><span class="w"> </span><span class="kn">import</span> <span class="n">channel_type</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne</span><span class="w"> </span><span class="kn">import</span> <span class="n">pick_types_forward</span><span class="p">,</span> <span class="n">add_source_space_distances</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">normalize</span><span class="p">,</span> <span class="n">initialize_radius</span><span class="p">,</span> <span class="n">compute_neighbours_matrix</span><span class="p">,</span> <span class="n">compute_neighbours_probability_matrix</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..sesame</span><span class="w"> </span><span class="kn">import</span> <span class="n">Sesame</span>
 
 
-<span class="k">def</span> <span class="nf">_is_epochs</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_epochs</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">Epochs</span><span class="p">,</span> <span class="n">EpochsArray</span><span class="p">)):</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
 
 
-<span class="k">def</span> <span class="nf">_is_evoked</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_evoked</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">Evoked</span><span class="p">,</span> <span class="n">EvokedArray</span><span class="p">)):</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
 
 
-<span class="k">def</span> <span class="nf">_is_forward</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_forward</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Forward</span><span class="p">):</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
 
 
-<span class="k">def</span> <span class="nf">_get_topographies</span><span class="p">(</span><span class="n">evoked</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">,</span> <span class="n">fourier</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">freqs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_topographies</span><span class="p">(</span><span class="n">evoked</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">,</span> <span class="n">fourier</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">freqs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">fourier</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">top_min</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">s_min</span> <span class="o">=</span> <span class="mi">0</span>
@@ -172,12 +184,13 @@
         <span class="k">raise</span> <span class="ne">ValueError</span>
 
 
-<span class="k">def</span> <span class="nf">_prepare_epochs_data</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">,</span> <span class="n">epochs_avg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fourier</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_prepare_epochs_data</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">,</span> <span class="n">epochs_avg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fourier</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">ep_data</span> <span class="o">=</span> <span class="n">epochs</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
     <span class="n">evoked</span> <span class="o">=</span> <span class="n">EvokedArray</span><span class="p">(</span><span class="n">ep_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">epochs</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="n">epochs</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="k">if</span> <span class="n">fourier</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
         <span class="n">s_min</span><span class="p">,</span> <span class="n">s_max</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span> <span class="o">=</span> <span class="n">_get_topographies</span><span class="p">(</span><span class="n">evoked</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">,</span> <span class="n">fourier</span><span class="o">=</span><span class="n">fourier</span><span class="p">)</span>
         <span class="n">_times</span> <span class="o">=</span> <span class="n">evoked</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="n">s_min</span><span class="p">:</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">_sfreq</span> <span class="o">=</span> <span class="n">evoked</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span>
         <span class="n">temp_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">ie</span><span class="p">,</span> <span class="n">_e</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ep_data</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">subsample</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -190,8 +203,9 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Averaging </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">temp_list</span><span class="p">)</span><span class="si">}</span><span class="s1"> epochs.&#39;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp_list</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">_times</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">temp_list</span><span class="p">),</span> <span class="n">_times</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">temp_list</span><span class="p">),</span> <span class="n">_times</span><span class="p">,</span> <span class="n">_sfreq</span>
     <span class="k">elif</span> <span class="n">fourier</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">_sfreq</span> <span class="o">=</span> <span class="n">evoked</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span>
         <span class="n">tstep</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">evoked</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span>
         <span class="n">evoked_f</span> <span class="o">=</span> <span class="n">evoked</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">evoked_f</span><span class="o">.</span><span class="n">data</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">(</span><span class="n">evoked</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -228,25 +242,27 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Averaging </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">temp_list</span><span class="p">)</span><span class="si">}</span><span class="s1"> epochs.&#39;</span><span class="p">)</span>
             <span class="n">_r_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp_list2_r</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">_i_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp_list2_i</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">_r_mean</span><span class="p">,</span> <span class="n">_i_mean</span><span class="p">]),</span> <span class="n">_freqs</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">_r_mean</span><span class="p">,</span> <span class="n">_i_mean</span><span class="p">]),</span> <span class="n">_freqs</span><span class="p">,</span> <span class="n">_sfreq</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">temp_list2</span><span class="p">),</span> <span class="n">_freqs</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">temp_list2</span><span class="p">),</span> <span class="n">_freqs</span><span class="p">,</span> <span class="n">_sfreq</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span>
 
 
-<span class="k">def</span> <span class="nf">_prepare_evoked_data</span><span class="p">(</span><span class="n">evoked</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fourier</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_prepare_evoked_data</span><span class="p">(</span><span class="n">evoked</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fourier</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">fourier</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
         <span class="n">s_min</span><span class="p">,</span> <span class="n">s_max</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span> <span class="o">=</span> <span class="n">_get_topographies</span><span class="p">(</span><span class="n">evoked</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">,</span> <span class="n">fourier</span><span class="o">=</span><span class="n">fourier</span><span class="p">)</span>
         <span class="n">_times</span> <span class="o">=</span> <span class="n">evoked</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="n">s_min</span><span class="p">:</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">_sfreq</span> <span class="o">=</span> <span class="n">evoked</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">subsample</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Subsampling data with step </span><span class="si">{</span><span class="n">subsample</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="n">_data</span> <span class="o">=</span> <span class="n">evoked</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">s_min</span><span class="p">:</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span><span class="n">subsample</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_data</span> <span class="o">=</span> <span class="n">evoked</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="n">s_min</span><span class="p">:</span><span class="n">s_max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">_data</span><span class="p">,</span> <span class="n">_times</span>
+        <span class="k">return</span> <span class="n">_data</span><span class="p">,</span> <span class="n">_times</span><span class="p">,</span> <span class="n">_sfreq</span>
     <span class="k">elif</span> <span class="n">fourier</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">_sfreq</span> <span class="o">=</span> <span class="n">evoked</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span>
         <span class="n">tstep</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">evoked</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span>
         <span class="n">evoked_f</span> <span class="o">=</span> <span class="n">evoked</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">evoked_f</span><span class="o">.</span><span class="n">data</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">(</span><span class="n">evoked</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -265,12 +281,12 @@
         <span class="n">temp_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">_l</span> <span class="ow">in</span> <span class="n">_data_temp</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
             <span class="n">temp_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">_l</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">_l</span><span class="p">)])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">temp_list</span><span class="p">),</span> <span class="n">_freqs</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">temp_list</span><span class="p">),</span> <span class="n">_freqs</span><span class="p">,</span> <span class="n">_sfreq</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span>
 
 
-<span class="k">def</span> <span class="nf">_read_fwd_ori</span><span class="p">(</span><span class="n">forward</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_fwd_ori</span><span class="p">(</span><span class="n">forward</span><span class="p">):</span>
     <span class="n">fwd_ori</span> <span class="o">=</span> <span class="n">forward</span><span class="p">[</span><span class="s1">&#39;source_ori&#39;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">fwd_ori</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">assert</span> <span class="p">(</span><span class="n">forward</span><span class="p">[</span><span class="s1">&#39;sol&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">forward</span><span class="p">[</span><span class="s1">&#39;source_rr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> \
@@ -287,7 +303,7 @@
                          <span class="s1">&#39;attribute of the Forward.&#39;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_prepare_src_lf</span><span class="p">(</span><span class="n">forward</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">noise_cov</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_prepare_src_lf</span><span class="p">(</span><span class="n">forward</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">noise_cov</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">_forward_picked</span><span class="p">,</span> <span class="n">_info_picked</span> <span class="o">=</span> <span class="n">_select_orient_forward</span><span class="p">(</span><span class="n">forward</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="n">noise_cov</span><span class="p">)</span>
 
     <span class="n">fixed_ori</span> <span class="o">=</span> <span class="n">_read_fwd_ori</span><span class="p">(</span><span class="n">_forward_picked</span><span class="p">)</span>
@@ -297,7 +313,7 @@
     <span class="k">return</span> <span class="n">_forward_picked</span><span class="p">,</span> <span class="n">source_space</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">n_verts</span><span class="p">,</span> <span class="n">fixed_ori</span><span class="p">,</span> <span class="n">_info_picked</span>
 
 
-<span class="k">def</span> <span class="nf">_compute_correlation_distance_matrix</span><span class="p">(</span><span class="n">fwd</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_compute_correlation_distance_matrix</span><span class="p">(</span><span class="n">fwd</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; Computing correlation distance matrix...&#39;</span><span class="p">)</span>
     <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;sol&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;sol&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
     <span class="n">n_ch_tot</span> <span class="o">=</span> <span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">][</span><span class="s1">&#39;nchan&#39;</span><span class="p">]</span>
@@ -322,7 +338,7 @@
     <span class="k">return</span> <span class="n">distance_matrix</span>
 
 
-<span class="k">def</span> <span class="nf">_compute_cortical_distance_matrix</span><span class="p">(</span><span class="n">fwd</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_compute_cortical_distance_matrix</span><span class="p">(</span><span class="n">fwd</span><span class="p">):</span>
     <span class="n">src_aux</span> <span class="o">=</span> <span class="n">fwd</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">src_aux</span> <span class="o">=</span> <span class="n">add_source_space_distances</span><span class="p">(</span><span class="n">src_aux</span><span class="p">,</span> <span class="n">dist_limit</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Creating distance matrix...&#39;</span><span class="p">)</span>
@@ -342,7 +358,7 @@
     <span class="k">return</span> <span class="n">distance_matrix</span>
 
 
-<span class="k">def</span> <span class="nf">_prepare_neighbours_matrix</span><span class="p">(</span><span class="n">fwd</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fixed_ori</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_simil</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_prepare_neighbours_matrix</span><span class="p">(</span><span class="n">fwd</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fixed_ori</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_simil</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">radius</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">radius</span> <span class="o">=</span> <span class="n">initialize_radius</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -375,7 +391,7 @@
         <span class="k">return</span> <span class="n">n_matrix</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="kc">None</span>
 
 
-<span class="k">def</span> <span class="nf">_prepare_neighbours_probabilities_matrix</span><span class="p">(</span><span class="n">n_matrix</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">neigh_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fixed_ori</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_prepare_neighbours_probabilities_matrix</span><span class="p">(</span><span class="n">n_matrix</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">neigh_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fixed_ori</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                              <span class="n">n_simil</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">combined_d_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Computing neighbours probabilities...&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">neigh_std</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -408,7 +424,7 @@
 
 <div class="viewcode-block" id="prepare_sesame">
 <a class="viewcode-back" href="../../../generated/sesameeg.mne.prepare_sesame.html#sesameeg.mne.prepare_sesame">[docs]</a>
-<span class="k">def</span> <span class="nf">prepare_sesame</span><span class="p">(</span><span class="n">forward</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">n_parts</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">top_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">top_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">prepare_sesame</span><span class="p">(</span><span class="n">forward</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">n_parts</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">top_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">top_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">noise_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">prior_locs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">hyper_q</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">max_n_dips</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
@@ -516,9 +532,9 @@
 
     <span class="c1"># Prepare data</span>
     <span class="k">if</span> <span class="n">_is_evoked</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-        <span class="n">_data</span><span class="p">,</span> <span class="n">_times</span> <span class="o">=</span> <span class="n">_prepare_evoked_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="n">subsample</span><span class="p">,</span> <span class="n">fourier</span><span class="o">=</span><span class="n">fourier</span><span class="p">)</span>
+        <span class="n">_data</span><span class="p">,</span> <span class="n">_times</span><span class="p">,</span> <span class="n">_sfreq</span> <span class="o">=</span> <span class="n">_prepare_evoked_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="n">subsample</span><span class="p">,</span> <span class="n">fourier</span><span class="o">=</span><span class="n">fourier</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">_is_epochs</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-        <span class="n">_data</span><span class="p">,</span> <span class="n">_times</span> <span class="o">=</span> <span class="n">_prepare_epochs_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">,</span> <span class="n">epochs_avg</span><span class="o">=</span><span class="n">epochs_avg</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="n">subsample</span><span class="p">,</span>
+        <span class="n">_data</span><span class="p">,</span> <span class="n">_times</span><span class="p">,</span> <span class="n">_sfreq</span> <span class="o">=</span> <span class="n">_prepare_epochs_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">top_min</span><span class="p">,</span> <span class="n">top_max</span><span class="p">,</span> <span class="n">epochs_avg</span><span class="o">=</span><span class="n">epochs_avg</span><span class="p">,</span> <span class="n">subsample</span><span class="o">=</span><span class="n">subsample</span><span class="p">,</span>
                                      <span class="n">fourier</span><span class="o">=</span><span class="n">fourier</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span>
@@ -550,14 +566,14 @@
                          <span class="n">fixed_ori</span><span class="o">=</span><span class="n">fixed_ori</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">neigh_std</span><span class="o">=</span><span class="n">neigh_std</span><span class="p">,</span> <span class="n">prior_locs</span><span class="o">=</span><span class="n">prior_locs</span><span class="p">,</span>
                          <span class="n">subsample</span><span class="o">=</span><span class="n">subsample</span><span class="p">,</span> <span class="n">hyper_q</span><span class="o">=</span><span class="n">hyper_q</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="n">lam</span><span class="p">,</span> <span class="n">max_n_dips</span><span class="o">=</span><span class="n">max_n_dips</span><span class="p">,</span>
                          <span class="n">fourier</span><span class="o">=</span><span class="n">fourier</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="n">forward</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">,</span>
-                         <span class="n">subjects_dir</span><span class="o">=</span><span class="n">subjects_dir</span><span class="p">,</span> <span class="n">data_times</span><span class="o">=</span><span class="n">_times</span><span class="p">,</span> <span class="n">trans_matrix</span><span class="o">=</span><span class="n">trans_matrix</span><span class="p">)</span>
+                         <span class="n">subjects_dir</span><span class="o">=</span><span class="n">subjects_dir</span><span class="p">,</span> <span class="n">data_times</span><span class="o">=</span><span class="n">_times</span><span class="p">,</span> <span class="n">data_sfreq</span><span class="o">=</span><span class="n">_sfreq</span><span class="p">,</span> <span class="n">trans_matrix</span><span class="o">=</span><span class="n">trans_matrix</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">_sesame</span> <span class="o">=</span> <span class="n">Sesame</span><span class="p">(</span><span class="n">source_space</span><span class="p">,</span> <span class="n">lead_field</span><span class="p">,</span> <span class="n">data_matrix</span><span class="p">,</span> <span class="n">n_parts</span><span class="o">=</span><span class="n">n_parts</span><span class="p">,</span> <span class="n">n_matrix</span><span class="o">=</span><span class="n">n_matrix</span><span class="p">,</span>
                          <span class="n">np_matrix</span><span class="o">=</span><span class="n">np_matrix</span><span class="p">,</span> <span class="n">noise_std</span><span class="o">=</span><span class="n">noise_std</span><span class="p">,</span> <span class="n">dip_mom_std</span><span class="o">=</span><span class="n">dip_mom_std</span><span class="p">,</span>
                          <span class="n">fixed_ori</span><span class="o">=</span><span class="n">fixed_ori</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">neigh_std</span><span class="o">=</span><span class="n">neigh_std</span><span class="p">,</span> <span class="n">prior_locs</span><span class="o">=</span><span class="n">prior_locs</span><span class="p">,</span>
                          <span class="n">subsample</span><span class="o">=</span><span class="n">subsample</span><span class="p">,</span> <span class="n">hyper_q</span><span class="o">=</span><span class="n">hyper_q</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="n">lam</span><span class="p">,</span> <span class="n">max_n_dips</span><span class="o">=</span><span class="n">max_n_dips</span><span class="p">,</span>
                          <span class="n">fourier</span><span class="o">=</span><span class="n">fourier</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">forward</span><span class="o">=</span><span class="n">forward</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">,</span>
-                         <span class="n">subjects_dir</span><span class="o">=</span><span class="n">subjects_dir</span><span class="p">,</span> <span class="n">data_freqs</span><span class="o">=</span><span class="n">_times</span><span class="p">,</span> <span class="n">trans_matrix</span><span class="o">=</span><span class="n">trans_matrix</span><span class="p">)</span>
+                         <span class="n">subjects_dir</span><span class="o">=</span><span class="n">subjects_dir</span><span class="p">,</span> <span class="n">data_freqs</span><span class="o">=</span><span class="n">_times</span><span class="p">,</span> <span class="n">data_sfreq</span><span class="o">=</span><span class="n">_sfreq</span><span class="p">,</span> <span class="n">trans_matrix</span><span class="o">=</span><span class="n">trans_matrix</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">_sesame</span></div>
 
@@ -575,7 +591,7 @@
     </p>
     <p>
         &copy; Copyright 2023, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.4.7.<br/>
     </p>
   </div>
 </footer>

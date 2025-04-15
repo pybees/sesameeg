@@ -4,15 +4,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sesameeg.viz.viz &#8212; sesameeg 0.0.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <title>sesameeg.viz.viz &#8212; sesameeg 0.0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=284a2d1d" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <script src="../../../_static/documentation_options.js?v=e3a6060d"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/documentation_options.js?v=47de8214"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/copybutton.js?v=26522df0"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -39,7 +39,7 @@
         </button>
         <a class="navbar-brand" href="../../../index.html">
           sesameeg</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.0.2</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.0.3</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -87,25 +87,36 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary">
+<form action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <h1>Source code for sesameeg.viz.viz</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">inspect</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">op</span>
-<span class="kn">import</span> <span class="nn">pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">head_to_mri</span>
-<span class="kn">from</span> <span class="nn">mne.label</span> <span class="kn">import</span> <span class="n">_n_colors</span>
-<span class="kn">from</span> <span class="nn">mne.viz.backends._utils</span> <span class="kn">import</span> <span class="n">_qt_app_exec</span>
-<span class="kn">from</span> <span class="nn">nilearn.plotting</span> <span class="kn">import</span> <span class="n">plot_stat_map</span>
-<span class="kn">from</span> <span class="nn">nilearn.image</span> <span class="kn">import</span> <span class="n">index_img</span>
-<span class="kn">from</span> <span class="nn">pyvistaqt</span> <span class="kn">import</span> <span class="n">BackgroundPlotter</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os.path</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">op</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyvista</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne</span><span class="w"> </span><span class="kn">import</span> <span class="n">head_to_mri</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne.label</span><span class="w"> </span><span class="kn">import</span> <span class="n">_n_colors</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mne.viz.backends._utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">_qt_app_exec</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nilearn.plotting</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_stat_map</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nilearn.image</span><span class="w"> </span><span class="kn">import</span> <span class="n">index_img</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyvistaqt</span><span class="w"> </span><span class="kn">import</span> <span class="n">BackgroundPlotter</span>
 
 
 <div class="viewcode-block" id="plot_n_sources">
 <a class="viewcode-back" href="../../../generated/sesameeg.viz.plot_n_sources.html#sesameeg.viz.plot_n_sources">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_n_sources</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_n_sources</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot the probability of number of sources.</span>
 
@@ -160,7 +171,7 @@
 
 <div class="viewcode-block" id="plot_amplitudes">
 <a class="viewcode-back" href="../../../generated/sesameeg.viz.plot_amplitudes.html#sesameeg.viz.plot_amplitudes">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_amplitudes</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_amplitudes</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot the amplitude of the estimated sources as function of time.</span>
 
@@ -193,7 +204,7 @@
 
 <div class="viewcode-block" id="plot_stc">
 <a class="viewcode-back" href="../../../generated/sesameeg.viz.plot_stc.html#sesameeg.viz.plot_stc">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_stc</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">plot_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_stc</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">plot_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
              <span class="n">save_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">true_idxs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_open</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot SESAME source estimates using mne.</span>
@@ -247,7 +258,7 @@
     <span class="n">nv_lh</span> <span class="o">=</span> <span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">true_idxs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">true_idxs</span><span class="p">)</span>
+        <span class="c1"># print(true_idxs)</span>
         <span class="k">for</span> <span class="n">t_idx</span><span class="p">,</span> <span class="n">t_loc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">true_idxs</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">t_loc</span> <span class="o">&lt;</span> <span class="n">nv_lh</span><span class="p">:</span>
                 <span class="n">brain</span><span class="o">.</span><span class="n">add_foci</span><span class="p">(</span><span class="n">inv_op</span><span class="o">.</span><span class="n">stc</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">t_loc</span><span class="p">],</span> <span class="n">coords_as_verts</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -289,7 +300,7 @@
 
 <div class="viewcode-block" id="plot_vol_stc">
 <a class="viewcode-back" href="../../../generated/sesameeg.viz.plot_vol_stc.html#sesameeg.viz.plot_vol_stc">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_vol_stc</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">plot_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_vol_stc</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">plot_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot Nutmeg style SESAME volumetric source estimates using nilearn.</span>
 
@@ -359,7 +370,7 @@
 
 <div class="viewcode-block" id="plot_cloud_sources">
 <a class="viewcode-back" href="../../../generated/sesameeg.viz.plot_cloud_sources.html#sesameeg.viz.plot_cloud_sources">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_cloud_sources</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">true_idxs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_cloud_sources</span><span class="p">(</span><span class="n">inv_op</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">true_idxs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot point cloud style SESAME source estimates using pyvista.</span>
 
@@ -415,7 +426,7 @@
     </p>
     <p>
         &copy; Copyright 2023, SESAMEEG developers.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.6.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.4.7.<br/>
     </p>
   </div>
 </footer>
